@@ -1,19 +1,32 @@
 {
-  "extends": "airbnb",
-  "parser": "babel-eslint",
-  "rules": {
-    "array-bracket-spacing": [2, "always"],
-    "jsx-quotes": [1, "prefer-single"],
-    "jsx-a11y/no-static-element-interactions": 0,
-    "max-len": ["error", { "code": 80, "ignoreTrailingComments": true }],
-    "no-use-before-define": [2, "nofunc"],
-    "no-shadow": 0,
-    "prefer-const": 1,
-    "quote-props": [1, "consistent-as-needed"],
-    "react/no-multi-comp": 0,
-    "react/prop-types": 0,
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "react/no-array-index-key": 0,
-    "space-before-function-paren": [2, {"anonymous": "always", "named": "never"}]
-  }
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "plugins": [
+      "react"
+    ],
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-const-assign": "warn",
+        "no-this-before-super": "warn",
+        "no-undef": "warn",
+        "no-unreachable": "warn",
+        "no-unused-vars": "warn",
+        "constructor-super": "warn",
+        "valid-typeof": "warn",
+        "react/jsx-uses-react": "warn",
+        "react/jsx-uses-vars": "warn"
+    }
 }
