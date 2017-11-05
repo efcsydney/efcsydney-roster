@@ -8,7 +8,10 @@ import {
   getQuarterLastMonth,
   getRoles
 } from '../utils';
-// create new test branch
+//#region Add iCalendar Events
+import AddToCalendar from 'react-add-to-calendar';
+import "../icalstyle.css";
+//#endregion Add iCalendar Events
 
 export default class QuarterView extends Component {
   static propTypes = {
@@ -27,6 +30,9 @@ export default class QuarterView extends Component {
     const cellWidth = `${100 / (roles.length + 1)}%`;
     const startMonth = getQuarterFirstMonth(date).format('MMM');
     const endMonth = getQuarterLastMonth(date).format('MMM');
+    //#region Add iCalendar Events
+    const icalicon = { 'calendar-plus-o': 'left' };
+    //#endregion Add iCalendar Events
 
     return (
       <Wrapper>
@@ -55,6 +61,23 @@ export default class QuarterView extends Component {
                 {roles.map((role, i) => {
                   const member = _.find(members, { role }) || {};
                   const name = member.name || '';
+
+                  //#region Add iCalendar Events
+                  // create a new event 
+                  let event = {
+                    title: 'EFCSydney Service',
+                    description: name + ' as ' + role,
+                    location: 'Portland, OR',
+                    startTime: day,
+                    endTime: day
+                  }
+                  
+                  let icalBtn = "";
+                  if(name !== ""){
+                    icalBtn = <AddToCalendar event={event} buttonTemplate={icalicon} buttonLabel="+" />;
+                  }
+                  //#endregion Add iCalendar Events
+
                   return (
                     <Cell
                       key={i}
@@ -66,6 +89,8 @@ export default class QuarterView extends Component {
                         member
                       )}>
                       <Text>{name}</Text>
+                      {/* Button for Add iCalendar Events*/}
+                      {icalBtn}
                     </Cell>
                   );
                 })}
