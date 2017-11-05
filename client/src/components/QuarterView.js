@@ -31,7 +31,7 @@ export default class QuarterView extends Component {
     const startMonth = getQuarterFirstMonth(date).format('MMM');
     const endMonth = getQuarterLastMonth(date).format('MMM');
     //#region Add iCalendar Events
-    const icalicon = { 'calendar-plus-o': 'left' };
+    const icalicon = { 'calendar-plus-o': 'center' };
     //#endregion Add iCalendar Events
 
     return (
@@ -74,7 +74,7 @@ export default class QuarterView extends Component {
                   
                   let icalBtn = "";
                   if(name !== ""){
-                    icalBtn = <AddToCalendar event={event} buttonTemplate={icalicon} buttonLabel="+" />;
+                    icalBtn = <AddToCalendar event={event} buttonTemplate={icalicon} buttonLabel="" />;
                   }
                   //#endregion Add iCalendar Events
 
@@ -90,7 +90,9 @@ export default class QuarterView extends Component {
                       )}>
                       <Text>{name}</Text>
                       {/* Button for Add iCalendar Events*/}
+                      <p />
                       {icalBtn}
+
                     </Cell>
                   );
                 })}
@@ -129,7 +131,7 @@ const Cell = styled.span`
   flex-direction: column;
   flex-grow: 1;
   font-weight: ${props => (props.type === 'header' ? 'bold' : 'normal')};
-  overflow: hidden;
+  /*overflow: hidden;*/
   padding: 10px;
   text-align: ${props => (props.align ? props.align : 'center')};
   text-overflow: ellipsis;
