@@ -6,10 +6,25 @@ import styled from 'styled-components';
 import data from './data.json';
 import leftArrowIcon from './assets/arrow_left.svg';
 import rightArrowIcon from './assets/arrow_right.svg';
+import moment from 'moment';
 
 export default class App extends Component {
   state = {
-    selectedFoods: []
+    selectedFoods: [],
+    date: new Date()
+  };
+  handleButtonClick = direction => {
+    const { date } = this.state;
+    let newDate = moment(date).startOf('quarter');
+    if (direction === 'prev') {
+      newDate.add(-1, 'Q');
+    } else {
+      newDate.add(1, 'Q');
+    }
+
+    this.setState({
+      date: newDate.toDate()
+    });
   };
   removeFoodItem = itemIndex => {
     const filteredFoods = this.state.selectedFoods.filter(
@@ -22,15 +37,16 @@ export default class App extends Component {
     this.setState({ selectedFoods: newFoods });
   };
   render() {
-    const { selectedFoods } = this.state;
+    const { selectedFoods, date } = this.state;
+
     return (
       <Wrapper>
         <ViewWrapper>
-          <QuarterView date={new Date()} data={data} />
-          <PrevButton>
+          <QuarterView date={date} data={data} />
+          <PrevButton onClick={this.handleButtonClick.bind(this, 'prev')}>
             <img src={leftArrowIcon} />
           </PrevButton>
-          <NextButton>
+          <NextButton onClick={this.handleButtonClick.bind(this, 'next')}>
             <img src={rightArrowIcon} />
           </NextButton>
         </ViewWrapper>
