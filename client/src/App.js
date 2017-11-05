@@ -17,7 +17,7 @@ export default class App extends Component {
     const { date } = this.state;
     let newDate = moment(date).startOf('quarter');
     if (direction === 'prev') {
-      newDate.add(-1, 'Q');
+      newDate.subtract(1, 'Q');
     } else {
       newDate.add(1, 'Q');
     }
