@@ -1,24 +1,19 @@
 import _ from 'lodash';
 import moment from 'moment';
 
-export function getQuarterDays(date, weekday = 'Sunday') {
-  let result = [];
-
-  let currentDay = moment(date)
-    .startOf('quarter')
-    .day(weekday);
-
-  const thisQuarter = currentDay.quarter();
-
-  if (currentDay.date() > 1) {
-    currentDay.add(7, 'd');
+export function getQuarterDays(date, weekday = 7) {
+  let currentDay = moment(date).startOf('quarter');
+  if (currentDay.isoWeekday() > weekday) {
+    currentDay = currentDay.add(1, 'w');
   }
+  currentDay = currentDay.isoWeekday(weekday);
 
+  let result = [];
+  const thisQuarter = currentDay.quarter();
   while (thisQuarter === currentDay.quarter()) {
     result.push(currentDay.clone());
     currentDay.add(7, 'd');
   }
-
   return result;
 }
 
