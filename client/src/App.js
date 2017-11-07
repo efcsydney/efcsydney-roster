@@ -15,7 +15,6 @@ export default class App extends Component {
   };
   cachedEvents = [];
   loadDataFromServer(isPreCache = false, from, to){
-    console.log("[Start] load server data");
     if(from === undefined){
       from = moment().startOf('quarter').subtract(1, 'Q').format("YYYY-MM-DD");
     } else {
@@ -30,10 +29,8 @@ export default class App extends Component {
       .then(response => response.json())
       .then(dataFromServer => {
         this.cachedEvents = dataFromServer;
-        console.log("server data => cachedEvents");
         if(!isPreCache){
           this.setState({ events: this.cachedEvents });
-          console.log("cachedEvents => state.events");
         }
       })
       .catch(function() { console.log("error"); });
