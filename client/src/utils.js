@@ -45,3 +45,13 @@ export function getQuarterFirstMonth(date) {
 export function getQuarterLastMonth(date) {
   return moment(date).endOf('quarter');
 }
+
+export function getMemberNames(events) {
+  return _(events)
+    .map('members')
+    .flatten()
+    .map('name')
+    .union()
+    .sort()
+    .value();
+}
