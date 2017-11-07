@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import SelectedFoods from './SelectedFoods';
-import FoodSearch from './FoodSearch';
-import QuarterView from './components/QuarterView';
 import styled from 'styled-components';
-import leftArrowIcon from './assets/arrow_left.svg';
-import rightArrowIcon from './assets/arrow_right.svg';
+import QuarterView from '../components/QuarterView';
+import leftArrowIcon from '../assets/arrow_left.svg';
+import rightArrowIcon from '../assets/arrow_right.svg';
 import moment from 'moment';
+import Edit from './Edit';
 
 export default class App extends Component {
   state = {
-    selectedFoods: [],
-    events: [],
-    date: new Date()
+    date: new Date(),
+    isEditing: false,
+    selectedData: {}
   };
   cachedEvents = [];
   loadDataFromServer(params = {}) {
@@ -43,11 +42,8 @@ export default class App extends Component {
         }
       })
       .catch(function() {
-        console.log('error');
+        console.log('error'); // eslint-disable-line
       });
-  }
-  componentWillMount() {
-    this.loadDataFromServer();
   }
   handleButtonClick = direction => {
     const { date } = this.state;
@@ -65,36 +61,57 @@ export default class App extends Component {
       to: newDate.endOf('quarter').format('YYYY-MM-DD')
     });
   };
+  handleCellClick = ({ day, member, role, names }) => {
+    this.setState({
+      isEditing: true,
+      selectedData: { date: day.toDate(), member, role, names }
+    });
+  };
+  handleEditClose = () => {
+    this.setState({
+      isEditing: false,
+      selectedData: null
+    });
+  };
+  handleEditSave = form => {
+    // TODO - @james or @jeffreyx
+    console.log(form); // eslint-disable-line
 
-  removeFoodItem = itemIndex => {
-    const filteredFoods = this.state.selectedFoods.filter(
-      (item, idx) => itemIndex !== idx
-    );
-    this.setState({ selectedFoods: filteredFoods });
+    this.setState({
+      isEditing: false,
+      selectedData: null
+    });
   };
-  addFood = food => {
-    const newFoods = this.state.selectedFoods.concat(food);
-    this.setState({ selectedFoods: newFoods });
-  };
+  componentWillMount() {
+    this.loadDataFromServer();
+  }
   render() {
-    const { selectedFoods, date } = this.state;
+    const { date, isEditing, selectedData } = this.state;
 
     return (
       <Wrapper>
         <ViewWrapper>
-          <QuarterView date={date} data={this.state.events} />
+          <QuarterView
+            date={date}
+            data={this.state.events}
+            onCellClick={this.handleCellClick}
+          />
           <PrevButton onClick={this.handleButtonClick.bind(this, 'prev')}>
-            <img src={leftArrowIcon} />
+            <img src={leftArrowIcon} role="presentation" />
           </PrevButton>
           <NextButton onClick={this.handleButtonClick.bind(this, 'next')}>
-            <img src={rightArrowIcon} />
+            <img src={rightArrowIcon} role="presentation" />
           </NextButton>
         </ViewWrapper>
-        <SelectedFoods
-          foods={selectedFoods}
-          onFoodClick={this.removeFoodItem}
-        />
-        <FoodSearch onFoodClick={this.addFood} />
+        {isEditing && (
+          <Edit
+            title="Edit Event"
+            isOpen={isEditing}
+            {...selectedData}
+            onClose={this.handleEditClose}
+            onSave={this.handleEditSave}
+          />
+        )}
       </Wrapper>
     );
   }
