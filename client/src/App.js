@@ -13,12 +13,33 @@ export default class App extends Component {
     events: [],
     date: new Date()
   };
-  componentWillMount() {
-    fetch('/api/events?from=2017-01-01&category=english')
+  cachedEvents = [];
+  loadDataFromServer(isPreCache = false, from, to){
+    console.log("[Start] load server data");
+    if(from === undefined){
+      from = moment().startOf('quarter').subtract(1, 'Q').format("YYYY-MM-DD");
+    } else {
+      from = moment(from).startOf('quarter').subtract(1, 'Q').format("YYYY-MM-DD");
+    }
+    if(to === undefined){
+      to = moment().startOf('quarter').add(2, 'Q').format("YYYY-MM-DD");
+    } else {
+      to = moment(to).startOf('quarter').add(1, 'Q').format("YYYY-MM-DD");
+    }
+    fetch('/api/events?from='+from+'&to='+to+'&category=english')
       .then(response => response.json())
-      .then(data => this.setState({ events: data }))
-      .then(function(){console.log("all data re-loaded from server");})
+      .then(dataFromServer => {
+        this.cachedEvents = dataFromServer;
+        console.log("server data => cachedEvents");
+        if(!isPreCache){
+          this.setState({ events: this.cachedEvents });
+          console.log("cachedEvents => state.events");
+        }
+      })
       .catch(function() { console.log("error"); });
+  }  
+  componentWillMount() {
+    this.loadDataFromServer();
   }
   handleButtonClick = direction => {
     const { date } = this.state;
@@ -28,12 +49,11 @@ export default class App extends Component {
     } else {
       newDate.add(1, 'Q');
     }
-    console.log("pre-load data existed in client");
     this.setState({
       date: newDate.toDate()
     });
-    console.log("re-load all data from server");
-    this.componentWillMount();
+    let endData = newDate.clone().add(1, 'Q');
+    this.loadDataFromServer(true, newDate.format("YYYY-MM-DD"), endData.format("YYYY-MM-DD"));
   };
   
   removeFoodItem = itemIndex => {
