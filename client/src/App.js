@@ -13,6 +13,13 @@ export default class App extends Component {
     events: [],
     date: new Date()
   };
+  componentWillMount() {
+    fetch('/api/events?from=2017-01-01&category=english')
+      .then(response => response.json())
+      .then(data => this.setState({ events: data }))
+      .then(function(){console.log("all data re-loaded from server");})
+      .catch(function() { console.log("error"); });
+  }
   handleButtonClick = direction => {
     const { date } = this.state;
     let newDate = moment(date).startOf('quarter');
@@ -21,16 +28,14 @@ export default class App extends Component {
     } else {
       newDate.add(1, 'Q');
     }
-
+    console.log("pre-load data existed in client");
     this.setState({
       date: newDate.toDate()
     });
+    console.log("re-load all data from server");
+    this.componentWillMount();
   };
-  componentWillMount() {
-    fetch('/api/events')
-      .then(response => response.json())
-      .then(data => this.setState({ events: data }));
-  }
+  
   removeFoodItem = itemIndex => {
     const filteredFoods = this.state.selectedFoods.filter(
       (item, idx) => itemIndex !== idx
