@@ -1,24 +1,29 @@
 import _ from 'lodash';
 import moment from 'moment';
 
-export function getQuarterDays(date, weekday = 'Sunday') {
-  let result = [];
+export function generateCalData(day, desc) {
+  return {
+    title: 'EFC Sydney English Service',
+    description: desc,
+    location: '10 Carlotta St, Artarmon NSW 2064, Australia',
+    startTime: day.clone().hour(10).minute(30),
+    endTime: day.clone().hour(12)
+  };
+}
 
-  let currentDay = moment(date)
-    .startOf('quarter')
-    .day(weekday);
-
-  const thisQuarter = currentDay.quarter();
-
-  if (currentDay.date() > 1) {
-    currentDay.add(7, 'd');
+export function getQuarterDays(date, weekday = 7) {
+  let currentDay = moment(date).startOf('quarter');
+  if (currentDay.isoWeekday() > weekday) {
+    currentDay = currentDay.add(1, 'w');
   }
+  currentDay = currentDay.isoWeekday(weekday);
 
+  let result = [];
+  const thisQuarter = currentDay.quarter();
   while (thisQuarter === currentDay.quarter()) {
     result.push(currentDay.clone());
     currentDay.add(7, 'd');
   }
-
   return result;
 }
 
