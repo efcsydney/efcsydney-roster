@@ -24,17 +24,18 @@ export default class QuarterView extends Component {
   };
   render() {
     const { date, data } = this.props;
-    const days = getQuarterDays(date, 'Sunday');
+    const days = getQuarterDays(date, 7);
     const roles = getRoles(data.data);
     const cellWidth = `${100 / (roles.length + 1)}%`;
     const startMonth = getQuarterFirstMonth(date).format('MMM');
     const endMonth = getQuarterLastMonth(date).format('MMM');
+    const year = days[0].format('YYYY');
     const icalicon = { 'calendar-plus-o': 'left' };
 
     return (
       <Wrapper>
         <Header>
-          {startMonth} - {endMonth} 2017 English Sunday Service Roster
+          {startMonth} - {endMonth} {year} English Sunday Service Roster
         </Header>
         <Grid>
           <Row>
