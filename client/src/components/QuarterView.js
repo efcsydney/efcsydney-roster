@@ -6,8 +6,11 @@ import {
   getQuarterDays,
   getQuarterFirstMonth,
   getQuarterLastMonth,
-  getRoles
+  getRoles,
+  generateCalData
 } from '../utils';
+import AddToCalendar from 'react-add-to-calendar';
+import "../icalstyle.css";
 
 export default class QuarterView extends Component {
   static propTypes = {
@@ -27,6 +30,7 @@ export default class QuarterView extends Component {
     const startMonth = getQuarterFirstMonth(date).format('MMM');
     const endMonth = getQuarterLastMonth(date).format('MMM');
     const year = days[0].format('YYYY');
+    const icalicon = { 'calendar-plus-o': 'left' };
 
     return (
       <Wrapper>
@@ -47,10 +51,19 @@ export default class QuarterView extends Component {
           {days.map((day, i) => {
             const event = _.find(data.data, { date: day.format('YYYY-MM-DD') });
             const members = event ? event.members : [];
+            let eventDesc = "";
+            {roles.map((role, i) => {
+              const member = _.find(members, { role }) || {};
+              const name = member.name || '';
+              eventDesc = eventDesc + role + "[" + name + "] ";
+            })};
+            const icalEvent = generateCalData(day, eventDesc);
+            const icalBtn = <AddToCalendar event={icalEvent} buttonTemplate={icalicon} buttonLabel={day.format('DD MMM')} />;
+            
             return (
               <Row key={i}>
                 <Cell type="header" align="right" width={cellWidth}>
-                  <Text>{day.format('DD MMM')}</Text>
+                  {icalBtn}
                 </Cell>
                 {roles.map((role, i) => {
                   const member = _.find(members, { role }) || {};
@@ -104,7 +117,6 @@ const Cell = styled.span`
   flex-direction: column;
   flex-grow: 1;
   font-weight: ${props => (props.type === 'header' ? 'bold' : 'normal')};
-  overflow: hidden;
   padding: 10px;
   text-align: ${props => (props.align ? props.align : 'center')};
   text-overflow: ellipsis;
