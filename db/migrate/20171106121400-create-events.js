@@ -7,6 +7,25 @@ module.exports = {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
+      },
+      volunteerName: {
+          type: Sequelize.STRING
+      },
+      calendarId:{
+          type: Sequelize.INTEGER,
+          unique: 'compositeIndex'
+      },
+      positionId: {
+          type: Sequelize.INTEGER,
+          unique: 'compositeIndex'
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     }, {
       charset: 'utf8'
