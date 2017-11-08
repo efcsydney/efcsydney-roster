@@ -14,27 +14,38 @@ export default class App extends Component {
     date: new Date()
   };
   cachedEvents = [];
-  loadDataFromServer(isPreCache = false, from, to){
-    if(from === undefined){
-      from = moment().startOf('quarter').subtract(1, 'Q').format("YYYY-MM-DD");
+  loadDataFromServer(params = {}) {
+    if (params.from === undefined) {
+      params.from = moment()
+        .startOf('quarter')
+        .format('YYYY-MM-DD');
     } else {
-      from = moment(from).startOf('quarter').subtract(1, 'Q').format("YYYY-MM-DD");
+      params.from = moment(params.from)
+        .startOf('quarter')
+        .format('YYYY-MM-DD');
     }
-    if(to === undefined){
-      to = moment().startOf('quarter').add(2, 'Q').format("YYYY-MM-DD");
+    if (params.to === undefined) {
+      params.to = moment()
+        .endOf('quarter')
+        .format('YYYY-MM-DD');
     } else {
-      to = moment(to).startOf('quarter').add(1, 'Q').format("YYYY-MM-DD");
+      params.to = moment(params.to)
+        .endOf('quarter')
+        .format('YYYY-MM-DD');
     }
-    fetch('/api/events?from='+from+'&to='+to+'&category=english')
+
+    fetch(`/api/events?from=${params.from}&to=${params.to}&category=english`)
       .then(response => response.json())
       .then(dataFromServer => {
         this.cachedEvents = dataFromServer;
-        if(!isPreCache){
+        if (!params.isPreCache || params.isPreCache === undefined) {
           this.setState({ events: this.cachedEvents });
         }
       })
-      .catch(function() { console.log("error"); });
-  }  
+      .catch(function() {
+        console.log('error');
+      });
+  }
   componentWillMount() {
     this.loadDataFromServer();
   }
@@ -49,10 +60,12 @@ export default class App extends Component {
     this.setState({
       date: newDate.toDate()
     });
-    let endData = newDate.clone().add(1, 'Q');
-    this.loadDataFromServer(true, newDate.format("YYYY-MM-DD"), endData.format("YYYY-MM-DD"));
+    this.loadDataFromServer({
+      from: newDate.format('YYYY-MM-DD'),
+      to: newDate.endOf('quarter').format('YYYY-MM-DD')
+    });
   };
-  
+
   removeFoodItem = itemIndex => {
     const filteredFoods = this.state.selectedFoods.filter(
       (item, idx) => itemIndex !== idx
