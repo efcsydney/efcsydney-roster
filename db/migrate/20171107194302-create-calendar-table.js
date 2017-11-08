@@ -5,7 +5,8 @@ module.exports = {
     return queryInterface.createTable('calendars', {
       id: {
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
       },
       date: {
           type: Sequelize.DATE,

@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const sequelizeClient = require('../infrastructure/sequelize-client');
-const calendars = require('./calendar');
-const positions = require('./position');
+const sequelizeClient = require('../infrastructure/sequelize-client').sequelizeClient;
+const calendars = require('./calendar').calendars;
+const positions = require('./position').positions;
 
 const events = sequelizeClient.define('events', {
   id: {
@@ -19,4 +19,4 @@ const events = sequelizeClient.define('events', {
 events.belongsTo(calendars);
 events.belongsTo(positions);
 
-module.exports = events;
+export const events;

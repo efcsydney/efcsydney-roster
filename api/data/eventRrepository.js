@@ -1,11 +1,11 @@
 const Sequelize = require('sequelize');
-const events = require('../models/event');
-const calendars = require("../models/calendar");
-const positions = require("../models/position");
+const events = require('../models/event').events;
+const calendars = require("../models/calendar").calendars;
+const positions = require("../models/position").positions;
 
 const Op = Sequelize.Op;
 
-module.exports = class EventRepository {
+class EventRepository {
     constructor(){
         this.queryKeyValuePair = [];
         this.calendarKeyValuePair = [];
@@ -51,3 +51,5 @@ module.exports = class EventRepository {
         });
     }
 }
+
+export const EventRepository;

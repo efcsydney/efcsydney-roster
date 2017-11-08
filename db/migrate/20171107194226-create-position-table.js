@@ -5,7 +5,8 @@ module.exports = {
     return queryInterface.createTable('positions', {
       id:{
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
       },
       name: {
           type: Sequelize.STRING,

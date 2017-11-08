@@ -1,4 +1,4 @@
-const Repository = require('./eventRrepository');
+const Repository = require('./eventRrepository').EventRepository;
 
 
 const repo = new Repository();

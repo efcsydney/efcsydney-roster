@@ -7,4 +7,4 @@ const sequelizeClient = new Sequelize(config.database, config.username, config.p
   host: config.host
 });
 
-module.exports = sequelizeClient;
+export const sequelizeClient;

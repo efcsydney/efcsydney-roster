@@ -1,11 +1,12 @@
 const Sequelize = require('sequelize');
-const sequelizeClient = require('../infrastructure/sequelize-client');
-const events = require('./event');
+const sequelizeClient = require('../infrastructure/sequelize-client').sequelizeClient;
+const events = require('./event').events;
 
 const positions = sequelizeClient.define('positions', {
     id:{
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     name: {
         type: Sequelize.STRING,
@@ -15,4 +16,4 @@ const positions = sequelizeClient.define('positions', {
     timestamps: false
   }) 
 
-module.exports = positions;
+  export const positions;
