@@ -6,7 +6,10 @@ export function generateCalData(day, desc) {
     title: 'EFC Sydney English Service',
     description: desc,
     location: '10 Carlotta St, Artarmon NSW 2064, Australia',
-    startTime: day.clone().hour(10).minute(30),
+    startTime: day
+      .clone()
+      .hour(10)
+      .minute(30),
     endTime: day.clone().hour(12)
   };
 }
@@ -36,11 +39,9 @@ export function getRoles(eventData) {
 }
 
 export function getQuarterFirstMonth(date) {
-  return moment(date)
-    .startOf('quarter');
+  return moment(date).startOf('quarter');
 }
 
 export function getQuarterLastMonth(date) {
-  return moment(date)
-    .endOf('quarter');
+  return moment(date).endOf('quarter');
 }

@@ -13,6 +13,42 @@ export default class App extends Component {
     events: [],
     date: new Date()
   };
+  cachedEvents = [];
+  loadDataFromServer(params = {}) {
+    if (params.from === undefined) {
+      params.from = moment()
+        .startOf('quarter')
+        .format('YYYY-MM-DD');
+    } else {
+      params.from = moment(params.from)
+        .startOf('quarter')
+        .format('YYYY-MM-DD');
+    }
+    if (params.to === undefined) {
+      params.to = moment()
+        .endOf('quarter')
+        .format('YYYY-MM-DD');
+    } else {
+      params.to = moment(params.to)
+        .endOf('quarter')
+        .format('YYYY-MM-DD');
+    }
+
+    fetch(`/api/events?from=${params.from}&to=${params.to}&category=english`)
+      .then(response => response.json())
+      .then(dataFromServer => {
+        this.cachedEvents = dataFromServer;
+        if (!params.isPreCache || params.isPreCache === undefined) {
+          this.setState({ events: this.cachedEvents });
+        }
+      })
+      .catch(function() {
+        console.log('error');
+      });
+  }
+  componentWillMount() {
+    this.loadDataFromServer();
+  }
   handleButtonClick = direction => {
     const { date } = this.state;
     let newDate = moment(date).startOf('quarter');
@@ -21,16 +57,15 @@ export default class App extends Component {
     } else {
       newDate.add(1, 'Q');
     }
-
     this.setState({
       date: newDate.toDate()
     });
+    this.loadDataFromServer({
+      from: newDate.format('YYYY-MM-DD'),
+      to: newDate.endOf('quarter').format('YYYY-MM-DD')
+    });
   };
-  componentWillMount() {
-    fetch('/api/events')
-      .then(response => response.json())
-      .then(data => this.setState({ events: data }));
-  }
+
   removeFoodItem = itemIndex => {
     const filteredFoods = this.state.selectedFoods.filter(
       (item, idx) => itemIndex !== idx

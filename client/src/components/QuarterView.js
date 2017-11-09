@@ -68,6 +68,7 @@ export default class QuarterView extends Component {
                 buttonLabel={day.format('DD MMM')}
               />
             );
+           
             const highlightDate = moment()
               .isoWeekday(7)
               .format('YYYY-MM-DD');
