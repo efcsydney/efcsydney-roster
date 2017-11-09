@@ -35,6 +35,16 @@ yarn
 cd ..
 ```
 
+## Setup database
+
+```
+npm run db-create  // create database
+npm run db-migrate // migrate database
+```
+You can use other sequelize utilities eg. `node_modules/.bin/sequelize db:migrate:undo` to revert migrations
+
+To use different environment, please add environmental variable NODE_ENV=xxx, ie. `NODE_ENV=test npm run db-create`.
+
 ## Start the server
 
 ```

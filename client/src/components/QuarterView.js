@@ -11,6 +11,7 @@ import {
 } from '../utils';
 import AddToCalendar from 'react-add-to-calendar';
 import '../icalstyle.css';
+import moment from 'moment';
 
 export default class QuarterView extends Component {
   static propTypes = {
@@ -67,9 +68,15 @@ export default class QuarterView extends Component {
                 buttonLabel={day.format('DD MMM')}
               />
             );
-
+           
+            const highlightDate = moment()
+              .isoWeekday(7)
+              .format('YYYY-MM-DD');
+            console.log(day.format('YYYY-MM-DD'), highlightDate);
             return (
-              <Row key={i}>
+              <Row
+                key={i}
+                highlighted={day.format('YYYY-MM-DD') === highlightDate}>
                 <Cell type="header" align="right" width={cellWidth}>
                   {icalBtn}
                 </Cell>
@@ -141,6 +148,10 @@ const Row = styled.div`
   display: flex;
   flex-wrap: no-wrap;
   width: 100%;
+  ${Cell} {
+    background-color: ${props =>
+      props.highlighted ? '#ffc !important' : 'transparent'};
+  }
   &:nth-child(odd) ${Cell} {
     background-color: #fae4d6;
   }
