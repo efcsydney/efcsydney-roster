@@ -36,7 +36,7 @@ export default class QuarterView extends Component {
     return (
       <Wrapper>
         <Header>
-          {startMonth} - {endMonth} {year} English Sunday Service Roster
+          {startMonth} - {endMonth} {year} English Sunday Service Rosterssssss
         </Header>
         <Grid>
           <Row>
