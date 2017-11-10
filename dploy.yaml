@@ -1,0 +1,9 @@
+qa:
+    scheme: sftp
+    host: 54.206.106.116
+    port: 22
+    user: ec2-user
+    check: true
+    privateKey: ~/.ssh/key/efcsydney.pem
+    path:
+        remote: /opt/efcsydney
