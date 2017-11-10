@@ -2,22 +2,15 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('events', {
+    return queryInterface.createTable('calendars', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      volunteerName: {
-          type: Sequelize.STRING
-      },
-      calendarId:{
-          type: Sequelize.INTEGER,
-          unique: 'compositeIndex'
-      },
-      positionId: {
-          type: Sequelize.INTEGER,
-          unique: 'compositeIndex'
+      date: {
+          type: Sequelize.DATE,
+          unique: true,
       },
       createdAt: {
         allowNull: false,
@@ -27,12 +20,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+
     }, {
       charset: 'utf8'
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('events');
+    return queryInterface.dropTable('calendars');
   }
 };
