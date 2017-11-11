@@ -9,15 +9,15 @@ module.exports = {
         autoIncrement: true
       },
       volunteerName: {
-          type: Sequelize.STRING
+        type: Sequelize.STRING
       },
       calendarId:{
-          type: Sequelize.INTEGER,
-          unique: 'compositeIndex'
+        type: Sequelize.INTEGER,
+        unique: 'compositeIndex'
       },
       positionId: {
-          type: Sequelize.INTEGER,
-          unique: 'compositeIndex'
+        type: Sequelize.INTEGER,
+        unique: 'compositeIndex'
       },
       createdAt: {
         allowNull: false,

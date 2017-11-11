@@ -2,6 +2,7 @@ const express = require("express");
 app = express();
 module.exports.app = app;
 const bodyParser = require('body-parser');
+const eventsController = require('./api/controllers/events-controller');
 
 app.use(bodyParser.json());
 
@@ -15,6 +16,8 @@ if (process.env.NODE_ENV === "production") {
 app.get('/', (req, res) => {
   res.json({ message: 'Hello Guys! Welcome to roster!' });
 })
+
+app.get('/api/eventsfromdb', eventsController.getEvents);
 
 app.get('/api/events', (req, res) => {
   res.json({

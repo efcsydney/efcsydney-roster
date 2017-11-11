@@ -1,22 +1,24 @@
 const Sequelize = require('sequelize');
 const sequelizeClient = require('../infrastructure/sequelize-client').sequelizeClient;
-const calendars = require('./calendar').calendars;
-const positions = require('./position').positions;
+const Calendar = require('./calendar').Calendar;
+const Position = require('./position').Position;
 
-const events = sequelizeClient.define('events', {
+const Event = sequelizeClient.define('events', {
   id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
   },
   volunteerName: {
-      type: Sequelize.STRING
+    type: Sequelize.STRING
   }
-  }, {
-    timestamps: false
+}, {
+  timestamps: true
 });
 
-events.belongsTo(calendars);
-events.belongsTo(positions);
+Event.belongsTo(Calendar);
+Event.belongsTo(Position);
 
-export const events;
+module.exports = {
+  Event
+}

@@ -1,8 +1,8 @@
-const Sequelize = require('sequlelize');
+const Sequelize = require('sequelize');
 const env       = process.env.NODE_ENV || 'development';
-const config    = require(__dirname + '/../config/database.json')[env];
+const config    = require(__dirname + '/../../config/database.json')[env];
 
-export const sequelizeClient = new Sequelize(config.database, config.username, null, {
+module.exports.sequelizeClient = new Sequelize(config.database, config.username, null, {
   dialect: config.dialect,
   host: config.host
 });
