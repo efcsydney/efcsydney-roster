@@ -1,19 +1,21 @@
 const Sequelize = require('sequelize');
 const sequelizeClient = require('../infrastructure/sequelize-client').sequelizeClient;
-const events = require('./event').events;
+const Event = require('./event').Event;
 
-const calendars = sequelizeClient.define('calendars', {
-    id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    date: {
-        type: Sequelize.DATE,
-        unique: true,
-    }
+const Calendar = sequelizeClient.define('calendars', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  date: {
+    type: Sequelize.DATE,
+    unique: true,
+  }
 },{
-    timestamps: false
-  });
+  timestamps: false
+});
 
-  export const calendars;
+module.exports = {
+  Calendar
+}
