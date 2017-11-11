@@ -1,27 +1,35 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import {
+  generateCalData,
+  getMemberNames,
   getQuarterDays,
   getQuarterFirstMonth,
   getQuarterLastMonth,
-  getRoles,
-  generateCalData
+  getRoles
 } from '../utils';
 import AddToCalendar from 'react-add-to-calendar';
 import '../icalstyle.css';
 import moment from 'moment';
+import styled from 'styled-components';
 
 export default class QuarterView extends Component {
   static propTypes = {
-    date: PropTypes.instanceOf(Date)
+    date: PropTypes.instanceOf(Date),
+    data: PropTypes.object,
+    onCellClick: PropTypes.func
   };
   static defaultProps = {
-    date: new Date()
+    date: new Date(),
+    data: {},
+    onCellClick: () => {}
   };
   handleCellClick = (day, role, member) => {
-    console.log(day, role, member); // eslint-disable-line
+    const { data, onCellClick } = this.props;
+    const names = getMemberNames(data.data);
+
+    onCellClick({ day, role, member, names });
   };
   render() {
     const { date, data } = this.props;
@@ -53,13 +61,11 @@ export default class QuarterView extends Component {
             const event = _.find(data.data, { date: day.format('YYYY-MM-DD') });
             const members = event ? event.members : [];
             let eventDesc = '';
-            {
-              roles.map((role, i) => {
-                const member = _.find(members, { role }) || {};
-                const name = member.name || '';
-                eventDesc = eventDesc + role + '[' + name + '] ';
-              });
-            }
+            roles.forEach(role => {
+              const member = _.find(members, { role }) || {};
+              const name = member.name || '';
+              eventDesc = eventDesc + role + '[' + name + '] ';
+            });
             const icalEvent = generateCalData(day, eventDesc);
             const icalBtn = (
               <AddToCalendar
@@ -72,7 +78,7 @@ export default class QuarterView extends Component {
             const highlightDate = moment()
               .isoWeekday(7)
               .format('YYYY-MM-DD');
-            console.log(day.format('YYYY-MM-DD'), highlightDate);
+
             return (
               <Row
                 key={i}
@@ -91,7 +97,7 @@ export default class QuarterView extends Component {
                         this,
                         day,
                         role,
-                        member
+                        name
                       )}>
                       <Text>{name}</Text>
                     </Cell>
@@ -137,12 +143,6 @@ const Cell = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   width: ${props => props.width};
-  /*
-  &:first-child {
-    width: 10%;
-    flex-grow: 2;
-  }
-  */
 `;
 const Row = styled.div`
   display: flex;
