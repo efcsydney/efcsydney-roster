@@ -13,15 +13,16 @@
     "fs": "0.0.2",
     "global": "^4.3.2",
     "mysql2": "^1.4.2",
+    "react-add-to-calendar": "^0.1.4",
     "sequelize": "^4.22.5",
     "sequelize-cli": "^3.0.0",
-    "react-add-to-calendar": "^0.1.4",
     "mocha": "^4.0.1",
     "nodemon": "^1.12.1",
     "sql.js": "0.3.2",
     "supertest": "^3.0.0"
   },
   "scripts": {
+    "build": "cd client && npm run build",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node server.js",
     "client": "node start-client.js",
@@ -29,10 +30,13 @@
     "lint": "eslint .",
     "test": "mocha",
     "db-create": "node scripts/create-database.js",
-    "db-migrate": "sequelize db:migrate"
+    "db-migrate": "sequelize db:migrate",
+    "deploy:qa": "dploy qa",
+    "deploy:prod": ""
   },
   "devDependencies": {
     "concurrently": "3.1.0",
+    "dploy": "^1.2.0",
     "eslint": "^4.10.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "2.2.0",

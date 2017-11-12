@@ -147,13 +147,33 @@ git add client/build
 git commit -m 'Adding `build` to source control'
 ```
 
-**3. Create the Heroku app**
+# AWS
+
+Deploy to AWS EC2 host
+
+** Get SSH key from admin Kai/Liam **
+
+**dploy to qa environment**
+
+```
+yarn deploy:qa
+```
+
+**dploy to production environment**
+
+```
+yarn deploy:prod
+```
+
+# Heroku
+
+**1. Create the Heroku app**
 
 ```
 heroku apps:create food-lookup-demo
 ```
 
-**4. Push to Heroku**
+**2. Push to Heroku**
 
 ```
 git push heroku master
