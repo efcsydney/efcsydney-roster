@@ -52,6 +52,7 @@ export function getMemberNames(events) {
     .flatten()
     .map('name')
     .union()
+    .filter(name => !_.isEmpty(name))
     .sort()
     .value();
 }
