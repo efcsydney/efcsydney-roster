@@ -106,6 +106,7 @@ const Label = styled.label`
   text-align: right;
   width: 80px;
 `;
+
 const Select = styled(Creatable)`width: 180px;`;
 const Button = styled.button.attrs({ type: 'button' })`
   background-color: #588c25;
