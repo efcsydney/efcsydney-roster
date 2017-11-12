@@ -12,8 +12,6 @@ const Position = sequelizeClient.define('positions', {
     type: Sequelize.STRING,
     unique: true
   }
-},{
-  timestamps: true
 });
 
 module.exports = {

@@ -12,8 +12,6 @@ const Event = sequelizeClient.define('events', {
   volunteerName: {
     type: Sequelize.STRING
   }
-}, {
-  timestamps: true
 });
 
 Event.belongsTo(Calendar);

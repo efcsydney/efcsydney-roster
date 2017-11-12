@@ -1,28 +1,22 @@
 const Event = require('../models/event').Event;
 const Calendar = require('../models/calendar').Calendar;
 const Position = require('../models/position').Position;
+const Repository = require('../data/repository').Repository;
+const EventService = require("../service/events-service").EventService;
+const DataMapper = require("../mapper/model-mapper").ModelMapper;
 
 async function getEvents(req, res) {
-  const events = await Event.findAll({
-    include: [{
-      model: Calendar,
-      where: {
-        date: new Date("2017-10-08T00:00:00Z")
-      }
-    },{
-      model: Position,
-    }],
-  });
-  const members = events.map((e) => {
-    return {
-      role: e.position.name,
-      name: e.volunteerName
-    }
-  })
+
+  const dateRange = EventService.getDateRange(req.from, req.to);
+  const events = await Repository.getEventsByDateRange(dateRange.from, dateRange.to);
+  const dto = DataMapper.convertEventsModelToDto(events);
+
   const response = {
-    date: "2017-10-08T00:00:00Z",
-    members
+    success: true,
+    error: { message: ""},
+    data: {dto}
   }
+
   console.log(JSON.stringify(response, null, 2));
   return res.json(response);
 }

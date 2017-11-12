@@ -12,8 +12,6 @@ const Calendar = sequelizeClient.define('calendars', {
     type: Sequelize.DATE,
     unique: true,
   }
-},{
-  timestamps: false
 });
 
 module.exports = {
