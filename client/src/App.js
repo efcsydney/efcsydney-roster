@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import leftArrowIcon from './assets/arrow_left.svg';
 import rightArrowIcon from './assets/arrow_right.svg';
 import moment from 'moment';
+import SelectPerson from './components/SelectPerson'
 
 export default class App extends Component {
   state = {
@@ -55,6 +56,7 @@ export default class App extends Component {
             <img src={rightArrowIcon} />
           </NextButton>
         </ViewWrapper>
+        <SelectPerson data={this.state.events} />
         <SelectedFoods
           foods={selectedFoods}
           onFoodClick={this.removeFoodItem}
