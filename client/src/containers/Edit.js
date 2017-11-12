@@ -9,8 +9,6 @@ import _ from 'lodash';
 
 function getOptions(names) {
   names = names.map(name => ({ value: name, label: name }));
-  names.unshift({ value: '', label: '-' });
-
   return names;
 }
 
@@ -22,15 +20,17 @@ export default class Edit extends Component {
     onSave: PropTypes.func,
     role: PropTypes.string
   };
-  handleNameChange = value => {
-    this.setState({ selectedName: value });
-
+  handleNameChange = option => {
+    const value = _.get(option, 'value', null);
+    let state = { selectedName: value };
+    let { names } = this.props;
+    if (!_.find(names, value)) {
+      state.names = _.union(names, [value]).sort();
+    }
+    this.setState(state);
   };
   handleSaveClick = form => {
     const { onSave } = this.props;
-    if (_.isPlainObject(form.name)) {
-      form.name = form.name.label;
-    }
     onSave(form);
   };
   constructor(props) {
@@ -65,6 +65,7 @@ export default class Edit extends Component {
                 value={selectedName}
                 onChange={this.handleNameChange}
                 options={getOptions(names)}
+                clearable={true}
               />
             </span>
           </Row>
