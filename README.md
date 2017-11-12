@@ -153,19 +153,13 @@ Deploy to AWS EC2 host
 
 ** Get SSH key from admin Kai/Liam **
 
-**1. Install dploy tool**
-
-```
-yarn
-```
-
-**2. dploy to qa environment**
+**dploy to qa environment**
 
 ```
 yarn dploy:qa
 ```
 
-**3. dploy to production environment**
+**dploy to production environment**
 
 ```
 yarn dploy:prod
