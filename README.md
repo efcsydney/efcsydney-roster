@@ -156,13 +156,13 @@ Deploy to AWS EC2 host
 **dploy to qa environment**
 
 ```
-yarn dploy:qa
+yarn deploy:qa
 ```
 
 **dploy to production environment**
 
 ```
-yarn dploy:prod
+yarn deploy:prod
 ```
 
 # Heroku
