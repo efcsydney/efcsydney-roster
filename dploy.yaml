@@ -6,4 +6,4 @@ qa:
     check: true
     privateKey: ~/.ssh/key/efcsydney.pem
     path:
-        remote: /opt/efcsydney
+        remote: /opt/efcsydney-roster
