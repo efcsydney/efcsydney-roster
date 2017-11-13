@@ -2,13 +2,13 @@ const moment = require('moment');
 const dateTimeFormat = require('../constants/datetime').dateTimeFormat;
 
 class EventService{
-  static getDateRange(from, to){
-    const fromDate = moment(from, dateTimeFormat.stringFormat);
-    const toDate = (moment(to, dateTimeFormat.stringFormat).isValid()) ?
+  static computeDateRange(from, to){
+    const rangeFrom = moment(from, dateTimeFormat.stringFormat);
+    const rangeTo = (to !== undefined) ?
       moment(to, dateTimeFormat.stringFormat) : 
-      fromDate.add(12, "weeks");
+      moment(from, dateTimeFormat.stringFormat).add(12, "weeks");
 
-    return {from: fromDate.toDate(), to: toDate.toDate()};
+    return {from: rangeFrom.toDate(), to: rangeTo.toDate()};
   }
 }
 

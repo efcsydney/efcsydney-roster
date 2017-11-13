@@ -37,6 +37,15 @@ cd ..
 
 ## Setup database
 
+Download and install MySql server. Browse to (https://dev.mysql.com/downloads/mysql/) and download MySql community server and MySql Workbench.
+
+Make sure that the root user password is leave as blank. If the root user password has been set, execute the following query to remove the password.
+
+```
+SET PASSWORD FOR root@localhost=PASSWORD('');
+```
+Once MySql server is installed and the root user is configured, execute the following command. Make sure the working folder is set to the project root directory.
+
 ```
 yarn db-create  // create database
 yarn db-migrate // migrate database
