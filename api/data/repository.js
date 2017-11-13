@@ -19,9 +19,8 @@ class Repository {
 
   static saveEvent(event){
     let calendarPromise = Calendar.findOrBuild({where: {date: event.calendar.date}, 
-      defaults: {date: event.calendar.date, createdAt: new Date(), updatedAt: new Date()}});
-    let positionPromise = Position.findOrBuild({where: {name: event.position.name}, 
-      defaults: {createdAt: new Date(), updatedAt: new Date()}});
+      defaults: {date: event.calendar.date}});
+    let positionPromise = Position.findOrBuild({where: {name: event.position.name}});
 
     return Promise.all([calendarPromise, positionPromise]).then(function(values){
       console.log(values); 
@@ -30,10 +29,7 @@ class Repository {
 
       let newEvent = Event.build({volunteerName: event.volunteerName,
         calendar: calendar, 
-        position: position,
-        default: {
-        createdAt: new Date(),
-        updatedAt: new Date()}});
+        position: position});
 
       return newEvent.save();
     });
