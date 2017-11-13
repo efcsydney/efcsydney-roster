@@ -11,11 +11,17 @@ const Event = sequelizeClient.define('events', {
   },
   volunteerName: {
     type: Sequelize.STRING
+  },
+  calendarId: {
+    type: Sequelize.INTEGER,
+  },
+  positionId: {
+    type: Sequelize.INTEGER,
   }
 });
 
-Event.belongsTo(Calendar);
-Event.belongsTo(Position);
+Event.Calendar = Event.belongsTo(Calendar);
+Event.Position = Event.belongsTo(Position);
 
 module.exports = {
   Event

@@ -1,6 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 const Repository = require('../../api/data/repository').Repository;
+const Event = require('../../api/models/event').Event;
 
 describe('Repository', function() {
   describe('/', function() {
@@ -12,10 +13,16 @@ describe('Repository', function() {
     });
 
     it('inserts new event', function() {
-      var newEvent = {id: 0, volunteerName: 'Kyle Huang', calendar: {date: new Date()}, position: { name: 'Speaker'}};
+      var newEvent = {volunteerName: 'Kyle Huang', calendar: {date: new Date()}, position: { name: 'Speaker'}};
       return Repository.saveEvent(newEvent)
         .then(function(event) {
+          const createdEvent = Event.findOne({ where: { id: event.id }});
+          console.log(createdEvent);
           expect('Kyle Huang').to.equal(event.volunteerName);
+        })
+        .catch(function (err) {
+          console.log(err)
+          expect(1).to.equal(2);
         });
     });
   });

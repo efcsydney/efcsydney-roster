@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const Event = require('../models/event').Event;
-const Calendar = require("../models/calendar").Calendar;
-const Position = require("../models/position").Position;
+const Calendar = require('../models/calendar').Calendar;
+const Position = require('../models/position').Position;
 
 const Op = Sequelize.Op;
 
@@ -13,26 +13,30 @@ class Repository {
         { model: Calendar, as: 'calendar', where: { date: {[Op.gte]: from, [Op.lte]: to}} },
         { model: Position, as: 'position' }],
       order: [
-        [Calendar, "date", "DESC" ] 
+        [Calendar, "date", "DESC" ]
       ]
     });
   }
 
   static saveEvent(event){
-    let calendarPromise = Calendar.findOrBuild({where: {date: event.calendar.date}, 
-      defaults: {date: event.calendar.date}});
-    let positionPromise = Position.findOrBuild({where: {name: event.position.name}});
+    let calendarPromise = Calendar.findOrCreate({
+      where: { date: event.calendar.date },
+      defaults: { date: event.calendar.date }
+    });
+    let positionPromise = Position.findOrCreate({
+      where: { name: event.position.name }
+    });
 
-    return Promise.all([calendarPromise, positionPromise]).then(function(values){
-      console.log(values); 
-      let calendar = values[0];
-      let position = values[1];
-
-      let newEvent = Event.build({volunteerName: event.volunteerName,
-        calendar: calendar, 
-        position: position});
-
-      return newEvent.save();
+    return Promise.all([calendarPromise, positionPromise])
+    .then(function(results){
+      const [calendarResult, positionResult] = results;
+      const calendar = calendarResult[0];
+      const position = positionResult[0];
+      return Event.create({
+        volunteerName: event.volunteerName,
+        calendarId: calendar.id,
+        positionId: position.id
+      });
     });
   };
 }
