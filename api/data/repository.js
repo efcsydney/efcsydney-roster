@@ -6,10 +6,11 @@ const Position = require("../models/position").Position;
 const Op = Sequelize.Op;
 
 class Repository {
-  static getEventsByDateRange(inclusiveStartDate, inclusiveEndDate){
+  static getEventsByDateRange(dateRange){
+    const {from, to} = dateRange;
     return Event.findAll({
       include: [
-        { model: Calendar, as: 'calendar', where: { date: {[Op.gte]: inclusiveStartDate, [Op.lte]: inclusiveEndDate}} },
+        { model: Calendar, as: 'calendar', where: { date: {[Op.gte]: from, [Op.lte]: to}} },
         { model: Position, as: 'position' }],
       order: [
         [Calendar, "date", "DESC" ] 

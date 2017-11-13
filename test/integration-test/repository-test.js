@@ -5,7 +5,7 @@ const Repository = require('../../api/data/repository').Repository;
 describe('Repository', function() {
   describe('/', function() {
     it('gets events by date range', function() {
-      return Repository.getEventsByDateRange(new Date("2017-10-01"),new Date("2017-11-01"))
+      return Repository.getEventsByDateRange({from: new Date("2017-10-01"), to: new Date("2017-11-01")})
         .then(function(events) {
           expect(16).to.equal(events.length);
         });

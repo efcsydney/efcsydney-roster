@@ -7,7 +7,7 @@ const EventMapper = require("../mapper/event-mapper").EventMapper;
 
 async function getEvents(req, res) {
   const dateRange = EventService.computeDateRange({from: req.query.from, to: req.query.to});
-  const events = await Repository.getEventsByDateRange(dateRange.from, dateRange.to);
+  const events = await Repository.getEventsByDateRange({from: dateRange.from, to: dateRange.to});
   const dto = EventMapper.convertEventsModelToDto(events);
 
   const response = {
