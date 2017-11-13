@@ -1,4 +1,4 @@
-class ModelMapper {
+class EventMapper {
 
   static convertEventsModelToDto(events){
     const eventDates = [];
@@ -21,4 +21,4 @@ class ModelMapper {
   }
 }
 
-module.exports = { ModelMapper}
+module.exports = { EventMapper }

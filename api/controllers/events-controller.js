@@ -3,12 +3,12 @@ const Calendar = require('../models/calendar').Calendar;
 const Position = require('../models/position').Position;
 const Repository = require('../data/repository').Repository;
 const EventService = require("../service/events-service").EventService;
-const DataMapper = require("../mapper/model-mapper").ModelMapper;
+const EventMapper = require("../mapper/event-mapper").EventMapper;
 
 async function getEvents(req, res) {
-  const dateRange = EventService.computeDateRange(req.query.from, req.query.to);
+  const dateRange = EventService.computeDateRange({from: req.query.from, to: req.query.to});
   const events = await Repository.getEventsByDateRange(dateRange.from, dateRange.to);
-  const dto = DataMapper.convertEventsModelToDto(events);
+  const dto = EventMapper.convertEventsModelToDto(events);
 
   const response = {
     success: true,

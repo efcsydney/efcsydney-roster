@@ -1,4 +1,4 @@
-const ModelMapper = require("../../api/mapper/model-mapper").ModelMapper;
+const EventMapper = require("../../api/mapper/event-mapper").EventMapper;
 const chai = require('chai');
 
 const expect = chai.expect;
@@ -21,7 +21,7 @@ describe('Model Mapper', function() {
         {volunteerName: "Joseph Cheung", position: "Moderator"}
       ]}];
 
-      const actualModel = ModelMapper.convertEventsModelToDto(eventsModel);
+      const actualModel = EventMapper.convertEventsModelToDto(eventsModel);
 
       expect(2).to.eq(actualModel.length);
       expect(actualModel[0].members[0].name).to.eq("Kyle Huang");
