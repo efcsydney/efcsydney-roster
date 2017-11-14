@@ -18,14 +18,34 @@ class Repository {
     });
   }
 
+  static getEventByDatePosition(criteria){
+    const {date, position} = criteria;
+    return Event.findOne({
+      include: [
+        { model: Calendar, as: 'calendar', where: { date: {[Op.eq]: date}}},
+        { model: Position, as: 'position', where: { name: position} }],
+      order: [
+        [Calendar, "date", "DESC" ]
+      ]
+    })
+  }
+
+  static findOrCreateCalendarDate(date){
+    return Calendar.findOrCreate({
+      where: { date: date },
+      defaults: { date: date }
+    });
+  }
+
+  static findOrCreatePosition(position){
+    return Position.findOrCreate({
+      where: { name: position }
+    });
+  }
+
   static saveEvent(event){
-    let calendarPromise = Calendar.findOrCreate({
-      where: { date: event.calendar.date },
-      defaults: { date: event.calendar.date }
-    });
-    let positionPromise = Position.findOrCreate({
-      where: { name: event.position.name }
-    });
+    const calendarPromise = Repository.findOrCreateCalendarDate(event.calendar.date);
+    const positionPromise = Repository.findOrCreatePosition(event.position.name);
 
     return Promise.all([calendarPromise, positionPromise])
     .then(function(results){
@@ -39,6 +59,23 @@ class Repository {
       });
     });
   };
+
+  static updateEvent(event){
+    const calendarPromise = Repository.findOrCreateCalendarDate(event.calendar.date);
+    const positionPromise = Repository.findOrCreatePosition(event.position.name);
+
+    return Promise.all([calendarPromise, positionPromise])
+    .then(function(results){
+      const [calendarResult, positionResult] = results;
+      const calendar = calendarResult[0];
+      const position = positionResult[0];
+      return Event.update({
+        volunteerName: event.volunteerName
+      },{
+        where: {calendarId: calendar.id, positionId: position.id }
+      });
+    });
+  }
 }
 
 module.exports = { Repository };

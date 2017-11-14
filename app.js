@@ -19,6 +19,8 @@ app.get('/', (req, res) => {
 
 app.get('/api/eventsfromdb', eventsController.getEvents);
 
+app.put('/api/events', eventsController.saveEvent);
+
 app.get('/api/events', (req, res) => {
   res.json({
     "data": [

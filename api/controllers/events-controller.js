@@ -20,6 +20,12 @@ async function getEvents(req, res) {
   return res.json(response);
 }
 
+async function saveEvent(req, res){
+
+
+}
+
 module.exports = {
-  getEvents
+  getEvents,
+  saveEvent
 }
