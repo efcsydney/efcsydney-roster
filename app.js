@@ -22,7 +22,7 @@ app.get('/api/eventsfromdb', eventsController.getEvents);
 app.put('/api/events', (req, res) => {
   // TODO - @Jimmy or @Kyle
   // save res.json to MySQL
-  console.log(req);
+  console.log(req.body);
   return;
 });
 

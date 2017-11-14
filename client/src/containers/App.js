@@ -77,7 +77,11 @@ export default class App extends Component {
     console.log(form);
     fetch('/api/events', {
       method: "PUT",
-      body: form
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(form)
     })
     .then(
           (resp) => resp.json()
