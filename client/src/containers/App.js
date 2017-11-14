@@ -79,25 +79,8 @@ export default class App extends Component {
     });
   };
   handleEditSave = form => {
-    console.log(form);
-    fetch('/api/events', {
-      method: "PUT",
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(form)
-    })
-    .then(
-          (resp) => resp.json()
-    )
-    .then(function(data) {
-          if(data.result !== 'OK'){
-            console.log("error");
-          }
-    }).catch(function() {
-          console.log("error");
-    });
+    // TODO - @james or @jeffreyx
+    console.log(form); // eslint-disable-line
 
     this.setState({
       isEditing: false,
