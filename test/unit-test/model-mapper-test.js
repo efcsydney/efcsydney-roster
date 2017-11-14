@@ -7,10 +7,10 @@ describe('Model Mapper', function() {
   describe('Convert Events Model to DTO', function() {
     it('converts events model', function() {
       const eventsModel = [
-        {volunteerName: "Kyle Huang", calendar: {date: new Date("2017-01-01")}, position: {name: "Speaker"}},
-        {volunteerName: "Mei Liu", calendar: {date: new Date("2017-01-01")}, position: {name: "Speaker"}},
-        {volunteerName: "Bo Qi", calendar: {date: new Date("2017-01-04")}, position: {name: "Tester"}},
-        {volunteerName: "Joseph Cheung", calendar: {date: new Date("2017-01-04")}, position: {name: "Moderator"}}];
+        {volunteerName: "Kyle Huang", calendarDate: {date: new Date("2017-01-01")}, position: {name: "Speaker"}},
+        {volunteerName: "Mei Liu", calendarDate: {date: new Date("2017-01-01")}, position: {name: "Speaker"}},
+        {volunteerName: "Bo Qi", calendarDate: {date: new Date("2017-01-04")}, position: {name: "Tester"}},
+        {volunteerName: "Joseph Cheung", calendarDate: {date: new Date("2017-01-04")}, position: {name: "Moderator"}}];
 
       const expectedModel = [{date: new Date("2017-01-01"), members: [
         {volunteerName: "Kyle Huang", position: "Speaker"},

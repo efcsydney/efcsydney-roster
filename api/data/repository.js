@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const Event = require('../models/event').Event;
-const Calendar = require('../models/calendar').Calendar;
+const CalendarDate = require('../models/calendar-date').CalendarDate;
 const Position = require('../models/position').Position;
 
 const Op = Sequelize.Op;
@@ -10,10 +10,10 @@ class Repository {
     const {from, to} = dateRange;
     return Event.findAll({
       include: [
-        { model: Calendar, as: 'calendar', where: { date: {[Op.gte]: from, [Op.lte]: to}} },
+        { model: CalendarDate, as: 'calendarDate', where: { date: {[Op.gte]: from, [Op.lte]: to}} },
         { model: Position, as: 'position' }],
       order: [
-        [Calendar, "date", "DESC" ]
+        [{model: CalendarDate, as: 'calendarDate'}, "date", "DESC" ]
       ]
     });
   }
@@ -22,16 +22,16 @@ class Repository {
     const {date, position} = criteria;
     return Event.findOne({
       include: [
-        { model: Calendar, as: 'calendar', where: { date: {[Op.eq]: date}}},
+        { model: CalendarDate, as: 'calendarDate', where: { date: {[Op.eq]: date}}},
         { model: Position, as: 'position', where: { name: position} }],
       order: [
-        [Calendar, "date", "DESC" ]
+        [{model: CalendarDate, as: 'calendarDate'}, "date", "DESC" ]
       ]
     })
   }
 
   static findOrCreateCalendarDate(date){
-    return Calendar.findOrCreate({
+    return CalendarDate.findOrCreate({
       where: { date: date },
       defaults: { date: date }
     });
@@ -44,35 +44,36 @@ class Repository {
   }
 
   static saveEvent(event){
-    const calendarPromise = Repository.findOrCreateCalendarDate(event.calendar.date);
+    const calendarDatePromise = Repository.findOrCreateCalendarDate(event.calendarDate.date);
     const positionPromise = Repository.findOrCreatePosition(event.position.name);
 
-    return Promise.all([calendarPromise, positionPromise])
+    return Promise.all([calendarDatePromise, positionPromise])
     .then(function(results){
-      const [calendarResult, positionResult] = results;
-      const calendar = calendarResult[0];
+      //console.log(results);
+      const [calendarDateResult, positionResult] = results;
+      const calendarDate = calendarDateResult[0];
       const position = positionResult[0];
       return Event.create({
         volunteerName: event.volunteerName,
-        calendarId: calendar.id,
+        calendarDateId: calendarDate.id,
         positionId: position.id
       });
     });
   };
 
   static updateEvent(event){
-    const calendarPromise = Repository.findOrCreateCalendarDate(event.calendar.date);
+    const calendarDatePromise = Repository.findOrCreateCalendarDate(event.calendarDate.date);
     const positionPromise = Repository.findOrCreatePosition(event.position.name);
 
-    return Promise.all([calendarPromise, positionPromise])
+    return Promise.all([calendarDatePromise, positionPromise])
     .then(function(results){
-      const [calendarResult, positionResult] = results;
-      const calendar = calendarResult[0];
+      const [calendarDateResult, positionResult] = results;
+      const calendarDate = calendarDateResult[0];
       const position = positionResult[0];
       return Event.update({
         volunteerName: event.volunteerName
       },{
-        where: {calendarId: calendar.id, positionId: position.id }
+        where: {calendarDateId: calendarDate.id, positionId: position.id }
       });
     });
   }

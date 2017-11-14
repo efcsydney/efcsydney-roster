@@ -5,7 +5,7 @@ class EventMapper {
     
     events.map((e) => {
       const eventDate = eventDates.find((event) =>{
-        return event.date.getTime() == e.calendar.date.getTime();
+        return event.date.getTime() == e.calendarDate.date.getTime();
       });
 
       const event = {position: e.position.name, name: e.volunteerName};
@@ -13,11 +13,16 @@ class EventMapper {
       if(eventDate !== undefined){
         eventDate.members.push(event);
       }else{
-        eventDates.push({date: e.calendar.date, members: [event] })
+        eventDates.push({date: e.calendarDate.date, members: [event] })
       }
     });
 
     return eventDates;
+  }
+
+  static convertDtoToEventModel(data){
+    const event = {volunteerName: data.name, calendarDate: {date: new Date(data.date)}, position: {name: data.position}};
+    return event;
   }
 }
 

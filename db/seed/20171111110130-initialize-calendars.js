@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('calendars', [{
+    return queryInterface.bulkInsert('calendar_dates', [{
       id: 1,
       date: '2017-10-08',
       createdAt: new Date(),
@@ -16,6 +16,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('calendars', null, {});
+    return queryInterface.bulkDelete('calendar_dates', null, {});
   }
 };
