@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import QuarterView from '../components/QuarterView';
+import LoadingIndicator from '../components/LoadingIndicator';
 import leftArrowIcon from '../assets/arrow_left.svg';
 import rightArrowIcon from '../assets/arrow_right.svg';
 import moment from 'moment';
@@ -9,6 +10,7 @@ import Edit from './Edit';
 export default class App extends Component {
   state = {
     date: new Date(),
+    isLoading: true,
     isEditing: false,
     selectedData: {}
   };
@@ -33,6 +35,7 @@ export default class App extends Component {
         .format('YYYY-MM-DD');
     }
 
+    this.setState({ isLoading: true });
     fetch(`/api/events?from=${params.from}&to=${params.to}&category=english`)
       .then(response => response.json())
       .then(dataFromServer => {
@@ -40,9 +43,11 @@ export default class App extends Component {
         if (!params.isPreCache || params.isPreCache === undefined) {
           this.setState({ events: this.cachedEvents });
         }
+        this.setState({ isLoading: false });
       })
       .catch(function() {
         console.log('error'); // eslint-disable-line
+        this.setState({ isLoading: false });
       });
   }
   handleButtonClick = direction => {
@@ -73,7 +78,7 @@ export default class App extends Component {
       selectedData: null
     });
   };
-  handleEditSave = form => {    
+  handleEditSave = form => {
     console.log(form);
     fetch('/api/events', {
       method: "PUT",
@@ -85,7 +90,7 @@ export default class App extends Component {
     })
     .then(
           (resp) => resp.json()
-    ) 
+    )
     .then(function(data) {
           if(data.result !== 'OK'){
             console.log("error");
@@ -103,7 +108,7 @@ export default class App extends Component {
     this.loadDataFromServer();
   }
   render() {
-    const { date, isEditing, selectedData } = this.state;
+    const { date, isLoading, isEditing, selectedData } = this.state;
 
     return (
       <Wrapper>
@@ -119,6 +124,7 @@ export default class App extends Component {
           <NextButton onClick={this.handleButtonClick.bind(this, 'next')}>
             <img src={rightArrowIcon} role="presentation" />
           </NextButton>
+          <LoadingIndicator overlay={true} active={isLoading} bgcolor="rgba(255, 255, 255, 0.7)"/>
         </ViewWrapper>
         {isEditing && (
           <Edit
