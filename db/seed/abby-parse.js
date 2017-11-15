@@ -1,6 +1,6 @@
 'use strict';
 
-// use Papaparse: make csv become js
+const Repository = require('../../api/data/repository').Repository;
 var Papa = require('papaparse');
 var fs = require('fs');
 var file = 'roster.csv';
@@ -12,38 +12,23 @@ var data = Papa.parse(content, {
 });
 
 // delete extra data
-for (var n = 0; n <= 4; n++){
-  var rmfront = data['data'].shift();
+for (var n = 0; n <= 3; n++){
+  var rmfront0 = data['data'].shift();
 }
+  var position = data['data'].shift();
 
 for (var m = 0; m <= 10; m++){
   var rmend = data['data'].pop();
 }
 
-// generate data array for DB
-var con = []
-
+// generate data for DB
 for (var i = 0; i <= data['data'].length; i++){
   for (var j = 1; j <= 8; j++){
-    con = [
-      {
+    Repository.saveEvent({
       volunteerName: data['data'][i][j+1],
-      calendarId: data['data'][i][1],
-      positionId: j-1,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      calendar: {date: data['data'][i][1]},
+      position: {name: position[j+1]}
       }
-    ]
-  console.log(con)
+    )
   }
 }
-
-module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('events', content, {});
-  },
-
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('events', null, {});
-  }
-};

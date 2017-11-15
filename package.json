@@ -16,6 +16,7 @@
     "moment": "^2.19.1",
     "mysql2": "^1.4.2",
     "nodemon": "^1.12.1",
+    "papaparse": "^4.3.6",
     "react-add-to-calendar": "^0.1.4",
     "sequelize": "^4.22.5",
     "sequelize-cli": "^3.0.0",
