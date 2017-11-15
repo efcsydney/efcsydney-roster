@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Creatable } from 'react-select';
 import 'react-select/dist/react-select.css';
 import _ from 'lodash';
+import StateButton from '../components/StateButton';
 
 function getOptions(names) {
   names = names.map(name => ({ value: name, label: name }));
@@ -70,14 +71,14 @@ export default class Edit extends Component {
             </span>
           </Row>
           <Row>
-            <Button
+            <StateButton
               onClick={this.handleSaveClick.bind(this, {
                 date,
                 role,
                 name: selectedName
               })}>
               Save
-            </Button>
+            </StateButton>
           </Row>
         </Form>
       </Modal>
@@ -108,12 +109,4 @@ const Label = styled.label`
 `;
 
 const Select = styled(Creatable)`width: 180px;`;
-const Button = styled.button.attrs({ type: 'button' })`
-  background-color: #588c25;
-  border-radius: 3px;
-  border: 1px solid #466d1d;
-  box-sizing: border-box;
-  color: #fff;
-  min-width: 110px;
-  padding: 12px;
-`;
+
