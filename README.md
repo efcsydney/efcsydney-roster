@@ -174,7 +174,7 @@ brew install heroku
 heroku login
 ```
 1. Use shared account `developer@efcsydney.org`
-2. Register along with your gmail, if you didn't see efcsydney-roster at your dash borad, please check with joseph.
+2. Register along with your gmail, you should have efcsydney-roster at your dash borad, if not, please check with Joseph/Liam.
 
 **deploy**
 ```
