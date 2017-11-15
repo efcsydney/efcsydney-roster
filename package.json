@@ -28,6 +28,7 @@
     "test": "mocha",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
+    "deploy:heroku": "sh deploy/heroku.sh",
     "deploy:qa": "dploy qa",
     "deploy:prod": ""
   },
