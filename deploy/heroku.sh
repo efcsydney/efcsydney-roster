@@ -1,12 +1,6 @@
 #/bin/sh
 current_branch=`git branch | grep \* | cut -d ' ' -f2`
 
-#Check install heroku  
-machine_type=`uname -s`
-if [ $machine_type = "Darwin" ]; then
-    which heroku || brew install heroku
-fi
-
 #Deploy Everything to heroku master branch 
 git add .
 git commit -m "deploy to heroku for test"
