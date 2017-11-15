@@ -42,7 +42,7 @@ describe('Repository', function() {
           return Event.destroy({where: {id: createdEvent.id }});
         })
         .then(function(){
-          console.log("Data is removed. Test is completed.");
+          console.log("Test data is removed. Test is completed.");
         })
         .catch(function (err) {
           console.log(err)
@@ -67,7 +67,7 @@ describe('Repository', function() {
           return Repository.updateEvent(originalEvent);
         })
         .then(function(){
-          console.log("Data is restored. Test is completed.");
+          console.log("Original data is restored. Test is completed.");
         })
         .catch(function (err) {
           console.log(err)

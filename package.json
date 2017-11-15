@@ -30,7 +30,8 @@
     "lint": "eslint .",
     "test": "mocha",
     "db-create": "node scripts/create-database.js",
-    "db-migrate": "sequelize db:migrate"
+    "db-migrate": "sequelize db:migrate",
+    "db-seed": "sequelize db:seed:all"
   },
   "devDependencies": {
     "concurrently": "3.1.0",
