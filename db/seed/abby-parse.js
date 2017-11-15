@@ -6,10 +6,7 @@ var fs = require('fs');
 var file = 'roster.csv';
 
 var content = fs.readFileSync(file, { encoding: 'binary' });
-var data = Papa.parse(content, {
-	complete: function(results) {
-	}
-});
+var data = Papa.parse(content);
 
 // delete extra data
 for (var n = 0; n <= 3; n++){
