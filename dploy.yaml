@@ -7,3 +7,4 @@ qa:
     privateKey: ~/.ssh/key/efcsydney.pem
     path:
         remote: /opt/efcsydney-roster
+
