@@ -1,6 +1,6 @@
 const chai = require('chai');
 const expect = chai.expect;
-const Repository = require('../../api/data/repository').Repository;
+const EventRepository = require('../../api/data/event-repository').EventRepository;
 const Event = require('../../api/models/event').Event;
 const CalendarDate = require('../../api/models/calendar-date').CalendarDate;
 const Position = require('../../api/models/position').Position;
@@ -10,14 +10,14 @@ const Op = Sequelize.Op;
 describe('Repository', function() {
   describe('/', function() {
     it('gets events by date range', function() {
-      return Repository.getEventsByDateRange({from: new Date("2017-10-01"), to: new Date("2017-11-01")})
+      return EventRepository.getEventsByDateRange({from: new Date("2017-10-01"), to: new Date("2017-11-01")})
         .then(function(events) {
           expect(16).to.equal(events.length);
         });
     });
 
     it('gets events by date and position', function() {
-      return Repository.getEventByDatePosition({date: new Date("2017-10-15"), position: "P&W"})
+      return EventRepository.getEventByDatePosition({date: new Date("2017-10-15"), position: "P&W"})
         .then(function(event) {
           console.log(event);
           expect("Amy Chen").to.equal(event.volunteerName);
@@ -30,7 +30,7 @@ describe('Repository', function() {
 
     it('inserts new event', function() {
       const newEvent = {volunteerName: 'Kyle Huang', calendarDate: {date: new Date("2017-11-25")}, position: { name: 'Speaker'}};
-      return Repository.saveEvent(newEvent)
+      return EventRepository.addEvent(newEvent)
         .then(function(event) {
           return Event.findOne({include: [
             { model: CalendarDate, as: 'calendarDate', where: { date: {[Op.eq]: newEvent.calendarDate.date}}},
@@ -51,8 +51,14 @@ describe('Repository', function() {
     });
 
     it('updates existing event', function() {
-      const existingEvent = {volunteerName: 'Jimmy Wong', calendarDate: {date: new Date('2017-10-08')}, position: { name: 'Speaker'}};
-      return Repository.updateEvent(existingEvent)
+            
+      const expectedName = 'Jimmy Wong';
+      const existingEvent = {volunteerName: expectedName, calendarDate: {date: new Date('2017-10-08')}, position: { name: 'Speaker'}};
+      return EventRepository.getEventByDatePosition({date: new Date('2017-10-08'), position: 'Speaker'})
+        .then(function(event){
+          event.volunteerName = expectedName;
+          return EventRepository.updateEvent(event);
+        })
         .then(function() {
           return Event.findOne({include: [
             { model: CalendarDate, as: 'calendarDate', where: { date: {[Op.eq]: existingEvent.calendarDate.date}}},
@@ -60,11 +66,10 @@ describe('Repository', function() {
         })
         .then(function(updatedEvent){
           //console.log(updatedEvent);
-          expect('Jimmy Wong').to.equal(updatedEvent.volunteerName);
-        })
-        .then(function(){
-          const originalEvent = {volunteerName: 'May Chien', calendarDate: {date: new Date('2017-10-08')}, position: { name: 'Speaker'}};
-          return Repository.updateEvent(originalEvent);
+          expect(expectedName).to.equal(updatedEvent.volunteerName);
+
+          updatedEvent.volunteerName = 'May Chien';
+          return EventRepository.updateEvent(updatedEvent);
         })
         .then(function(){
           console.log("Original data is restored. Test is completed.");

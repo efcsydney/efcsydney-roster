@@ -1,7 +1,7 @@
 const Event = require('../models/event').Event;
 const CalendarDate = require('../models/calendar-date').CalendarDate;
 const Position = require('../models/position').Position;
-const Repository = require('../data/repository').Repository;
+const EventRepository = require('../data/event-repository').EventRepository;
 const EventService = require("../service/events-service").EventService;
 const EventMapper = require("../mapper/event-mapper").EventMapper;
 
@@ -24,9 +24,9 @@ async function saveEvent(req, res){
   const event = EventMapper.convertDtoToEventModel(req.body.data);
   const dbEvent = await Repository.getEventByDatePosition({date: event.calendarDate.date, position: event.position.name});
   if(dbEvent != null && dbEvent.id > 0){
-    await Repository.updateEvent(event);
+    await EventRepository.updateEvent(event);
   }else{
-    await Repository.saveEvent(event);
+    await EventRepository.saveEvent(event);
   }
 
   const response = {

@@ -5,7 +5,7 @@ const Position = require('../models/position').Position;
 
 const Op = Sequelize.Op;
 
-class Repository {
+class EventRepository {
   static getEventsByDateRange(dateRange){
     const {from, to} = dateRange;
     return Event.findAll({
@@ -43,9 +43,9 @@ class Repository {
     });
   }
 
-  static saveEvent(event){
-    const calendarDatePromise = Repository.findOrCreateCalendarDate(event.calendarDate.date);
-    const positionPromise = Repository.findOrCreatePosition(event.position.name);
+  static addEvent(event){
+    const calendarDatePromise = EventRepository.findOrCreateCalendarDate(event.calendarDate.date);
+    const positionPromise = EventRepository.findOrCreatePosition(event.position.name);
 
     return Promise.all([calendarDatePromise, positionPromise])
     .then(function(results){
@@ -62,21 +62,12 @@ class Repository {
   };
 
   static updateEvent(event){
-    const calendarDatePromise = Repository.findOrCreateCalendarDate(event.calendarDate.date);
-    const positionPromise = Repository.findOrCreatePosition(event.position.name);
-
-    return Promise.all([calendarDatePromise, positionPromise])
-    .then(function(results){
-      const [calendarDateResult, positionResult] = results;
-      const calendarDate = calendarDateResult[0];
-      const position = positionResult[0];
       return Event.update({
         volunteerName: event.volunteerName
       },{
-        where: {calendarDateId: calendarDate.id, positionId: position.id }
+        where: {id: event.id }
       });
-    });
   }
 }
 
-module.exports = { Repository };
+module.exports = { EventRepository };
