@@ -2,10 +2,8 @@
 current_branch=`git branch | grep \* | cut -d ' ' -f2`
 
 #Deploy Everything to heroku master branch 
-git add .
-git commit -m "deploy to heroku for test"
 heroku git:remote -a efcsydney-roster
-git push -f heroku $current_branch:master
+git push heroku $current_branch:master
 
 Yellow='\033[0;33m'
 White='\033[0;0m'
