@@ -22,7 +22,7 @@ export default class App extends Component {
       to
     })
       .then(data => {
-        this.setState({ 
+        this.setState({
           events: data,
           isLoading: false
         });
@@ -61,7 +61,7 @@ export default class App extends Component {
       selectedData: null
     });
   };
-  handleEditSave = form => {    
+  handleEditSave = form => {
     console.log(form);
     fetch('/api/events', {
       method: "PUT",
@@ -73,7 +73,7 @@ export default class App extends Component {
     })
     .then(
           (resp) => resp.json()
-    ) 
+    )
     .then(function(data) {
           if(data.result !== 'OK'){
             console.log("error");
