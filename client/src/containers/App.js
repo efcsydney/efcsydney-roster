@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import QuarterView from '../components/QuarterView';
+import LoadingIndicator from '../components/LoadingIndicator';
 import leftArrowIcon from '../assets/arrow_left.svg';
 import rightArrowIcon from '../assets/arrow_right.svg';
 import moment from 'moment';
@@ -10,18 +11,26 @@ import API from '../api';
 export default class App extends Component {
   state = {
     date: new Date(),
+    isLoading: true,
     isEditing: false,
     selectedData: {}
   };
   loadData = ({ from, to }) => {
+    this.setState({ isLoading: true });
     return API.retrieve({
       from,
       to
     })
       .then(data => {
-        this.setState({ events: data });
+        this.setState({ 
+          events: data,
+          isLoading: false
+        });
       })
-      .catch(e => console.error(e)); // eslint-disable-line
+      .catch(e => {
+        console.error(e);  // eslint-disable-line
+        this.setState({ isLoading: false });
+      });
   };
   handleButtonClick = direction => {
     const { date } = this.state;
@@ -89,7 +98,7 @@ export default class App extends Component {
     });
   }
   render() {
-    const { date, isEditing, selectedData } = this.state;
+    const { date, isLoading, isEditing, selectedData } = this.state;
 
     return (
       <Wrapper>
@@ -105,6 +114,7 @@ export default class App extends Component {
           <NextButton onClick={this.handleButtonClick.bind(this, 'next')}>
             <img src={rightArrowIcon} role="presentation" />
           </NextButton>
+          <LoadingIndicator overlay={true} active={isLoading} bgcolor="rgba(255, 255, 255, 0.7)"/>
         </ViewWrapper>
         {isEditing && (
           <Edit
