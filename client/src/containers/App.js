@@ -6,6 +6,7 @@ import leftArrowIcon from '../assets/arrow_left.svg';
 import rightArrowIcon from '../assets/arrow_right.svg';
 import moment from 'moment';
 import Edit from './Edit';
+import API from '../api';
 
 export default class App extends Component {
   state = {
@@ -14,42 +15,23 @@ export default class App extends Component {
     isEditing: false,
     selectedData: {}
   };
-  cachedEvents = [];
-  loadDataFromServer(params = {}) {
-    if (params.from === undefined) {
-      params.from = moment()
-        .startOf('quarter')
-        .format('YYYY-MM-DD');
-    } else {
-      params.from = moment(params.from)
-        .startOf('quarter')
-        .format('YYYY-MM-DD');
-    }
-    if (params.to === undefined) {
-      params.to = moment()
-        .endOf('quarter')
-        .format('YYYY-MM-DD');
-    } else {
-      params.to = moment(params.to)
-        .endOf('quarter')
-        .format('YYYY-MM-DD');
-    }
-
+  loadData = ({ from, to }) => {
     this.setState({ isLoading: true });
-    fetch(`/api/events?from=${params.from}&to=${params.to}&category=english`)
-      .then(response => response.json())
-      .then(dataFromServer => {
-        this.cachedEvents = dataFromServer;
-        if (!params.isPreCache || params.isPreCache === undefined) {
-          this.setState({ events: this.cachedEvents });
-        }
-        this.setState({ isLoading: false });
+    return API.retrieve({
+      from,
+      to
+    })
+      .then(data => {
+        this.setState({ 
+          events: data,
+          isLoading: false
+        });
       })
-      .catch(function() {
-        console.log('error'); // eslint-disable-line
+      .catch(e => {
+        console.error(e);  // eslint-disable-line
         this.setState({ isLoading: false });
       });
-  }
+  };
   handleButtonClick = direction => {
     const { date } = this.state;
     let newDate = moment(date).startOf('quarter');
@@ -61,7 +43,8 @@ export default class App extends Component {
     this.setState({
       date: newDate.toDate()
     });
-    this.loadDataFromServer({
+
+    this.loadData({
       from: newDate.format('YYYY-MM-DD'),
       to: newDate.endOf('quarter').format('YYYY-MM-DD')
     });
@@ -78,9 +61,26 @@ export default class App extends Component {
       selectedData: null
     });
   };
-  handleEditSave = form => {
-    // TODO - @james or @jeffreyx
-    console.log(form); // eslint-disable-line
+  handleEditSave = form => {    
+    console.log(form);
+    fetch('/api/events', {
+      method: "PUT",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(form)
+    })
+    .then(
+          (resp) => resp.json()
+    ) 
+    .then(function(data) {
+          if(data.result !== 'OK'){
+            console.log("error");
+          }
+    }).catch(function() {
+          console.log("error");
+    });
 
     this.setState({
       isEditing: false,
@@ -88,7 +88,14 @@ export default class App extends Component {
     });
   };
   componentWillMount() {
-    this.loadDataFromServer();
+    this.loadData({
+      from: moment()
+        .startOf('quarter')
+        .format('YYYY-MM-DD'),
+      to: moment()
+        .endOf('quarter')
+        .format('YYYY-MM-DD')
+    });
   }
   render() {
     const { date, isLoading, isEditing, selectedData } = this.state;
