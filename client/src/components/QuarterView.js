@@ -40,6 +40,7 @@ export default class QuarterView extends Component {
     const endMonth = getQuarterLastMonth(date).format('MMM');
     const year = days[0].format('YYYY');
     const icalicon = { 'calendar-plus-o': 'left' };
+    const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
 
     return (
       <Wrapper>
@@ -70,11 +71,12 @@ export default class QuarterView extends Component {
             const icalBtn = (
               <AddToCalendar
                 event={icalEvent}
+                listItems={icalitems}
                 buttonTemplate={icalicon}
                 buttonLabel={day.format('DD MMM')}
               />
             );
-           
+
             const highlightDate = moment()
               .isoWeekday(7)
               .format('YYYY-MM-DD');
