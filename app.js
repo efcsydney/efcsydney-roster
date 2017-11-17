@@ -6,7 +6,7 @@ const eventsController = require('./api/controllers/events-controller');
 
 app.use(bodyParser.json());
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3001);
 
 // Express frond-end static assets
 app.use(express.static('client/build'));
