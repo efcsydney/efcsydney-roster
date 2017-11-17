@@ -22,12 +22,8 @@ async function getEvents(req, res) {
 
 async function saveEvent(req, res){
   const event = EventMapper.convertDtoToEventModel(req.body.data);
-  const dbEvent = await Repository.getEventByDatePosition({date: event.calendarDate.date, position: event.position.name});
-  if(dbEvent != null && dbEvent.id > 0){
-    await EventRepository.updateEvent(event);
-  }else{
-    await EventRepository.saveEvent(event);
-  }
+
+  await EventService.saveEvent(event);
 
   const response = {
     success: 'OK',

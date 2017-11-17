@@ -49,7 +49,6 @@ class EventRepository {
 
     return Promise.all([calendarDatePromise, positionPromise])
     .then(function(results){
-      //console.log(results);
       const [calendarDateResult, positionResult] = results;
       const calendarDate = calendarDateResult[0];
       const position = positionResult[0];
