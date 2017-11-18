@@ -8,10 +8,8 @@ app.use(bodyParser.json());
 
 app.set('port', process.env.PORT || 3001);
 
-// Express only serves static assets in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
-}
+// Express frond-end static assets
+app.use(express.static('client/build'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'Hello Guys! Welcome to roster!' });
