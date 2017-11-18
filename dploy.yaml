@@ -7,3 +7,5 @@ qa:
     privateKey: ~/.ssh/key/efcsydney.pem
     path:
         remote: /opt/efcsydney-roster
+    include:
+        "client/build/**/*": "/client/build/"

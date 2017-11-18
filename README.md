@@ -111,15 +111,15 @@ This setup uses [concurrently](https://github.com/kimmobrunfeldt/concurrently) f
 
 ## Deploy
 
-Deploy to QA server hostname: http://demo-roster.efcsydney.org 
+Deploy to QA server hostname: http://demo-roster.efcsydney.org
 
 ```
-dploy qa
+yarn deploy:qa
 ```
 
 
 Deploy to Production server (Todo) http://roster.efcsydney.org
 
 ```
-dploy prod
+yarn deploy:prod
 ```

@@ -25,6 +25,7 @@
     "supertest": "^3.0.0"
   },
   "scripts": {
+    "build": "cd client && npm run build",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node server.js",
     "client": "node start-client.js",
