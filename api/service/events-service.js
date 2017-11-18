@@ -22,18 +22,13 @@ class EventService {
       date: event.calendarDate.date,
       position: event.position.name
     }).then(function(dbEvent) {
-      return EventService.createOrUpdateEvent(dbEvent);
+      if (dbEvent != null) {
+        dbEvent.volunteerName = event.volunteerName;
+        return EventRepository.updateEvent(dbEvent);
+      } else {
+        return EventRepository.addEvent(event);
+      }
     });
-  }
-  static createOrUpdateEvent(dbEvent) {
-    if (!dbEvent.hasOwnProperty('id')) {
-      throw exception('Expected id is not available');
-    }
-    if (dbEvent != null && dbEvent.id > 0) {
-      return EventRepository.addEvent(event);
-    } else {
-      return EventRepository.saveEvent(event);
-    }
   }
 }
 

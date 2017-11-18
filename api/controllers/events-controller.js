@@ -26,7 +26,7 @@ async function getEvents(req, res) {
 
 async function saveEvent(req, res){
   const event = EventMapper.convertDtoToEventModel(req.body.data);
-
+  console.log(event);
   await EventService.saveEvent(event);
 
   const response = {
