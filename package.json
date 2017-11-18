@@ -20,6 +20,7 @@
     "react-add-to-calendar": "^0.1.4",
     "sequelize": "^4.22.5",
     "sequelize-cli": "^3.0.0",
+    "sinon": "^4.1.2",
     "sql.js": "0.3.2",
     "supertest": "^3.0.0"
   },
@@ -29,7 +30,7 @@
     "client": "node start-client.js",
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
     "lint": "eslint .",
-    "test": "mocha",
+    "test": "NODE_ENV=test mocha",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
     "db-seed": "sequelize db:seed:all"

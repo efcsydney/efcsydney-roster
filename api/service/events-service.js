@@ -4,7 +4,7 @@ const EventRepository = require('../data/event-repository').EventRepository;
 
 class EventService {
   static computeDateRange(dateRange) {
-    const { from, to } = dateRange;
+    let { from, to } = dateRange;
     if (from === undefined) {
       from = new Date();
     }

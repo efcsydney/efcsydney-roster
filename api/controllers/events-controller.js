@@ -7,34 +7,48 @@ const EventMapper = require("../mapper/event-mapper").EventMapper;
 const Factory = require('../service/factory').Factory;
 
 async function getEvents(req, res) {
-  const repository = Factory.getRepository(req);
-  const dataMapper = Factory.getDataMapper(req);
+  try {
+    const repository = Factory.getRepository(req);
+    const dataMapper = Factory.getDataMapper(req);
 
-  const dateRange = EventService.computeDateRange({from: req.query.from, to: req.query.to});
-  const events = await repository.getEventsByDateRange({from: dateRange.from, to: dateRange.to});
-  const dto = dataMapper.convertEventsModelToDto(events);
+    const dateRange = EventService.computeDateRange({from: req.query.from, to: req.query.to});
+    const events = await repository.getEventsByDateRange({from: dateRange.from, to: dateRange.to});
+    const dto = dataMapper.convertEventsModelToDto(events);
 
-  const response = {
-    success: 'OK',
-    error: { message: ""},
-    data: dto
+    const response = {
+      success: 'OK',
+      error: { message: ""},
+      data: dto
+    }
+
+    // console.log(JSON.stringify(response, null, 2));
+    return res.json(response);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      error: { message: err.message }
+    });
   }
-
-  console.log(JSON.stringify(response, null, 2));
-  return res.json(response);
 }
 
 async function saveEvent(req, res){
-  const event = EventMapper.convertDtoToEventModel(req.body.data);
-  console.log(event);
-  await EventService.saveEvent(event);
+  try {
+    const event = EventMapper.convertDtoToEventModel(req.body);
+    console.log(event);
+    await EventService.saveEvent(event);
 
-  const response = {
-    success: 'OK',
-    error: { message: ""}
+    const response = {
+      success: 'OK',
+      error: { message: ""}
+    }
+
+    return res.status(201).json(response);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      error: { message: err.message }
+    });
   }
-
-  return res.json(response);
 }
 
 module.exports = {

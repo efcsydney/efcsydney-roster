@@ -13,21 +13,21 @@ describe('Model Mapper', function() {
         {volunteerName: "Joseph Cheung", calendarDate: {date: new Date("2017-01-04")}, position: {name: "Moderator"}}];
 
       const expectedModel = [{date: new Date("2017-01-01"), members: [
-        {volunteerName: "Kyle Huang", position: "Speaker"},
-        {volunteerName: "Mei Liu", position: "Speaker"},
-      ]}, 
+        {volunteerName: "Kyle Huang", role: "Speaker"},
+        {volunteerName: "Mei Liu", role: "Speaker"},
+      ]},
       {date: new Date("2017-01-04"), members: [
-        {volunteerName: "Bo Qi", position: "Tester"},
-        {volunteerName: "Joseph Cheung", position: "Moderator"}
+        {volunteerName: "Bo Qi", role: "Tester"},
+        {volunteerName: "Joseph Cheung", role: "Moderator"}
       ]}];
 
       const actualModel = EventMapper.convertEventsModelToDto(eventsModel);
 
       expect(2).to.eq(actualModel.length);
       expect(actualModel[0].members[0].name).to.eq("Kyle Huang");
-      expect(actualModel[0].members[0].position).to.eq("Speaker");
+      expect(actualModel[0].members[0].role).to.eq("Speaker");
       expect(actualModel[1].members[0].name).to.eq("Bo Qi");
-      expect(actualModel[1].members[0].position).to.eq("Tester");
+      expect(actualModel[1].members[0].role).to.eq("Tester");
     });
   });
 });
