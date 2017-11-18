@@ -1,50 +1,37 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import QuarterView from '../components/QuarterView';
+import LoadingIndicator from '../components/LoadingIndicator';
 import leftArrowIcon from '../assets/arrow_left.svg';
 import rightArrowIcon from '../assets/arrow_right.svg';
 import moment from 'moment';
 import Edit from './Edit';
+import API from '../api';
 
 export default class App extends Component {
   state = {
     date: new Date(),
+    isLoading: true,
     isEditing: false,
     selectedData: {}
   };
-  cachedEvents = [];
-  loadDataFromServer(params = {}) {
-    if (params.from === undefined) {
-      params.from = moment()
-        .startOf('quarter')
-        .format('YYYY-MM-DD');
-    } else {
-      params.from = moment(params.from)
-        .startOf('quarter')
-        .format('YYYY-MM-DD');
-    }
-    if (params.to === undefined) {
-      params.to = moment()
-        .endOf('quarter')
-        .format('YYYY-MM-DD');
-    } else {
-      params.to = moment(params.to)
-        .endOf('quarter')
-        .format('YYYY-MM-DD');
-    }
-
-    fetch(`/api/events?from=${params.from}&to=${params.to}&category=english`)
-      .then(response => response.json())
-      .then(dataFromServer => {
-        this.cachedEvents = dataFromServer;
-        if (!params.isPreCache || params.isPreCache === undefined) {
-          this.setState({ events: this.cachedEvents });
-        }
+  loadData = ({ from, to }) => {
+    this.setState({ isLoading: true });
+    return API.retrieve({
+      from,
+      to
+    })
+      .then(data => {
+        this.setState({
+          events: data,
+          isLoading: false
+        });
       })
-      .catch(function() {
-        console.log('error'); // eslint-disable-line
+      .catch(e => {
+        console.error(e);  // eslint-disable-line
+        this.setState({ isLoading: false });
       });
-  }
+  };
   handleButtonClick = direction => {
     const { date } = this.state;
     let newDate = moment(date).startOf('quarter');
@@ -56,7 +43,8 @@ export default class App extends Component {
     this.setState({
       date: newDate.toDate()
     });
-    this.loadDataFromServer({
+
+    this.loadData({
       from: newDate.format('YYYY-MM-DD'),
       to: newDate.endOf('quarter').format('YYYY-MM-DD')
     });
@@ -74,8 +62,25 @@ export default class App extends Component {
     });
   };
   handleEditSave = form => {
-    // TODO - @james or @jeffreyx
-    console.log(form); // eslint-disable-line
+    console.log(form);
+    fetch('/api/events', {
+      method: "PUT",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(form)
+    })
+    .then(
+          (resp) => resp.json()
+    )
+    .then(function(data) {
+          if(data.result !== 'OK'){
+            console.log("error");
+          }
+    }).catch(function() {
+          console.log("error");
+    });
 
     this.setState({
       isEditing: false,
@@ -83,10 +88,17 @@ export default class App extends Component {
     });
   };
   componentWillMount() {
-    this.loadDataFromServer();
+    this.loadData({
+      from: moment()
+        .startOf('quarter')
+        .format('YYYY-MM-DD'),
+      to: moment()
+        .endOf('quarter')
+        .format('YYYY-MM-DD')
+    });
   }
   render() {
-    const { date, isEditing, selectedData } = this.state;
+    const { date, isLoading, isEditing, selectedData } = this.state;
 
     return (
       <Wrapper>
@@ -102,6 +114,7 @@ export default class App extends Component {
           <NextButton onClick={this.handleButtonClick.bind(this, 'next')}>
             <img src={rightArrowIcon} role="presentation" />
           </NextButton>
+          <LoadingIndicator overlay={true} active={isLoading} bgcolor="rgba(255, 255, 255, 0.7)"/>
         </ViewWrapper>
         {isEditing && (
           <Edit
