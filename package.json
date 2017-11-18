@@ -10,6 +10,7 @@
     "babel-eslint": "^8.0.2",
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
+    "dploy": "^1.2.0",
     "express": "4.13.3",
     "fs": "0.0.2",
     "global": "^4.3.2",
@@ -32,7 +33,9 @@
     "test": "mocha",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
-    "db-seed": "sequelize db:seed:all"
+    "db-seed": "sequelize db:seed:all",
+    "deploy:qa": "dploy qa",
+    "deploy:prod": "dploy prod"
   },
   "devDependencies": {
     "concurrently": "3.1.0",
