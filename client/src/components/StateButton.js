@@ -15,9 +15,9 @@ export default class StateButton extends Component {
   };
 
   render() {
-    const { children, kind } = this.props;
+    const { children, kind, ...otherProps } = this.props;
     return (
-      <Button>
+      <Button {...otherProps}>
         {kind === 'loading' && <SpinIcon animate="spin" />}
         {kind === 'success' && <CheckIcon />}
         {kind === 'failed' && <CloseIcon />}
