@@ -4,11 +4,15 @@ const Position = require('../models/position').Position;
 const EventRepository = require('../data/event-repository').EventRepository;
 const EventService = require("../service/events-service").EventService;
 const EventMapper = require("../mapper/event-mapper").EventMapper;
+const Factory = require('../service/factory').Factory;
 
 async function getEvents(req, res) {
+  const repository = Factory.getRepository(req);
+  const dataMapper = Factory.getDataMapper(req);
+
   const dateRange = EventService.computeDateRange({from: req.query.from, to: req.query.to});
-  const events = await Repository.getEventsByDateRange({from: dateRange.from, to: dateRange.to});
-  const dto = EventMapper.convertEventsModelToDto(events);
+  const events = await repository.getEventsByDateRange({from: dateRange.from, to: dateRange.to});
+  const dto = dataMapper.convertEventsModelToDto(events);
 
   const response = {
     success: 'OK',

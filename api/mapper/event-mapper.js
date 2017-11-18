@@ -2,7 +2,7 @@ class EventMapper {
 
   static convertEventsModelToDto(events){
     const eventDates = [];
-    
+
     events.map((e) => {
       const eventDate = eventDates.find((event) =>{
         return event.date.getTime() == e.calendarDate.date.getTime();
