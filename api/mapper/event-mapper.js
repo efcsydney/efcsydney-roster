@@ -8,7 +8,7 @@ class EventMapper {
         return event.date.getTime() == e.calendarDate.date.getTime();
       });
 
-      const event = {position: e.position.name, name: e.volunteerName};
+      const event = {role: e.position.name, name: e.volunteerName};
 
       if(eventDate !== undefined){
         eventDate.members.push(event);
