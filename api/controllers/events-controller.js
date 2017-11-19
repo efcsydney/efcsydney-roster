@@ -1,25 +1,57 @@
 const Event = require('../models/event').Event;
-const Calendar = require('../models/calendar').Calendar;
+const CalendarDate = require('../models/calendar-date').CalendarDate;
 const Position = require('../models/position').Position;
-const Repository = require('../data/repository').Repository;
+const EventRepository = require('../data/event-repository').EventRepository;
 const EventService = require("../service/events-service").EventService;
 const EventMapper = require("../mapper/event-mapper").EventMapper;
+const Factory = require('../service/factory').Factory;
 
 async function getEvents(req, res) {
-  const dateRange = EventService.computeDateRange({from: req.query.from, to: req.query.to});
-  const events = await Repository.getEventsByDateRange({from: dateRange.from, to: dateRange.to});
-  const dto = EventMapper.convertEventsModelToDto(events);
+  try {
+    const repository = Factory.getRepository(req);
+    const dataMapper = Factory.getDataMapper(req);
 
-  const response = {
-    success: true,
-    error: { message: ""},
-    data: dto
+    const dateRange = EventService.computeDateRange({from: req.query.from, to: req.query.to});
+    const events = await repository.getEventsByDateRange({from: dateRange.from, to: dateRange.to});
+    const dto = dataMapper.convertEventsModelToDto(events);
+
+    const response = {
+      success: 'OK',
+      error: { message: ""},
+      data: dto
+    }
+
+    // console.log(JSON.stringify(response, null, 2));
+    return res.json(response);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      error: { message: err.message }
+    });
   }
+}
 
-  console.log(JSON.stringify(response, null, 2));
-  return res.json(response);
+async function saveEvent(req, res){
+  try {
+    const event = EventMapper.convertDtoToEventModel(req.body);
+    console.log(event);
+    await EventService.saveEvent(event);
+
+    const response = {
+      success: 'OK',
+      error: { message: ""}
+    }
+
+    return res.status(201).json(response);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      error: { message: err.message }
+    });
+  }
 }
 
 module.exports = {
-  getEvents
+  getEvents,
+  saveEvent
 }

@@ -11,7 +11,7 @@ module.exports = {
       volunteerName: {
         type: Sequelize.STRING
       },
-      calendarId:{
+      calendarDateId:{
         type: Sequelize.INTEGER,
         unique: 'compositeIndex'
       },

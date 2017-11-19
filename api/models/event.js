@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelizeClient = require('../infrastructure/sequelize-client').sequelizeClient;
-const Calendar = require('./calendar').Calendar;
+const CalendarDate = require('./calendar-date').CalendarDate;
 const Position = require('./position').Position;
 
 const Event = sequelizeClient.define('events', {
@@ -12,7 +12,7 @@ const Event = sequelizeClient.define('events', {
   volunteerName: {
     type: Sequelize.STRING
   },
-  calendarId: {
+  calendarDateId: {
     type: Sequelize.INTEGER,
   },
   positionId: {
@@ -20,8 +20,14 @@ const Event = sequelizeClient.define('events', {
   }
 });
 
-Event.Calendar = Event.belongsTo(Calendar);
-Event.Position = Event.belongsTo(Position);
+Event.CalendarDate = Event.belongsTo(CalendarDate, {
+  as: 'calendarDate',
+  foreignKey: 'calendarDateId'
+});
+Event.Position = Event.belongsTo(Position, {
+  as: 'position',
+  foreignKey: 'positionId'
+});
 
 module.exports = {
   Event

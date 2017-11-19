@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const sequelizeClient = require('../infrastructure/sequelize-client').sequelizeClient;
 const Event = require('./event').Event;
 
-const Calendar = sequelizeClient.define('calendars', {
+const CalendarDate = sequelizeClient.define('calendar_dates', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -15,5 +15,5 @@ const Calendar = sequelizeClient.define('calendars', {
 });
 
 module.exports = {
-  Calendar
+  CalendarDate
 }

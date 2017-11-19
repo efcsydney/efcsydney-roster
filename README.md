@@ -57,6 +57,14 @@ To use different environment, please add environmental variable NODE_ENV=xxx, ie
 
 ## Run test
 
+First you will have to setup the test database
+
+```
+NODE_ENV=test yarn db-create  // create database
+NODE_ENV=test yarn db-migrate // migrate database
+NODE_ENV=test yarn db-seed    // seed database
+```
+
 ```
 yarn test // will run unit test and integration test
 ```
