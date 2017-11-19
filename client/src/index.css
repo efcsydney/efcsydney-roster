@@ -1,8 +1,13 @@
 html, body {
-  background: #fff;
+  background-color: #ecf2f7 !important;
 }
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+.react-add-to-calendar__button {
+  border: none !important;
+  background: none !important;
+  padding: 10px 3px;
 }

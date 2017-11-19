@@ -63,7 +63,7 @@ export default class QuarterView extends Component {
     return (
       <Wrapper>
         <Header>
-          {startMonth} - {endMonth} {year} English Sunday Service Roster
+          {startMonth} - {endMonth} {year}
         </Header>
         <Grid>
           {!isMobile && (
@@ -79,7 +79,9 @@ export default class QuarterView extends Component {
             </Row>
           )}
           {days.map((day, i) => {
-            const event = _.find(data.data, { date: day.format('YYYY-MM-DD') });
+            const event = _.find(data.data, item =>
+              moment(item.date).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+            );
             const members = event ? event.members : [];
             let eventDesc = '';
             roles.forEach(role => {
@@ -93,7 +95,7 @@ export default class QuarterView extends Component {
                 event={icalEvent}
                 listItems={icalitems}
                 buttonTemplate={icalicon}
-                buttonLabel={day.format('DD MMM')}
+                buttonLabel=""
               />
             );
 
@@ -110,7 +112,7 @@ export default class QuarterView extends Component {
                   type="header"
                   align="right"
                   width={cellWidth}>
-                  {icalBtn}
+                  {icalBtn} {day.format('DD MMM')}
                 </Cell>
                 {roles.map((role, i) => {
                   const member = _.find(members, { role }) || {};
@@ -140,34 +142,32 @@ export default class QuarterView extends Component {
 }
 
 const Wrapper = styled.div`
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   font-size: 13px;
   ${media.mobile`
-    margin-top: 40px;
+    margin-top: 20px;
   `};
 `;
 const Header = styled.h1`
-  background: #eb7d3c;
-  color: #fff;
-  font-size 18px;
-  padding: 5px;
-  margin: 0 0 3px 0;
+  border-radius: 4px 4px 0 0;
+  color: #666;
+  font-size 15px;
+  padding: 15px 0;
+  margin: 0;
   text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   ${media.mobile`
     font-size: 14px;
-    left: 10px;
-    padding: 10px;
-    position: fixed;
-    right: 10px;
-    top: 0;
-    z-index: 2;
+    padding: 15px;
   `}
 `;
 const Grid = styled.div`
-  border-left: solid 1px #fd9827;
-  border-top: solid 1px #fd9827;
+  border-left: solid 1px #f0f3f8;
+  border-radius: 0 0 4px 4px;
   flex-wrap: wrap;
   margin: 0 0 3em 0;
   padding: 0;
@@ -189,10 +189,10 @@ const Text = styled.span`
   white-space: nowrap;
 `;
 const Cell = styled.span`
-  background: ${props => (props.type === 'header' ? '#f6caae' : 'transparent')};
-  border-bottom: solid 1px #fd9827;
-  border-right: solid 1px #fd9827;
-  cursor: pointer;
+  border-bottom: solid 1px #e6e6e6;
+  border-right: solid 1px #e6e6e6;
+  color: #666;
+  cursor: ${props => (props.type === 'header' ? 'default' : 'pointer')};
   flex-direction: column;
   flex-grow: 1;
   font-weight: ${props => (props.type === 'header' ? 'bold' : 'normal')};
@@ -213,17 +213,17 @@ const Cell = styled.span`
     ${props =>
       props.type === 'header' &&
       `
-      background-color: #f6caae !important;
+      background-color: #eee !important;
       display: block;
-      padding: 5px;
+      padding: 0;
       width: auto;
       a {
         display: inline-block;
       }
     `}
     ${Label} {
-      background: #f6caae;
-      border-right: solid 1px #fd9827;
+      background: #eee;
+      border-right: solid 1px #e6e6e6;
       padding: 10px;
       text-align: right;
       width: 30%;
@@ -245,10 +245,29 @@ const Row = styled.div`
     background-color: ${props => props.highlighted && '#ffc'};
   }
   &:nth-child(odd) {
-    background-color: #fae4d6;
+    background-color: #f8f8f8;
     ${media.mobile`
       background-color: transparent;
     `};
+  }
+  ${props => props.highlighted && `
+      background-color: #faf2eb !important;
+      ${Cell} {
+        color: #7ac4f0 !important;
+      }
+  `}
+  &:last-child ${Cell} {
+    border-bottom: none;
+    &:first-child {
+      border-bottom-left-radius: 8px;
+    }
+    &:last-child {
+      border-bottom-right-radius: 8px;
+    }
+  }
+
+  &:last-child {
+    border-radius: 0 0 8px 8px;
   }
   ${media.mobile`
     flex-direction: column;
