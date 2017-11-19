@@ -26,7 +26,7 @@ async function getEvents(req, res) {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      success: 'error',
+      result: 'error',
       error: { message: err.message }
     });
   }
