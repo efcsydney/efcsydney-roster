@@ -1,5 +1,5 @@
 {
-  "name": "lookup-server",
+  "name": "efcsydney-roster",
   "version": "0.0.1",
   "private": true,
   "engines": {
@@ -10,6 +10,7 @@
     "babel-eslint": "^8.0.2",
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
+    "dploy": "^1.2.0",
     "express": "4.13.3",
     "fs": "0.0.2",
     "global": "^4.3.2",
@@ -25,6 +26,7 @@
     "supertest": "^3.0.0"
   },
   "scripts": {
+    "build": "cd client && npm run build",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node server.js",
     "client": "node start-client.js",
@@ -33,7 +35,9 @@
     "test": "NODE_ENV=test mocha",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
-    "db-seed": "sequelize db:seed:all"
+    "db-seed": "sequelize db:seed:all",
+    "deploy:qa": "dploy qa",
+    "deploy:prod": "dploy prod"
   },
   "devDependencies": {
     "concurrently": "3.1.0",
