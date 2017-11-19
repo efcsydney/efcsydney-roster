@@ -16,7 +16,7 @@ async function getEvents(req, res) {
     const dto = dataMapper.convertEventsModelToDto(events);
 
     const response = {
-      success: 'OK',
+      result: 'OK',
       error: { message: ""},
       data: dto
     }
@@ -26,6 +26,7 @@ async function getEvents(req, res) {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
+      result: 'error',
       error: { message: err.message }
     });
   }
@@ -38,7 +39,7 @@ async function saveEvent(req, res){
     await EventService.saveEvent(event);
 
     const response = {
-      success: 'OK',
+      result: 'OK',
       error: { message: ""}
     }
 
@@ -46,6 +47,7 @@ async function saveEvent(req, res){
   } catch (err) {
     console.log(err);
     return res.status(500).json({
+      result: 'error',
       error: { message: err.message }
     });
   }
