@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { media } from '../styled';
 
 export default () => (
   <Wrapper>
@@ -14,12 +15,16 @@ const Wrapper = styled.div`
   background: linear-gradient(to right, #666, #333);
   color: #fff;
   display: flex;
+  justify-content: center;
   margin-bottom: 10px;
   padding: 20px;
   img {
     border-radius: 8px;
     margin-right: 10px;
   }
+  ${media.mobile`
+    margin-bottom: 0;
+  `};
 `;
 const Logo = styled.img.attrs({src: '/logo.png'})`
   display: inline-block;
@@ -39,4 +44,7 @@ const Org = styled.span`
   font-size: 18px;
   font-weight: bold;
   margin-left: auto;
+  ${media.mobile`
+    display: none;
+  `};
 `;
