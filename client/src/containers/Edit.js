@@ -70,7 +70,7 @@ export default class Edit extends Component {
               />
             </span>
           </Row>
-          <Row>
+          <Row align="center">
             <StateButton
               onClick={this.handleSaveClick.bind(this, {
                 date,
@@ -99,6 +99,7 @@ const Row = styled.div`
     text-align: center;
     padding: 20px 0;
   }
+  justify-content: ${props => props.align || 'flex-start'};
 `;
 const Label = styled.label`
   display: inline-block;
@@ -107,6 +108,5 @@ const Label = styled.label`
   text-align: right;
   width: 80px;
 `;
-
 const Select = styled(Creatable)`width: 180px;`;
 

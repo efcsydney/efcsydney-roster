@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Portal } from 'react-portal';
 import styled from 'styled-components';
 import IconClose from 'react-icons/lib/md/close';
+import { media } from '../styled';
 
 export default class Modal extends Component {
   static propTypes = {
@@ -14,10 +15,10 @@ export default class Modal extends Component {
     isOpen: false
   };
   handleKeyup = e => {
-    const {onClose} = this.props;
+    const { onClose } = this.props;
 
     if (e.keyCode === 27) {
-      onClose()
+      onClose();
     }
   };
   componentWillMount() {
@@ -50,6 +51,7 @@ const Mask = styled.div`
   position: fixed;
   right: 0;
   top: 0;
+  z-index: 3;
 `;
 const Popup = styled.div`
   background: #fff;
@@ -58,9 +60,15 @@ const Popup = styled.div`
   height: 350px;
   margin: 50px auto;
   max-width: 420px;
-  padding: 50px;
+  padding: 50px 20px;
   position: relative;
   width: 90%;
+  ${media.mobile`
+    height: 300px;
+    margin: 20px auto;
+    padding: 20px;
+    width: 95%;
+  `};
 `;
 const Header = styled.div`
   border-radius: 5px 5px 0 0;
@@ -69,12 +77,14 @@ const Header = styled.div`
   font-weight: bold;
   margin-bottom: 30px;
   text-align: center;
+  ${media.mobile`
+    padding: 10px;
+    margin-bottom: 0;
+  `};
 `;
 const Body = styled.div`
   background: #fff;
   margin: 0 auto;
-  min-width: 320px;
-  width: 320px;
 `;
 const CloseLink = styled.span`
   align-items: center;
