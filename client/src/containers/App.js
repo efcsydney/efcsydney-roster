@@ -37,9 +37,6 @@ export default class App extends Component {
     }
     queryParams.from = from;
     queryParams.to = to;
-    if(queryParams.mock === undefined){
-      queryParams.mock = true;
-    }
     this.setState({ isLoading: true, params : queryParams });
     return API.retrieve(queryParams)
       .then(data => {
