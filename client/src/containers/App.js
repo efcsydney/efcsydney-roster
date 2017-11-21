@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import QuarterView from '../components/QuarterView';
 import LoadingIndicator from '../components/LoadingIndicator';
+import NavBar from '../components/NavBar';
 import leftArrowIcon from '../assets/arrow_left.svg';
 import rightArrowIcon from '../assets/arrow_right.svg';
 import moment from 'moment';
@@ -104,6 +105,7 @@ export default class App extends Component {
 
     return (
       <Wrapper>
+        <NavBar/>
         <ViewWrapper>
           <QuarterView
             date={date}
@@ -136,8 +138,8 @@ export default class App extends Component {
   }
 }
 
-const Wrapper = styled.div`margin: 10px;`;
-const ViewWrapper = styled.div`position: relative;`;
+const Wrapper = styled.div``;
+const ViewWrapper = styled.div`position: relative;margin: 10px;`;
 const Arrow = styled.button`
   align-items: center;
   background: rgba(255, 255, 255, 0.5);
