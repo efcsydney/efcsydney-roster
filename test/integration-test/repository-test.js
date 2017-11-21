@@ -5,17 +5,21 @@ const EventRepository = require('../../api/data/event-repository')
 const Event = require('../../api/models/event').Event;
 const CalendarDate = require('../../api/models/calendar-date').CalendarDate;
 const Position = require('../../api/models/position').Position;
+const createSeed = require('../helpers/test-helper').createSeed;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 describe('Repository', function() {
-  describe('/', function() {
+  describe('Events', function() {
+    beforeEach(function() {
+      return createSeed();
+    });
     it('gets events by date range', function() {
       return EventRepository.getEventsByDateRange({
-        from: new Date('2017-10-01'),
+        from: new Date('2017-10-08'),
         to: new Date('2017-11-01')
       }).then(function(events) {
-        expect(16).to.equal(events.length);
+        expect(events.length).to.equal(16);
       });
     });
 

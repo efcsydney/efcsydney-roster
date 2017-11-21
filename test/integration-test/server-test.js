@@ -2,12 +2,16 @@ const chai = require('chai');
 const expect = chai.expect;
 const request = require('supertest');
 const app = require('../../app').app;
+const createSeed = require('../helpers/test-helper').createSeed;
 
 describe('Server', function() {
   describe('get events', function() {
+    beforeEach(function() {
+      return createSeed();
+    });
     it('returns 4 weeks of data between 2017-03-01 and 2017-03-27', function() {
       return request(app)
-        .get('/api/events?from=2017-03-01&to=2017-03-27&mock=false')
+        .get('/api/events?from=2017-03-01&to=2017-03-27')
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
@@ -17,7 +21,7 @@ describe('Server', function() {
 
     it('returns 3 weeks of data between 2017-10-01 and 2017-10-15', function() {
       return request(app)
-        .get('/api/events?from=2017-10-01&to=2017-10-15&mock=false')
+        .get('/api/events?from=2017-10-01&to=2017-10-15')
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
@@ -67,7 +71,7 @@ describe('Server', function() {
 
     it('returns 12 weeks of date by default when the end date is not specified', function() {
       return request(app)
-        .get('/api/events?from=2017-09-02&mock=false')
+        .get('/api/events?from=2017-09-02')
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
