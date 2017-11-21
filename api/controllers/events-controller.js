@@ -2,24 +2,37 @@ const Event = require('../models/event').Event;
 const CalendarDate = require('../models/calendar-date').CalendarDate;
 const Position = require('../models/position').Position;
 const EventRepository = require('../data/event-repository').EventRepository;
-const EventService = require("../service/events-service").EventService;
-const EventMapper = require("../mapper/event-mapper").EventMapper;
+const PositionRepository = require('../data/position-repository')
+  .PositionRepository;
+const EventService = require('../service/events-service').EventService;
+const EventMapper = require('../mapper/event-mapper').EventMapper;
 const Factory = require('../service/factory').Factory;
 
 async function getEvents(req, res) {
   try {
-    const repository = Factory.getRepository(req);
+    const eventRepository = Factory.getEventRepository(req);
     const dataMapper = Factory.getDataMapper(req);
+    const eventService = Factory.getEventService(req);
 
-    const dateRange = EventService.computeDateRange({from: req.query.from, to: req.query.to});
-    const events = await repository.getEventsByDateRange({from: dateRange.from, to: dateRange.to});
-    const dto = dataMapper.convertEventsModelToDto(events);
+    const dateRange = eventService.computeDateRange({
+      from: req.query.from,
+      to: req.query.to
+    });
+    const scheduledEvents = await eventRepository.getEventsByDateRange({
+      from: dateRange.from,
+      to: dateRange.to
+    });
+    const allEvents = await eventService.linkScheduledEventsForDateRange(
+      dateRange,
+      scheduledEvents
+    );
+    const dto = dataMapper.convertEventsModelToDto(allEvents);
 
     const response = {
       result: 'OK',
-      error: { message: ""},
+      error: { message: '' },
       data: dto
-    }
+    };
 
     // console.log(JSON.stringify(response, null, 2));
     return res.json(response);
@@ -32,7 +45,7 @@ async function getEvents(req, res) {
   }
 }
 
-async function saveEvent(req, res){
+async function saveEvent(req, res) {
   try {
     const event = EventMapper.convertDtoToEventModel(req.body);
     console.log(event);
@@ -40,8 +53,8 @@ async function saveEvent(req, res){
 
     const response = {
       result: 'OK',
-      error: { message: ""}
-    }
+      error: { message: '' }
+    };
 
     return res.status(201).json(response);
   } catch (err) {
@@ -56,4 +69,4 @@ async function saveEvent(req, res){
 module.exports = {
   getEvents,
   saveEvent
-}
+};

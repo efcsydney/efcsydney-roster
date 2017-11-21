@@ -36,5 +36,12 @@ describe('Event Service', function() {
 
       expect(now.toString()).to.eq(actualDateRange.from.toString());
     });
+
+    it('computes Sunday dates between two days', function() {
+      const expectedDateRange = {from: new Date("2017-11-01"), to: new Date("2018-01-24")};
+      const datesArray = EventService.getSundayDatesForDateRange(expectedDateRange);
+
+      expect(7).to.eq(datesArray.length);
+    });
   });
 });
