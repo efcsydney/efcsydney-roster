@@ -79,8 +79,11 @@ export default class QuarterView extends Component {
             </Row>
           )}
           {days.map((day, i) => {
-            const event = _.find(data.data, item =>
-              moment(item.date).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+            const event = _.find(
+              data.data,
+              item =>
+                moment(item.date).format('YYYY-MM-DD') ===
+                day.format('YYYY-MM-DD')
             );
             const members = event ? event.members : [];
             let eventDesc = '';
@@ -189,7 +192,6 @@ const Text = styled.span`
   white-space: nowrap;
 `;
 const Cell = styled.span`
-  border-bottom: solid 1px #e6e6e6;
   border-right: solid 1px #e6e6e6;
   color: #666;
   cursor: ${props => (props.type === 'header' ? 'default' : 'pointer')};
@@ -202,6 +204,11 @@ const Cell = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   width: ${props => props.width};
+  &:first-child {
+    background-color: #e0e0e0;
+    border-bottom: solid 1px #e0e0e0;
+    border-right: solid 1px #e0e0e0;
+  }
   ${media.mobile`
     display: flex;
     flex-direction: row;
@@ -246,11 +253,25 @@ const Row = styled.div`
   }
   &:nth-child(odd) {
     background-color: #f8f8f8;
+    ${Cell}:first-child {
+      background-color: #eee;
+    }
     ${media.mobile`
       background-color: transparent;
     `};
   }
-  ${props => props.highlighted && `
+  &:first-child {
+    background-color: #eee;
+    ${Cell} {
+      border-bottom: solid 1px #e6e6e6;
+      &:first-child {
+        background-color: #eee;
+      }
+    }
+  }
+  ${props =>
+    props.highlighted &&
+    `
       background-color: #faf2eb !important;
       ${Cell} {
         color: #7ac4f0 !important;
