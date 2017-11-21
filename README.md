@@ -74,8 +74,11 @@ yarn test // will run unit test and integration test
 ```
 yarn start
 ```
-
+use test database in default:
 [http://localhost:3000/](http://localhost:3000/)
+
+If you want to use production database:
+[http://localhost:3000/?mock=false](http://localhost:3000/?mock=false)
 
 ## Overview
 

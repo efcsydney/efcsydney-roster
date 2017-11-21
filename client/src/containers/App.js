@@ -8,19 +8,37 @@ import moment from 'moment';
 import Edit from './Edit';
 import API from '../api';
 
+function getQueryParams(qs) {
+  qs = qs.split('+').join(' ');
+  let params = {},
+    tokens,
+    re = /[?&]?([^=]+)=([^&]*)/g;
+  for (let paramCount = 0; paramCount < 20; paramCount++) {
+    tokens = re.exec(qs);
+    if (tokens == null) {
+      break;
+    }
+    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+  }
+  return params;
+}
 export default class App extends Component {
   state = {
     date: new Date(),
     isLoading: true,
     isEditing: false,
-    selectedData: {}
+    selectedData: {},
+    params: {}
   };
   loadData = ({ from, to }) => {
-    this.setState({ isLoading: true });
-    return API.retrieve({
-      from,
-      to
-    })
+    let queryParams = {};
+    if (document.location.search.length > 0) {
+      queryParams = getQueryParams(document.location.search);
+    }
+    queryParams.from = from;
+    queryParams.to = to;
+    this.setState({ isLoading: true, params : queryParams });
+    return API.retrieve(queryParams)
       .then(data => {
         this.setState({
           events: data,
@@ -28,7 +46,7 @@ export default class App extends Component {
         });
       })
       .catch(e => {
-        console.error(e);  // eslint-disable-line
+        console.error(e); // eslint-disable-line
         this.setState({ isLoading: false });
       });
   };
@@ -63,24 +81,8 @@ export default class App extends Component {
   };
   handleEditSave = form => {
     console.log(form);
-    fetch('/api/events', {
-      method: "PUT",
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(form)
-    })
-    .then(
-          (resp) => resp.json()
-    )
-    .then(function(data) {
-          if(data.result !== 'OK'){
-            console.log("error");
-          }
-    }).catch(function() {
-          console.log("error");
-    });
+    form.mock = this.state.params.mock;
+    API.modify(form);
 
     this.setState({
       isEditing: false,
@@ -114,7 +116,11 @@ export default class App extends Component {
           <NextButton onClick={this.handleButtonClick.bind(this, 'next')}>
             <img src={rightArrowIcon} role="presentation" />
           </NextButton>
-          <LoadingIndicator overlay={true} active={isLoading} bgcolor="rgba(255, 255, 255, 0.7)"/>
+          <LoadingIndicator
+            overlay={true}
+            active={isLoading}
+            bgcolor="rgba(255, 255, 255, 0.7)"
+          />
         </ViewWrapper>
         {isEditing && (
           <Edit

@@ -4,8 +4,7 @@ const EventMapper = require('../mapper/event-mapper').EventMapper;
 const MockEventMapper = require('../mapper/mock-event-mapper').MockEventMapper;
 class Factory{
   static getRepository(req){
-    if(req.query.mock === undefined || req.query.mock !== "true"){
-      console.log(req.query.mock);
+    if(process.env.NODE_ENV === 'production' || req.query.mock === "false"){
       return EventRepository;
     }
     else{
@@ -13,7 +12,7 @@ class Factory{
     }
   }
   static getDataMapper(req){
-    if(req.query.mock === undefined || req.query.mock !== "true"){
+    if(process.env.NODE_ENV === 'production' || req.query.mock === "false"){
       return EventMapper;
     }else{
       return MockEventMapper;
