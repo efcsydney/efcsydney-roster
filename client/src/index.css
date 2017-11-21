@@ -1,11 +1,19 @@
 html, body {
-  background: #fff;
+  background-color: #ecf2f7 !important;
 }
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
 }
+
 .zindexNavigator {z-index:3;}
 .zindexTitle {z-index:2;}
 .zindexBG {z-index:0;}
+
+.react-add-to-calendar__button {
+  border: none !important;
+  background: none !important;
+  padding: 10px 3px;
+}
+
