@@ -7,6 +7,7 @@ import rightArrowIcon from '../assets/arrow_right.svg';
 import moment from 'moment';
 import Edit from './Edit';
 import API from '../api';
+import { media } from '../styled';
 
 function getQueryParams(qs) {
   qs = qs.split('+').join(' ');
@@ -37,7 +38,7 @@ export default class App extends Component {
     }
     queryParams.from = from;
     queryParams.to = to;
-    this.setState({ isLoading: true, params : queryParams });
+    this.setState({ isLoading: true, params: queryParams });
     return API.retrieve(queryParams)
       .then(data => {
         this.setState({
@@ -80,7 +81,6 @@ export default class App extends Component {
     });
   };
   handleEditSave = form => {
-    console.log(form);
     form.mock = this.state.params.mock;
     API.modify(form);
 
@@ -110,10 +110,14 @@ export default class App extends Component {
             data={this.state.events}
             onCellClick={this.handleCellClick}
           />
-          <PrevButton onClick={this.handleButtonClick.bind(this, 'prev')}>
+          <PrevButton
+            className="zindexNavigator"
+            onClick={this.handleButtonClick.bind(this, 'prev')}>
             <img src={leftArrowIcon} role="presentation" />
           </PrevButton>
-          <NextButton onClick={this.handleButtonClick.bind(this, 'next')}>
+          <NextButton
+            className="zindexNavigator"
+            onClick={this.handleButtonClick.bind(this, 'next')}>
             <img src={rightArrowIcon} role="presentation" />
           </NextButton>
           <LoadingIndicator
@@ -161,5 +165,34 @@ const Arrow = styled.button`
     display: inline-block;
   }
 `;
-const PrevButton = styled(Arrow)`left: 10px;`;
-const NextButton = styled(Arrow)`right: 10px;`;
+const PrevButton = styled(Arrow)`
+  left: 20px;
+  top: 33px;
+  width: 34px;
+  height: 34px;
+  img {
+    width: 15px;
+  }
+  ${media.mobile`
+    left:10px;
+    top: 24px;
+    width: 27px;
+    height: 27px;
+  `};
+`;
+
+const NextButton = styled(Arrow)`
+  right: 20px;
+  top: 33px;
+  width: 34px;
+  height: 34px;
+  img {
+    width: 15px;
+  }
+  ${media.mobile`
+    right:10px;
+    top: 24px;
+    width: 27px;
+    height: 27px;
+  `};
+`;

@@ -6,3 +6,6 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+.zindexNavigator {z-index:3;}
+.zindexTitle {z-index:2;}
+.zindexBG {z-index:0;}

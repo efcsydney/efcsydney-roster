@@ -62,7 +62,7 @@ export default class QuarterView extends Component {
 
     return (
       <Wrapper>
-        <Header>
+        <Header className="zindexTitle">
           {startMonth} - {endMonth} {year} English Sunday Service Roster
         </Header>
         <Grid>
@@ -146,6 +146,10 @@ const Wrapper = styled.div`
   `};
 `;
 const Header = styled.h1`
+  position: fixed;
+  left: 10px;
+  padding: 10px;
+  right: 10px;
   background: #eb7d3c;
   color: #fff;
   font-size 18px;
@@ -157,12 +161,7 @@ const Header = styled.h1`
   overflow: hidden;
   ${media.mobile`
     font-size: 14px;
-    left: 10px;
-    padding: 10px;
-    position: fixed;
-    right: 10px;
     top: 0;
-    z-index: 2;
   `}
 `;
 const Grid = styled.div`
@@ -170,7 +169,7 @@ const Grid = styled.div`
   border-top: solid 1px #fd9827;
   flex-wrap: wrap;
   margin: 0 0 3em 0;
-  padding: 0;
+  padding: 40px 0px 0px 0px;
   width: 100%;
 `;
 const Label = styled.span`
