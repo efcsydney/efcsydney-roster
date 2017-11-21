@@ -63,7 +63,7 @@ export default class QuarterView extends Component {
     return (
       <Wrapper>
         <Header className="zindexTitle">
-          {startMonth} - {endMonth} {year} 
+          {startMonth} - {endMonth} {year}
         </Header>
         <Grid>
           {!isMobile && (
@@ -156,8 +156,10 @@ const Wrapper = styled.div`
 const Header = styled.h1`
   position: fixed;
   left: 10px;
+  bottom:0px;
   padding: 10px;
   right: 10px;
+  background: #ffffff;
   border-radius: 4px 4px 0 0;
   color: #666;
   font-size 15px;
@@ -176,7 +178,6 @@ const Grid = styled.div`
   border-radius: 0 0 4px 4px;
   flex-wrap: wrap;
   margin: 0 0 3em 0;
-  padding: 40px 0px 0px 0px;
   width: 100%;
 `;
 const Label = styled.span`

@@ -9,7 +9,6 @@ body {
 
 .zindexNavigator {z-index:3;}
 .zindexTitle {z-index:2;}
-.zindexBG {z-index:0;}
 
 .react-add-to-calendar__button {
   border: none !important;

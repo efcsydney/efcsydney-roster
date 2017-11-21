@@ -170,7 +170,8 @@ const Arrow = styled.button`
 
 const PrevButton = styled(Arrow)`
   left: 20px;
-  top: 33px;
+  bottom: 10px;
+  top: auto;
   width: 34px;
   height: 34px;
   img {
@@ -178,7 +179,6 @@ const PrevButton = styled(Arrow)`
   }
   ${media.mobile`
     left:10px;
-    top: 24px;
     width: 27px;
     height: 27px;
   `};
@@ -186,7 +186,8 @@ const PrevButton = styled(Arrow)`
 
 const NextButton = styled(Arrow)`
   right: 20px;
-  top: 33px;
+  bottom: 10px;
+  top: auto;
   width: 34px;
   height: 34px;
   img {
@@ -194,7 +195,6 @@ const NextButton = styled(Arrow)`
   }
   ${media.mobile`
     right:10px;
-    top: 24px;
     width: 27px;
     height: 27px;
   `};
