@@ -22,7 +22,7 @@ async function getEvents(req, res) {
       from: dateRange.from,
       to: dateRange.to
     });
-    const allEvents = await eventService.linkScheduledEventsForDateRange(
+    const allEvents = await eventService.linkScheduledEventsToCalendarDates(
       dateRange,
       scheduledEvents
     );

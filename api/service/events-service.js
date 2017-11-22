@@ -48,7 +48,7 @@ class EventService {
 
     return days;
   }
-  static linkScheduledEventsForDateRange(dateRange, scheduledEvents) {
+  static linkScheduledEventsToCalendarDates(dateRange, scheduledEvents) {
     return PositionRepository.getAll().then(positions => {
       const dates = EventService.getWeekdayDatesForTimePeriod(dateRange);
       let allEvents = EventService.linkPositionsToDates(positions, dates);

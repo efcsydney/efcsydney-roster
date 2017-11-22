@@ -3,7 +3,7 @@ class MockEventService {
   static computeDateRange(dateRange) {
     return EventService.computeDateRange(dateRange);
   }
-  static linkScheduledEventsForDateRange(dateRange, scheduledEvents) {
+  static linkScheduledEventsToCalendarDates(dateRange, scheduledEvents) {
     return Promise.resolve(scheduledEvents);
   }
 }
