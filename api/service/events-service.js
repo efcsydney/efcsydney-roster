@@ -56,7 +56,7 @@ class EventService {
       scheduledEvents.forEach(scheduledEvent => {
         let event = allEvents.find(event => {
           return (
-            moment(event.calendarDate.date).format(dateTimeFormat.stringFormat) ==
+            moment(event.calendarDate.date).format(dateTimeFormat.stringFormat) ===
               moment(scheduledEvent.calendarDate.date).format(dateTimeFormat.stringFormat)
               && event.position.name == scheduledEvent.position.name
           );
