@@ -11,7 +11,7 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
-          expect(4).to.equal(res.body.data.length);
+          expect(res.body.data.length).to.equal(4);
         });
     });
 
@@ -21,7 +21,47 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
-          expect(3).to.equal(res.body.data.length);
+          expect(res.body.data).to.eql([
+            {
+              date: '2017-10-15',
+              members: [
+                { role: 'Moderator', name: '' },
+                { role: 'Newsletter', name: '' },
+                { role: 'P&W', name: '' },
+                { role: 'PA/PPT', name: '' },
+                { role: 'Pianist', name: '' },
+                { role: 'Refreshments', name: '' },
+                { role: 'Speaker', name: '' },
+                { role: 'Usher/Offering', name: '' },
+              ]
+            },
+            {
+              date: '2017-10-08',
+              members: [
+                { role: 'Moderator', name: 'Angela Sun' },
+                { role: 'Newsletter', name: 'Kai Chang' },
+                { role: 'P&W', name: 'Edison Huang' },
+                { role: 'PA/PPT', name: 'Raymond Tsang' },
+                { role: 'Pianist', name: 'Joseph Wang' },
+                { role: 'Refreshments', name: 'Christine Yang' },
+                { role: 'Speaker', name: 'May Chien' },
+                { role: 'Usher/Offering', name: 'Cheer Lin' },
+              ]
+            },
+            {
+              date: '2017-10-01',
+              members: [
+                { role: 'Moderator', name: '' },
+                { role: 'Newsletter', name: '' },
+                { role: 'P&W', name: '' },
+                { role: 'PA/PPT', name: '' },
+                { role: 'Pianist', name: '' },
+                { role: 'Refreshments', name: '' },
+                { role: 'Speaker', name: '' },
+                { role: "Usher/Offering", name: '' },
+              ]
+            }
+          ]);
         });
     });
 
@@ -31,7 +71,7 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
-          expect(12).to.equal(res.body.data.length);
+          expect(res.body.data.length).to.eql(12);
         });
     });
 
@@ -41,7 +81,7 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
-          expect(12).to.equal(res.body.data.length);
+          expect(res.body.data.length).to.equal(12);
         });
     });
   });
