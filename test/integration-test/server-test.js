@@ -25,40 +25,40 @@ describe('Server', function() {
             {
               date: '2017-10-15',
               members: [
-                { role: 'Moderator', name: '' },
-                { role: 'Newsletter', name: '' },
-                { role: 'P&W', name: '' },
-                { role: 'PA/PPT', name: '' },
-                { role: 'Pianist', name: '' },
-                { role: 'Refreshments', name: '' },
                 { role: 'Speaker', name: '' },
+                { role: 'Moderator', name: '' },
+                { role: 'P&W', name: '' },
+                { role: 'Pianist', name: '' },
                 { role: 'Usher/Offering', name: '' },
+                { role: 'PA/PPT', name: '' },
+                { role: 'Newsletter', name: '' },
+                { role: 'Refreshments', name: '' },
               ]
             },
             {
               date: '2017-10-08',
               members: [
-                { role: 'Moderator', name: 'Angela Sun' },
-                { role: 'Newsletter', name: 'Kai Chang' },
-                { role: 'P&W', name: 'Edison Huang' },
-                { role: 'PA/PPT', name: 'Raymond Tsang' },
-                { role: 'Pianist', name: 'Joseph Wang' },
-                { role: 'Refreshments', name: 'Christine Yang' },
                 { role: 'Speaker', name: 'May Chien' },
+                { role: 'Moderator', name: 'Angela Sun' },
+                { role: 'P&W', name: 'Edison Huang' },
+                { role: 'Pianist', name: 'Joseph Wang' },
                 { role: 'Usher/Offering', name: 'Cheer Lin' },
+                { role: 'PA/PPT', name: 'Raymond Tsang' },
+                { role: 'Newsletter', name: 'Kai Chang' },
+                { role: 'Refreshments', name: 'Christine Yang' },
               ]
             },
             {
               date: '2017-10-01',
               members: [
-                { role: 'Moderator', name: '' },
-                { role: 'Newsletter', name: '' },
-                { role: 'P&W', name: '' },
-                { role: 'PA/PPT', name: '' },
-                { role: 'Pianist', name: '' },
-                { role: 'Refreshments', name: '' },
                 { role: 'Speaker', name: '' },
-                { role: "Usher/Offering", name: '' },
+                { role: 'Moderator', name: '' },
+                { role: 'P&W', name: '' },
+                { role: 'Pianist', name: '' },
+                { role: 'Usher/Offering', name: '' },
+                { role: 'PA/PPT', name: '' },
+                { role: 'Newsletter', name: '' },
+                { role: 'Refreshments', name: '' },
               ]
             }
           ]);
