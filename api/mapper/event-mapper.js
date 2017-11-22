@@ -1,29 +1,42 @@
+const moment = require('moment');
+const dateTimeFormat = require('../constants/datetime').dateTimeFormat;
 class EventMapper {
-
-  static convertEventsModelToDto(events){
+  static convertEventsModelToDto(events) {
     const eventDates = [];
 
-    events.map((e) => {
-      const eventDate = eventDates.find((event) =>{
+    events.forEach(e => {
+      const eventDate = eventDates.find(event => {
         return event.date.getTime() == e.calendarDate.date.getTime();
       });
 
-      const event = {role: e.position.name, name: e.volunteerName};
+      const event = { role: e.position.name, name: e.volunteerName };
 
-      if(eventDate !== undefined){
+      if (eventDate !== undefined) {
         eventDate.members.push(event);
-      }else{
-        eventDates.push({date: e.calendarDate.date, members: [event] })
+      } else {
+        eventDates.push({ date: e.calendarDate.date, members: [event] });
       }
     });
 
-    return eventDates;
+    return eventDates.map(eventDate => EventMapper.formatDate(eventDate));
+  }
+  static formatDate(eventDate) {
+    eventDate.date = moment(eventDate.date).format(dateTimeFormat.stringFormat);
+    return eventDate;
   }
 
-  static convertDtoToEventModel(data){
-    const event = {volunteerName: data.name, calendarDate: {date: new Date(data.date)}, position: {name: data.position}};
+  static convertDtoToEventModel(data) {
+    const event = {
+      volunteerName: data.name,
+      calendarDate: {
+        date: moment(data.date, dateTimeFormat.stringFormat).format(
+          dateTimeFormat.stringFormat
+        )
+      },
+      position: { name: data.role }
+    };
     return event;
   }
 }
 
-module.exports = { EventMapper }
+module.exports = { EventMapper };
