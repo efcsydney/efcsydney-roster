@@ -6,7 +6,7 @@ const Op = Sequelize.Op;
 class PositionRepository {
   static getAll() {
     return Position.findAll({
-      order: [['name', 'ASC']]
+      order: [['id', 'ASC']]
     });
   }
 }
