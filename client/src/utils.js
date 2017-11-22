@@ -1,16 +1,33 @@
 import _ from 'lodash';
 import moment from 'moment';
 
-export function generateCalData(day, desc) {
+export function getCalData(day, roles, members) {
+  const description = _.reduce(
+    roles,
+    (message, role) => {
+      const member = _.find(members, { role }) || {};
+      const name = member.name || '';
+      if (name) {
+        message.push(`${role} - ${name}`);
+      }
+      return message;
+    },
+    []
+  ).join(', ');
+
   return {
     title: 'EFC Sydney English Service',
-    description: desc,
+    description,
     location: '10 Carlotta St, Artarmon NSW 2064, Australia',
     startTime: day
       .clone()
       .hour(10)
-      .minute(30),
-    endTime: day.clone().hour(12)
+      .minute(30)
+      .toISOString(),
+    endTime: day
+      .clone()
+      .hour(12)
+      .toISOString()
   };
 }
 
