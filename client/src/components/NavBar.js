@@ -4,8 +4,9 @@ import { media } from '../styled';
 
 export default () => (
   <Wrapper>
-    <Logo/>
-    <Title>English Sunday Service Roster</Title>
+    <Title>
+      <Logo />English Sunday Service Roster
+    </Title>
     <Org>EFC Sydney</Org>
   </Wrapper>
 );
@@ -22,28 +23,39 @@ const Wrapper = styled.div`
     border-radius: 8px;
     margin-right: 10px;
   }
+  height: 72px;
   ${media.mobile`
     margin-bottom: 0;
   `};
 `;
-const Logo = styled.img.attrs({src: '/logo.png'})`
+const Logo = styled.img.attrs({ src: '/logo.png' })`
   display: inline-block;
+  vertical-align: middle;
   height: 32px;
   width: 32px;
 `;
-const Title = styled.a.attrs({href: '/'})`
+const Title = styled.a.attrs({ href: '/' })`
   display: inline-block;
   font-size: 16px;
   font-weight: bold;
-  &:link, &:hover, &:visited {
+  &:link,
+  &:hover,
+  &:visited {
     color: #fff;
     text-decoration: none;
   }
+  position: absolute;
+  left: 64px;
+  ${media.mobile`
+    position: initial;
+    left:auto;
+  `};
 `;
 const Org = styled.span`
   font-size: 18px;
   font-weight: bold;
-  margin-left: auto;
+  position: absolute;
+  right: 64px;
   ${media.mobile`
     display: none;
   `};
