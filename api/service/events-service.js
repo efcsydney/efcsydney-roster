@@ -37,7 +37,7 @@ class EventService {
   static getWeekdayDatesForTimePeriod(dateRange, weekday = 7) {
     const { from, to } = dateRange;
     const firstSunday = moment(from).isoWeekday(weekday);
-    const lastSunday = moment(to).isoWeekday(weekday);
+    const lastSunday = moment(to).startOf('week');
     let daysDiff = lastSunday.diff(firstSunday, 'days');
     let days = [];
     while (daysDiff > 0) {
