@@ -1,11 +1,11 @@
 const API = {
-  retrieve({ from, to }) {
+  retrieve(query) {
     return fetch(
-      `/api/events?from=${from}&to=${to}&category=english`
+      `/api/events?from=${query.from}&to=${query.to}&mock=${query.mock}&category=english`
     ).then(response => response.json());
   },
   modify(query) {
-    fetch('/api/events', {
+    return fetch(`/api/events?mock=${query.mock}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
