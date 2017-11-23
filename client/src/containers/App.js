@@ -83,12 +83,31 @@ export default class App extends Component {
   };
   handleEditSave = form => {
     form.mock = this.state.params.mock;
-    API.modify(form);
-
-    this.setState({
-      isEditing: false,
-      selectedData: null
+    API.modify(form).then(()=>{
+      let tmpEvent = this.state.events;
+      let tmpdata= this.state.events.data;
+      let formDate = new moment(form.date).format('YYYY-MM-DD');
+      let formRole = form.role;
+      for(let indexDate=0; indexDate < tmpdata.length; indexDate++){
+          let checkDate = moment(tmpdata[indexDate].date).format('YYYY-MM-DD');
+          if(formDate == checkDate){
+            for(let indexMembers=0; indexMembers < tmpdata[indexDate].members.length; indexMembers++){
+              if(tmpdata[indexDate].members[indexMembers].role == formRole){
+                tmpdata[indexDate].members[indexMembers].name = form.name;
+                break;
+              } else if (tmpdata[indexDate].members[indexMembers].role == null){
+                break;
+              }
+            }
+          }
+      }
+      this.setState({
+        events: tmpEvent,
+        isEditing: false,
+        selectedData: null
+      });
     });
+
   };
   componentWillMount() {
     this.loadData({
