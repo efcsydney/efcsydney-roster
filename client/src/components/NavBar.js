@@ -36,7 +36,7 @@ const Logo = styled.img.attrs({ src: '/logo.png' })`
 `;
 const Title = styled.a.attrs({ href: '/' })`
   display: inline-block;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   &:link,
   &:hover,
