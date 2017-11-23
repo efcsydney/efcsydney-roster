@@ -8,6 +8,7 @@ import rightArrowIcon from '../assets/arrow_right.svg';
 import moment from 'moment';
 import Edit from './Edit';
 import API from '../api';
+import { media } from '../styled';
 
 function getQueryParams(qs) {
   qs = qs.split('+').join(' ');
@@ -38,7 +39,7 @@ export default class App extends Component {
     }
     queryParams.from = from;
     queryParams.to = to;
-    this.setState({ isLoading: true, params : queryParams });
+    this.setState({ isLoading: true, params: queryParams });
     return API.retrieve(queryParams)
       .then(data => {
         this.setState({
@@ -81,7 +82,6 @@ export default class App extends Component {
     });
   };
   handleEditSave = form => {
-    console.log(form);
     form.mock = this.state.params.mock;
     API.modify(form);
 
@@ -105,17 +105,31 @@ export default class App extends Component {
 
     return (
       <Wrapper>
-        <NavBar/>
+        <NavBar />
         <ViewWrapper>
           <QuarterView
             date={date}
             data={this.state.events}
             onCellClick={this.handleCellClick}
           />
-          <PrevButton onClick={this.handleButtonClick.bind(this, 'prev')}>
+          <PrevButtonTop
+            className="zindexNavigator"
+            onClick={this.handleButtonClick.bind(this, 'prev')}>
+            <img src={leftArrowIcon} role="presentation" />
+          </PrevButtonTop>
+          <NextButtonTop
+            className="zindexNavigator"
+            onClick={this.handleButtonClick.bind(this, 'next')}>
+            <img src={rightArrowIcon} role="presentation" />
+          </NextButtonTop>
+          <PrevButton
+            className="zindexNavigator"
+            onClick={this.handleButtonClick.bind(this, 'prev')}>
             <img src={leftArrowIcon} role="presentation" />
           </PrevButton>
-          <NextButton onClick={this.handleButtonClick.bind(this, 'next')}>
+          <NextButton
+            className="zindexNavigator"
+            onClick={this.handleButtonClick.bind(this, 'next')}>
             <img src={rightArrowIcon} role="presentation" />
           </NextButton>
           <LoadingIndicator
@@ -139,29 +153,69 @@ export default class App extends Component {
 }
 
 const Wrapper = styled.div``;
-const ViewWrapper = styled.div`position: relative;margin: 10px;`;
+const ViewWrapper = styled.div`
+  position: relative;
+  margin: 10px;
+`;
 const Arrow = styled.button`
+  bottom: 10px;
+  width: 34px;
+  height: 34px;
   align-items: center;
   background: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   border-width: 0;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
   display: flex;
-  height: 48px;
   line-height: 0;
   margin-top: -24px;
   outline: 0;
   position: fixed;
-  top: 50%;
-  width: 48px;
   transition: background 1s;
   &:hover {
     background: rgba(255, 255, 255, 1);
   }
   img {
+    width: 15px;
     margin: 0 auto;
     display: inline-block;
   }
 `;
-const PrevButton = styled(Arrow)`left: 10px;`;
-const NextButton = styled(Arrow)`right: 10px;`;
+
+const PrevButton = styled(Arrow)`
+  left: 20px;
+  ${media.mobile`
+    left:15px;
+    width: 27px;
+    height: 27px;
+  `};
+`;
+const PrevButtonTop = PrevButton.extend`
+  position: absolute;
+  bottom: auto;
+  top: -38px;
+  left: 10px;
+  ${media.mobile`
+    top: -48px;
+    left: 0px;
+  `};
+`;
+
+const NextButton = styled(Arrow)`
+  right: 20px;
+  ${media.mobile`
+    right:15px;
+    width: 27px;
+    height: 27px;
+  `};
+`;
+const NextButtonTop = NextButton.extend`
+  position: absolute;
+  bottom: auto;
+  top: -38px;
+  right: 10px;
+  ${media.mobile`
+    top: -48px;
+    right: 0px;
+  `};
+`;

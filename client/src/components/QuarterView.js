@@ -62,9 +62,12 @@ export default class QuarterView extends Component {
 
     return (
       <Wrapper>
-        <Header>
+        <Header className="zindexTitle">
           {startMonth} - {endMonth} {year}
         </Header>
+        <BottomBar className="zindexTitle">
+          {startMonth} - {endMonth} {year}
+        </BottomBar>
         <Grid>
           {!isMobile && (
             <Row>
@@ -154,8 +157,13 @@ const Wrapper = styled.div`
   `};
 `;
 const Header = styled.h1`
+  position: absolute;
+  top: -70px;
+  left: 10px;
+  padding: 10px;
+  right: 10px;
   border-radius: 4px 4px 0 0;
-  color: #666;
+  color: #fff;
   font-size 15px;
   padding: 15px 0;
   margin: 0;
@@ -163,17 +171,28 @@ const Header = styled.h1`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  border-bottom: none;
+  ${media.mobile`
+    display: none;
+  `}
+`;
+const BottomBar = Header.extend`
+  position: fixed;
+  color: #666;
+  background: #ffffff;
+  top: auto;
+  bottom: 0px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   ${media.mobile`
     font-size: 14px;
-    padding: 15px;
-  `}
+    display: inline-block;
+  `};
 `;
 const Grid = styled.div`
   border-left: solid 1px #f0f3f8;
   border-radius: 0 0 4px 4px;
   flex-wrap: wrap;
   margin: 0 0 3em 0;
-  padding: 0;
   width: 100%;
 `;
 const Label = styled.span`
@@ -276,8 +295,7 @@ const Row = styled.div`
       ${Cell} {
         color: #7ac4f0 !important;
       }
-  `}
-  &:last-child ${Cell} {
+  `} &:last-child ${Cell} {
     border-bottom: none;
     &:first-child {
       border-bottom-left-radius: 8px;
