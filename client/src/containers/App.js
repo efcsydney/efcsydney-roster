@@ -9,6 +9,7 @@ import moment from 'moment';
 import Edit from './Edit';
 import API from '../api';
 import { media } from '../styled';
+import _ from 'lodash';
 
 function getQueryParams(qs) {
   qs = qs.split('+').join(' ');
@@ -83,11 +84,18 @@ export default class App extends Component {
   };
   handleEditSave = form => {
     form.mock = this.state.params.mock;
-    API.modify(form);
-
-    this.setState({
-      isEditing: false,
-      selectedData: null
+    API.modify(form).then(() => {
+      const clonedEvents = _.clone(this.state.events);
+      const i = _.findIndex(clonedEvents.data, {
+        date: moment(form.date).format('YYYY-MM-DD')
+      });
+      const j = _.findIndex(clonedEvents.data[i].members, { role: form.role });
+      _.set(clonedEvents, `data.${i}.members.${j}.name`, form.name);
+      this.setState({
+        events: clonedEvents,
+        isEditing: false,
+        selectedData: null
+      });
     });
   };
   componentWillMount() {
@@ -177,7 +185,8 @@ const Arrow = styled.button`
   }
   img {
     width: 15px;
-    margin: 0 auto;
+    left: 9.5px;
+    position: absolute;
     display: inline-block;
   }
 `;
