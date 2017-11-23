@@ -7,17 +7,17 @@
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": null,
+    "username": "liamishandsome",
+    "password": "liamishandsome",
     "database": "efcRosterTest",
-    "host": "127.0.0.1",
+    "host": "liamishandsome.ceavfbidxehi.ap-southeast-2.rds.amazonaws.com",
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
+    "username": "rdsuser",
+    "password": "12345678",
     "database": "efcRoster",
-    "host": "127.0.0.1",
+    "host": "dbidentifier.ccoogueru7pl.ap-southeast-2.rds.amazonaws.com",
     "dialect": "mysql"
   }
 }
