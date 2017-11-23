@@ -4,7 +4,7 @@ class MockRepository {
       {
         date: '2017-10-08',
         members: [
-          { role: 'Speaker', name: 'May Chien' },
+          { role: 'Speaker', name: 'Mock' },
           { role: 'Moderator', name: 'Angela Sun' },
           { role: 'P&W', name: 'Edison Huang' },
           { role: 'Pianist', name: 'Joseph Wang' },
