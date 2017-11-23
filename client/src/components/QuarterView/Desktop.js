@@ -80,6 +80,7 @@ const Cell = styled.span`
   border-right: solid 1px #dadada;
   flex-direction: column;
   flex-grow: 1;
+  overflow: hidden;
   padding: 10px;
   text-align: center;
   text-overflow: ellipsis;
@@ -98,11 +99,11 @@ const Role = Cell.extend`
   border-right: solid 1px #dadada;
   color: #666;
   font-weight: bold;
+  overflow: visible;
   text-align: right;
 `;
 const Name = Cell.extend`
   cursor: pointer;
-  overflow: hidden;
 `;
 const Row = styled.div`
   display: flex;
