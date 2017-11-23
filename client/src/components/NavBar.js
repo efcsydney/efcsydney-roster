@@ -47,7 +47,8 @@ const Title = styled.a.attrs({ href: '/' })`
   position: absolute;
   left: 64px;
   ${media.mobile`
-    position: initial;
+    font-size: 14px;
+    position: static;
     left:auto;
   `};
 `;
