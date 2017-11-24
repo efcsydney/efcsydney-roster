@@ -15,7 +15,7 @@ class EventRepository {
           as: 'calendarDate',
           where: { date: { [Op.gte]: from, [Op.lte]: to } }
         },
-        { model: Position, as: 'position', required: false }
+        { model: Position, as: 'position' }
       ],
       order: [
         [{ model: CalendarDate, as: 'calendarDate' }, 'date', 'DESC'],

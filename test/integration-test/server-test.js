@@ -15,7 +15,7 @@ describe('Server', function() {
         });
     });
 
-    it('returns the 3 weeks of data between 2017-10-01 and 2017-10-15', function() {
+    it('returns 3 weeks of data between 2017-10-01 and 2017-10-15', function() {
       return request(app)
         .get('/api/events?from=2017-10-01&to=2017-10-15&mock=false')
         .expect('Content-Type', /json/)
@@ -82,6 +82,42 @@ describe('Server', function() {
         .expect(200)
         .then(function(res) {
           expect(res.body.data.length).to.equal(12);
+        });
+    });
+
+    it('updates an event where its time contains timezone info', function() {
+      const event = {date:"2017-11-04T13:00:00.000Z",role:"Usher/Offering",name:"Christine Yang"};
+      return request(app)
+        .put('/api/events')
+        .send(event)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .then(function(res) {
+          expect(res.body.result).to.equal('OK');
+        });
+    });
+
+    it('updates an event where its time excludes timezone', function() {
+      const event = {date:"2017-11-05T13:00:00",role:"Usher/Offering",name:"Christine Yang"};
+      return request(app)
+        .put('/api/events')
+        .send(event)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .then(function(res) {
+          expect(res.body.result).to.equal('OK');
+        });
+    });
+
+    it('updates an event where its time contains date only', function() {
+      const event = {date:"2017-11-07",role:"Usher/Offering",name:"Christine Yang"};
+      return request(app)
+        .put('/api/events')
+        .send(event)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .then(function(res) {
+          expect(res.body.result).to.equal('OK');
         });
     });
   });
