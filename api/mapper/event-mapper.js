@@ -26,16 +26,13 @@ class EventMapper {
   }
 
   static convertDtoToEventModel(data) {
-    const event = {
+    return {
       volunteerName: data.name,
       calendarDate: {
-        date: moment(data.date, dateTimeFormat.stringFormat).format(
-          dateTimeFormat.stringFormat
-        )
+        date: moment(data.date).startOf('day')
       },
       position: { name: data.role }
     };
-    return event;
   }
 }
 
