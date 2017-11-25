@@ -165,7 +165,7 @@ const ViewWrapper = styled.div`
   position: relative;
   margin: 10px;
 `;
-const Arrow = styled.button`
+const Arrow = styled.a`
   bottom: 10px;
   width: 34px;
   height: 34px;
