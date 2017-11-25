@@ -160,7 +160,9 @@ export default class App extends Component {
   }
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+padding:0 0 4em 0;
+`;
 const ViewWrapper = styled.div`
   position: relative;
   margin: 10px;
