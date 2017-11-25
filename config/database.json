@@ -6,7 +6,7 @@
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
-  "test": {
+  "qa": {
     "username": "liamishandsome",
     "password": "liamishandsome",
     "database": "efcRosterTest",
