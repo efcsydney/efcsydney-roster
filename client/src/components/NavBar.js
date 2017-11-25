@@ -46,6 +46,7 @@ const Title = styled.a.attrs({ href: '/' })`
   }
   position: absolute;
   left: 64px;
+  top: 20px;
   ${media.mobile`
     font-size: 14px;
     position: static;
@@ -57,6 +58,7 @@ const Org = styled.span`
   font-weight: bold;
   position: absolute;
   right: 64px;
+  top: 24px;
   ${media.mobile`
     display: none;
   `};
