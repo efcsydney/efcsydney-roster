@@ -165,7 +165,7 @@ const ViewWrapper = styled.div`
   position: relative;
   margin: 10px;
 `;
-const Arrow = styled.button`
+const Arrow = styled.a`
   bottom: 10px;
   width: 34px;
   height: 34px;
@@ -175,6 +175,7 @@ const Arrow = styled.button`
   border-width: 0;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
   display: flex;
+  justify-content: center;
   line-height: 0;
   margin-top: -24px;
   outline: 0;
@@ -184,9 +185,8 @@ const Arrow = styled.button`
     background: rgba(255, 255, 255, 1);
   }
   img {
-    width: 15px;
-    left: 9.5px;
-    position: absolute;
+    width: 20px;
+    height: 20px;
     display: inline-block;
   }
 `;
