@@ -6,10 +6,17 @@
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "efcRosterTest",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
   "qa": {
     "username": "liamishandsome",
     "password": "liamishandsome",
-    "database": "efcRosterTest",
+    "database": "efcRosterQa",
     "host": "liamishandsome.ceavfbidxehi.ap-southeast-2.rds.amazonaws.com",
     "dialect": "mysql"
   },
