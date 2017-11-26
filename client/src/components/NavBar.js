@@ -5,9 +5,9 @@ import { media } from '../styled';
 export default () => (
   <Wrapper>
     <Title>
-      <Logo />English Sunday Service Roster
+      <ArrowSpaceLogo /><Logo />English Sunday Service Roster
     </Title>
-    <Org>EFC Sydney</Org>
+    <Org>EFC Sydney<ArrowSpace /></Org>
   </Wrapper>
 );
 
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   background: linear-gradient(to right, #666, #333);
   color: #fff;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: 10px;
   padding: 20px;
   img {
@@ -26,8 +26,23 @@ const Wrapper = styled.div`
   height: 72px;
   ${media.mobile`
     margin-bottom: 0;
+    justify-content: center;
   `};
 `;
+const ArrowSpace = styled.span`
+  width:44px;
+  height:5px;
+  display:inline-block;
+  ${media.mobile`
+    width:24px;
+  `};
+`;
+const ArrowSpaceLogo = ArrowSpace.extend`
+  ${media.mobile`
+    display:none;
+  `};
+`;
+
 const Logo = styled.img.attrs({ src: '/logo.png' })`
   display: inline-block;
   vertical-align: middle;
@@ -44,9 +59,6 @@ const Title = styled.a.attrs({ href: '/' })`
     color: #fff;
     text-decoration: none;
   }
-  position: absolute;
-  left: 64px;
-  top: 20px;
   ${media.mobile`
     font-size: 14px;
     position: static;
@@ -56,9 +68,6 @@ const Title = styled.a.attrs({ href: '/' })`
 const Org = styled.span`
   font-size: 18px;
   font-weight: bold;
-  position: absolute;
-  right: 64px;
-  top: 24px;
   ${media.mobile`
     display: none;
   `};
