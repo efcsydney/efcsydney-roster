@@ -161,7 +161,7 @@ export default class App extends Component {
 }
 
 const Wrapper = styled.div`
-padding:0 0 4em 0;
+  padding: 0 0 4em 0;
 `;
 const ViewWrapper = styled.div`
   position: relative;

@@ -5,9 +5,12 @@ import { media } from '../styled';
 export default () => (
   <Wrapper>
     <Title>
-      <ArrowSpaceLogo /><Logo />English Sunday Service Roster
+      <ArrowSpaceLogo />
+      <Logo />English Sunday Service Roster
     </Title>
-    <Org>EFC Sydney<ArrowSpace /></Org>
+    <Org>
+      EFC Sydney<ArrowSpace />
+    </Org>
   </Wrapper>
 );
 
@@ -30,9 +33,9 @@ const Wrapper = styled.div`
   `};
 `;
 const ArrowSpace = styled.span`
-  width:44px;
-  height:5px;
-  display:inline-block;
+  width: 44px;
+  height: 5px;
+  display: inline-block;
   ${media.mobile`
     width:24px;
   `};
