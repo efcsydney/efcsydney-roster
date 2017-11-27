@@ -1,3 +1,4 @@
+process.env.TZ = 'Australia/Sydney';
 const app = require('./app').app;
 
 app.listen(app.get("port"), () => {
