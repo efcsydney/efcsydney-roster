@@ -98,6 +98,14 @@ export default class App extends Component {
       });
     });
   };
+  scrollToThisWeek = () => {
+    const highlighted = document.getElementById('highlighted');
+    if (highlighted) {
+      highlighted.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  };
   componentWillMount() {
     this.loadData({
       from: moment()
@@ -107,6 +115,12 @@ export default class App extends Component {
         .endOf('quarter')
         .format('YYYY-MM-DD')
     });
+  }
+  componentDidMount() {
+    this.scrollToThisWeek();
+  }
+  componentDidUpdate() {
+    this.scrollToThisWeek();
   }
   render() {
     const { date, isLoading, isEditing, selectedData } = this.state;

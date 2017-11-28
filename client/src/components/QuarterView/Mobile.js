@@ -28,11 +28,13 @@ export default ({ events, roles, days, onDayClick }) => {
         const highlightDate = moment()
           .isoWeekday(7)
           .format('YYYY-MM-DD');
+        const highlighted = day.format('YYYY-MM-DD') === highlightDate;
 
         return (
           <Day
             key={i}
-            highlighted={day.format('YYYY-MM-DD') === highlightDate}>
+            highlighted={highlighted}
+            id={highlighted ? 'highlighted' : undefined}>
             <Header>
               <Label>{day.format('DD MMM')}</Label>
               <Action>
@@ -50,7 +52,9 @@ export default ({ events, roles, days, onDayClick }) => {
               return (
                 <Row key={i}>
                   <Role>{role}</Role>
-                  <Name onClick={() => onDayClick(day, role, name)}>{name}</Name>
+                  <Name onClick={() => onDayClick(day, role, name)}>
+                    {name}
+                  </Name>
                 </Row>
               );
             })}
@@ -121,12 +125,12 @@ const Row = styled.div`
   }
 `;
 const Day = styled.div`
-  color: ${props => props.highlighted ? '#333': '#666'};
+  color: ${props => (props.highlighted ? '#333' : '#666')};
   display: flex;
   flex-wrap: no-wrap;
   flex-direction: column;
   ${Name} {
-    background-color: ${props => props.highlighted ? '#ffc': 'transparent'};
+    background-color: ${props => (props.highlighted ? '#ffc' : 'transparent')};
   }
   &:last-child {
     border-radius: 0 0 8px 8px;
@@ -145,7 +149,7 @@ const Label = styled.span`
   display: inline-block;
   font-size: 15px;
   padding: 10px;
-`
+`;
 const Action = styled.span`
   display: inline-block;
   margin-left: auto;
