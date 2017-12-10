@@ -1,16 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 import { media } from '../styled';
+import Select from 'react-select';
+//import 'react-select/dist/react-select.css';
 
-export default () => (
+export default ({ value, onServiceChange }) => (
   <Wrapper>
+    <Logo />
     <Title>
-      <ArrowSpaceLogo />
-      <Logo />English Sunday Service Roster
+      <Select
+        className="ServiceSelect"
+        value={value}
+        clearable={false}
+        options={[
+          { value: 'english', label: 'English Sunday Service Roster' },
+          { value: 'chinese', label: '中文堂服事表' }
+        ]}
+        onChange={onServiceChange}
+      />
     </Title>
-    <Org>
-      EFC Sydney<ArrowSpace />
-    </Org>
+    <Org>EFC Sydney</Org>
   </Wrapper>
 );
 
@@ -19,9 +28,8 @@ const Wrapper = styled.div`
   background: linear-gradient(to right, #666, #333);
   color: #fff;
   display: flex;
-  justify-content: space-between;
   margin-bottom: 10px;
-  padding: 20px;
+  padding: 0 20px;
   img {
     border-radius: 8px;
     margin-right: 10px;
@@ -32,36 +40,28 @@ const Wrapper = styled.div`
     justify-content: center;
   `};
 `;
-const ArrowSpace = styled.span`
-  width: 44px;
-  height: 5px;
-  display: inline-block;
-  ${media.mobile`
-    width:24px;
-  `};
-`;
-const ArrowSpaceLogo = ArrowSpace.extend`
-  ${media.mobile`
-    display:none;
-  `};
-`;
-
 const Logo = styled.img.attrs({ src: '/logo.png' })`
   display: inline-block;
   vertical-align: middle;
   height: 32px;
   width: 32px;
 `;
-const Title = styled.a.attrs({ href: '/' })`
+const Title = styled.span`
   display: inline-block;
   font-size: 18px;
   font-weight: bold;
+  position: relative;
+  z-index: 3;
+  min-width: 300px;
   &:link,
   &:hover,
   &:visited {
     color: #fff;
     text-decoration: none;
   }
+  ${media.mobile`
+    min-width: 220px;
+  `};
   ${media.mobile`
     font-size: 14px;
     position: static;
@@ -71,6 +71,7 @@ const Title = styled.a.attrs({ href: '/' })`
 const Org = styled.span`
   font-size: 18px;
   font-weight: bold;
+  margin-left: auto;
   ${media.mobile`
     display: none;
   `};

@@ -7,12 +7,38 @@ body {
   font-family: sans-serif;
 }
 
-.zindexNavigator {z-index:3;}
-.zindexTitle {z-index:2;}
-
 .react-add-to-calendar__button {
   border: none !important;
   background: none !important;
   padding: 10px 3px;
 }
 
+/* Title Service Dropdown */
+.ServiceSelect.Select .Select-control,
+.ServiceSelect.Select.is-focused .Select-control {
+  border: none;
+  background: transparent;
+}
+.ServiceSelect.Select .Select-arrow,
+.ServiceSelect.Select.is-focused .Select-arrow {
+  border-color: #fff transparent transparent;
+}
+.ServiceSelect.Select.Select--single.is-focused > .Select-control .Select-value .Select-value-label,
+.ServiceSelect.Select.Select--single > .Select-control .Select-value .Select-value-label {
+  color: #fff;
+}
+.ServiceSelect.Select.is-open .Select-control {
+  background: #fff;
+  border-color: #b3b3b3 #ccc #d9d9d9;
+}
+/*
+.ServiceSelect.Select.is-open.Select--single > .Select-control .Select-value {
+  position: static;
+}
+*/
+.ServiceSelect.Select.is-open.Select--single > .Select-control .Select-value .Select-value-label {
+  color: #333;
+}
+.ServiceSelect .Select-arrow-zone:hover > .Select-arrow {
+  border-top-color: #fff;
+}
