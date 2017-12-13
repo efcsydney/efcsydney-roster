@@ -47,6 +47,21 @@ export function getQuarterDays(date, weekday = 7) {
   return result;
 }
 
+export function getQueryParams(qs) {
+  qs = qs.split('+').join(' ');
+  let params = {},
+    tokens,
+    re = /[?&]?([^=]+)=([^&]*)/g;
+  for (let paramCount = 0; paramCount < 20; paramCount++) {
+    tokens = re.exec(qs);
+    if (tokens == null) {
+      break;
+    }
+    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+  }
+  return params;
+}
+
 export function getRoles(eventData) {
   return _.reduce(
     eventData,

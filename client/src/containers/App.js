@@ -8,21 +8,8 @@ import moment from 'moment';
 import Edit from './Edit';
 import API from '../api';
 import _ from 'lodash';
+import { getQueryParams } from '../utils';
 
-function getQueryParams(qs) {
-  qs = qs.split('+').join(' ');
-  let params = {},
-    tokens,
-    re = /[?&]?([^=]+)=([^&]*)/g;
-  for (let paramCount = 0; paramCount < 20; paramCount++) {
-    tokens = re.exec(qs);
-    if (tokens == null) {
-      break;
-    }
-    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
-  }
-  return params;
-}
 export default class App extends Component {
   state = {
     date: new Date(),
@@ -98,9 +85,9 @@ export default class App extends Component {
       });
     });
   };
-  handleServiceChange = ({value}) => {
+  handleServiceChange = ({ value }) => {
     location.href = `#${value}`;
-    this.setState({selectedService: value});
+    this.setState({ selectedService: value });
   };
   componentWillMount() {
     this.loadData({
@@ -113,28 +100,34 @@ export default class App extends Component {
     });
   }
   render() {
-    const { date, isLoading, isEditing, selectedData, selectedService } = this.state;
+    const {
+      date,
+      isLoading,
+      isEditing,
+      selectedData,
+      selectedService
+    } = this.state;
+
+    const barProps = {
+      date,
+      onPrevClick: this.handleButtonClick.bind(this, 'prev'),
+      onNextClick: this.handleButtonClick.bind(this, 'next')
+    };
 
     return (
       <Wrapper>
         <NavBar
           value={selectedService}
-          onServiceChange={this.handleServiceChange}/>
+          onServiceChange={this.handleServiceChange}
+        />
         <Content>
-          <DateBar
-            date={date}
-            onPrevClick={this.handleButtonClick.bind(this, 'prev')}
-            onNextClick={this.handleButtonClick.bind(this, 'next')} />
+          <DateBar {...barProps}/>
           <QuarterView
             date={date}
             data={this.state.events}
             onCellClick={this.handleCellClick}
           />
-          <DateBar
-            date={date}
-            position="bottom"
-            onPrevClick={this.handleButtonClick.bind(this, 'prev')}
-            onNextClick={this.handleButtonClick.bind(this, 'next')} />
+          <DateBar position="bottom" {...barProps}/>
         </Content>
         <LoadingIndicator
           overlay={true}

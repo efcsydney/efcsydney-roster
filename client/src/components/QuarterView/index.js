@@ -1,16 +1,12 @@
 import _ from 'lodash';
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  getMemberNames,
-  getQuarterDays,
-  getRoles
-} from '../../utils';
-import '../../icalstyle.css';
+import React, { Component } from 'react';
 import styled from 'styled-components';
-import { MOBILE_BREAKPOINT } from '../../styled';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
+import { MOBILE_BREAKPOINT } from '../../styled';
+import { getMemberNames, getQuarterDays, getRoles } from '../../utils';
+import '../../icalstyle.css';
 
 export default class QuarterView extends Component {
   static propTypes = {
@@ -59,8 +55,8 @@ export default class QuarterView extends Component {
 
     return (
       <Wrapper>
-        {isMobile && <Mobile {...viewProps}/>}
-        {!isMobile && <Desktop {...viewProps}/>}
+        {isMobile && <Mobile {...viewProps} />}
+        {!isMobile && <Desktop {...viewProps} />}
       </Wrapper>
     );
   }
