@@ -5,7 +5,8 @@ import LoadingIndicator from '../components/LoadingIndicator';
 import NavBar from '../components/NavBar';
 import DateBar from '../components/DateBar';
 import moment from 'moment';
-import Edit from './Edit';
+import EditRole from './EditRole';
+import EditDay from './EditDay';
 import API from '../api';
 import _ from 'lodash';
 import { getQueryParams } from '../utils';
@@ -14,7 +15,8 @@ export default class App extends Component {
   state = {
     date: new Date(),
     isLoading: true,
-    isEditing: false,
+    isEditingRole: false,
+    isEditingDay: false,
     selectedData: {},
     selectedService: 'english',
     params: {}
@@ -57,15 +59,25 @@ export default class App extends Component {
       to: newDate.endOf('quarter').format('YYYY-MM-DD')
     });
   };
-  handleCellClick = ({ day, member, role, names }) => {
+  handleDayClick = () => {
     this.setState({
-      isEditing: true,
+      isEditingDay: true
+    });
+  };
+  handleRoleClick = ({ day, member, role, names }) => {
+    this.setState({
+      isEditingRole: true,
       selectedData: { date: day.toDate(), member, role, names }
+    });
+  };
+  handleEditDayClose = () => {
+    this.setState({
+      isEditingDay: false
     });
   };
   handleEditClose = () => {
     this.setState({
-      isEditing: false,
+      isEditingRole: false,
       selectedData: null
     });
   };
@@ -80,7 +92,7 @@ export default class App extends Component {
       _.set(clonedEvents, `data.${i}.members.${j}.name`, form.name);
       this.setState({
         events: clonedEvents,
-        isEditing: false,
+        isEditingRole: false,
         selectedData: null
       });
     });
@@ -103,7 +115,8 @@ export default class App extends Component {
     const {
       date,
       isLoading,
-      isEditing,
+      isEditingDay,
+      isEditingRole,
       selectedData,
       selectedService
     } = this.state;
@@ -121,26 +134,36 @@ export default class App extends Component {
           onServiceChange={this.handleServiceChange}
         />
         <Content>
-          <DateBar {...barProps}/>
+          <DateBar {...barProps} />
           <QuarterView
             date={date}
             data={this.state.events}
-            onCellClick={this.handleCellClick}
+            onRoleClick={this.handleRoleClick}
+            onDayClick={this.handleDayClick}
           />
-          <DateBar position="bottom" {...barProps}/>
+          <DateBar position="bottom" {...barProps} />
         </Content>
         <LoadingIndicator
           overlay={true}
           active={isLoading}
           bgcolor="rgba(255, 255, 255, 0.7)"
         />
-        {isEditing && (
-          <Edit
+        {isEditingRole && (
+          <EditRole
             title="Edit Event"
-            isOpen={isEditing}
+            isOpen={isEditingRole}
             {...selectedData}
             onClose={this.handleEditClose}
             onSave={this.handleEditSave}
+          />
+        )}
+        {isEditingDay && (
+          <EditDay
+            date={date}
+            title="Edit Day"
+            isOpen={isEditingDay}
+            onClose={this.handleEditDayClose}
+            {...selectedData}
           />
         )}
       </Wrapper>
