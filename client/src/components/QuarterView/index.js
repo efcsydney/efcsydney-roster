@@ -1,11 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  getMemberNames,
-  getQuarterDays,
-  getRoles
-} from '../../utils';
+import { getMemberNames, getQuarterDays, getRoles } from '../../utils';
 import '../../icalstyle.css';
 import styled from 'styled-components';
 import { MOBILE_BREAKPOINT } from '../../styled';
@@ -16,18 +12,25 @@ export default class QuarterView extends Component {
   static propTypes = {
     date: PropTypes.instanceOf(Date),
     data: PropTypes.object,
-    onCellClick: PropTypes.func
+    onDayClick: PropTypes.func,
+    onRoleClick: PropTypes.func
   };
   static defaultProps = {
     date: new Date(),
     data: {},
-    onCellClick: () => {}
+    onDayClick: () => {},
+    onRoleClick: () => {}
   };
-  handleCellClick = (day, role, member) => {
-    const { data, onCellClick } = this.props;
+  handleDayClick = (day, footnote) => {
+    const { onDayClick } = this.props;
+
+    onDayClick({ day, footnote });
+  };
+  handleRoleClick = (day, role, member) => {
+    const { data, onRoleClick } = this.props;
     const names = getMemberNames(data.data);
 
-    onCellClick({ day, role, member, names });
+    onRoleClick({ day, role, member, names });
   };
   handleWindowResize = () => {
     this.setState({
@@ -54,13 +57,14 @@ export default class QuarterView extends Component {
       events: data.data,
       days,
       roles,
-      onDayClick: this.handleCellClick
+      onDayClick: this.handleDayClick,
+      onRoleClick: this.handleRoleClick
     };
 
     return (
       <Wrapper>
-        {isMobile && <Mobile {...viewProps}/>}
-        {!isMobile && <Desktop {...viewProps}/>}
+        {isMobile && <Mobile {...viewProps} />}
+        {!isMobile && <Desktop {...viewProps} />}
       </Wrapper>
     );
   }

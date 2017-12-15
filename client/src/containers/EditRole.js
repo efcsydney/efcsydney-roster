@@ -13,7 +13,7 @@ function getOptions(names) {
   return names;
 }
 
-export default class Edit extends Component {
+export default class EditRole extends Component {
   static propTypes = {
     date: PropTypes.instanceOf(Date).isRequired,
     member: PropTypes.string,

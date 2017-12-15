@@ -1,16 +1,20 @@
+import { buildQuery } from './utils';
+
 const API = {
   retrieve(query) {
-    return fetch(
-      `/api/events?from=${query.from}&to=${query.to}&mock=${query.mock}&category=english`
-    ).then(response => response.json());
+    query.category = 'english';
+    return fetch(`/api/events?${buildQuery(query)}`).then(response =>
+      response.json()
+    );
   },
-  modify(query) {
-    return fetch(`/api/events?mock=${query.mock}`, {
+  modify({ mock, ...body }) {
+    const query = buildQuery({ mock });
+    return fetch(`/api/events?${query}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(query)
+      body: JSON.stringify(body)
     }).then(response => response.json());
   }
 };

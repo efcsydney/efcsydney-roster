@@ -5,7 +5,8 @@ import LoadingIndicator from '../components/LoadingIndicator';
 import NavBar from '../components/NavBar';
 import DateBar from '../components/DateBar';
 import moment from 'moment';
-import Edit from './Edit';
+import EditRole from './EditRole';
+import EditDay from './EditDay';
 import API from '../api';
 import _ from 'lodash';
 
@@ -27,7 +28,8 @@ export default class App extends Component {
   state = {
     date: new Date(),
     isLoading: true,
-    isEditing: false,
+    isEditingRole: false,
+    isEditingDay: false,
     selectedData: {},
     selectedService: 'english',
     params: {}
@@ -70,20 +72,34 @@ export default class App extends Component {
       to: newDate.endOf('quarter').format('YYYY-MM-DD')
     });
   };
-  handleCellClick = ({ day, member, role, names }) => {
+  handleDayClick = ({ day, footnote }) => {
     this.setState({
-      isEditing: true,
+      isEditingDay: true,
+      selectedData: { date: day.toDate(), footnote }
+    });
+  };
+  handleRoleClick = ({ day, member, role, names }) => {
+    this.setState({
+      isEditingRole: true,
       selectedData: { date: day.toDate(), member, role, names }
+    });
+  };
+  handleEditDayClose = () => {
+    this.setState({
+      isEditingDay: false
     });
   };
   handleEditClose = () => {
     this.setState({
-      isEditing: false,
+      isEditingRole: false,
       selectedData: null
     });
   };
   handleEditSave = form => {
-    form.mock = this.state.params.mock;
+    const { params: { mock } } = this.state;
+    if (mock) {
+      form.mock = mock;
+    }
     API.modify(form).then(() => {
       const clonedEvents = _.clone(this.state.events);
       const i = _.findIndex(clonedEvents.data, {
@@ -93,14 +109,30 @@ export default class App extends Component {
       _.set(clonedEvents, `data.${i}.members.${j}.name`, form.name);
       this.setState({
         events: clonedEvents,
-        isEditing: false,
+        isEditingRole: false,
         selectedData: null
       });
     });
   };
-  handleServiceChange = ({value}) => {
+  handleServiceChange = ({ value }) => {
     location.href = `#${value}`;
-    this.setState({selectedService: value});
+    this.setState({ selectedService: value });
+  };
+  handleEditDaySave = form => {
+    const { params: { mock } } = this.state;
+    if (mock) {
+      form.mock = mock;
+    }
+    API.modify(form).then(() => {
+      const events = _.clone(this.state.events);
+      const date = moment(form.date).format('YYYY-MM-DD');
+      const i = _.findIndex(events.data, { date });
+      _.set(events, `data.${i}.footnote`, form.footnote);
+      this.setState({
+        events,
+        isEditingDay: false
+      });
+    });
   };
   componentWillMount() {
     this.loadData({
@@ -113,41 +145,61 @@ export default class App extends Component {
     });
   }
   render() {
-    const { date, isLoading, isEditing, selectedData, selectedService } = this.state;
+    const {
+      date,
+      isLoading,
+      isEditingDay,
+      isEditingRole,
+      selectedData,
+      selectedService
+    } = this.state;
 
     return (
       <Wrapper>
         <NavBar
           value={selectedService}
-          onServiceChange={this.handleServiceChange}/>
+          onServiceChange={this.handleServiceChange}
+        />
         <Content>
           <DateBar
             date={date}
             onPrevClick={this.handleButtonClick.bind(this, 'prev')}
-            onNextClick={this.handleButtonClick.bind(this, 'next')} />
+            onNextClick={this.handleButtonClick.bind(this, 'next')}
+          />
           <QuarterView
             date={date}
             data={this.state.events}
-            onCellClick={this.handleCellClick}
+            onRoleClick={this.handleRoleClick}
+            onDayClick={this.handleDayClick}
           />
           <DateBar
             date={date}
             position="bottom"
             onPrevClick={this.handleButtonClick.bind(this, 'prev')}
-            onNextClick={this.handleButtonClick.bind(this, 'next')} />
+            onNextClick={this.handleButtonClick.bind(this, 'next')}
+          />
         </Content>
         <LoadingIndicator
           overlay={true}
           active={isLoading}
           bgcolor="rgba(255, 255, 255, 0.7)"
         />
-        {isEditing && (
-          <Edit
+        {isEditingRole && (
+          <EditRole
             title="Edit Event"
-            isOpen={isEditing}
+            isOpen={isEditingRole}
             {...selectedData}
             onClose={this.handleEditClose}
             onSave={this.handleEditSave}
+          />
+        )}
+        {isEditingDay && (
+          <EditDay
+            title="Edit Day"
+            isOpen={isEditingDay}
+            {...selectedData}
+            onClose={this.handleEditDayClose}
+            onSave={this.handleEditDaySave}
           />
         )}
       </Wrapper>

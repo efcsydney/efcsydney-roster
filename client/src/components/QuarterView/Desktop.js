@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import AddToCalendar from 'react-add-to-calendar';
 import '../../icalstyle.css';
@@ -15,60 +15,77 @@ function findEvent(events, day) {
   );
 }
 
-export default ({ events, roles, days, onDayClick }) => {
-  const cellWidth = `${100 / (roles.length + 1)}%`;
-  const icalicon = { 'calendar-plus-o': 'left' };
-  const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
+export default class Desktop extends Component {
+  handleDayClick = (e, day, footnote) => {
+    const isAddCalendar =
+      e.target.className.indexOf('react-add-to-calendar') !== -1;
+    if (isAddCalendar) {
+      e.stopPropagation();
+      return;
+    }
+    this.props.onDayClick(day, footnote);
+  };
+  render() {
+    const { events, roles, days, onRoleClick } = this.props;
+    const cellWidth = `${100 / (roles.length + 1)}%`;
+    const icalicon = { 'calendar-plus-o': 'left' };
+    const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
 
-  return (
-    <Grid>
-      <Row>
-        <Header width={cellWidth}>
-          <Text>Date / Role</Text>
-        </Header>
-        {roles.map((role, i) => (
-          <Header key={i} width={cellWidth}>
-            <Text>{role}</Text>
+    return (
+      <Grid>
+        <Row>
+          <Header width={cellWidth}>
+            <Text>Date / Role</Text>
           </Header>
-        ))}
-      </Row>
-      {days.map((day, i) => {
-        const event = findEvent(events, day);
-        const members = event ? event.members : [];
-        const icalEvent = getCalData(day, roles, members);
-        const highlightDate = moment()
-          .isoWeekday(7)
-          .format('YYYY-MM-DD');
+          {roles.map((role, i) => (
+            <Header key={i} width={cellWidth}>
+              <Text>{role}</Text>
+            </Header>
+          ))}
+        </Row>
+        {days.map((day, i) => {
+          const event = findEvent(events, day);
+          const members = event ? event.members : [];
+          const footnote = event ? event.footnote : '';
+          const icalEvent = getCalData(day, roles, members);
+          const highlightDate = moment()
+            .isoWeekday(7)
+            .format('YYYY-MM-DD');
 
-        return (
-          <Row key={i} highlighted={day.format('YYYY-MM-DD') === highlightDate}>
-            <Role width={cellWidth}>
-              <AddToCalendar
-                event={icalEvent}
-                listItems={icalitems}
-                buttonTemplate={icalicon}
-                buttonLabel=""
-              />
-              {day.format('DD MMM')}
-            </Role>
-            {roles.map((role, i) => {
-              const member = _.find(members, { role }) || {};
-              const name = member.name || '';
-              return (
-                <Name
-                  key={i}
-                  width={cellWidth}
-                  onClick={() => onDayClick(day, role, name)}>
-                  <Text>{name}</Text>
-                </Name>
-              );
-            })}
-          </Row>
-        );
-      })}
-    </Grid>
-  );
-};
+          return (
+            <Row
+              key={i}
+              highlighted={day.format('YYYY-MM-DD') === highlightDate}>
+              <Role
+                onClick={e => this.handleDayClick(e, day, footnote)}
+                width={cellWidth}>
+                <AddToCalendar
+                  event={icalEvent}
+                  listItems={icalitems}
+                  buttonTemplate={icalicon}
+                  buttonLabel=""
+                />
+                {day.format('DD MMM')}
+              </Role>
+              {roles.map((role, i) => {
+                const member = _.find(members, { role }) || {};
+                const name = member.name || '';
+                return (
+                  <Name
+                    key={i}
+                    width={cellWidth}
+                    onClick={() => onRoleClick(day, role, name)}>
+                    <Text>{name}</Text>
+                  </Name>
+                );
+              })}
+            </Row>
+          );
+        })}
+      </Grid>
+    );
+  }
+}
 
 const Text = styled.span`
   flex-grow: 1;
@@ -98,6 +115,7 @@ const Header = Cell.extend`
 const Role = Cell.extend`
   border-right: solid 1px #dadada;
   color: #666;
+  cursor: pointer;
   font-weight: bold;
   overflow: visible;
   text-align: right;
