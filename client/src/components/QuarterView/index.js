@@ -25,12 +25,12 @@ export default class QuarterView extends Component {
     date: new Date(),
     data: {},
     onDayClick: () => {},
-    onRoleClick: () => {},
+    onRoleClick: () => {}
   };
-  handleDayClick = (day) => {
+  handleDayClick = (day, footnote) => {
     const { onDayClick } = this.props;
 
-    onDayClick(day);
+    onDayClick({ day, footnote });
   };
   handleRoleClick = (day, role, member) => {
     const { data, onRoleClick } = this.props;
@@ -78,8 +78,8 @@ export default class QuarterView extends Component {
         <BottomBar className="zindexTitle">
           {startMonth} - {endMonth} {year}
         </BottomBar>
-        {isMobile && <Mobile {...viewProps}/>}
-        {!isMobile && <Desktop {...viewProps}/>}
+        {isMobile && <Mobile {...viewProps} />}
+        {!isMobile && <Desktop {...viewProps} />}
       </Wrapper>
     );
   }

@@ -16,14 +16,14 @@ function findEvent(events, day) {
 }
 
 export default class Desktop extends Component {
-  handleDayClick = (e, day) => {
+  handleDayClick = (e, day, footnote) => {
     const isAddCalendar =
       e.target.className.indexOf('react-add-to-calendar') !== -1;
     if (isAddCalendar) {
       e.stopPropagation();
       return;
     }
-    this.props.onDayClick(day);
+    this.props.onDayClick(day, footnote);
   };
   render() {
     const { events, roles, days, onRoleClick } = this.props;
@@ -46,6 +46,7 @@ export default class Desktop extends Component {
         {days.map((day, i) => {
           const event = findEvent(events, day);
           const members = event ? event.members : [];
+          const footnote = event ? event.footnote : '';
           const icalEvent = getCalData(day, roles, members);
           const highlightDate = moment()
             .isoWeekday(7)
@@ -56,7 +57,7 @@ export default class Desktop extends Component {
               key={i}
               highlighted={day.format('YYYY-MM-DD') === highlightDate}>
               <Role
-                onClick={e => this.handleDayClick(e, day)}
+                onClick={e => this.handleDayClick(e, day, footnote)}
                 width={cellWidth}>
                 <AddToCalendar
                   event={icalEvent}
