@@ -6,23 +6,30 @@ import Modal from '../components/Modal';
 //import { Creatable } from 'react-select';
 import StateButton from '../components/StateButton';
 
-export default class EditRole extends Component {
+export default class EditDay extends Component {
   static propTypes = {
     date: PropTypes.instanceOf(Date).isRequired,
-    member: PropTypes.string,
-    names: PropTypes.array,
-    onSave: PropTypes.func,
-    role: PropTypes.string
+    footnote: PropTypes.string,
+    onSave: PropTypes.func
+  };
+  handleFootnoteChange = e => {
+    const footnote = e.target.value;
+    this.setState({ footnote });
+  };
+  handleSaveClick = form => {
+    const { onSave } = this.props;
+    onSave(form);
   };
   constructor(props) {
     super(props);
 
     this.state = {
-      names: props.names
+      footnote: props.footnote || ''
     };
   }
   render() {
-    const { date, member, onSave, role, ...otherProps } = this.props; // eslint-disable-line
+    const { date, ...otherProps } = this.props;
+    const { footnote } = this.state;
     const formattedDate = moment(date).format('DD MMM, YYYY');
 
     return (
@@ -35,11 +42,22 @@ export default class EditRole extends Component {
           <Row>
             <Label>Note</Label>
             <span>
-              <Input placeholder="ex. Holy Communion"/>
+              <Input
+                type="text"
+                value={footnote}
+                placeholder="ex. Holy Communion"
+                onChange={this.handleFootnoteChange}
+              />
             </span>
           </Row>
           <Row align="center">
-            <StateButton>Save</StateButton>
+            <StateButton
+              onClick={this.handleSaveClick.bind(this, {
+                date,
+                footnote
+              })}>
+              Save
+            </StateButton>
           </Row>
         </Form>
       </Modal>
@@ -86,32 +104,32 @@ const Input = styled.input`
   width: 100%;
   display: block;
   &.extra-space-for-addon {
-      padding-left: 48px;
+    padding-left: 48px;
   }
   &:hover {
-      border-color: #8b8b8b;
+    border-color: #8b8b8b;
   }
   &:focus {
-      border-color: #64b8dc;
-      box-shadow: none;
-      outline: 0;
+    border-color: #64b8dc;
+    box-shadow: none;
+    outline: 0;
   }
   &[disabled] {
-      background: #e5e5e5;
-      border-color:#c1c1c1;
-      box-shadow: none;
+    background: #e5e5e5;
+    border-color: #c1c1c1;
+    box-shadow: none;
   }
   &::-webkit-input-placeholder {
-      color: #999;
+    color: #999;
   }
   &:-moz-placeholder {
-      color: #999;
+    color: #999;
   }
   &::-moz-placeholder {
-      color: #999;
+    color: #999;
   }
   &:-ms-input-placeholder {
-      color: #999;
+    color: #999;
   }
 `;
 Input.displayName = 'Input';
