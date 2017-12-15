@@ -1,5 +1,16 @@
+import $ from 'jquery';
 import _ from 'lodash';
 import moment from 'moment';
+
+export const sanitize = obj =>
+  _.isObject(obj)
+    ? _(obj)
+        .omit(_.isUndefined)
+        .omit(_.isNull)
+        .value()
+    : obj;
+
+export const buildQuery = obj => $.param(sanitize(obj));
 
 export function getCalData(day, roles, members) {
   const description = _.reduce(
