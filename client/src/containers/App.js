@@ -6,7 +6,8 @@ import NavBar from '../components/NavBar';
 import leftArrowIcon from '../assets/arrow_left.svg';
 import rightArrowIcon from '../assets/arrow_right.svg';
 import moment from 'moment';
-import Edit from './Edit';
+import EditRole from './EditRole';
+import EditDay from './EditDay';
 import API from '../api';
 import { media } from '../styled';
 import _ from 'lodash';
@@ -29,7 +30,8 @@ export default class App extends Component {
   state = {
     date: new Date(),
     isLoading: true,
-    isEditing: false,
+    isEditingRole: false,
+    isEditingDay: false,
     selectedData: {},
     params: {}
   };
@@ -70,15 +72,25 @@ export default class App extends Component {
       to: newDate.endOf('quarter').format('YYYY-MM-DD')
     });
   };
-  handleCellClick = ({ day, member, role, names }) => {
+  handleDayClick = () => {
     this.setState({
-      isEditing: true,
+      isEditingDay: true
+    });
+  };
+  handleRoleClick = ({ day, member, role, names }) => {
+    this.setState({
+      isEditingRole: true,
       selectedData: { date: day.toDate(), member, role, names }
+    });
+  };
+  handleEditDayClose = () => {
+    this.setState({
+      isEditingDay: false,
     });
   };
   handleEditClose = () => {
     this.setState({
-      isEditing: false,
+      isEditingRole: false,
       selectedData: null
     });
   };
@@ -93,7 +105,7 @@ export default class App extends Component {
       _.set(clonedEvents, `data.${i}.members.${j}.name`, form.name);
       this.setState({
         events: clonedEvents,
-        isEditing: false,
+        isEditingRole: false,
         selectedData: null
       });
     });
@@ -109,7 +121,7 @@ export default class App extends Component {
     });
   }
   render() {
-    const { date, isLoading, isEditing, selectedData } = this.state;
+    const { date, isLoading, isEditingDay, isEditingRole, selectedData } = this.state;
 
     return (
       <Wrapper>
@@ -118,7 +130,8 @@ export default class App extends Component {
           <QuarterView
             date={date}
             data={this.state.events}
-            onCellClick={this.handleCellClick}
+            onRoleClick={this.handleRoleClick}
+            onDayClick={this.handleDayClick}
           />
           <PrevButtonTop
             className="zindexNavigator"
@@ -146,13 +159,22 @@ export default class App extends Component {
             bgcolor="rgba(255, 255, 255, 0.7)"
           />
         </ViewWrapper>
-        {isEditing && (
-          <Edit
+        {isEditingRole && (
+          <EditRole
             title="Edit Event"
-            isOpen={isEditing}
+            isOpen={isEditingRole}
             {...selectedData}
             onClose={this.handleEditClose}
             onSave={this.handleEditSave}
+          />
+        )}
+        {isEditingDay && (
+          <EditDay
+            date={date}
+            title="Edit Day"
+            isOpen={isEditingDay}
+            onClose={this.handleEditDayClose}
+            {...selectedData}
           />
         )}
       </Wrapper>
