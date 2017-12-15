@@ -19,12 +19,12 @@ export default class QuarterView extends Component {
     date: new Date(),
     data: {},
     onDayClick: () => {},
-    onRoleClick: () => {},
+    onRoleClick: () => {}
   };
-  handleDayClick = (day) => {
+  handleDayClick = (day, footnote) => {
     const { onDayClick } = this.props;
 
-    onDayClick(day);
+    onDayClick({ day, footnote });
   };
   handleRoleClick = (day, role, member) => {
     const { data, onRoleClick } = this.props;

@@ -59,9 +59,10 @@ export default class App extends Component {
       to: newDate.endOf('quarter').format('YYYY-MM-DD')
     });
   };
-  handleDayClick = () => {
+  handleDayClick = ({ day, footnote }) => {
     this.setState({
-      isEditingDay: true
+      isEditingDay: true,
+      selectedData: { date: day.toDate(), footnote }
     });
   };
   handleRoleClick = ({ day, member, role, names }) => {
@@ -82,7 +83,10 @@ export default class App extends Component {
     });
   };
   handleEditSave = form => {
-    form.mock = this.state.params.mock;
+    const { params: { mock } } = this.state;
+    if (mock) {
+      form.mock = mock;
+    }
     API.modify(form).then(() => {
       const clonedEvents = _.clone(this.state.events);
       const i = _.findIndex(clonedEvents.data, {
@@ -100,6 +104,22 @@ export default class App extends Component {
   handleServiceChange = ({ value }) => {
     location.href = `#${value}`;
     this.setState({ selectedService: value });
+  };
+  handleEditDaySave = form => {
+    const { params: { mock } } = this.state;
+    if (mock) {
+      form.mock = mock;
+    }
+    API.modify(form).then(() => {
+      const events = _.clone(this.state.events);
+      const date = moment(form.date).format('YYYY-MM-DD');
+      const i = _.findIndex(events.data, { date });
+      _.set(events, `data.${i}.footnote`, form.footnote);
+      this.setState({
+        events,
+        isEditingDay: false
+      });
+    });
   };
   componentWillMount() {
     this.loadData({
@@ -159,11 +179,11 @@ export default class App extends Component {
         )}
         {isEditingDay && (
           <EditDay
-            date={date}
             title="Edit Day"
             isOpen={isEditingDay}
-            onClose={this.handleEditDayClose}
             {...selectedData}
+            onClose={this.handleEditDayClose}
+            onSave={this.handleEditDaySave}
           />
         )}
       </Wrapper>
