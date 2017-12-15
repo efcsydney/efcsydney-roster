@@ -54,5 +54,7 @@ body {
   position: static;
 }
 .ServiceSelect .Select-input {
-  display: none !important;
+  position: absolute;
+  left: -1000em;
+  top: -1000em;
 }

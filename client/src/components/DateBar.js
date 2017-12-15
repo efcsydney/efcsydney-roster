@@ -13,7 +13,6 @@ export default ({
   position,
   onPrevClick,
   onNextClick,
-  children,
   ...otherProps
 }) => {
   const days = getQuarterDays(date, 7);
