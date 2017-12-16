@@ -31,7 +31,7 @@
   "scripts": {
     "build": "cd client && npm run build",
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "start:qa": "NODE_ENV=qa PORT=80 nodemon server.js",
+    "start:qa": "NODE_ENV=qa PORT=80 REACT_APP_ENV=qa nodemon server.js",
     "server": "node server.js",
     "client": "node start-client.js",
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
