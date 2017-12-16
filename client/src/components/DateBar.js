@@ -33,7 +33,7 @@ export default ({
   );
 };
 
-const Wrapper = styled.h1`
+const Wrapper = styled.div`
   align-items: center;
   background: #ffffff;
   border-bottom: none;

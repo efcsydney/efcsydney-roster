@@ -53,7 +53,6 @@ const Title = styled.span`
   font-size: 18px;
   font-weight: bold;
   position: relative;
-  z-index: 3;
   &:link,
   &:hover,
   &:visited {
