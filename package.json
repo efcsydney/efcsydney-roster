@@ -38,7 +38,8 @@
     "db-migrate": "sequelize db:migrate",
     "db-seed": "sequelize db:seed:all",
     "deploy:qa": "dploy qa",
-    "deploy:prod": "dploy prod"
+    "deploy:prod": "dploy prod",
+    "prettier": "prettier --single-quote --write '{,!(node_modules|client)/**/}*.js'"
   },
   "devDependencies": {
     "concurrently": "3.1.0",

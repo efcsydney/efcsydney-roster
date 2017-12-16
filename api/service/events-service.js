@@ -56,12 +56,15 @@ class EventService {
       scheduledEvents.forEach(scheduledEvent => {
         let event = allEvents.find(event => {
           return (
-            moment(event.calendarDate.date).format(dateTimeFormat.stringFormat) ===
-              moment(scheduledEvent.calendarDate.date).format(dateTimeFormat.stringFormat)
-              && event.position.name == scheduledEvent.position.name
+            moment(event.calendarDate.date).format(
+              dateTimeFormat.stringFormat
+            ) ===
+              moment(scheduledEvent.calendarDate.date).format(
+                dateTimeFormat.stringFormat
+              ) && event.position.name == scheduledEvent.position.name
           );
         });
-        if(event == null){
+        if (event == null) {
           return;
         }
         event.volunteerName = scheduledEvent.volunteerName;
