@@ -11,7 +11,7 @@ script:
 - yarn && cd client && yarn && cd ..
 - yarn build
 before_deploy:
-- mkdir -p ~/.ssh/key 
+- mkdir -p ~/.ssh/key
 - ls -altr ~/.ssh
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
   -in deploy_rsa.enc -out ~/.ssh/key/efcsydney.pem -d
@@ -21,6 +21,6 @@ before_deploy:
 deploy:
 - provider: script
   script:
-  - yarn deploy:qa 
+  - yarn deploy:qa
   on:
     branch: travis
