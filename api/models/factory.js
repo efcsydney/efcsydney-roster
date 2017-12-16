@@ -1,5 +1,4 @@
-
-class Factory{
+class Factory {
   static createEvent(volunteerName, position, date) {
     return {
       volunteerName: '',
@@ -11,4 +10,4 @@ class Factory{
 
 module.exports = {
   Factory
-}
+};

@@ -1,8 +1,7 @@
 class MockEventMapper {
-
-    static convertEventsModelToDto(events){
-      return events;
-    }
+  static convertEventsModelToDto(events) {
+    return events;
   }
+}
 
-  module.exports = { MockEventMapper }
+module.exports = { MockEventMapper };

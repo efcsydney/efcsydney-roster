@@ -32,7 +32,7 @@ describe('Server', function() {
                 { role: 'Usher/Offering', name: '' },
                 { role: 'PA/PPT', name: '' },
                 { role: 'Newsletter', name: '' },
-                { role: 'Refreshments', name: '' },
+                { role: 'Refreshments', name: '' }
               ]
             },
             {
@@ -45,7 +45,7 @@ describe('Server', function() {
                 { role: 'Usher/Offering', name: 'Cheer Lin' },
                 { role: 'PA/PPT', name: 'Raymond Tsang' },
                 { role: 'Newsletter', name: 'Kai Chang' },
-                { role: 'Refreshments', name: 'Christine Yang' },
+                { role: 'Refreshments', name: 'Christine Yang' }
               ]
             },
             {
@@ -58,7 +58,7 @@ describe('Server', function() {
                 { role: 'Usher/Offering', name: '' },
                 { role: 'PA/PPT', name: '' },
                 { role: 'Newsletter', name: '' },
-                { role: 'Refreshments', name: '' },
+                { role: 'Refreshments', name: '' }
               ]
             }
           ]);
@@ -86,7 +86,11 @@ describe('Server', function() {
     });
 
     it('updates an event where its time contains timezone info', function() {
-      const event = {date:"2017-11-04T13:00:00.000Z",role:"Usher/Offering",name:"Christine Yang"};
+      const event = {
+        date: '2017-11-04T13:00:00.000Z',
+        role: 'Usher/Offering',
+        name: 'Christine Yang'
+      };
       return request(app)
         .put('/api/events')
         .send(event)
@@ -98,7 +102,11 @@ describe('Server', function() {
     });
 
     it('updates an event where its time excludes timezone', function() {
-      const event = {date:"2017-11-05T13:00:00",role:"Usher/Offering",name:"Christine Yang"};
+      const event = {
+        date: '2017-11-05T13:00:00',
+        role: 'Usher/Offering',
+        name: 'Christine Yang'
+      };
       return request(app)
         .put('/api/events')
         .send(event)
@@ -110,7 +118,11 @@ describe('Server', function() {
     });
 
     it('updates an event where its time contains date only', function() {
-      const event = {date:"2017-11-07",role:"Usher/Offering",name:"Christine Yang"};
+      const event = {
+        date: '2017-11-07',
+        role: 'Usher/Offering',
+        name: 'Christine Yang'
+      };
       return request(app)
         .put('/api/events')
         .send(event)
