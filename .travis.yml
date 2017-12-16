@@ -7,11 +7,8 @@ cache:
   - client/node_modules
 addons:
   ssh_known_hosts: 54.206.106.116
-script:
-- yarn && cd client && yarn && cd ..
-- yarn build
 before_deploy:
-- mdkir ~/.ssh/key
+- mkdir ~/.ssh/key
 - ls -altr ~/.ssh
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
   -in deploy_rsa.enc -out ~/.ssh/key/efcsydney.pem -d
