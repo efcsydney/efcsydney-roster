@@ -9,6 +9,7 @@ qa:
         remote: /opt/efcsydney-roster
     include:
         "client/build/**/*": "/client/build/"
+        "node_modules/**/*": "node_modules/"
         
 prod:
     scheme: sftp
