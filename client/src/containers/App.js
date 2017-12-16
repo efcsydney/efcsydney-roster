@@ -4,6 +4,7 @@ import QuarterView from '../components/QuarterView';
 import LoadingIndicator from '../components/LoadingIndicator';
 import NavBar from '../components/NavBar';
 import DateBar from '../components/DateBar';
+import TagManager from '../components/TagManager';
 import moment from 'moment';
 import Edit from './Edit';
 import API from '../api';
@@ -99,6 +100,15 @@ export default class App extends Component {
         .format('YYYY-MM-DD')
     });
   }
+  renderTagManager() {
+    if (process.env.NODE_ENV === 'qa') {
+      return <TagManager gtmId="GTM-W8CJV63" />;
+    } else if (process.NODE_ENV === 'production') {
+      return <TagManager gtmId="GTM-KS4KKTW" />;
+    } else {
+      return <div />;
+    }
+  }
   render() {
     const {
       date,
@@ -121,13 +131,13 @@ export default class App extends Component {
           onServiceChange={this.handleServiceChange}
         />
         <Content>
-          <DateBar {...barProps}/>
+          <DateBar {...barProps} />
           <QuarterView
             date={date}
             data={this.state.events}
             onCellClick={this.handleCellClick}
           />
-          <DateBar position="bottom" {...barProps}/>
+          <DateBar position="bottom" {...barProps} />
         </Content>
         <LoadingIndicator
           overlay={true}
