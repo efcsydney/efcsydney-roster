@@ -87,7 +87,7 @@ export default class App extends Component {
     });
   };
   handleServiceChange = ({ value }) => {
-    location.href = `#${value}`;
+    document.location.href = `#${value}`;
     this.setState({ selectedService: value });
   };
   componentWillMount() {
@@ -134,13 +134,13 @@ export default class App extends Component {
           onServiceChange={this.handleServiceChange}
         />
         <Content>
-          <DateBar {...barProps}/>
+          <DateBar {...barProps} />
           <QuarterView
             date={date}
             data={this.state.events}
             onCellClick={this.handleCellClick}
           />
-          <DateBar position="bottom" {...barProps}/>
+          <DateBar position="bottom" {...barProps} />
         </Content>
         <LoadingIndicator
           overlay={true}

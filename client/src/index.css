@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900');
+
 html, body {
   background-color: #ecf2f7 !important;
 }
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .react-add-to-calendar__button {

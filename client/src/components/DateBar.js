@@ -25,7 +25,9 @@ export default ({
       <Arrow onClick={onPrevClick}>
         <img src={leftArrowIcon} role="presentation" />
       </Arrow>
-      {startMonth} - {endMonth} {year}
+      <Label>
+        {startMonth} - {endMonth} {year}
+      </Label>
       <Arrow onClick={onNextClick}>
         <img src={rightArrowIcon} role="presentation" />
       </Arrow>
@@ -80,4 +82,7 @@ const Arrow = styled.a`
     height: 18px;
     display: inline-block;
   }
+`;
+const Label = styled.span`
+  font-weight: bold;
 `;
