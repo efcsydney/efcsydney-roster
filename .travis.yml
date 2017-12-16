@@ -17,7 +17,7 @@ before_deploy:
   -in deploy_rsa.enc -out ~/.ssh/key/efcsydney.pem -d
 - eval "$(ssh-agent -s)"
 - chmod 600 ~/.ssh/key/efcsydney.pem
-- ls -altr && yarn deploy:qa
+- yes | yarn deploy:qa
 deploy:
 - provider: script
   script:
