@@ -24,3 +24,4 @@ deploy:
   - yarn deploy:qa
   on:
     branch: travis
+
