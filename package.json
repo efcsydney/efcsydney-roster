@@ -39,6 +39,7 @@
     "test": "NODE_ENV=test mocha test",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
+    "db-rollback-all": "sequelize db:migrate:undo:all",
     "db-seed": "sequelize db:seed:all",
     "db-undo-seed": "sequelize db:seed:undo:all",
     "deploy:qa": "dploy qa",

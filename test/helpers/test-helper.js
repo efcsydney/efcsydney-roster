@@ -32,56 +32,20 @@ const Position = require('../../api/models/position').Position;
 
 async function createSeed() {
   await Position.bulkCreate([
-    {
-      id: 1,
-      name: 'Speaker'
-    },
-    {
-      id: 2,
-      name: 'Moderator'
-    },
-    {
-      id: 3,
-      name: 'P&W'
-    },
-    {
-      id: 4,
-      name: 'Pianist'
-    },
-    {
-      id: 5,
-      name: 'Usher/Offering'
-    },
-    {
-      id: 6,
-      name: 'PA/PPT'
-    },
-    {
-      id: 7,
-      name: 'Newsletter'
-    },
-    {
-      id: 8,
-      name: 'Refreshments'
-    }
+    { id: 1, name: 'Speaker' },
+    { id: 2, name: 'Moderator' },
+    { id: 3, name: 'P&W' },
+    { id: 4, name: 'Pianist' },
+    { id: 5, name: 'Usher/Offering' },
+    { id: 6, name: 'PA/PPT' },
+    { id: 7, name: 'Newsletter' },
+    { id: 8, name: 'Refreshments' }
   ]);
   await CalendarDate.bulkCreate([
-    {
-      id: 1,
-      date: '2017-10-08'
-    },
-    {
-      id: 2,
-      date: '2017-10-15'
-    },
-    {
-      id: 3,
-      date: '2017-10-29'
-    },
-    {
-      id: 4,
-      date: '2017-11-05'
-    }
+    { id: 1, date: '2017-10-08' },
+    { id: 2, date: '2017-10-15' },
+    { id: 3, date: '2017-10-29' },
+    { id: 4, date: '2017-11-05' }
   ]);
   await Event.bulkCreate([
     {
