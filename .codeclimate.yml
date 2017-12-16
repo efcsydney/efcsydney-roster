@@ -23,7 +23,7 @@ checks:
   identical-code:
     enabled: true
 plugins:
-  rubocop:
+  eslint:
     enabled: true
   fixme:
     enabled: true
