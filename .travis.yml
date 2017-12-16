@@ -11,7 +11,8 @@ script:
 - yarn && cd client && yarn && cd ..
 - yarn build
 before_deploy:
-- ls && pwd
+- mdkir ~/.ssh/key
+- ls -altr ~/.ssh
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
   -in deploy_rsa.enc -out ~/.ssh/key/efcsydney.pem -d
 - eval "$(ssh-agent -s)"
