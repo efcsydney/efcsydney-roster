@@ -1,6 +1,7 @@
 process.env.TZ = 'Australia/Sydney';
 const app = require('./app').app;
+const logger = require('winston');
 
 app.listen(app.get('port'), () => {
-  console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
+  logger.info(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
 });

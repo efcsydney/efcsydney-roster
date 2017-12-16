@@ -1,2 +1,3 @@
 --recursive
 --exit
+test/helpers/test-helper.js

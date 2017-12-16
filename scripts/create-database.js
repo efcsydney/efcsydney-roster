@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/database.json')[env];
+const log = require('winston');
 
 const sequelize = new Sequelize(undefined, config.username, config.password, {
   dialect: config.dialect,
@@ -9,5 +10,5 @@ const sequelize = new Sequelize(undefined, config.username, config.password, {
 
 return sequelize
   .query(`CREATE DATABASE ${config.database}`)
-  .catch(err => console.log(err))
+  .catch(err => log.error(err))
   .lastly(() => sequelize.close());

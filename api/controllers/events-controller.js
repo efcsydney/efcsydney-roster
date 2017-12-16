@@ -7,6 +7,7 @@ const PositionRepository = require('../data/position-repository')
 const EventService = require('../service/events-service').EventService;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const Factory = require('../service/factory').Factory;
+const log = require('winston');
 
 async function getEvents(req, res) {
   try {
@@ -34,10 +35,10 @@ async function getEvents(req, res) {
       data: dto
     };
 
-    // console.log(JSON.stringify(response, null, 2));
+    // log.info(JSON.stringify(response, null, 2));
     return res.json(response);
   } catch (err) {
-    console.log(err);
+    log.error(err);
     return res.status(500).json({
       result: 'error',
       error: { message: err.message }
@@ -59,7 +60,7 @@ async function saveEvent(req, res) {
 
     return res.status(201).json(response);
   } catch (err) {
-    console.log(err);
+    log.error(err);
     return res.status(500).json({
       result: 'error',
       error: { message: err.message }
