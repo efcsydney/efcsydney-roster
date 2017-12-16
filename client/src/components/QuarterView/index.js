@@ -1,12 +1,13 @@
 import _ from 'lodash';
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { getMemberNames, getQuarterDays, getRoles } from '../../utils';
 import '../../icalstyle.css';
 import styled from 'styled-components';
 import { MOBILE_BREAKPOINT } from '../../styled';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
+import '../../icalstyle.css';
 
 export default class QuarterView extends Component {
   static propTypes = {

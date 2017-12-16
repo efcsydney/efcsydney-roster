@@ -4,16 +4,8 @@ import styled from 'styled-components';
 import AddToCalendar from 'react-add-to-calendar';
 import '../../icalstyle.css';
 import moment from 'moment';
-import { getCalData } from '../../utils';
+import { findEvent, getCalData } from '../../utils';
 import { Grid } from './styled';
-
-function findEvent(events, day) {
-  return _.find(
-    events,
-    event =>
-      moment(event.date).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
-  );
-}
 
 export default ({ events, roles, days, onDayClick, onRoleClick }) => {
   const icalicon = { 'calendar-plus-o': 'left' };
@@ -24,23 +16,23 @@ export default ({ events, roles, days, onDayClick, onRoleClick }) => {
       {days.map((day, i) => {
         const event = findEvent(events, day);
         const members = event ? event.members : [];
+        const footnote = event ? event.footnote : '';
         const icalEvent = getCalData(day, roles, members);
         const highlightDate = moment()
           .isoWeekday(7)
           .format('YYYY-MM-DD');
 
         return (
-          <Day
-            key={i}
-            highlighted={day.format('YYYY-MM-DD') === highlightDate}>
-            <Header onClick={e => {
+          <Day key={i} highlighted={day.format('YYYY-MM-DD') === highlightDate}>
+            <Header
+              onClick={e => {
                 const isAddCalendar =
                   e.target.className.indexOf('react-add-to-calendar') !== -1;
                 if (isAddCalendar) {
-                  e.stopPropagation()
+                  e.stopPropagation();
                   return;
                 }
-                onDayClick(day);
+                onDayClick(day, footnote);
               }}>
               <Label>{day.format('DD MMM')}</Label>
               <Action>
@@ -58,7 +50,9 @@ export default ({ events, roles, days, onDayClick, onRoleClick }) => {
               return (
                 <Row key={i}>
                   <Role>{role}</Role>
-                  <Name onClick={() => onRoleClick(day, role, name)}>{name}</Name>
+                  <Name onClick={() => onRoleClick(day, role, name)}>
+                    {name}
+                  </Name>
                 </Row>
               );
             })}
@@ -129,12 +123,12 @@ const Row = styled.div`
   }
 `;
 const Day = styled.div`
-  color: ${props => props.highlighted ? '#333': '#666'};
+  color: ${props => (props.highlighted ? '#333' : '#666')};
   display: flex;
   flex-wrap: no-wrap;
   flex-direction: column;
   ${Name} {
-    background-color: ${props => props.highlighted ? '#ffc': 'transparent'};
+    background-color: ${props => (props.highlighted ? '#ffc' : 'transparent')};
   }
   &:last-child {
     border-radius: 0 0 8px 8px;
@@ -153,7 +147,7 @@ const Label = styled.span`
   display: inline-block;
   font-size: 15px;
   padding: 10px;
-`
+`;
 const Action = styled.span`
   display: inline-block;
   margin-left: auto;

@@ -13,7 +13,6 @@ export default ({
   position,
   onPrevClick,
   onNextClick,
-  children,
   ...otherProps
 }) => {
   const days = getQuarterDays(date, 7);
@@ -34,7 +33,7 @@ export default ({
   );
 };
 
-const Wrapper = styled.h1`
+const Wrapper = styled.div`
   align-items: center;
   background: #ffffff;
   border-bottom: none;
