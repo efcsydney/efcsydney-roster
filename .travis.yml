@@ -1,15 +1,20 @@
 language: node_js
 node_js:
-  - 8.9
+- 8.9
 cache:
   directories:
-    - node_modules
-    - client/node_modules
-    
+  - node_modules
+  - client/node_modules
+addons:
+  ssh_known_hosts: 54.206.106.116
 script:
-  - yarn && cd client && yarn
-  - yarn build
-  
+- yarn && cd client && yarn
+- yarn build
+before_deploy:
+- openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
+  -in deploy_rsa.enc -out ~/.ssh/key/efcsydney.pem -d
+- eval "$(ssh-agent -s)"
+- chmod 600 ~/.ssh/key/efcsydney.pem
 deploy:
 - provider: script
   script:
