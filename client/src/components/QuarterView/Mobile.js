@@ -15,7 +15,7 @@ function findEvent(events, day) {
   );
 }
 
-export default ({ events, roles, days, onDayClick }) => {
+export default ({ events, roles, days, onDayClick, onRoleClick }) => {
   const icalicon = { 'calendar-plus-o': 'left' };
   const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
 
@@ -33,7 +33,15 @@ export default ({ events, roles, days, onDayClick }) => {
           <Day
             key={i}
             highlighted={day.format('YYYY-MM-DD') === highlightDate}>
-            <Header>
+            <Header onClick={e => {
+                const isAddCalendar =
+                  e.target.className.indexOf('react-add-to-calendar') !== -1;
+                if (isAddCalendar) {
+                  e.stopPropagation()
+                  return;
+                }
+                onDayClick(day);
+              }}>
               <Label>{day.format('DD MMM')}</Label>
               <Action>
                 <AddToCalendar
@@ -50,7 +58,7 @@ export default ({ events, roles, days, onDayClick }) => {
               return (
                 <Row key={i}>
                   <Role>{role}</Role>
-                  <Name onClick={() => onDayClick(day, role, name)}>{name}</Name>
+                  <Name onClick={() => onRoleClick(day, role, name)}>{name}</Name>
                 </Row>
               );
             })}
