@@ -20,7 +20,6 @@ before_deploy:
 deploy:
 - provider: script
   script:
-  - bash ls -altr
-  - bash yarn deploy:qa
+  - bash ls -altr && yarn deploy:qa
   on:
     branch: travis
