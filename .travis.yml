@@ -18,8 +18,9 @@ before_deploy:
 - eval "$(ssh-agent -s)"
 - chmod 600 ~/.ssh/key/efcsydney.pem
 - ls -altr && yarn deploy:qa
-#deploy:
-#- provider: script
-#  script:
-#  on:
-#    branch: travis
+deploy:
+- provider: script
+  script:
+  - yarn deploy:qa 
+  on:
+    branch: travis
