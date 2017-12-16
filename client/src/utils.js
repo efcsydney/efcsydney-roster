@@ -11,6 +11,14 @@ export const sanitize = obj => {
 
 export const buildQuery = obj => $.param(sanitize(obj));
 
+export function findEvent(events, day) {
+  return _.find(
+    events,
+    event =>
+      moment(event.date).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+  );
+}
+
 export function getCalData(day, roles, members) {
   const description = _.reduce(
     roles,
