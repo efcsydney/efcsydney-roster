@@ -1,16 +1,27 @@
 import React from 'react';
+import Select from 'react-select';
 import styled from 'styled-components';
 import { media } from '../styled';
 
-export default () => (
+export default ({ value, onServiceChange }) => (
   <Wrapper>
+    <a href="/">
+      <Logo />
+    </a>
     <Title>
-      <ArrowSpaceLogo />
-      <Logo />English Sunday Service Roster
+      <Select
+        className="ServiceSelect"
+        clearable={false}
+        options={[
+          { value: 'english', label: 'English Sunday Service Roster' },
+          { value: 'chinese', label: '中文堂服事表' }
+        ]}
+        onChange={onServiceChange}
+        searchable={false}
+        value={value}
+      />
     </Title>
-    <Org>
-      EFC Sydney<ArrowSpace />
-    </Org>
+    <Org>EFC Sydney</Org>
   </Wrapper>
 );
 
@@ -19,9 +30,8 @@ const Wrapper = styled.div`
   background: linear-gradient(to right, #666, #333);
   color: #fff;
   display: flex;
-  justify-content: space-between;
   margin-bottom: 10px;
-  padding: 20px;
+  padding: 0 20px;
   img {
     border-radius: 8px;
     margin-right: 10px;
@@ -32,30 +42,17 @@ const Wrapper = styled.div`
     justify-content: center;
   `};
 `;
-const ArrowSpace = styled.span`
-  width: 44px;
-  height: 5px;
-  display: inline-block;
-  ${media.mobile`
-    width:24px;
-  `};
-`;
-const ArrowSpaceLogo = ArrowSpace.extend`
-  ${media.mobile`
-    display:none;
-  `};
-`;
-
 const Logo = styled.img.attrs({ src: '/logo.png' })`
   display: inline-block;
-  vertical-align: middle;
   height: 32px;
+  vertical-align: middle;
   width: 32px;
 `;
-const Title = styled.a.attrs({ href: '/' })`
+const Title = styled.span`
   display: inline-block;
   font-size: 18px;
   font-weight: bold;
+  position: relative;
   &:link,
   &:hover,
   &:visited {
@@ -64,13 +61,14 @@ const Title = styled.a.attrs({ href: '/' })`
   }
   ${media.mobile`
     font-size: 14px;
-    position: static;
     left:auto;
+    position: static;
   `};
 `;
 const Org = styled.span`
   font-size: 18px;
   font-weight: bold;
+  margin-left: auto;
   ${media.mobile`
     display: none;
   `};
