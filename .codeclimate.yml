@@ -41,3 +41,4 @@ exclude_patterns:
   - "**/tests/"
   - "**/vendor/"
   - "client/semantic"
+  - "api/data/mock-repository.js"
