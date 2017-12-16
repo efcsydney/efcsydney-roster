@@ -19,7 +19,7 @@ before_deploy:
 - chmod 600 ~/.ssh/key/efcsydney.pem
 deploy:
   provider: script
-  script: cat node_modules/.bin/dploy ||yes | yarn deploy:qa
+  script: yarn && yes | yarn deploy:qa
   on:
     branch: travis
 
