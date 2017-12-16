@@ -5,6 +5,14 @@ cache:
   directories:
     - node_modules
     - client/node_modules
+    
 script:
   - yarn && cd client && yarn
   - yarn build
+  
+deploy:
+- provider: script
+  script:
+  - yarn deploy:qa
+  on:
+    branch: travis
