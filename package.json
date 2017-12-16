@@ -37,7 +37,7 @@
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
     "db-seed": "sequelize db:seed:all",
-    "deploy:qa": "dploy qa",
+    "deploy:qa": "node_modules/.bin/dploy qa",
     "deploy:prod": "dploy prod"
   },
   "devDependencies": {
