@@ -4,16 +4,8 @@ import styled from 'styled-components';
 import AddToCalendar from 'react-add-to-calendar';
 import '../../icalstyle.css';
 import moment from 'moment';
-import { getCalData } from '../../utils';
+import { findEvent, getCalData } from '../../utils';
 import { Grid } from './styled';
-
-function findEvent(events, day) {
-  return _.find(
-    events,
-    event =>
-      moment(event.date).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
-  );
-}
 
 export default class Desktop extends Component {
   handleDayClick = (e, day, footnote) => {
