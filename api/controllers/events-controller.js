@@ -9,20 +9,17 @@ const EventMapper = require('../mapper/event-mapper').EventMapper;
 const Factory = require('../service/factory').Factory;
 const log = require('winston');
 
+// req params
+// from: query string
+// to?: query string
 async function getEvents(req, res) {
   try {
     const eventRepository = Factory.getEventRepository(req);
     const dataMapper = Factory.getDataMapper(req);
     const eventService = Factory.getEventService(req);
 
-    const dateRange = eventService.computeDateRange({
-      from: req.query.from,
-      to: req.query.to
-    });
-    const scheduledEvents = await eventRepository.getEventsByDateRange({
-      from: dateRange.from,
-      to: dateRange.to
-    });
+    const dateRange = eventService.computeDateRange(req.query);
+    const scheduledEvents = await eventRepository.getEventsByDateRange(dateRange);
     const allEvents = await eventService.linkScheduledEventsToCalendarDates(
       dateRange,
       scheduledEvents
