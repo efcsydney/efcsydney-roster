@@ -23,13 +23,13 @@ export default ({
   return (
     <Wrapper position={position} {...otherProps}>
       <Arrow onClick={onPrevClick}>
-        <img src={leftArrowIcon} role="presentation" />
+        <img src={leftArrowIcon} role="presentation" alt="Prev" />
       </Arrow>
       <Label>
         {startMonth} - {endMonth} {year}
       </Label>
       <Arrow onClick={onNextClick}>
-        <img src={rightArrowIcon} role="presentation" />
+        <img src={rightArrowIcon} role="presentation" alt="Next" />
       </Arrow>
     </Wrapper>
   );
