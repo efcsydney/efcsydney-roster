@@ -3,7 +3,7 @@ node_js:
   - 4
   - 6
 cache:
-  directories:
+  directories:fe
     - node_modules
     - client/node_modules
 script:
