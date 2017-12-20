@@ -28,9 +28,10 @@ export default class Desktop extends Component {
       .format('YYYY-MM-DD');
     const icalicon = { 'calendar-plus-o': 'left' };
     const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
+    const formattedDay = day.format('YYYY-MM-DD');
 
     return (
-      <Row highlighted={day.format('YYYY-MM-DD') === highlightDate}>
+      <Row key={formattedDay} highlighted={formattedDay === highlightDate}>
         <DayCell
           onClick={e => this.handleDayClick(e, day, footnote)}
           width={cellWidth}>

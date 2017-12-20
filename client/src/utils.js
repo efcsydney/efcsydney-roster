@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import queryString from 'query-string';
 import _ from 'lodash';
 import moment from 'moment';
 
@@ -9,7 +9,7 @@ export const sanitize = obj => {
   return query;
 };
 
-export const buildQuery = obj => $.param(sanitize(obj));
+export const buildQuery = obj => queryString.stringify(sanitize(obj));
 
 export function findEvent(events, day) {
   return _.find(
