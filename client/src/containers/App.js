@@ -4,6 +4,7 @@ import QuarterView from '../components/QuarterView';
 import LoadingIndicator from '../components/LoadingIndicator';
 import NavBar from '../components/NavBar';
 import DateBar from '../components/DateBar';
+import TagManager from '../components/TagManager';
 import moment from 'moment';
 import Edit from './Edit';
 import API from '../api';
@@ -99,6 +100,17 @@ export default class App extends Component {
         .format('YYYY-MM-DD')
     });
   }
+  renderTagManager() {
+    console.log(process.env); // eslint-disable-line
+    const env = process.env.REACT_APP_ENV;
+    if (env === 'qa') {
+      return <TagManager gtmId="GTM-W8CJV63" />;
+    } else if (env === 'production') {
+      return <TagManager gtmId="GTM-KS4KKTW" />;
+    } else {
+      return <div />;
+    }
+  }
   render() {
     const {
       date,
@@ -116,6 +128,7 @@ export default class App extends Component {
 
     return (
       <Wrapper>
+        {this.renderTagManager()}
         <NavBar
           value={selectedService}
           onServiceChange={this.handleServiceChange}
