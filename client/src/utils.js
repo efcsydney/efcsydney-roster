@@ -1,5 +1,23 @@
+import queryString from 'query-string';
 import _ from 'lodash';
 import moment from 'moment';
+
+export const sanitize = obj => {
+  let query = _.clone(obj);
+  query = _.omit(query, _.isUndefined);
+  query = _.omit(query, _.isNull);
+  return query;
+};
+
+export const buildQuery = obj => queryString.stringify(sanitize(obj));
+
+export function findEvent(events, day) {
+  return _.find(
+    events,
+    event =>
+      moment(event.date).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+  );
+}
 
 export function getCalData(day, roles, members) {
   const description = _.reduce(
