@@ -32,20 +32,21 @@ const Position = require('../../api/models/position').Position;
 
 async function createSeed() {
   await Position.bulkCreate([
-    { id: 1, name: 'Speaker' },
-    { id: 2, name: 'Moderator' },
-    { id: 3, name: 'P&W' },
-    { id: 4, name: 'Pianist' },
-    { id: 5, name: 'Usher/Offering' },
-    { id: 6, name: 'PA/PPT' },
-    { id: 7, name: 'Newsletter' },
-    { id: 8, name: 'Refreshments' }
+    { id: 1, name: 'Speaker', order: 1 },
+    { id: 2, name: 'Moderator', order: 2 },
+    { id: 3, name: 'P&W', order: 3 },
+    { id: 4, name: 'Pianist', order: 4 },
+    { id: 5, name: 'Usher/Offering', order: 5 },
+    { id: 6, name: 'PA/PPT', order: 6 },
+    { id: 7, name: 'Newsletter', order: 7 },
+    { id: 8, name: 'Refreshments', order: 8 }
   ]);
   await CalendarDate.bulkCreate([
     { id: 1, date: '2017-10-08' },
     { id: 2, date: '2017-10-15' },
-    { id: 3, date: '2017-10-29' },
-    { id: 4, date: '2017-11-05' }
+    { id: 3, date: '2017-10-22' },
+    { id: 4, date: '2017-10-29' },
+    { id: 5, date: '2017-11-05' }
   ]);
   await Event.bulkCreate([
     {
@@ -126,6 +127,46 @@ async function createSeed() {
     {
       volunteerName: 'Christine Yang',
       calendarDateId: 2,
+      positionId: 8
+    },
+    {
+      volunteerName: 'Rev. Kian Holik',
+      calendarDateId: 3,
+      positionId: 1
+    },
+    {
+      volunteerName: 'Jennifer Chu',
+      calendarDateId: 3,
+      positionId: 2
+    },
+    {
+      volunteerName: 'Amy Chen',
+      calendarDateId: 3,
+      positionId: 3
+    },
+    {
+      volunteerName: 'Yvonne Lu',
+      calendarDateId: 3,
+      positionId: 4
+    },
+    {
+      volunteerName: 'Christine Yang',
+      calendarDateId: 3,
+      positionId: 5
+    },
+    {
+      volunteerName: 'Raymond Tsang',
+      calendarDateId: 3,
+      positionId: 6
+    },
+    {
+      volunteerName: 'Kai Chang',
+      calendarDateId: 3,
+      positionId: 7
+    },
+    {
+      volunteerName: 'Christine Yang',
+      calendarDateId: 3,
       positionId: 8
     }
   ]);

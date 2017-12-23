@@ -12,6 +12,9 @@ const Position = sequelizeClient.define('positions', {
   name: {
     type: Sequelize.STRING,
     unique: true
+  },
+  order: {
+    type: Sequelize.INTEGER
   }
 });
 

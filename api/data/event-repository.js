@@ -19,7 +19,7 @@ class EventRepository {
       ],
       order: [
         [{ model: CalendarDate, as: 'calendarDate' }, 'date', 'DESC'],
-        [{ model: Position, as: 'position' }, 'name', 'ASC']
+        [{ model: Position, as: 'position' }, 'order', 'ASC']
       ]
     });
   }
@@ -39,48 +39,45 @@ class EventRepository {
           where: { name: position },
           required: true
         }
-      ],
-      order: [
-        [{ model: CalendarDate, as: 'calendarDate' }, 'date', 'DESC'],
-        [{ model: Position, as: 'position' }, 'name', 'ASC']
       ]
     });
   }
 
-  static findOrCreateCalendarDate(date) {
-    return CalendarDate.findOrCreate({
-      where: { date: date },
-      defaults: { date: date }
-    });
-  }
+  // Event, CalendarDate and Position should all be prepopulated
+  // static findOrCreateCalendarDate(date) {
+  //   return CalendarDate.findOrCreate({
+  //     where: { date: date },
+  //     defaults: { date: date }
+  //   });
+  // }
 
-  static findOrCreatePosition(position) {
-    return Position.findOrCreate({
-      where: { name: position }
-    });
-  }
+  // static findOrCreatePosition(position) {
+  //   return Position.findOrCreate({
+  //     where: { name: position }
+  //   });
+  // }
 
-  static addEvent(event) {
-    const calendarDatePromise = EventRepository.findOrCreateCalendarDate(
-      event.calendarDate.date
-    );
-    const positionPromise = EventRepository.findOrCreatePosition(
-      event.position.name
-    );
+  // static addEvent(event) {
+  //   const calendarDatePromise = EventRepository.findOrCreateCalendarDate(
+  //     event.calendarDate.date
+  //   );
+  //   const positionPromise = EventRepository.findOrCreatePosition(
+  //     event.position.name
+  //   );
 
-    return Promise.all([calendarDatePromise, positionPromise]).then(function(
-      results
-    ) {
-      const [calendarDateResult, positionResult] = results;
-      const calendarDate = calendarDateResult[0];
-      const position = positionResult[0];
-      return Event.create({
-        volunteerName: event.volunteerName,
-        calendarDateId: calendarDate.id,
-        positionId: position.id
-      });
-    });
-  }
+  //   return Promise.all([calendarDatePromise, positionPromise]).then(function(
+  //     results
+  //   ) {
+  //     const [calendarDateResult, positionResult] = results;
+  //     const calendarDate = calendarDateResult[0];
+  //     const position = positionResult[0];
+  //     return Event.create({
+  //       volunteerName: event.volunteerName,
+  //       calendarDateId: calendarDate.id,
+  //       positionId: position.id
+  //     });
+  //   });
+  // }
 
   static updateEvent(event) {
     return Event.update(

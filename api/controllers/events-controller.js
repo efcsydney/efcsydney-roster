@@ -17,23 +17,17 @@ async function getEvents(req, res) {
     const eventRepository = Factory.getEventRepository(req);
     const dataMapper = Factory.getDataMapper(req);
     const eventService = Factory.getEventService(req);
-
     const dateRange = eventService.computeDateRange(req.query);
-    const scheduledEvents = await eventRepository.getEventsByDateRange(dateRange);
-    const allEvents = await eventService.linkScheduledEventsToCalendarDates(
-      dateRange,
-      scheduledEvents
+    const scheduledEvents = await eventRepository.getEventsByDateRange(
+      dateRange
     );
-    const dto = dataMapper.convertEventsModelToDto(allEvents);
+    const dto = dataMapper.convertEventsModelToDto(scheduledEvents);
 
-    const response = {
+    res.json({
       result: 'OK',
       error: { message: '' },
       data: dto
-    };
-
-    // log.info(JSON.stringify(response, null, 2));
-    return res.json(response);
+    });
   } catch (err) {
     log.error(err);
     return res.status(500).json({
@@ -45,9 +39,9 @@ async function getEvents(req, res) {
 
 async function saveEvent(req, res) {
   try {
-    console.log(req.body);
+    log.info('saveEvent: ', req.body);
     const event = EventMapper.convertDtoToEventModel(req.body);
-    console.log(event);
+    log.info('event model: ', event);
     await EventService.saveEvent(event);
 
     const response = {

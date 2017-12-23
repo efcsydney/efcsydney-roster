@@ -11,7 +11,7 @@ module.exports = {
           autoIncrement: true
         },
         date: {
-          type: Sequelize.DATE,
+          type: Sequelize.DATEONLY,
           unique: true
         },
         createdAt: {

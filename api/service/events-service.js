@@ -1,25 +1,23 @@
 const moment = require('moment');
-const dateTimeFormat = require('../constants/datetime').dateTimeFormat;
 const EventRepository = require('../data/event-repository').EventRepository;
-const PositionRepository = require('../data/position-repository')
-  .PositionRepository;
 const CalendarDateRepository = require('../data/calendar-date-repository')
   .CalendarDateRepository;
-const Factory = require('../models/factory').Factory;
+const log = require('winston');
+const getDateString = require('../utilities/datetime-util').getDateString;
+
 class EventService {
   static computeDateRange(dateRange) {
     let { from, to } = dateRange;
-    if (from === undefined) {
-      from = new Date();
+    if (!from) {
+      from = getDateString(new Date());
     }
-    const rangeFrom = moment(from, dateTimeFormat.stringFormat);
-
-    const rangeTo =
-      to !== undefined
-        ? moment(to, dateTimeFormat.stringFormat)
-        : moment(from, dateTimeFormat.stringFormat).add(12, 'weeks');
-
-    return { from: rangeFrom.toDate(), to: rangeTo.toDate() };
+    if (!to) {
+      const toDate = new Date(from);
+      // add 12 weeks to from date
+      toDate.setDate(toDate.getDate() + 7 * 12);
+      to = getDateString(toDate);
+    }
+    return { from, to };
   }
   static saveEvent(event) {
     return EventRepository.getEventByDatePosition({
@@ -30,7 +28,9 @@ class EventService {
         dbEvent.volunteerName = event.volunteerName;
         return EventRepository.updateEvent(dbEvent);
       } else {
-        return EventRepository.addEvent(event);
+        const msg = `Error: missing event in DB: ${JSON.stringify(event)}`;
+        log.error(msg);
+        return Promise.reject(new Error(msg));
       }
     });
   }
@@ -47,40 +47,6 @@ class EventService {
     days.push(firstSunday);
 
     return days;
-  }
-  static linkScheduledEventsToCalendarDates(dateRange, scheduledEvents) {
-    return PositionRepository.getAll().then(positions => {
-      const dates = EventService.getWeekdayDatesForTimePeriod(dateRange);
-      let allEvents = EventService.linkPositionsToDates(positions, dates);
-
-      scheduledEvents.forEach(scheduledEvent => {
-        let event = allEvents.find(event => {
-          return (
-            moment(event.calendarDate.date).format(
-              dateTimeFormat.stringFormat
-            ) ===
-              moment(scheduledEvent.calendarDate.date).format(
-                dateTimeFormat.stringFormat
-              ) && event.position.name == scheduledEvent.position.name
-          );
-        });
-        if (event == null) {
-          return;
-        }
-        event.volunteerName = scheduledEvent.volunteerName;
-      });
-
-      return allEvents;
-    });
-  }
-  static linkPositionsToDates(positions, dates) {
-    let events = [];
-    dates.forEach(date => {
-      positions.forEach(position => {
-        events.push(Factory.createEvent('', position, date.toDate()));
-      });
-    });
-    return events;
   }
 }
 
