@@ -145,28 +145,21 @@ export default class App extends Component {
   }
   renderSentryCDN() {
     const env = process.env.REACT_APP_ENV;
-    let SentryCDN = (
+    let SentryCDN = (env !== 'qa' && env !== 'production') ? '' : (
       <script src="http://cdn.ravenjs.com/3.21.0/raven.min.js" crossOrigin="anonymous"/>
     );
-    if (env !== 'qa' && env !== 'production') {
-      SentryCDN = '';
-    }
-
-    return  SentryCDN;
+    return SentryCDN;
   }
   renderSentryInit() {
     const env = process.env.REACT_APP_ENV;
-    let SentryInit = (
+    let SentryInit = (env !== 'qa' && env !== 'production') ? '' : (
       <script>
         {`Raven.config('http://77ecc83e23f04149ab73510390b284f2@sentry.io/260762', {
           release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
         }).install();`}
       </script>
     );
-    if (env !== 'qa' && env !== 'production') {
-      SentryInit = '';
-    }
-    return  SentryInit;
+    return SentryInit;
   }
   render() {
     const {
