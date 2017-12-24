@@ -151,18 +151,6 @@ export default class App extends Component {
         crossOrigin="anonymous"
       />
     );
-    let SentryInit = (
-      <script>
-        {`
-    Raven
-      .config('http://77ecc83e23f04149ab73510390b284f2@sentry.io/260762', {
-        release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
-      })
-      .install();
-    //var aa = this_is_a_test_error_from_sentry_20171224;
-    `}
-      </script>
-    );
     if (env !== 'qa' && env !== 'production') {
       SentryCDN = '';
     }
