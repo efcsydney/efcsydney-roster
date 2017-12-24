@@ -143,6 +143,48 @@ export default class App extends Component {
       return <div />;
     }
   }
+  renderSentryCDN() {
+    const env = process.env.REACT_APP_ENV;
+    let SentryCDN = (
+      <script
+        src="http://cdn.ravenjs.com/3.21.0/raven.min.js"
+        crossOrigin="anonymous"
+      />
+    );
+    let SentryInit = (
+      <script>
+        {`
+    Raven
+      .config('http://77ecc83e23f04149ab73510390b284f2@sentry.io/260762', {
+        release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
+      })
+      .install();
+    //var aa = this_is_a_test_error_from_sentry_20171224;
+    `}
+      </script>
+    );
+    if (env !== 'qa' && env !== 'production') {
+      SentryCDN = '';
+    }
+
+    return  SentryCDN;
+  }
+  renderSentryInit() {
+    const env = process.env.REACT_APP_ENV;
+    let SentryInit = (
+      <script>
+        {`Raven.config('http://77ecc83e23f04149ab73510390b284f2@sentry.io/260762', {
+          release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
+        })
+        .install();
+        //var aa = this_is_a_test_error_from_sentry_20171224;`}
+      </script>
+    );
+    if (env !== 'qa' && env !== 'production') {
+      SentryInit = '';
+    }
+    return  SentryInit;
+  }
   render() {
     const {
       date,
@@ -161,6 +203,8 @@ export default class App extends Component {
 
     return (
       <Wrapper>
+        {this.renderSentryCDN()}
+        {this.renderSentryInit()}
         {this.renderTagManager()}
         <NavBar
           value={selectedService}
