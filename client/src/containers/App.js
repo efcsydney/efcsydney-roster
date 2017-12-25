@@ -143,6 +143,24 @@ export default class App extends Component {
       return <div />;
     }
   }
+  renderSentryCDN() {
+    const env = process.env.REACT_APP_ENV;
+    let SentryCDN = (env !== 'qa' && env !== 'production') ? '' : (
+      <script src="http://cdn.ravenjs.com/3.21.0/raven.min.js" crossOrigin="anonymous"/>
+    );
+    return SentryCDN;
+  }
+  renderSentryInit() {
+    const env = process.env.REACT_APP_ENV;
+    let SentryInit = (env !== 'qa' && env !== 'production') ? '' : (
+      <script>
+        {`Raven.config('http://77ecc83e23f04149ab73510390b284f2@sentry.io/260762', {
+          release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
+        }).install();`}
+      </script>
+    );
+    return SentryInit;
+  }
   render() {
     const {
       date,
@@ -161,6 +179,8 @@ export default class App extends Component {
 
     return (
       <Wrapper>
+        {this.renderSentryCDN()}
+        {this.renderSentryInit()}
         {this.renderTagManager()}
         <NavBar
           value={selectedService}
@@ -203,7 +223,6 @@ export default class App extends Component {
     );
   }
 }
-
 const Wrapper = styled.div`
   padding: 0 0 3em 0;
 `;
