@@ -122,6 +122,7 @@ export default class App extends Component {
       });
     });
   };
+
   componentWillMount() {
     this.loadData({
       from: moment()
@@ -132,9 +133,24 @@ export default class App extends Component {
         .format('YYYY-MM-DD')
     });
   }
+  renderSentry() {
+    const env = process.env.REACT_APP_ENV;
+    if (env === 'qa' || env === 'production')
+    {
+      const sebtryInit = document.createElement('script');
+      const sebtryInitHTML = document.createTextNode(
+        `Raven.config('https://6d4d9e488cda4ef59dddc1e282a24a7b@sentry.io/263713', {
+          release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
+        }).install();`
+      );
+      sebtryInit.appendChild(sebtryInitHTML);
+      document.body.insertBefore(sebtryInit, document.body.childNodes[0]);
+    }
+  }
   renderTagManager() {
     console.log(process.env); // eslint-disable-line
     const env = process.env.REACT_APP_ENV;
+
     if (env === 'qa') {
       return <TagManager gtmId="GTM-W8CJV63" />;
     } else if (env === 'production') {
@@ -142,24 +158,6 @@ export default class App extends Component {
     } else {
       return <div />;
     }
-  }
-  renderSentryCDN() {
-    const env = process.env.REACT_APP_ENV;
-    let SentryCDN = (env !== 'qa' && env !== 'production') ? '' : (
-      <script src="http://cdn.ravenjs.com/3.21.0/raven.min.js" crossOrigin="anonymous"/>
-    );
-    return SentryCDN;
-  }
-  renderSentryInit() {
-    const env = process.env.REACT_APP_ENV;
-    let SentryInit = (env !== 'qa' && env !== 'production') ? '' : (
-      <script>
-        {`Raven.config('http://77ecc83e23f04149ab73510390b284f2@sentry.io/260762', {
-          release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
-        }).install();`}
-      </script>
-    );
-    return SentryInit;
   }
   render() {
     const {
@@ -179,8 +177,7 @@ export default class App extends Component {
 
     return (
       <Wrapper>
-        {this.renderSentryCDN()}
-        {this.renderSentryInit()}
+        {this.renderSentry()}
         {this.renderTagManager()}
         <NavBar
           value={selectedService}
