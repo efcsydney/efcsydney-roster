@@ -9,22 +9,22 @@ describe('Model Mapper', function() {
       const eventsModel = [
         {
           volunteerName: 'Kyle Huang',
-          calendarDate: { date: new Date('2017-01-01') },
+          calendarDate: { date: '2017-01-01' },
           position: { name: 'Speaker' }
         },
         {
           volunteerName: 'Mei Liu',
-          calendarDate: { date: new Date('2017-01-01') },
+          calendarDate: { date: '2017-01-01' },
           position: { name: 'Speaker' }
         },
         {
           volunteerName: 'Bo Qi',
-          calendarDate: { date: new Date('2017-01-04') },
+          calendarDate: { date: '2017-01-04' },
           position: { name: 'Tester' }
         },
         {
           volunteerName: 'Joseph Cheung',
-          calendarDate: { date: new Date('2017-01-04') },
+          calendarDate: { date: '2017-01-04' },
           position: { name: 'Moderator' }
         }
       ];

@@ -19,7 +19,7 @@ describe('Repository', function() {
         from: new Date('2017-10-08'),
         to: new Date('2017-11-01')
       }).then(function(events) {
-        expect(events.length).to.equal(16);
+        expect(events.length).to.equal(24);
       });
     });
 
@@ -30,38 +30,6 @@ describe('Repository', function() {
       })
         .then(function(event) {
           expect('Amy Chen').to.equal(event.volunteerName);
-        })
-        .catch(function(err) {
-          expect(1).to.equal(2);
-        });
-    });
-
-    it('inserts new event', function() {
-      const newEvent = {
-        volunteerName: 'Kyle Huang',
-        calendarDate: { date: new Date('2017-11-25') },
-        position: { name: 'Speaker' }
-      };
-      return EventRepository.addEvent(newEvent)
-        .then(function(event) {
-          return Event.findOne({
-            include: [
-              {
-                model: CalendarDate,
-                as: 'calendarDate',
-                where: { date: { [Op.eq]: newEvent.calendarDate.date } }
-              },
-              {
-                model: Position,
-                as: 'position',
-                where: { name: newEvent.position.name }
-              }
-            ]
-          });
-        })
-        .then(function(createdEvent) {
-          expect('Kyle Huang').to.equal(createdEvent.volunteerName);
-          return Event.destroy({ where: { id: createdEvent.id } });
         })
         .catch(function(err) {
           expect(1).to.equal(2);

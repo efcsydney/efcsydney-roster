@@ -15,10 +15,10 @@ module.exports = {
           defaultValue: ''
         },
         calendarDateId: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.INTEGER
         },
         positionId: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.INTEGER
         },
         createdAt: {
           allowNull: false,
@@ -33,11 +33,13 @@ module.exports = {
       },
       {
         charset: 'utf8',
-        uniqueKeys : [{
-          name        : 'unique on calendar date and position',
-          singleField : false,
-          fields      : ['calendarDateId', 'positionId'],
-        }],
+        uniqueKeys: [
+          {
+            name: 'unique on calendar date and position',
+            singleField: false,
+            fields: ['calendarDateId', 'positionId']
+          }
+        ]
       }
     );
   },

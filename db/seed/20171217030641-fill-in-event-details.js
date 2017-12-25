@@ -16,7 +16,7 @@ module.exports = {
       'SELECT id, date from calendar_dates'
     ))[0];
     const dateMapper = calendarDatesData.reduce((result, calendarDate) => {
-      date = calendarDate.date.toISOString().slice(0, 10);
+      date = calendarDate.date;
       result[date] = calendarDate.id;
       return result;
     }, {});

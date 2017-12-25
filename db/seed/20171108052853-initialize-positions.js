@@ -5,14 +5,14 @@ module.exports = {
     return queryInterface.bulkInsert(
       'positions',
       [
-        { id: 1, name: 'Speaker' },
-        { id: 2, name: 'Moderator' },
-        { id: 3, name: 'P&W' },
-        { id: 4, name: 'Pianist' },
-        { id: 5, name: 'Usher/Offering' },
-        { id: 6, name: 'PA/PPT' },
-        { id: 7, name: 'Newsletter' },
-        { id: 8, name: 'Refreshments' }
+        { id: 1, name: 'Speaker', order: 1 },
+        { id: 2, name: 'Moderator', order: 2 },
+        { id: 3, name: 'P&W', order: 3 },
+        { id: 4, name: 'Pianist', order: 4 },
+        { id: 5, name: 'Usher/Offering', order: 5 },
+        { id: 6, name: 'PA/PPT', order: 6 },
+        { id: 7, name: 'Newsletter', order: 7 },
+        { id: 8, name: 'Refreshments', order: 8 }
       ],
       {}
     );
