@@ -135,8 +135,7 @@ export default class App extends Component {
   }
   renderSentry() {
     const env = process.env.REACT_APP_ENV;
-    if (env === 'qa' || env === 'production')
-    {
+    if (env === 'qa' || env === 'production') {
       const sebtryInit = document.createElement('script');
       const sebtryInitHTML = document.createTextNode(
         `Raven.config('https://6d4d9e488cda4ef59dddc1e282a24a7b@sentry.io/263713', {
@@ -148,9 +147,7 @@ export default class App extends Component {
     }
   }
   renderTagManager() {
-    console.log(process.env); // eslint-disable-line
-    const env = process.env.REACT_APP_ENV;
-
+    const env = process.env.NODE_ENV;
     if (env === 'qa') {
       return <TagManager gtmId="GTM-W8CJV63" />;
     } else if (env === 'production') {
