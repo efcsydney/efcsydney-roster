@@ -135,16 +135,18 @@ export default class App extends Component {
   }
   renderSentry() {
     const env = process.env.REACT_APP_ENV;
-    if (env === 'qa' || env === 'production')
-    {
-      const sebtryInit = document.createElement('script');
-      const sebtryInitHTML = document.createTextNode(
+    if (env === 'qa' || env === 'production') {
+      const sentryInit = document.createElement('script');
+      const sentryInitHTML = document.createTextNode(
         `Raven.config('https://6d4d9e488cda4ef59dddc1e282a24a7b@sentry.io/263713', {
           release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
+          , environment: '` +
+          env +
+          `'
         }).install();`
       );
-      sebtryInit.appendChild(sebtryInitHTML);
-      document.body.insertBefore(sebtryInit, document.body.childNodes[0]);
+      sentryInit.appendChild(sentryInitHTML);
+      document.body.insertBefore(sentryInit, document.body.childNodes[0]);
     }
   }
   renderTagManager() {
