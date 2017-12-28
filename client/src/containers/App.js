@@ -124,6 +124,7 @@ export default class App extends Component {
   };
 
   componentWillMount() {
+    this.appendSentry();
     this.loadData({
       from: moment()
         .startOf('quarter')
@@ -133,8 +134,8 @@ export default class App extends Component {
         .format('YYYY-MM-DD')
     });
   }
-  renderSentry() {
-    const env = process.env.REACT_APP_ENV;
+  appendSentry() {
+    const env = process.env.NODE_ENV;
     if (env === 'qa' || env === 'production') {
       const sentryInit = document.createElement('script');
       const sentryInitHTML = document.createTextNode(
@@ -179,7 +180,6 @@ export default class App extends Component {
 
     return (
       <Wrapper>
-        {this.renderSentry()}
         {this.renderTagManager()}
         <NavBar
           value={selectedService}
