@@ -1,4 +1,3 @@
-/* global describe, expect, it */
 import { buildQuery, sanitize } from './utils';
 
 describe('utils', () => {
