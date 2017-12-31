@@ -5,7 +5,6 @@ import AddToCalendar from 'react-add-to-calendar';
 import '../../icalstyle.css';
 import moment from 'moment';
 import { findEvent, getCalData } from '../../utils';
-import { Grid } from './styled';
 
 export default class Desktop extends Component {
   handleDayClick = (e, day, footnote) => {
@@ -81,15 +80,22 @@ export default class Desktop extends Component {
 }
 
 const Text = styled.span`
-  flex-grow: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
+const Grid = styled.div`
+  border-left: solid 1px #f0f3f8;
+  border-radius: 0 0 8px 8px;
+  display: table;
+  margin: 0;
+  padding: 0;
+  table-layout: fixed;
+  width: 100%;
+`;
 const Cell = styled.span`
   border-right: solid 1px #dadada;
-  flex-direction: column;
-  flex-grow: 1;
+  display: table-cell;
   overflow: hidden;
   padding: 10px;
   text-align: center;
@@ -117,8 +123,7 @@ const NameCell = Cell.extend`
   cursor: pointer;
 `;
 const Row = styled.div`
-  display: flex;
-  flex-wrap: no-wrap;
+  display: table-row;
   width: 100%;
   &:nth-child(odd) {
     background-color: #f8f8f8;

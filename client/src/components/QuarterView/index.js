@@ -72,7 +72,7 @@ export default class QuarterView extends Component {
 
 const Wrapper = styled.div`
   background: #fff;
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   font-size: 13px;
 `;
