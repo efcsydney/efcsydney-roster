@@ -39,7 +39,7 @@ const Wrapper = styled.div`
   align-items: center;
   background: #ffffff;
   border-bottom: none;
-  border-radius: 4px 4px 0 0;
+  border-radius: 8px 8px 0 0;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   display: flex;
   font-size 15px;
