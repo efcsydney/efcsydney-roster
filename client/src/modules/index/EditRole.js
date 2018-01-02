@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Modal from '../components/Modal';
+import { Modal, StateButton } from '../../components';
 import styled from 'styled-components';
 import { Creatable } from 'react-select';
 import 'react-select/dist/react-select.css';
 import _ from 'lodash';
-import StateButton from '../components/StateButton';
 
 function getOptions(names) {
   names = names.map(name => ({ value: name, label: name }));
@@ -108,5 +107,6 @@ const Label = styled.label`
   text-align: right;
   width: 80px;
 `;
-const Select = styled(Creatable)`width: 180px;`;
-
+const Select = styled(Creatable)`
+  width: 180px;
+`;

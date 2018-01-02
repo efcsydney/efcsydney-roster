@@ -2,10 +2,9 @@ import _ from 'lodash';
 import React from 'react';
 import styled from 'styled-components';
 import AddToCalendar from 'react-add-to-calendar';
-import '../../icalstyle.css';
+import './icalstyle.css';
 import moment from 'moment';
-import { findEvent, getCalData } from '../../utils';
-import { Grid } from './styled';
+import { findEvent, getCalData } from '../../../utils';
 
 export default ({ events, roles, days, onDayClick, onRoleClick }) => {
   const icalicon = { 'calendar-plus-o': 'left' };
@@ -63,6 +62,14 @@ export default ({ events, roles, days, onDayClick, onRoleClick }) => {
   );
 };
 
+const Grid = styled.div`
+  border-left: solid 1px #f0f3f8;
+  border-radius: 0 0 4px 4px;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+`;
 const Cell = styled.span`
   color: #666;
   flex-grow: 1;
