@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import styled from 'styled-components';
-import { media } from '../styled';
+import { media } from '../../styled';
 
 export default ({ value, onServiceChange }) => (
   <Wrapper>
