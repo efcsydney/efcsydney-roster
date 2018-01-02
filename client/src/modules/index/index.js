@@ -17,7 +17,6 @@ export default class App extends Component {
     isEditingRole: false,
     isEditingDay: false,
     selectedData: {},
-    selectedService: 'english',
     params: {}
   };
   loadData = ({ from, to }) => {
@@ -100,10 +99,6 @@ export default class App extends Component {
       });
     });
   };
-  handleServiceChange = ({ value }) => {
-    document.location.href = `#${value}`;
-    this.setState({ selectedService: value });
-  };
   handleEditDaySave = form => {
     const { params: { mock } } = this.state;
     if (mock) {
@@ -165,8 +160,7 @@ export default class App extends Component {
       isLoading,
       isEditingDay,
       isEditingRole,
-      selectedData,
-      selectedService
+      selectedData
     } = this.state;
 
     const barProps = {
@@ -178,10 +172,7 @@ export default class App extends Component {
     return (
       <Wrapper>
         {this.renderTagManager()}
-        <NavBar
-          value={selectedService}
-          onServiceChange={this.handleServiceChange}
-        />
+        <NavBar />
         <Content>
           <DateBar {...barProps} />
           <QuarterView

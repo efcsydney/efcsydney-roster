@@ -1,28 +1,46 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Select from 'react-select';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
+import { switchCategory } from '../../modules/index/redux';
 import { media } from '../../styled';
 
-export default ({ value, onServiceChange }) => (
-  <Wrapper>
-    <a href="/">
-      <Logo />
-    </a>
-    <Title>
-      <Select
-        className="ServiceSelect"
-        clearable={false}
-        options={[
-          { value: 'english', label: 'English Sunday Service Roster' },
-          { value: 'chinese', label: '中文堂服事表' }
-        ]}
-        onChange={onServiceChange}
-        searchable={false}
-        value={value}
-      />
-    </Title>
-    <Org>EFC Sydney</Org>
-  </Wrapper>
+const mapStateToProps = state => ({ value: state['index'].meta.category });
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ switchCategory }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  class NavBar extends Component {
+    handleCategoryChange = ({ value }) => {
+      const { switchCategory } = this.props;
+      switchCategory(value);
+    };
+    render() {
+      const { value } = this.props;
+      return (
+        <Wrapper>
+          <a href="/">
+            <Logo />
+          </a>
+          <Title>
+            <Select
+              className="ServiceSelect"
+              clearable={false}
+              options={[
+                { value: 'english', label: 'English Sunday Service Roster' },
+                { value: 'chinese', label: '中文堂服事表' }
+              ]}
+              onChange={this.handleCategoryChange}
+              searchable={false}
+              value={value}
+            />
+          </Title>
+          <Org>EFC Sydney</Org>
+        </Wrapper>
+      );
+    }
+  }
 );
 
 const Wrapper = styled.div`
