@@ -3,7 +3,9 @@ const EventRepository = require('../data/event-repository').EventRepository;
 const CalendarDateRepository = require('../data/calendar-date-repository')
   .CalendarDateRepository;
 const log = require('winston');
-const getDateString = require('../utilities/datetime-util').getDateString;
+const datetimeUtils = require('../utilities/datetime-util')
+const getDateString = datetimeUtils.getDateString;
+const getDateByWeeks = datetimeUtils.getDateByWeeks;
 
 class EventService {
   static computeDateRange(dateRange) {
@@ -12,10 +14,7 @@ class EventService {
       from = getDateString(new Date());
     }
     if (!to) {
-      const toDate = new Date(from);
-      // add 12 weeks to from date
-      toDate.setDate(toDate.getDate() + 7 * 12);
-      to = getDateString(toDate);
+      to = getDateByWeeks(from, 12); // add 12 weeks to from date
     }
     return { from, to };
   }
@@ -33,20 +32,6 @@ class EventService {
         return Promise.reject(new Error(msg));
       }
     });
-  }
-  static getWeekdayDatesForTimePeriod(dateRange, weekday = 7) {
-    const { from, to } = dateRange;
-    const firstSunday = moment(from).isoWeekday(weekday);
-    const lastSunday = moment(to).startOf('week');
-    let daysDiff = lastSunday.diff(firstSunday, 'days');
-    let days = [];
-    while (daysDiff > 0) {
-      days.push(firstSunday.clone().add(daysDiff, 'days'));
-      daysDiff = daysDiff - 7;
-    }
-    days.push(firstSunday);
-
-    return days;
   }
 }
 

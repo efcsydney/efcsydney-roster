@@ -1,0 +1,10 @@
+emailService:
+  smtp: 'smtp.gmail.com'
+  authentication:
+    user: ''
+    pass: ''
+reminderEmail:
+  content:
+    from: ''
+    cc: ''
+    subject: 'Reminder'
