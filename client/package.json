@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "babel-plugin-transform-class-properties": "6.22.0",
+    "history": "^4.7.2",
     "moment": "^2.19.1",
     "react": "^16.0.0",
     "react-add-to-calendar": "^0.1.4",
@@ -17,7 +18,13 @@
     "react-google-tag-manager": "^2.2.1",
     "react-icons": "^2.2.7",
     "react-portal": "^4.0.0",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.9",
     "react-select": "^1.1.0",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
     "styled-components": "^2.2.3"
   },
   "scripts": {
