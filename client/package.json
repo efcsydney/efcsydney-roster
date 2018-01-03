@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:3001/",
   "devDependencies": {
+    "codeclimate-test-reporter": "^0.5.0",
     "enzyme": "2.4.1",
     "react-addons-test-utils": "15.4.0",
     "react-scripts": "^1.0.17"
@@ -32,6 +33,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "test:ci": "CI=true npm test -- --coverage; ./scripts/codebeat-upload-coverage.sh",
     "eject": "react-scripts eject"
   }
 }
