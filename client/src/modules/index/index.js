@@ -145,7 +145,6 @@ export default class App extends Component {
   }
   renderTagManager() {
     const env = process.env.NODE_ENV;
-
     if (env === 'qa') {
       return <TagManager gtmId="GTM-W8CJV63" />;
     } else if (env === 'production') {
