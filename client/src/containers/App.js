@@ -122,7 +122,9 @@ export default class App extends Component {
       });
     });
   };
+
   componentWillMount() {
+    this.appendSentry();
     this.loadData({
       from: moment()
         .startOf('quarter')
@@ -132,9 +134,26 @@ export default class App extends Component {
         .format('YYYY-MM-DD')
     });
   }
+  appendSentry() {
+    const env = process.env.NODE_ENV;
+    if (env === 'qa' || env === 'production') {
+      const sentryInit = document.createElement('script');
+      const sentryInitHTML = document.createTextNode(
+        `Raven.config('https://6d4d9e488cda4ef59dddc1e282a24a7b@sentry.io/263713', {
+          release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
+          , environment: '` +
+          env +
+          `'
+        }).install();`
+      );
+      sentryInit.appendChild(sentryInitHTML);
+      document.body.insertBefore(sentryInit, document.body.childNodes[0]);
+    }
+  }
   renderTagManager() {
     console.log(process.env); // eslint-disable-line
     const env = process.env.REACT_APP_ENV;
+
     if (env === 'qa') {
       return <TagManager gtmId="GTM-W8CJV63" />;
     } else if (env === 'production') {
@@ -203,7 +222,6 @@ export default class App extends Component {
     );
   }
 }
-
 const Wrapper = styled.div`
   padding: 0 0 3em 0;
 `;
