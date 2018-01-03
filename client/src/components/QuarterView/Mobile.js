@@ -24,6 +24,21 @@ export default class Mobile extends Component {
     onRoleClick: () => {}
   };
 
+  scrollToThisWeek = () => {
+    const highlighted = document.getElementById('highlighted');
+    if (highlighted) {
+      highlighted.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.events !== nextProps.events) {
+      this.scrollToThisWeek();
+    }
+  }
+
   render() {
     const icalicon = { 'calendar-plus-o': 'left' };
     const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
@@ -39,11 +54,12 @@ export default class Mobile extends Component {
           const highlightDate = moment()
             .isoWeekday(7)
             .format('YYYY-MM-DD');
-
+          const highlighted = day.format('YYYY-MM-DD') === highlightDate;
           return (
             <Day
               key={i}
-              highlighted={day.format('YYYY-MM-DD') === highlightDate}>
+              highlighted={highlighted}
+              id={highlighted ? 'highlighted' : undefined}>
               <Header
                 onClick={e => {
                   const isAddCalendar =
