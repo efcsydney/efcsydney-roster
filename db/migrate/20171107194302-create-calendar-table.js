@@ -2,28 +2,33 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('calendar_dates', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      date: {
+    return queryInterface.createTable(
+      'calendar_dates',
+      {
+        id: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        date: {
+          type: Sequelize.DATEONLY,
+          unique: true
+        },
+        createdAt: {
+          allowNull: false,
           type: Sequelize.DATE,
-          unique: true,
+          defaultValue: Sequelize.fn('NOW')
+        },
+        updatedAt: {
+          allowNull: false,
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.fn('NOW')
+        }
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+      {
+        charset: 'utf8'
       }
-
-    }, {
-      charset: 'utf8'
-    });
+    );
   },
 
   down: (queryInterface, Sequelize) => {

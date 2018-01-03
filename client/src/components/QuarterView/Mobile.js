@@ -4,18 +4,10 @@ import styled from 'styled-components';
 import AddToCalendar from 'react-add-to-calendar';
 import '../../icalstyle.css';
 import moment from 'moment';
-import { getCalData } from '../../utils';
+import { findEvent, getCalData } from '../../utils';
 import { Grid } from './styled';
 
-function findEvent(events, day) {
-  return _.find(
-    events,
-    event =>
-      moment(event.date).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
-  );
-}
-
-export default ({ events, roles, days, onDayClick }) => {
+export default ({ events, roles, days, onDayClick, onRoleClick }) => {
   const icalicon = { 'calendar-plus-o': 'left' };
   const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
 
@@ -24,6 +16,7 @@ export default ({ events, roles, days, onDayClick }) => {
       {days.map((day, i) => {
         const event = findEvent(events, day);
         const members = event ? event.members : [];
+        const footnote = event ? event.footnote : '';
         const icalEvent = getCalData(day, roles, members);
         const highlightDate = moment()
           .isoWeekday(7)
@@ -31,11 +24,17 @@ export default ({ events, roles, days, onDayClick }) => {
         const highlighted = day.format('YYYY-MM-DD') === highlightDate;
 
         return (
-          <Day
-            key={i}
-            highlighted={highlighted}
-            id={highlighted ? 'highlighted' : undefined}>
-            <Header>
+          <Day key={i} highlighted={day.format('YYYY-MM-DD') === highlightDate}>
+            <Header
+              onClick={e => {
+                const isAddCalendar =
+                  e.target.className.indexOf('react-add-to-calendar') !== -1;
+                if (isAddCalendar) {
+                  e.stopPropagation();
+                  return;
+                }
+                onDayClick(day, footnote);
+              }}>
               <Label>{day.format('DD MMM')}</Label>
               <Action>
                 <AddToCalendar
@@ -52,7 +51,7 @@ export default ({ events, roles, days, onDayClick }) => {
               return (
                 <Row key={i}>
                   <Role>{role}</Role>
-                  <Name onClick={() => onDayClick(day, role, name)}>
+                  <Name onClick={() => onRoleClick(day, role, name)}>
                     {name}
                   </Name>
                 </Row>

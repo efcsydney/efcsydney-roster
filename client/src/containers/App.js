@@ -3,34 +3,23 @@ import styled from 'styled-components';
 import QuarterView from '../components/QuarterView';
 import LoadingIndicator from '../components/LoadingIndicator';
 import NavBar from '../components/NavBar';
-import leftArrowIcon from '../assets/arrow_left.svg';
-import rightArrowIcon from '../assets/arrow_right.svg';
+import DateBar from '../components/DateBar';
+import TagManager from '../components/TagManager';
 import moment from 'moment';
-import Edit from './Edit';
+import EditRole from './EditRole';
+import EditDay from './EditDay';
 import API from '../api';
-import { media } from '../styled';
 import _ from 'lodash';
+import { getQueryParams } from '../utils';
 
-function getQueryParams(qs) {
-  qs = qs.split('+').join(' ');
-  let params = {},
-    tokens,
-    re = /[?&]?([^=]+)=([^&]*)/g;
-  for (let paramCount = 0; paramCount < 20; paramCount++) {
-    tokens = re.exec(qs);
-    if (tokens == null) {
-      break;
-    }
-    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
-  }
-  return params;
-}
 export default class App extends Component {
   state = {
     date: new Date(),
     isLoading: true,
-    isEditing: false,
+    isEditingRole: false,
+    isEditingDay: false,
     selectedData: {},
+    selectedService: 'english',
     params: {}
   };
   loadData = ({ from, to }) => {
@@ -55,6 +44,7 @@ export default class App extends Component {
   };
   handleButtonClick = direction => {
     const { date } = this.state;
+
     let newDate = moment(date).startOf('quarter');
     if (direction === 'prev') {
       newDate.subtract(1, 'Q');
@@ -70,20 +60,34 @@ export default class App extends Component {
       to: newDate.endOf('quarter').format('YYYY-MM-DD')
     });
   };
-  handleCellClick = ({ day, member, role, names }) => {
+  handleDayClick = ({ day, footnote }) => {
     this.setState({
-      isEditing: true,
+      isEditingDay: true,
+      selectedData: { date: day.toDate(), footnote }
+    });
+  };
+  handleRoleClick = ({ day, member, role, names }) => {
+    this.setState({
+      isEditingRole: true,
       selectedData: { date: day.toDate(), member, role, names }
+    });
+  };
+  handleEditDayClose = () => {
+    this.setState({
+      isEditingDay: false
     });
   };
   handleEditClose = () => {
     this.setState({
-      isEditing: false,
+      isEditingRole: false,
       selectedData: null
     });
   };
   handleEditSave = form => {
-    form.mock = this.state.params.mock;
+    const { params: { mock } } = this.state;
+    if (mock) {
+      form.mock = mock;
+    }
     API.modify(form).then(() => {
       const clonedEvents = _.clone(this.state.events);
       const i = _.findIndex(clonedEvents.data, {
@@ -93,7 +97,7 @@ export default class App extends Component {
       _.set(clonedEvents, `data.${i}.members.${j}.name`, form.name);
       this.setState({
         events: clonedEvents,
-        isEditing: false,
+        isEditingRole: false,
         selectedData: null
       });
     });
@@ -106,7 +110,29 @@ export default class App extends Component {
       window.scrollTo(0, 0);
     }
   };
+  handleServiceChange = ({ value }) => {
+    document.location.href = `#${value}`;
+    this.setState({ selectedService: value });
+  };
+  handleEditDaySave = form => {
+    const { params: { mock } } = this.state;
+    if (mock) {
+      form.mock = mock;
+    }
+    API.modify(form).then(() => {
+      const events = _.clone(this.state.events);
+      const date = moment(form.date).format('YYYY-MM-DD');
+      const i = _.findIndex(events.data, { date });
+      _.set(events, `data.${i}.footnote`, form.footnote);
+      this.setState({
+        events,
+        isEditingDay: false
+      });
+    });
+  };
+
   componentWillMount() {
+    this.appendSentry();
     this.loadData({
       from: moment()
         .startOf('quarter')
@@ -116,131 +142,98 @@ export default class App extends Component {
         .format('YYYY-MM-DD')
     });
   }
-  componentDidMount() {
-    this.scrollToThisWeek();
+  appendSentry() {
+    const env = process.env.NODE_ENV;
+    if (env === 'qa' || env === 'production') {
+      const sentryInit = document.createElement('script');
+      const sentryInitHTML = document.createTextNode(
+        `Raven.config('https://6d4d9e488cda4ef59dddc1e282a24a7b@sentry.io/263713', {
+          release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
+          , environment: '` +
+          env +
+          `'
+        }).install();`
+      );
+      sentryInit.appendChild(sentryInitHTML);
+      document.body.insertBefore(sentryInit, document.body.childNodes[0]);
+    }
   }
-  componentDidUpdate() {
-    this.scrollToThisWeek();
+  renderTagManager() {
+    console.log(process.env); // eslint-disable-line
+    const env = process.env.REACT_APP_ENV;
+
+    if (env === 'qa') {
+      return <TagManager gtmId="GTM-W8CJV63" />;
+    } else if (env === 'production') {
+      return <TagManager gtmId="GTM-KS4KKTW" />;
+    } else {
+      return <div />;
+    }
   }
   render() {
-    const { date, isLoading, isEditing, selectedData } = this.state;
+    const {
+      date,
+      isLoading,
+      isEditingDay,
+      isEditingRole,
+      selectedData,
+      selectedService
+    } = this.state;
+
+    const barProps = {
+      date,
+      onPrevClick: this.handleButtonClick.bind(this, 'prev'),
+      onNextClick: this.handleButtonClick.bind(this, 'next')
+    };
 
     return (
       <Wrapper>
-        <NavBar />
-        <ViewWrapper>
+        {this.renderTagManager()}
+        <NavBar
+          value={selectedService}
+          onServiceChange={this.handleServiceChange}
+        />
+        <Content>
+          <DateBar {...barProps} />
           <QuarterView
             date={date}
             data={this.state.events}
-            onCellClick={this.handleCellClick}
+            onRoleClick={this.handleRoleClick}
+            onDayClick={this.handleDayClick}
           />
-          <PrevButtonTop
-            className="zindexNavigator"
-            onClick={this.handleButtonClick.bind(this, 'prev')}>
-            <img src={leftArrowIcon} role="presentation" />
-          </PrevButtonTop>
-          <NextButtonTop
-            className="zindexNavigator"
-            onClick={this.handleButtonClick.bind(this, 'next')}>
-            <img src={rightArrowIcon} role="presentation" />
-          </NextButtonTop>
-          <PrevButton
-            className="zindexNavigator"
-            onClick={this.handleButtonClick.bind(this, 'prev')}>
-            <img src={leftArrowIcon} role="presentation" />
-          </PrevButton>
-          <NextButton
-            className="zindexNavigator"
-            onClick={this.handleButtonClick.bind(this, 'next')}>
-            <img src={rightArrowIcon} role="presentation" />
-          </NextButton>
-          <LoadingIndicator
-            overlay={true}
-            active={isLoading}
-            bgcolor="rgba(255, 255, 255, 0.7)"
-          />
-        </ViewWrapper>
-        {isEditing && (
-          <Edit
+          <DateBar position="bottom" {...barProps} />
+        </Content>
+        <LoadingIndicator
+          overlay={true}
+          active={isLoading}
+          bgcolor="rgba(255, 255, 255, 0.7)"
+        />
+        {isEditingRole && (
+          <EditRole
             title="Edit Event"
-            isOpen={isEditing}
+            isOpen={isEditingRole}
             {...selectedData}
             onClose={this.handleEditClose}
             onSave={this.handleEditSave}
+          />
+        )}
+        {isEditingDay && (
+          <EditDay
+            title="Edit Day"
+            isOpen={isEditingDay}
+            {...selectedData}
+            onClose={this.handleEditDayClose}
+            onSave={this.handleEditDaySave}
           />
         )}
       </Wrapper>
     );
   }
 }
-
 const Wrapper = styled.div`
-  padding: 0 0 4em 0;
+  padding: 0 0 3em 0;
 `;
-const ViewWrapper = styled.div`
+const Content = styled.div`
   position: relative;
   margin: 10px;
-`;
-const Arrow = styled.a`
-  bottom: 10px;
-  width: 34px;
-  height: 34px;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  border-width: 0;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  line-height: 0;
-  margin-top: -24px;
-  outline: 0;
-  position: fixed;
-  transition: background 1s;
-  &:hover {
-    background: rgba(255, 255, 255, 1);
-  }
-  img {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-  }
-`;
-
-const PrevButton = styled(Arrow)`
-  left: 20px;
-  ${media.mobile`
-    left:15px;
-    width: 27px;
-    height: 27px;
-  `};
-`;
-const PrevButtonTop = PrevButton.extend`
-  position: absolute;
-  bottom: auto;
-  top: -38px;
-  left: 10px;
-  ${media.mobile`
-    top: -48px;
-    left: 0px;
-  `};
-`;
-
-const NextButton = styled(Arrow)`
-  right: 20px;
-  ${media.mobile`
-    right:15px;
-    width: 27px;
-    height: 27px;
-  `};
-`;
-const NextButtonTop = NextButton.extend`
-  position: absolute;
-  bottom: auto;
-  top: -38px;
-  right: 10px;
-  ${media.mobile`
-    top: -48px;
-    right: 0px;
-  `};
 `;

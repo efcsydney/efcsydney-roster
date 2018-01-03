@@ -1,5 +1,23 @@
+import queryString from 'query-string';
 import _ from 'lodash';
 import moment from 'moment';
+
+export const sanitize = obj => {
+  let query = _.clone(obj);
+  query = _.omit(query, _.isUndefined);
+  query = _.omit(query, _.isNull);
+  return query;
+};
+
+export const buildQuery = obj => queryString.stringify(sanitize(obj));
+
+export function findEvent(events, day) {
+  return _.find(
+    events,
+    event =>
+      moment(event.date).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+  );
+}
 
 export function getCalData(day, roles, members) {
   const description = _.reduce(
@@ -45,6 +63,21 @@ export function getQuarterDays(date, weekday = 7) {
     currentDay.add(7, 'd');
   }
   return result;
+}
+
+export function getQueryParams(qs) {
+  qs = qs.split('+').join(' ');
+  let params = {},
+    tokens,
+    re = /[?&]?([^=]+)=([^&]*)/g;
+  for (let paramCount = 0; paramCount < 20; paramCount++) {
+    tokens = re.exec(qs);
+    if (tokens == null) {
+      break;
+    }
+    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+  }
+  return params;
 }
 
 export function getRoles(eventData) {

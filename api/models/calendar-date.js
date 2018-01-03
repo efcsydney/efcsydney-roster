@@ -10,7 +10,7 @@ const CalendarDate = sequelizeClient.define('calendar_dates', {
     autoIncrement: true
   },
   date: {
-    type: Sequelize.DATE,
+    type: Sequelize.DATEONLY,
     unique: true
   }
 });

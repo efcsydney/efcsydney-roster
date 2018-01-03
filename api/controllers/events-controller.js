@@ -7,37 +7,29 @@ const PositionRepository = require('../data/position-repository')
 const EventService = require('../service/events-service').EventService;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const Factory = require('../service/factory').Factory;
+const log = require('winston');
 
+// req params
+// from: query string
+// to?: query string
 async function getEvents(req, res) {
   try {
     const eventRepository = Factory.getEventRepository(req);
     const dataMapper = Factory.getDataMapper(req);
     const eventService = Factory.getEventService(req);
-
-    const dateRange = eventService.computeDateRange({
-      from: req.query.from,
-      to: req.query.to
-    });
-    const scheduledEvents = await eventRepository.getEventsByDateRange({
-      from: dateRange.from,
-      to: dateRange.to
-    });
-    const allEvents = await eventService.linkScheduledEventsToCalendarDates(
-      dateRange,
-      scheduledEvents
+    const dateRange = eventService.computeDateRange(req.query);
+    const scheduledEvents = await eventRepository.getEventsByDateRange(
+      dateRange
     );
-    const dto = dataMapper.convertEventsModelToDto(allEvents);
+    const dto = dataMapper.convertEventsModelToDto(scheduledEvents);
 
-    const response = {
+    res.json({
       result: 'OK',
       error: { message: '' },
       data: dto
-    };
-
-    // console.log(JSON.stringify(response, null, 2));
-    return res.json(response);
+    });
   } catch (err) {
-    console.log(err);
+    log.error(err);
     return res.status(500).json({
       result: 'error',
       error: { message: err.message }
@@ -47,7 +39,9 @@ async function getEvents(req, res) {
 
 async function saveEvent(req, res) {
   try {
+    log.info('saveEvent: ', req.body);
     const event = EventMapper.convertDtoToEventModel(req.body);
+    log.info('event model: ', event);
     await EventService.saveEvent(event);
 
     const response = {
@@ -57,7 +51,7 @@ async function saveEvent(req, res) {
 
     return res.status(201).json(response);
   } catch (err) {
-    console.log(err);
+    log.error(err);
     return res.status(500).json({
       result: 'error',
       error: { message: err.message }

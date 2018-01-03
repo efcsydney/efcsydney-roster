@@ -62,7 +62,6 @@ First you will have to setup the test database
 ```
 NODE_ENV=test yarn db-create  // create database
 NODE_ENV=test yarn db-migrate // migrate database
-NODE_ENV=test yarn db-seed    // seed database
 ```
 
 ```
