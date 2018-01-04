@@ -8,7 +8,7 @@ import EditRole from './EditRole';
 import EditDay from './EditDay';
 import EventsAPI from '../../apis/events';
 import _ from 'lodash';
-import { getQueryParams } from '../utils';
+import { getQueryParams } from '../../utils';
 import Cookies from 'js-cookie';
 
 export default class App extends Component {
