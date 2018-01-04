@@ -19,7 +19,7 @@ describe('Server', function() {
 
     it('returns 2 weeks of data between 2017-10-01 and 2017-10-15', function() {
       return request(app)
-        .get('/api/events?from=2017-10-08&to=2017-10-15')
+        .get('/api/events?from=2017-10-08&to=2017-10-15&category=english')
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
@@ -56,7 +56,7 @@ describe('Server', function() {
 
     it('returns the next 12 weeks of date by default when the end date is not specified', function() {
       return request(app)
-        .get('/api/events?from=2017-08-02')
+        .get('/api/events?from=2017-08-02&category=english')
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
