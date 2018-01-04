@@ -83,6 +83,8 @@ const Arrow = styled.a`
     display: inline-block;
   }
 `;
+Arrow.displayName = 'Arrow';
+
 const Label = styled.span`
   font-weight: bold;
 `;
