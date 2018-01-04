@@ -7,7 +7,7 @@ const PositionRepository = require('../data/position-repository')
 const EventService = require('../service/events-service').EventService;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const Factory = require('../service/factory').Factory;
-const log = require('winston');
+const log = require('../utilities/logger');
 
 // req params
 // from: query string

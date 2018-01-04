@@ -32,7 +32,8 @@
     "sinon": "^4.1.2",
     "sql.js": "0.3.2",
     "supertest": "^3.0.0",
-    "winston": "^2.4.0"
+    "winston": "^2.4.0",
+    "winston-daily-rotate-file": "^1.7.2"
   },
   "scripts": {
     "build": "cd client && npm run build",
