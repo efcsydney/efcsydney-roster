@@ -9,6 +9,7 @@ import EditDay from './EditDay';
 import EventsAPI from 'apis/events';
 import _ from 'lodash';
 import { getQueryParams } from 'utils';
+import Cookies from 'js-cookie';
 
 export default class App extends Component {
   state = {
@@ -17,15 +18,17 @@ export default class App extends Component {
     isEditingRole: false,
     isEditingDay: false,
     selectedData: {},
+    selectedService: this.getDefaultServiceName(),
     params: {}
   };
-  loadData = ({ from, to }) => {
+  loadData = ({ from, to, category }) => {
     let queryParams = {};
     if (document.location.search.length > 0) {
       queryParams = getQueryParams(document.location.search);
     }
     queryParams.from = from;
     queryParams.to = to;
+    queryParams.category = category;
     this.setState({ isLoading: true, params: queryParams });
     return EventsAPI.retrieve(queryParams)
       .then(data => {
@@ -40,7 +43,7 @@ export default class App extends Component {
       });
   };
   handleButtonClick = direction => {
-    const { date } = this.state;
+    const { date, selectedService } = this.state;
 
     let newDate = moment(date).startOf('quarter');
     if (direction === 'prev') {
@@ -54,7 +57,8 @@ export default class App extends Component {
 
     this.loadData({
       from: newDate.format('YYYY-MM-DD'),
-      to: newDate.endOf('quarter').format('YYYY-MM-DD')
+      to: newDate.endOf('quarter').format('YYYY-MM-DD'),
+      category: selectedService
     });
   };
   handleDayClick = ({ day, footnote }) => {
@@ -99,6 +103,11 @@ export default class App extends Component {
       });
     });
   };
+  handleServiceChange = ({ value }) => {
+    document.location.href = `#${value}`;
+    this.setState({ selectedService: value });
+    Cookies.set('selectedService', value);
+  };
   handleEditDaySave = form => {
     const { params: { mock } } = this.state;
     if (mock) {
@@ -115,7 +124,14 @@ export default class App extends Component {
       });
     });
   };
-
+  getDefaultServiceName() {
+    let serviceName = Cookies.get('selectedService');
+    if (!serviceName) {
+      const urlServiceRegex = document.URL.match(/(chinese|enghlish)/g);
+      serviceName = urlServiceRegex ? urlServiceRegex.toString() : 'english';
+    }
+    return serviceName;
+  }
   componentWillMount() {
     this.appendSentry();
     this.loadData({
@@ -124,7 +140,8 @@ export default class App extends Component {
         .format('YYYY-MM-DD'),
       to: moment()
         .endOf('quarter')
-        .format('YYYY-MM-DD')
+        .format('YYYY-MM-DD'),
+      category: this.state.selectedService
     });
   }
   appendSentry() {
