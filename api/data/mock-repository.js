@@ -1,5 +1,5 @@
 class MockRepository {
-  static getEventsByDateRange(dateRange) {
+  static getEventsByDateRange(dateRange, service) {
     return Promise.resolve([
       {
         date: '2017-10-08',
