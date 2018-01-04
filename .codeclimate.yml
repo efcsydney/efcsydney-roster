@@ -19,7 +19,8 @@ checks:
   return-statements:
     enabled: true
   similar-code:
-    enabled: true
+    config:
+      threshold: 50
   identical-code:
     enabled: true
 plugins:
