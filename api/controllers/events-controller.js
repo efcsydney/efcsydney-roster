@@ -12,14 +12,17 @@ const log = require('../utilities/logger');
 // req params
 // from: query string
 // to?: query string
+// category: query string
 async function getEvents(req, res) {
   try {
     const eventRepository = Factory.getEventRepository(req);
     const dataMapper = Factory.getDataMapper(req);
     const eventService = Factory.getEventService(req);
     const dateRange = eventService.computeDateRange(req.query);
+    const { category: service } = req.query;
     const scheduledEvents = await eventRepository.getEventsByDateRange(
-      dateRange
+      dateRange,
+      service
     );
     const dto = dataMapper.convertEventsModelToDto(scheduledEvents);
 
