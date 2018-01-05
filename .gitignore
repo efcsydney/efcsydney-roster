@@ -4,3 +4,4 @@ npm-debug.log
 yarn-error.log
 client/build
 scripts/email/sample.html
+log
