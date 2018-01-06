@@ -3,6 +3,7 @@ app = express();
 module.exports.app = app;
 const bodyParser = require('body-parser');
 const eventsController = require('./api/controllers/events-controller');
+const exception = require('./api/middleware/exception-handler');
 
 app.use(bodyParser.json());
 
@@ -20,3 +21,5 @@ app.get('/', (req, res) => {
 app.get('/api/events', eventsController.getEvents);
 
 app.put('/api/events', eventsController.saveEvent);
+
+app.use(exception.errorHandler);

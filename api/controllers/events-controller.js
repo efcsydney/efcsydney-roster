@@ -7,13 +7,13 @@ const PositionRepository = require('../data/position-repository')
 const EventService = require('../service/events-service').EventService;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const Factory = require('../service/factory').Factory;
-const log = require('winston');
+const log = require('../utilities/logger');
 
 // req params
 // from: query string
 // to?: query string
 // category: query string
-async function getEvents(req, res) {
+async function getEvents(req, res, next) {
   try {
     const eventRepository = Factory.getEventRepository(req);
     const dataMapper = Factory.getDataMapper(req);
@@ -31,16 +31,12 @@ async function getEvents(req, res) {
       error: { message: '' },
       data: dto
     });
-  } catch (err) {
-    log.error(err);
-    return res.status(500).json({
-      result: 'error',
-      error: { message: err.message }
-    });
+   } catch (err) {
+    next(err);
   }
 }
 
-async function saveEvent(req, res) {
+async function saveEvent(req, res, next) {
   try {
     log.info('saveEvent: ', req.body);
     const event = EventMapper.convertDtoToEventModel(req.body);
@@ -54,11 +50,7 @@ async function saveEvent(req, res) {
 
     return res.status(201).json(response);
   } catch (err) {
-    log.error(err);
-    return res.status(500).json({
-      result: 'error',
-      error: { message: err.message }
-    });
+    next(err);
   }
 }
 
