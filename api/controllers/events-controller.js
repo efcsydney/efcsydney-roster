@@ -31,7 +31,7 @@ async function getEvents(req, res, next) {
       error: { message: '' },
       data: dto
     });
-   } catch (err) {
+  } catch (err) {
     next(err);
   }
 }
