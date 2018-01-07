@@ -21,6 +21,7 @@ export default ({ events, roles, days, onDayClick, onRoleClick }) => {
         const highlightDate = moment()
           .isoWeekday(7)
           .format('YYYY-MM-DD');
+        const highlighted = day.format('YYYY-MM-DD') === highlightDate;
 
         return (
           <Day key={i} highlighted={day.format('YYYY-MM-DD') === highlightDate}>

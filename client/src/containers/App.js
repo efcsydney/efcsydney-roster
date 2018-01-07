@@ -102,6 +102,14 @@ export default class App extends Component {
       });
     });
   };
+  scrollToThisWeek = () => {
+    const highlighted = document.getElementById('highlighted');
+    if (highlighted) {
+      highlighted.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  };
   handleServiceChange = ({ value }) => {
     document.location.href = `#${value}`;
     this.setState({ selectedService: value });
