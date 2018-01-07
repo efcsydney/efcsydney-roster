@@ -2,9 +2,9 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import AddToCalendar from 'react-add-to-calendar';
-import '../../icalstyle.css';
+import './icalstyle.css';
 import moment from 'moment';
-import { findEvent, getCalData } from '../../utils';
+import { findEvent, getCalData } from 'utils';
 
 export default class Desktop extends Component {
   handleDayClick = (e, day, footnote) => {

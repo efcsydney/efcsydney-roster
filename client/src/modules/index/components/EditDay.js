@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import styled from 'styled-components';
-import Modal from '../components/Modal';
+import { Modal, StateButton } from 'components';
 //import { Creatable } from 'react-select';
-import StateButton from '../components/StateButton';
 
 export default class EditDay extends Component {
   static propTypes = {
