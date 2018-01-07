@@ -26,6 +26,17 @@ class FootnoteRepository {
       order: [[{ model: CalendarDate, as: 'calendarDate' }, 'date', 'DESC']]
     });
   }
+
+  static updateFootnote(footnote){
+    return Footnote.update(
+      {
+        name: footnote.name
+      },
+      {
+        where: { id: footnote.id }
+      }
+    );
+  }
 }
 
 module.exports = {

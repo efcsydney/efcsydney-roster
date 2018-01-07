@@ -37,9 +37,7 @@ class EventMapper {
   static mapFootnotesToEvents(footnotes, events) {
     return events.map((event) => {
       const eventFootnote = footnotes.find((footnote) => footnote.calendarDate.date === event.date);
-      //if(!eventFootnote){
-        event.footnote = eventFootnote;
-      //}
+      event.footnote = eventFootnote;
       return event;
     })
   }

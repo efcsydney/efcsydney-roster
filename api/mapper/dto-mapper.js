@@ -7,25 +7,22 @@ class DtoMapper {
         date: e.date,
         footnote: DtoMapper.mapFootnoteToDto(e.footnote),
         members: DtoMapper.mapEventsToDto(e.positions)
-      }
+      };
     });
   }
 
-  static mapEventsToDto(events){
-    return events.map((event) => ({
+  static mapEventsToDto(events) {
+    return events.map(event => ({
       role: event.position,
       name: event.volunteerName
     }));
   }
 
-  static mapFootnoteToDto(footnote){
-    if(footnote){
-      return {
-        id: footnote.id,
-        name: footnote.name
-      }
-    }
-    return {};
+  static mapFootnoteToDto(footnote) {
+    return {
+      id: footnote.id,
+      name: footnote.name
+    };
   }
 
   static formatDate(eventDate) {
@@ -40,6 +37,18 @@ class DtoMapper {
         date: getDateString(data.date)
       },
       position: { name: data.role }
+    };
+  }
+
+  static convertDtoToFootnoteModel(dto) {
+    const { id, data } = dto;
+    return {
+      id: id,
+      name: data.footnote,
+      calendarDate: {
+        date: getDateString(data.date)
+      },
+      service: { name: data.category }
     };
   }
 }

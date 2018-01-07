@@ -30,6 +30,7 @@ const Event = require('../../api/models/event').Event;
 const CalendarDate = require('../../api/models/calendar-date').CalendarDate;
 const Position = require('../../api/models/position').Position;
 const Service = require('../../api/models/service').Service;
+const Footnote = require('../../api/models/footnote').Footnote;
 
 async function createSeed() {
   await Service.bulkCreate([
@@ -64,6 +65,18 @@ async function createSeed() {
     { id: 3, date: '2017-10-22' },
     { id: 4, date: '2017-10-29' },
     { id: 5, date: '2017-11-05' }
+  ]);
+  await Footnote.bulkCreate([
+    { id: 1, name: 'english footnote 1', serviceId: 1, calendarDateId: 1 },
+    { id: 2, name: 'chinese footnote 1', serviceId: 2, calendarDateId: 1 },
+    { id: 3, name: 'english footnote 2', serviceId: 1, calendarDateId: 2 },
+    { id: 4, name: 'chinese footnote 2', serviceId: 2, calendarDateId: 2 },
+    { id: 5, name: 'english footnote 3', serviceId: 1, calendarDateId: 3 },
+    { id: 6, name: 'chinese footnote 3', serviceId: 2, calendarDateId: 3 },
+    { id: 7, name: 'english footnote 4', serviceId: 1, calendarDateId: 4 },
+    { id: 8, name: 'chinese footnote 4', serviceId: 2, calendarDateId: 4 },
+    { id: 9, name: 'english footnote 5', serviceId: 1, calendarDateId: 5 },
+    { id: 10, name: 'chinese footnote 4', serviceId: 2, calendarDateId: 5 }
   ]);
   await Event.bulkCreate([
     {
