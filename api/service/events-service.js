@@ -3,7 +3,7 @@ const EventRepository = require('../data/event-repository').EventRepository;
 const CalendarDateRepository = require('../data/calendar-date-repository')
   .CalendarDateRepository;
 const log = require('winston');
-const datetimeUtils = require('../utilities/datetime-util')
+const datetimeUtils = require('../utilities/datetime-util');
 const getDateString = datetimeUtils.getDateString;
 const getDateByWeeks = datetimeUtils.getDateByWeeks;
 

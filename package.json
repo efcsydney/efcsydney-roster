@@ -51,7 +51,7 @@
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
     "db-rollback-all": "sequelize db:migrate:undo:all",
-    "db-seed": "sequelize db:seed:all",
+    "db-seed": "sequelize db:seed:all; yarn db-update-events",
     "db-undo-seed": "sequelize db:seed:undo:all",
     "deploy:qa": "dploy qa",
     "deploy:prod": "dploy prod",
