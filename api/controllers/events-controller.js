@@ -16,7 +16,7 @@ const log = require('../utilities/logger');
  * @param to? {String} query string for date range, eg. '2017-02-01'
  * @param category: query string
  */
-async function getEvents(req, res) {
+async function getEvents(req, res, next) {
   try {
     const eventRepository = Factory.getEventRepository(req);
     const dataMapper = Factory.getDataMapper(req);
