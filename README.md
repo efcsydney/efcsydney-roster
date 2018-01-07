@@ -55,6 +55,14 @@ You can use other sequelize utilities eg. `node_modules/.bin/sequelize db:migrat
 
 To use different environment, please add environmental variable NODE_ENV=xxx, ie. `NODE_ENV=test npm run db-create`.
 
+### Populate event data
+
+Since we may need to continue to update event data, we use a script instead of seeding tool to achieve this. This script can be run multiple times, and will used `db/data/english-events.csv` and `db/data/chinese-events.csv` as data source.
+
+```
+yarn db-update-events
+```
+
 ## Run test
 
 First you will have to setup the test database
