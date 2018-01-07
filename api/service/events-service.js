@@ -2,6 +2,9 @@ const moment = require('moment');
 const EventRepository = require('../data/event-repository').EventRepository;
 const CalendarDateRepository = require('../data/calendar-date-repository')
   .CalendarDateRepository;
+const FootnoteRepository = require('../data/footnote-repository')
+  .FootnoteRepository;
+const EventMapper = require('../mapper/event-mapper').EventMapper;
 const log = require('winston');
 const getDateString = require('../utilities/datetime-util').getDateString;
 
@@ -47,6 +50,21 @@ class EventService {
     days.push(firstSunday);
 
     return days;
+  }
+  static async getEventsByDateRange(dateRange, service = 'english'){
+    const scheduledEvents = await EventRepository.getEventsByDateRange(
+      dateRange,
+      service
+    );
+    const scheduledEventsByDate = EventMapper.groupEventsByCalendarDate(scheduledEvents);
+
+    const footnotes = await FootnoteRepository.getFootnotesByDateRange(
+      dateRange,
+      service
+    );
+    const eventsWithFootnotes = EventMapper.mapFootnotesToEvents(footnotes, scheduledEventsByDate);
+
+    return eventsWithFootnotes;
   }
 }
 

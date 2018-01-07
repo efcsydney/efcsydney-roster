@@ -11,7 +11,7 @@ describe('Server', function() {
   describe('get events', function() {
     it('returns no data if no data around the period', function() {
       return request(app)
-        .get('/api/events?from=2017-03-01&to=2017-03-27')
+        .get('/api/events?from=2017-03-01&to=2017-03-27&category=english')
         .expect('Content-Type', /json/)
         .expect(200)
         .then(res => expect(res.body.data.length).to.equal(0));
@@ -26,6 +26,7 @@ describe('Server', function() {
           expect(res.body.data).to.eql([
             {
               date: '2017-10-15',
+              footnote: {},
               members: [
                 { role: 'Speaker', name: 'Rev. Kian Holik' },
                 { role: 'Moderator', name: 'Jennifer Chu' },
@@ -39,6 +40,7 @@ describe('Server', function() {
             },
             {
               date: '2017-10-08',
+              footnote: {},
               members: [
                 { role: 'Speaker', name: 'May Chien' },
                 { role: 'Moderator', name: 'Angela Sun' },

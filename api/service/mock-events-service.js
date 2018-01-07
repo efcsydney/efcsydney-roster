@@ -1,10 +1,14 @@
 const EventService = require('./events-service').EventService;
+const MockRepository = require('../data/mock-repository').MockRepository;
+const MockEventMapper = require('../mapper/mock-event-mapper').MockEventMapper;
+
 class MockEventService {
   static computeDateRange(dateRange) {
     return EventService.computeDateRange(dateRange);
   }
-  static linkScheduledEventsToCalendarDates(dateRange, scheduledEvents) {
-    return Promise.resolve(scheduledEvents);
+  async getEventsByDateRange(dateRange, service = 'english'){
+
+    return MockRepository.getEventsByDateRange(dateRange, service);
   }
 }
 
