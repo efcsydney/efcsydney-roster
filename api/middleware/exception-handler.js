@@ -6,10 +6,10 @@ const errorHandler = function(err, req, res, next) {
   log.error(err.stack);
 
   if (res.headersSent) {
-    return next(err)
+    return next(err);
   }
   res.status(500);
-  res.send({ error: { message: err.message }});
-}
+  res.send({ error: { message: err.message } });
+};
 
-module.exports = { errorHandler }
+module.exports = { errorHandler };

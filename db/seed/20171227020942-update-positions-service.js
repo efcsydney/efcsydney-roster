@@ -1,14 +1,12 @@
 'use strict';
 const sequelizeClient = require('../../api/infrastructure/sequelize-client')
-.sequelizeClient;
+  .sequelizeClient;
 
 module.exports = {
-  up: async function (queryInterface, Sequelize) {
+  up: async function(queryInterface, Sequelize) {
     await sequelizeClient.query(
       'UPDATE positions SET serviceId = 1 WHERE id BETWEEN 1 AND 8'
-    )
+    );
   },
-  down: (queryInterface, Sequelize) => {
-
-  }
+  down: (queryInterface, Sequelize) => {}
 };

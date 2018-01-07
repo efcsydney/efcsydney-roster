@@ -52,7 +52,8 @@
     "db-undo-seed": "sequelize db:seed:undo:all",
     "deploy:qa": "dploy qa",
     "deploy:prod": "dploy prod",
-    "prettier": "prettier --single-quote --write '{,!(node_modules|client)/**/}*.js'"
+    "prettier": "prettier --single-quote --write '{,!(node_modules|client)/**/}*.js'",
+    "db-update-events": "node ./scripts/update-events-details.js"
   },
   "devDependencies": {
     "concurrently": "3.1.0",
