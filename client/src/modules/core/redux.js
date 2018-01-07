@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { createAction, handleAction } from 'redux-actions';
 
-const PREFIX = 'index';
+const PREFIX = 'core';
 
 export const switchCategory = createAction(`${PREFIX}/SWITCH_CATEGORY`);
 

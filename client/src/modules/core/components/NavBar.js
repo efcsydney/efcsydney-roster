@@ -3,10 +3,10 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
-import { switchCategory } from '../../modules/index/redux';
-import { media } from '../../styled';
+import { switchCategory } from '../redux';
+import { media } from 'styled';
 
-const mapStateToProps = state => ({ value: state['index'].meta.category });
+const mapStateToProps = state => ({ value: state.core.meta.category });
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ switchCategory }, dispatch);
 
