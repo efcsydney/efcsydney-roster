@@ -11,6 +11,9 @@ const Service = sequelizeClient.define('services', {
   name: {
     type: Sequelize.STRING,
     unique: true
+  },
+  locale: {
+    type: Sequelize.STRING
   }
 });
 

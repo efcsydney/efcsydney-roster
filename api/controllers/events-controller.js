@@ -9,11 +9,14 @@ const EventMapper = require('../mapper/event-mapper').EventMapper;
 const Factory = require('../service/factory').Factory;
 const log = require('../utilities/logger');
 
-// req params
-// from: query string
-// to?: query string
-// category: query string
-async function getEvents(req, res, next) {
+/**
+ * Get Events
+ *
+ * @param from {String} query string for date range, eg. '2017-01-01'
+ * @param to? {String} query string for date range, eg. '2017-02-01'
+ * @param category: query string
+ */
+async function getEvents(req, res) {
   try {
     const eventRepository = Factory.getEventRepository(req);
     const dataMapper = Factory.getDataMapper(req);

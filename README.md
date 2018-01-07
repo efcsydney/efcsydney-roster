@@ -63,6 +63,12 @@ Since we may need to continue to update event data, we use a script instead of s
 yarn db-update-events
 ```
 
+## Setup email
+
+You can setup your local settings by creating `config/local.yaml`. This will overwrite all other settings.
+
+To test email, you can use your own email account and smtp provider, or use fake smtp providers like [ethereal](https://ethereal.email). Note that to make gmail work, you have to put it to a [less secure setting](https://myaccount.google.com/lesssecureapps).
+
 ## Run test
 
 First you will have to setup the test database
