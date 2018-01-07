@@ -24,7 +24,6 @@ Position.Service = Position.belongsTo(Service, {
 });
 Service.hasMany(Position);
 
-
 module.exports = {
   Position
 };
