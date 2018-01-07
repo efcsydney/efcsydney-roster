@@ -3,4 +3,6 @@ node_modules
 npm-debug.log
 yarn-error.log
 client/build
-scripts/email/sample.html
+scripts/email/test/sample.html
+config/local.yaml
+.rev

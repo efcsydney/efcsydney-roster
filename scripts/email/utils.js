@@ -1,6 +1,10 @@
 const { mjml2html } = require('mjml');
 const _ = require('lodash');
 const moment = require('moment');
+const nodemailer = require('nodemailer');
+const log = require('winston');
+const config = require('config');
+
 require('moment/locale/en-au');
 require('moment/locale/zh-tw');
 
@@ -92,4 +96,31 @@ exports.getEmailHTML = events => {
   `;
 
   return mjml2html(mjml).html;
+};
+
+/**
+ * Send email
+ *
+ * @method sendEmail
+ * @param account sending gmail account { user: 'x@example.com', pass: 'somepassword'}
+ * @param mailOptions { from: 'from@example.com', to: 'a@xample.com, b@example.com ...', subject: 'whatever', html: '<html/>' }
+ * @return {Promise}
+ */
+exports.sendEmail = (mailOptions) => {
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: config.get('emailService.smtp'),
+    auth: config.get('emailService.authentication'),
+  });
+
+  // send mail with defined transport object
+  return transporter.sendMail({
+    from: mailOptions.from,
+    to: mailOptions.to,
+    subject: mailOptions.subject,
+    html: mailOptions.html
+  }).then((info) => {
+    log.info('email sent');
+    return info;
+  });
 };

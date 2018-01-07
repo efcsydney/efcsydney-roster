@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const { getEmailHTML } = require('./utils');
+const { getEmailHTML } = require('../utils');
 
 const mockData = {
   chinese: [
