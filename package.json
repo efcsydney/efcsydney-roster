@@ -2,6 +2,7 @@
   "name": "efcsydney-roster",
   "version": "0.0.1",
   "private": true,
+  "license": "MIT",
   "engines": {
     "node": "^8.9.0"
   },
@@ -47,7 +48,7 @@
     "client": "node start-client.js",
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
     "lint": "eslint .",
-    "test": "cross-env NODE_ENV=test mocha test",
+    "test": "cross-env NODE_ENV=test mocha test; cd client; yarn test:ci",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
     "db-rollback-all": "sequelize db:migrate:undo:all",

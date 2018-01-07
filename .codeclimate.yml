@@ -19,7 +19,8 @@ checks:
   return-statements:
     enabled: true
   similar-code:
-    enabled: true
+    config:
+      threshold: 50
   identical-code:
     enabled: true
 plugins:
@@ -42,3 +43,5 @@ exclude_patterns:
   - "**/vendor/"
   - "client/semantic"
   - "api/data/mock-repository.js"
+  - "**/*.spec.js"
+  - "**/*.test.js"

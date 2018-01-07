@@ -3,9 +3,12 @@ import _ from 'lodash';
 import moment from 'moment';
 
 export const sanitize = obj => {
-  let query = _.clone(obj);
-  query = _.omit(query, _.isUndefined);
-  query = _.omit(query, _.isNull);
+  const query = _.clone(obj);
+  _.forOwnRight(query, (val, key) => {
+    if (_.isNull(val) || _.isUndefined(val) || val === '') {
+      delete query[key];
+    }
+  });
   return query;
 };
 
