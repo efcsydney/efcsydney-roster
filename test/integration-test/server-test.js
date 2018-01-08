@@ -11,13 +11,13 @@ describe('Server', function() {
   describe('get events', function() {
     it('returns no data if no data around the period', function() {
       return request(app)
-        .get('/api/events?from=2017-03-01&to=2017-03-27')
+        .get('/api/events?from=2017-03-01&to=2017-03-27&category=english')
         .expect('Content-Type', /json/)
         .expect(200)
         .then(res => expect(res.body.data.length).to.equal(0));
     });
 
-    it('returns 2 weeks of data between 2017-10-01 and 2017-10-15', function() {
+    it('returns 2 weeks of English service data between 2017-10-01 and 2017-10-15', function() {
       return request(app)
         .get('/api/events?from=2017-10-08&to=2017-10-15&category=english')
         .expect('Content-Type', /json/)
@@ -26,6 +26,10 @@ describe('Server', function() {
           expect(res.body.data).to.eql([
             {
               date: '2017-10-15',
+              footnote: {
+                id: 3,
+                name: 'english footnote 2'
+              },
               members: [
                 { role: 'Speaker', name: 'Rev. Kian Holik' },
                 { role: 'Moderator', name: 'Jennifer Chu' },
@@ -39,6 +43,10 @@ describe('Server', function() {
             },
             {
               date: '2017-10-08',
+              footnote: {
+                id: 1,
+                name: 'english footnote 1'
+              },
               members: [
                 { role: 'Speaker', name: 'May Chien' },
                 { role: 'Moderator', name: 'Angela Sun' },
@@ -48,6 +56,59 @@ describe('Server', function() {
                 { role: 'PA/PPT', name: 'Raymond Tsang' },
                 { role: 'Newsletter', name: 'Kai Chang' },
                 { role: 'Refreshments', name: 'Christine Yang' }
+              ]
+            }
+          ]);
+        });
+    });
+
+    it('returns 2 weeks of Chinese service data between 2017-10-01 and 2017-10-15', function() {
+      return request(app)
+        .get('/api/events?from=2017-10-08&to=2017-10-15&category=chinese')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(function(res) {
+          expect(res.body.data).to.eql([
+            {
+              date: '2017-10-15',
+              footnote: {
+                id: 4,
+                name: 'chinese footnote 2'
+              },
+              members: [
+                { role: '證道', name: 'Christine Yang' },
+                { role: '司會', name: 'Raymond Tsang' },
+                { role: '詩歌讚美', name: 'Kai Chang' },
+                { role: '司琴', name: 'Christine Yang' },
+                { role: '招待', name: 'Christine Yang' },
+                { role: '司獻', name: 'Raymond Tsang' },
+                { role: '聖餐聖洗', name: 'Kai Chang' },
+                { role: '投影', name: 'Christine Yang' },
+                { role: '音控', name: 'Christine Yang' },
+                { role: '燈光', name: 'Raymond Tsang' },
+                { role: '督堂', name: 'Kai Chang' },
+                { role: '愛餐', name: 'Christine Yang' }
+              ]
+            },
+            {
+              date: '2017-10-08',
+              footnote: {
+                id: 2,
+                name: 'chinese footnote 1'
+              },
+              members: [
+                { role: '證道', name: 'May Chien' },
+                { role: '司會', name: 'Angela Sun' },
+                { role: '詩歌讚美', name: 'Edison Huang' },
+                { role: '司琴', name: 'Joseph Wang' },
+                { role: '招待', name: 'Cheer Lin' },
+                { role: '司獻', name: 'Raymond Tsang' },
+                { role: '聖餐聖洗', name: 'Kai Chang' },
+                { role: '投影', name: 'Christine Yang' },
+                { role: '音控', name: 'Rev. Kian Holik' },
+                { role: '燈光', name: 'Jennifer Chu' },
+                { role: '督堂', name: 'Amy Chen' },
+                { role: '愛餐', name: 'Yvonne Lu' }
               ]
             }
           ]);
@@ -90,6 +151,24 @@ describe('Server', function() {
       return request(app)
         .put('/api/events')
         .send(event)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .then(function(res) {
+          expect(res.body.result).to.equal('OK');
+        });
+    });
+  });
+  describe('update footnote', function() {
+    it('updates a footnote', function() {
+      const footnote = {
+        date: '2017-10-08' ,
+        category: 'english',
+        footnote: 'Meeting (Election)'
+      };
+      const footnoteId = 1;
+      return request(app)
+        .put(`/api/footnotes/${footnoteId}`)
+        .send(footnote)
         .expect('Content-Type', /json/)
         .expect(201)
         .then(function(res) {
