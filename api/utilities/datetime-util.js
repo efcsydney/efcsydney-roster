@@ -5,6 +5,21 @@ function getDateString(date) {
   return dateInMoment.format().slice(0, 10);
 }
 
+/**
+ * Get new date string by weeks
+ *
+ * @method getDateByWeeks
+ * @param dateString {String} '2017-10-12'
+ * @param week {Integer} 2
+ * @return {String} '2017-10-26'
+ */
+function getDateByWeeks(from, weeks) {
+  const date = new Date(from);
+  date.setDate(date.getDate() + 7 * weeks);
+  return getDateString(date);
+}
+
 module.exports = {
-  getDateString
+  getDateString,
+  getDateByWeeks
 };

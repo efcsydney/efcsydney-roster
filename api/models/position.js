@@ -15,6 +15,9 @@ const Position = sequelizeClient.define('positions', {
   },
   order: {
     type: Sequelize.INTEGER
+  },
+  serviceId: {
+    type: Sequelize.STRING
   }
 });
 
@@ -23,7 +26,6 @@ Position.Service = Position.belongsTo(Service, {
   foreignKey: 'serviceId'
 });
 Service.hasMany(Position);
-
 
 module.exports = {
   Position

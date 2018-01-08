@@ -2,13 +2,16 @@
 const EventService = require('../service/events-service').EventService;
 const DtoMapper = require('../mapper/dto-mapper').DtoMapper;
 const Factory = require('../service/factory').Factory;
-const log = require('winston');
+const log = require('../utilities/logger');
 
-// req params
-// from: query string
-// to?: query string
-// category: query string
-async function getEvents(req, res) {
+/**
+ * Get Events
+ *
+ * @param from {String} query string for date range, eg. '2017-01-01'
+ * @param to? {String} query string for date range, eg. '2017-02-01'
+ * @param category: query string
+ */
+async function getEvents(req, res, next) {
   try {
     const eventService = Factory.getEventService(req);
     const dateRange = eventService.computeDateRange(req.query);
@@ -22,15 +25,11 @@ async function getEvents(req, res) {
       data: dto
     });
   } catch (err) {
-    log.error(err);
-    return res.status(500).json({
-      result: 'error',
-      error: { message: err.message }
-    });
+    next(err);
   }
 }
 
-async function saveEvent(req, res) {
+async function saveEvent(req, res, next) {
   try {
     log.info('saveEvent: ', req.body);
     const event = DtoMapper.convertDtoToEventModel(req.body);
@@ -44,11 +43,7 @@ async function saveEvent(req, res) {
 
     return res.status(201).json(response);
   } catch (err) {
-    log.error(err);
-    return res.status(500).json({
-      result: 'error',
-      error: { message: err.message }
-    });
+    next(err);
   }
 }
 

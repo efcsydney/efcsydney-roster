@@ -4,12 +4,16 @@
   "private": true,
   "proxy": "http://localhost:3001/",
   "devDependencies": {
-    "enzyme": "2.4.1",
+    "codeclimate-test-reporter": "^0.5.0",
+    "enzyme": "^3.3.0",
     "react-addons-test-utils": "15.4.0",
     "react-scripts": "^1.0.17"
   },
   "dependencies": {
     "babel-plugin-transform-class-properties": "6.22.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "history": "^4.7.2",
+    "js-cookie": "^2.2.0",
     "moment": "^2.19.1",
     "react": "^16.0.0",
     "react-add-to-calendar": "^0.1.4",
@@ -17,13 +21,22 @@
     "react-google-tag-manager": "^2.2.1",
     "react-icons": "^2.2.7",
     "react-portal": "^4.0.0",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.9",
     "react-select": "^1.1.0",
+    "react-test-renderer": "^16.2.0",
+    "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
     "styled-components": "^2.2.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "test:ci": "CI=true npm test -- --coverage; ./scripts/codebeat-upload-coverage.sh",
     "eject": "react-scripts eject"
   }
 }

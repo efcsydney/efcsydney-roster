@@ -55,6 +55,20 @@ You can use other sequelize utilities eg. `node_modules/.bin/sequelize db:migrat
 
 To use different environment, please add environmental variable NODE_ENV=xxx, ie. `NODE_ENV=test npm run db-create`.
 
+### Populate event data
+
+Since we may need to continue to update event data, we use a script instead of seeding tool to achieve this. This script can be run multiple times, and will used `db/data/english-events.csv` and `db/data/chinese-events.csv` as data source.
+
+```
+yarn db-update-events
+```
+
+## Setup email
+
+You can setup your local settings by creating `config/local.yaml`. This will overwrite all other settings.
+
+To test email, you can use your own email account and smtp provider, or use fake smtp providers like [ethereal](https://ethereal.email). Note that to make gmail work, you have to put it to a [less secure setting](https://myaccount.google.com/lesssecureapps).
+
 ## Run test
 
 First you will have to setup the test database
@@ -128,7 +142,7 @@ yarn deploy:qa
 ```
 
 
-Deploy to Production server (Todo) http://roster.efcsydney.org
+Deploy to Production server http://roster.efcsydney.org
 
 ```
 yarn deploy:prod

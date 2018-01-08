@@ -3,6 +3,7 @@ app = express();
 module.exports.app = app;
 const bodyParser = require('body-parser');
 const eventsController = require('./api/controllers/events-controller');
+const exception = require('./api/middleware/exception-handler');
 const footnoteController = require('./api/controllers/footnotes-controller');
 
 app.use(bodyParser.json());
@@ -23,3 +24,5 @@ app.get('/api/events', eventsController.getEvents);
 app.put('/api/events', eventsController.saveEvent);
 
 app.put('/api/footnotes/:id', footnoteController.saveFootnote);
+
+app.use(exception.errorHandler);

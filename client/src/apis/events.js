@@ -1,6 +1,6 @@
-import { buildQuery } from './utils';
+import { buildQuery } from '../utils';
 
-const API = {
+const EventsAPI = {
   retrieve(query) {
     query.category = 'english';
     return fetch(`/api/events?${buildQuery(query)}`).then(response =>
@@ -18,4 +18,4 @@ const API = {
     }).then(response => response.json());
   }
 };
-export default API;
+export default EventsAPI;

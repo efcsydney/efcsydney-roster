@@ -6,7 +6,9 @@ const FootnoteRepository = require('../data/footnote-repository')
   .FootnoteRepository;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const log = require('winston');
-const getDateString = require('../utilities/datetime-util').getDateString;
+const datetimeUtils = require('../utilities/datetime-util')
+const getDateString = datetimeUtils.getDateString;
+const getDateByWeeks = datetimeUtils.getDateByWeeks;
 
 class EventService {
   static computeDateRange(dateRange) {
@@ -15,10 +17,7 @@ class EventService {
       from = getDateString(new Date());
     }
     if (!to) {
-      const toDate = new Date(from);
-      // add 12 weeks to from date
-      toDate.setDate(toDate.getDate() + 7 * 12);
-      to = getDateString(toDate);
+      to = getDateByWeeks(from, 12); // add 12 weeks to from date
     }
     return { from, to };
   }

@@ -15,19 +15,25 @@ describe('Repository', function() {
       return createSeed();
     });
     it('gets english events by date range', function() {
-      return EventRepository.getEventsByDateRange({
-        from: new Date('2017-10-08'),
-        to: new Date('2017-10-15')
-      },'english').then(function(events) {
+      return EventRepository.getEventsByDateRange(
+        {
+          from: new Date('2017-10-08'),
+          to: new Date('2017-10-15')
+        },
+        'english'
+      ).then(function(events) {
         expect(events.length).to.equal(16);
       });
     });
 
     it('gets chinese events by date range', function() {
-      return EventRepository.getEventsByDateRange({
-        from: new Date('2017-10-08'),
-        to: new Date('2017-10-15')
-      },'chinese').then(function(events) {
+      return EventRepository.getEventsByDateRange(
+        {
+          from: new Date('2017-10-08'),
+          to: new Date('2017-10-15')
+        },
+        'chinese'
+      ).then(function(events) {
         expect(events.length).to.equal(24);
       });
     });

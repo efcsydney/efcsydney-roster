@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import QuarterView from '../components/QuarterView';
-import LoadingIndicator from '../components/LoadingIndicator';
-import NavBar from '../components/NavBar';
-import DateBar from '../components/DateBar';
-import TagManager from '../components/TagManager';
+import QuarterView from './QuarterView';
+import { LoadingIndicator, DateBar, TagManager } from 'components';
+import { NavBar } from 'modules/core';
 import moment from 'moment';
 import EditRole from './EditRole';
 import EditDay from './EditDay';
-import API from '../api';
+import EventsAPI from 'apis/events';
 import _ from 'lodash';
-import { getQueryParams } from '../utils';
+import { getQueryParams } from 'utils';
+import Cookies from 'js-cookie';
 
 export default class App extends Component {
   state = {
@@ -19,18 +18,19 @@ export default class App extends Component {
     isEditingRole: false,
     isEditingDay: false,
     selectedData: {},
-    selectedService: 'english',
+    selectedService: this.getDefaultServiceName(),
     params: {}
   };
-  loadData = ({ from, to }) => {
+  loadData = ({ from, to, category }) => {
     let queryParams = {};
     if (document.location.search.length > 0) {
       queryParams = getQueryParams(document.location.search);
     }
     queryParams.from = from;
     queryParams.to = to;
+    queryParams.category = category;
     this.setState({ isLoading: true, params: queryParams });
-    return API.retrieve(queryParams)
+    return EventsAPI.retrieve(queryParams)
       .then(data => {
         this.setState({
           events: data,
@@ -43,7 +43,7 @@ export default class App extends Component {
       });
   };
   handleButtonClick = direction => {
-    const { date } = this.state;
+    const { date, selectedService } = this.state;
 
     let newDate = moment(date).startOf('quarter');
     if (direction === 'prev') {
@@ -57,7 +57,8 @@ export default class App extends Component {
 
     this.loadData({
       from: newDate.format('YYYY-MM-DD'),
-      to: newDate.endOf('quarter').format('YYYY-MM-DD')
+      to: newDate.endOf('quarter').format('YYYY-MM-DD'),
+      category: selectedService
     });
   };
   handleDayClick = ({ day, footnote }) => {
@@ -88,7 +89,7 @@ export default class App extends Component {
     if (mock) {
       form.mock = mock;
     }
-    API.modify(form).then(() => {
+    EventsAPI.modify(form).then(() => {
       const clonedEvents = _.clone(this.state.events);
       const i = _.findIndex(clonedEvents.data, {
         date: moment(form.date).format('YYYY-MM-DD')
@@ -105,13 +106,14 @@ export default class App extends Component {
   handleServiceChange = ({ value }) => {
     document.location.href = `#${value}`;
     this.setState({ selectedService: value });
+    Cookies.set('selectedService', value);
   };
   handleEditDaySave = form => {
     const { params: { mock } } = this.state;
     if (mock) {
       form.mock = mock;
     }
-    API.modify(form).then(() => {
+    EventsAPI.modify(form).then(() => {
       const events = _.clone(this.state.events);
       const date = moment(form.date).format('YYYY-MM-DD');
       const i = _.findIndex(events.data, { date });
@@ -122,7 +124,14 @@ export default class App extends Component {
       });
     });
   };
-
+  getDefaultServiceName() {
+    let serviceName = Cookies.get('selectedService');
+    if (!serviceName) {
+      const urlServiceRegex = document.URL.match(/(chinese|enghlish)/g);
+      serviceName = urlServiceRegex ? urlServiceRegex.toString() : 'english';
+    }
+    return serviceName;
+  }
   componentWillMount() {
     this.appendSentry();
     this.loadData({
@@ -131,7 +140,8 @@ export default class App extends Component {
         .format('YYYY-MM-DD'),
       to: moment()
         .endOf('quarter')
-        .format('YYYY-MM-DD')
+        .format('YYYY-MM-DD'),
+      category: this.state.selectedService
     });
   }
   appendSentry() {
@@ -151,9 +161,7 @@ export default class App extends Component {
     }
   }
   renderTagManager() {
-    console.log(process.env); // eslint-disable-line
-    const env = process.env.REACT_APP_ENV;
-
+    const env = process.env.NODE_ENV;
     if (env === 'qa') {
       return <TagManager gtmId="GTM-W8CJV63" />;
     } else if (env === 'production') {
@@ -168,8 +176,7 @@ export default class App extends Component {
       isLoading,
       isEditingDay,
       isEditingRole,
-      selectedData,
-      selectedService
+      selectedData
     } = this.state;
 
     const barProps = {
@@ -181,10 +188,7 @@ export default class App extends Component {
     return (
       <Wrapper>
         {this.renderTagManager()}
-        <NavBar
-          value={selectedService}
-          onServiceChange={this.handleServiceChange}
-        />
+        <NavBar />
         <Content>
           <DateBar {...barProps} />
           <QuarterView

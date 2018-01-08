@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import leftArrowIcon from '../assets/arrow_left.svg';
-import rightArrowIcon from '../assets/arrow_right.svg';
+import leftArrowIcon from 'assets/arrow_left.svg';
+import rightArrowIcon from 'assets/arrow_right.svg';
 import {
   getQuarterDays,
   getQuarterFirstMonth,
@@ -83,6 +83,8 @@ const Arrow = styled.a`
     display: inline-block;
   }
 `;
+Arrow.displayName = 'Arrow';
+
 const Label = styled.span`
   font-weight: bold;
 `;
