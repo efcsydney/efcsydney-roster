@@ -19,7 +19,7 @@ before_deploy:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: deploy.sh
+  script: sh -x deploy.sh
   on:
     branch: scp
 
