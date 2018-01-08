@@ -19,12 +19,19 @@ function getEmailList() {
 async function buildEventsForMultipleServices(from, to) {
   const events = {};
   services = await Service.findAll();
-  await Promise.all(services.map(async (service) => {
-    const eventsForService = await EventRepository.getEventsByDateRange({ from, to }, service.name);
-    events[service.name] = EventMapper.convertEventsModelToDto(eventsForService);
-    events[service.name].lang = service.locale;
-    return events
-  }))
+  await Promise.all(
+    services.map(async service => {
+      const eventsForService = await EventRepository.getEventsByDateRange(
+        { from, to },
+        service.name
+      );
+      events[service.name] = EventMapper.convertEventsModelToDto(
+        eventsForService
+      );
+      events[service.name].lang = service.locale;
+      return events;
+    })
+  );
   return events;
 }
 
@@ -33,7 +40,7 @@ async function reminderEmail() {
   const from = getDateString(new Date());
   const to = getDateByWeeks(from, 2);
   const events = await buildEventsForMultipleServices(from, to);
-  log.info(JSON.stringify(events))
+  log.info(JSON.stringify(events));
 
   return sendEmail({
     from: config.get('reminderEmail.content.from'),
@@ -46,4 +53,4 @@ async function reminderEmail() {
 
 module.exports = {
   reminderEmail
-}
+};
