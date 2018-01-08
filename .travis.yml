@@ -21,7 +21,7 @@ deploy:
   skip_cleanup: true
   script: sh -x deploy.sh
   on:
-    branch: scp
+    branch: qa
 
 after_deploy:
 - ssh -i ~/.ssh/key/efcsydney.pem ec2-user@54.206.106.116 "cd /opt/efcsydney-roster; . ~/.bash_profile; nvm use 8; yarn"
