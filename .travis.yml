@@ -18,17 +18,17 @@ before_deploy:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: rm -rf client/node_modules && cd ../ && tar -czf efcsydney-roster.tar.gz efcsydney-roster 
+  script: rm -rf client/node_modules && cd ../ && tar -czf efcsydney-roster.tar.gz efcsydney-roster
   on:
-    branch: 
+    branches:
     - qa
     - scp
-  
+
 - provider: script
   skip_cleanup: true
   script: scp i ~/.ssh/key/efcsydney.pem ./efcsydney-roster.tar.gz ec2-user@54.206.106.116:/opt/
   on:
-    branch: 
+    branches:
     - qa
     - scp
 
@@ -36,7 +36,7 @@ deploy:
   skip_cleanup: true
   script: ssh -i ~/.ssh/key/efcsydney.pem ec2-user@54.206.106.116 "cd /opt; mv efcsydney-roster pre-efcsydney-roster; tar -xf efcsydney-roster.tar.gz"
   on:
-    branch: 
+    branches:
     - qa
     - scp
 
