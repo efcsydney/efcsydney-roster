@@ -17,6 +17,7 @@ module.exports = {
     calendarDatesData.forEach(calendarDate => {
       servicesData.forEach(service => {
         footnotes.push({
+          name: '',
           calendarDateId: calendarDate.id,
           serviceId: service.id
         });
