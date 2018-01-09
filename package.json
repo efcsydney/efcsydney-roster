@@ -50,7 +50,7 @@
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
     "lint": "eslint .",
     "test": "cross-env NODE_ENV=test mocha test",
-    "test:frontend": "cd client && yarn test:ci",
+    "test:frontend": "cd client && yarn test",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
     "db-rollback-all": "sequelize db:migrate:undo:all",
