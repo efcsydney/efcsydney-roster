@@ -2,9 +2,9 @@
 
 echo "Clean up"
 rm -rf client/node_modules
-cd ../
 
 echo "Tar"
+cd ../
 tar -czf efcsydney-roster.tar.gz efcsydney-roster
 
 echo "Upload"
