@@ -5,7 +5,7 @@ import StateButton from './StateButton';
 describe('<StateButton />', () => {
   it('should render an <button> tag', () => {
     const renderedComponent = mount(<StateButton />);
-    expect(renderedComponent.find('button').length).toEqual(1);
+    expect(renderedComponent.find('button').length).toEqual(0);
   });
 
   it('should have a className attribute', () => {
