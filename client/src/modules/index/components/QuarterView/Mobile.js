@@ -24,17 +24,18 @@ export default class Mobile extends Component {
   };
 
   scrollToThisWeek = () => {
-    const highlighted = document.getElementById('highlighted');
-    if (highlighted) {
-      highlighted.scrollIntoView();
-    } else {
-      window.scrollTo(0, 0);
+    const highlightedEl = document.getElementById('highlighted');
+    if (highlightedEl) {
+      highlightedEl.scrollIntoView();
     }
   };
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.events !== nextProps.events) {
-      this.scrollToThisWeek();
+    const isInitialLoad = !this.props.events.length && nextProps.events.length;
+    if (isInitialLoad) {
+      setTimeout(() => {
+        this.scrollToThisWeek();
+      }, 500);
     }
   }
 
