@@ -1,15 +1,26 @@
 import { combineReducers } from 'redux';
 import { createAction, handleAction } from 'redux-actions';
+import Cookies from 'js-cookie';
 
 const PREFIX = 'core';
 
 export const switchCategory = createAction(`${PREFIX}/SWITCH_CATEGORY`);
 
+function getServiceName() {
+  const urlServiceRegex = document.URL.match(/(chinese|enghlish)/g);
+  let serviceName = urlServiceRegex;
+  if (serviceName) {
+    return serviceName;
+  }
+  serviceName = Cookies.get('selectedService');
+  return serviceName ? serviceName : 'english';
+}
+
 const defaultState = {
   data: [],
   meta: {
     lang: 'en-US',
-    category: 'english'
+    category: getServiceName()
   }
 };
 
