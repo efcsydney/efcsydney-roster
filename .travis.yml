@@ -8,6 +8,7 @@ cache:
 addons:
   ssh_known_hosts: 54.206.106.116
 script:
+- yarn test:frontend
 - cd client && yarn && NODE_ENV=qa NODE_PATH=src/ yarn build && cd ..
 
 before_deploy:
