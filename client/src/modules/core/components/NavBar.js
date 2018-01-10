@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import { switchCategory } from '../redux';
 import { media } from 'styled';
+import Cookies from 'js-cookie';
 
 const mapStateToProps = state => ({ value: state.core.meta.category });
 const mapDispatchToProps = dispatch =>
@@ -15,6 +16,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     handleCategoryChange = ({ value }) => {
       const { switchCategory } = this.props;
       switchCategory(value);
+      Cookies.set('selectedService', value);
     };
     render() {
       const { value } = this.props;
