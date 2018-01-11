@@ -28,7 +28,9 @@ export default class Desktop extends Component {
     const icalicon = { 'calendar-plus-o': 'left' };
     const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
     const formattedDay = day.format('YYYY-MM-DD');
-
+    let lastCellValue = null;
+    let IsSingleValueRow = true;
+	
     return (
       <Row key={formattedDay} highlighted={formattedDay === highlightDate}>
         <DayCell
@@ -42,12 +44,23 @@ export default class Desktop extends Component {
           />
           {day.format('DD MMM')}
         </DayCell>
+		{(lastCellValue = null)}
+        {roles.map((role, i) => {
+          const member = _.find(members, { role }) || {};
+          const name = member.name || '';
+          if (lastCellValue != null && name != lastCellValue) {
+            IsSingleValueRow = false;
+          }
+          lastCellValue = name;
+        })}
         {roles.map((role, i) => {
           const member = _.find(members, { role }) || {};
           const name = member.name || '';
           return (
             <NameCell
               key={i}
+              colIndex={i}
+              IsSingleValueRow={IsSingleValueRow}
               width={cellWidth}
               onClick={() => onRoleClick(day, role, name)}>
               <Text>{name}</Text>
@@ -121,6 +134,11 @@ const DayCell = Cell.extend`
 `;
 const NameCell = Cell.extend`
   cursor: pointer;
+  border-right: ${props => (props.IsSingleValueRow ? 'none' : '')};
+  color: ${props =>
+    props.IsSingleValueRow && props.colIndex != 3
+      ? 'rgba(255,255,255,0) !important'
+      : ''};
 `;
 const Row = styled.div`
   display: table-row;
