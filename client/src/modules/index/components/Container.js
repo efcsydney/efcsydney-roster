@@ -10,7 +10,6 @@ import EventsAPI from 'apis/events';
 import _ from 'lodash';
 import { getQueryParams } from 'utils';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 const mapStateToProps = state => ({ category: state.core.meta.category });
 
