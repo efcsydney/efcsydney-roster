@@ -45,10 +45,10 @@ export default class Desktop extends Component {
           {day.format('DD MMM')}
         </DayCell>
         {(lastCellValue = null)}
-        {roles.map((role, i) => {
+        {roles.forEach(role => {
           const member = _.find(members, { role }) || {};
           const name = member.name || '';
-          if (lastCellValue != null && name != lastCellValue) {
+          if (lastCellValue !==null && name !== lastCellValue) {
             IsSingleValueRow = false;
           }
           lastCellValue = name;
@@ -136,7 +136,7 @@ const NameCell = Cell.extend`
   cursor: pointer;
   border-right: ${props => (props.IsSingleValueRow ? 'none' : '')};
   color: ${props =>
-    props.IsSingleValueRow && props.colIndex != 3
+    props.IsSingleValueRow && props.colIndex !== 3
       ? 'rgba(255,255,255,0) !important'
       : ''};
 `;
