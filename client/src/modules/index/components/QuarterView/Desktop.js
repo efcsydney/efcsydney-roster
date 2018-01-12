@@ -48,7 +48,7 @@ export default class Desktop extends Component {
         {roles.forEach(role => {
           const member = _.find(members, { role }) || {};
           const name = member.name || '';
-          if (lastCellValue !==null && name !== lastCellValue) {
+          if (lastCellValue !== null && name !== lastCellValue) {
             isSingleValueRow = false;
           }
           lastCellValue = name;
