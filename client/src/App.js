@@ -4,6 +4,6 @@ import Index from './modules/index';
 
 export default () => (
   <div>
-    <Route exact path="/" component={Index} />
+    <Route path="(/|/chinese|/english)" component={Index} />
   </div>
 );
