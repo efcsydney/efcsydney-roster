@@ -29,7 +29,7 @@ export default class Desktop extends Component {
     const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
     const formattedDay = day.format('YYYY-MM-DD');
     let lastCellValue = null;
-    let IsSingleValueRow = true;
+    let isSingleValueRow = true;
 
     return (
       <Row key={formattedDay} highlighted={formattedDay === highlightDate}>
@@ -49,7 +49,7 @@ export default class Desktop extends Component {
           const member = _.find(members, { role }) || {};
           const name = member.name || '';
           if (lastCellValue !==null && name !== lastCellValue) {
-            IsSingleValueRow = false;
+            isSingleValueRow = false;
           }
           lastCellValue = name;
         })}
@@ -60,7 +60,7 @@ export default class Desktop extends Component {
             <NameCell
               key={i}
               colIndex={i}
-              IsSingleValueRow={IsSingleValueRow}
+              isSingleValueRow={isSingleValueRow}
               width={cellWidth}
               onClick={() => onRoleClick(day, role, name)}>
               <Text>{name}</Text>
@@ -134,9 +134,9 @@ const DayCell = Cell.extend`
 `;
 const NameCell = Cell.extend`
   cursor: pointer;
-  border-right: ${props => (props.IsSingleValueRow ? 'none' : '')};
+  border-right: ${props => (props.isSingleValueRow ? 'none' : '')};
   color: ${props =>
-    props.IsSingleValueRow && props.colIndex !== 3
+    props.isSingleValueRow && props.colIndex !== 3
       ? 'rgba(255,255,255,0) !important'
       : ''};
 `;
