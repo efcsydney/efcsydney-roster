@@ -22,4 +22,4 @@ echo "Replace"
 ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} "cd /opt; rm -rf pre-efcsydney-roster; mv efcsydney-roster pre-efcsydney-roster; tar -xf efcsydney-roster.tar.gz"
 
 echo "After deploy"
-ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} "cd /opt/efcsydney-roster; . ~/.bash_profile; nvm use 8; yarn"
+ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} "cd /opt/efcsydney-roster; . ~/.bash_profile; nvm use 8; yarn; yarn db-migrate"
