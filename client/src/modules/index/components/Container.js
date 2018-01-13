@@ -168,11 +168,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         const sentryInit = document.createElement('script');
         const sentryInitHTML = document.createTextNode(
           `Raven.config('https://6d4d9e488cda4ef59dddc1e282a24a7b@sentry.io/263713', {
-          release: '0e4fdef81448dcfa0e16ecc4433ff3997aa53572'
-          , environment: '` +
-            env +
-            `'
-        }).install();`
+            environment: '${env}'
+          }).install();`
         );
         sentryInit.appendChild(sentryInitHTML);
         document.body.insertBefore(sentryInit, document.body.childNodes[0]);

@@ -39,6 +39,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "test:ci": "CI=true npm test -- --coverage; ./scripts/codebeat-upload-coverage.sh",
     "eject": "react-scripts eject"
   }
 }
