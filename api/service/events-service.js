@@ -2,7 +2,8 @@ const moment = require('moment');
 const EventRepository = require('../data/event-repository').EventRepository;
 const CalendarDateRepository = require('../data/calendar-date-repository')
   .CalendarDateRepository;
-const SerivceCalendarDateRepository = require('../data/service-calendar-date-repository').SerivceCalendarDateRepository;
+const SerivceCalendarDateRepository = require('../data/service-calendar-date-repository')
+  .SerivceCalendarDateRepository;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const log = require('winston');
 const datetimeUtils = require('../utilities/datetime-util');
@@ -49,18 +50,23 @@ class EventService {
 
     return days;
   }
-  static async getEventsByDateRange(dateRange, service = 'english'){
+  static async getEventsByDateRange(dateRange, service = 'english') {
     const scheduledEvents = await EventRepository.getEventsByDateRange(
       dateRange,
       service
     );
-    const scheduledEventsByDate = EventMapper.groupEventsByCalendarDate(scheduledEvents);
+    const scheduledEventsByDate = EventMapper.groupEventsByCalendarDate(
+      scheduledEvents
+    );
 
     const footnotes = await SerivceCalendarDateRepository.getServiceInfoByDateRange(
       dateRange,
       service
     );
-    const eventsWithFootnotes = EventMapper.mapFootnotesToEvents(footnotes, scheduledEventsByDate);
+    const eventsWithFootnotes = EventMapper.mapFootnotesToEvents(
+      footnotes,
+      scheduledEventsByDate
+    );
 
     return eventsWithFootnotes;
   }

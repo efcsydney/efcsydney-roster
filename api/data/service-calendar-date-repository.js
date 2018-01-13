@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
-const SerivceCalendarDate = require('../models/service-calendar-date').SerivceCalendarDate;
+const SerivceCalendarDate = require('../models/service-calendar-date')
+  .SerivceCalendarDate;
 const CalendarDate = require('../models/calendar-date').CalendarDate;
 const Service = require('../models/service').Service;
 
@@ -27,7 +28,7 @@ class SerivceCalendarDateRepository {
     });
   }
 
-  static updateServiceFootnote(serviceInfo){
+  static updateServiceFootnote(serviceInfo) {
     return SerivceCalendarDate.update(
       {
         footnote: serviceInfo.footnote

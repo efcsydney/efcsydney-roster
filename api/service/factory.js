@@ -5,7 +5,6 @@ const MockEventMapper = require('../mapper/mock-event-mapper').MockEventMapper;
 const EventService = require('./events-service').EventService;
 const MockEventService = require('./mock-events-service').MockEventService;
 class Factory {
-
   static getEventService(req) {
     if (req.query.mock === 'true') {
       return MockEventService;

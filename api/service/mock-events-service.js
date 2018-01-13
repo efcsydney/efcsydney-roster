@@ -6,8 +6,7 @@ class MockEventService {
   static computeDateRange(dateRange) {
     return EventService.computeDateRange(dateRange);
   }
-  async getEventsByDateRange(dateRange, service = 'english'){
-
+  async getEventsByDateRange(dateRange, service = 'english') {
     return MockRepository.getEventsByDateRange(dateRange, service);
   }
 }

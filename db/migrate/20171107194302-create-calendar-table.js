@@ -1,5 +1,5 @@
 const getDateString = require('../../api/utilities/datetime-util')
-.getDateString;
+  .getDateString;
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {

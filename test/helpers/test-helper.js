@@ -30,7 +30,8 @@ const Event = require('../../api/models/event').Event;
 const CalendarDate = require('../../api/models/calendar-date').CalendarDate;
 const Position = require('../../api/models/position').Position;
 const Service = require('../../api/models/service').Service;
-const SerivceCalendarDate = require('../../api/models/service-calendar-date').SerivceCalendarDate;
+const SerivceCalendarDate = require('../../api/models/service-calendar-date')
+  .SerivceCalendarDate;
 
 async function createSeed() {
   await Service.bulkCreate([

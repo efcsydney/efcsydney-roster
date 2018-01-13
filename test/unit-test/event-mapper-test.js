@@ -49,10 +49,18 @@ describe('Event Mapper', function() {
       const actualModel = EventMapper.groupEventsByCalendarDate(eventsModel);
 
       expect(2).to.eq(actualModel.length);
-      expect(actualModel[0].positions[0].volunteerName).to.eq(expectedModel[0].positions[0].volunteerName);
-      expect(actualModel[0].positions[0].position).to.eq(expectedModel[0].positions[0].position);
-      expect(actualModel[1].positions[0].volunteerName).to.eq(expectedModel[1].positions[0].volunteerName);
-      expect(actualModel[1].positions[0].position).to.eq(expectedModel[1].positions[0].position);
+      expect(actualModel[0].positions[0].volunteerName).to.eq(
+        expectedModel[0].positions[0].volunteerName
+      );
+      expect(actualModel[0].positions[0].position).to.eq(
+        expectedModel[0].positions[0].position
+      );
+      expect(actualModel[1].positions[0].volunteerName).to.eq(
+        expectedModel[1].positions[0].volunteerName
+      );
+      expect(actualModel[1].positions[0].position).to.eq(
+        expectedModel[1].positions[0].position
+      );
     });
   });
 
@@ -106,12 +114,12 @@ describe('Event Mapper', function() {
       const footNoteModel = [
         {
           id: 3,
-          calendarDate: {date: '2017-11-05'},
+          calendarDate: { date: '2017-11-05' },
           name: 'Combined Service'
         },
         {
           id: 2,
-          calendarDate: {date: '2017-11-12'},
+          calendarDate: { date: '2017-11-12' },
           name: ''
         }
       ];
@@ -148,9 +156,13 @@ describe('Event Mapper', function() {
 
       expect(2).to.eq(actualModel.length);
       expect(actualModel[0].footnote.id).to.eq(expectedModel[0].footnote.id);
-      expect(actualModel[0].footnote.name).to.eq(expectedModel[0].footnote.name);
+      expect(actualModel[0].footnote.name).to.eq(
+        expectedModel[0].footnote.name
+      );
       expect(actualModel[1].footnote.id).to.eq(expectedModel[1].footnote.id);
-      expect(actualModel[1].footnote.name).to.eq(expectedModel[1].footnote.name);
+      expect(actualModel[1].footnote.name).to.eq(
+        expectedModel[1].footnote.name
+      );
     });
   });
 });
