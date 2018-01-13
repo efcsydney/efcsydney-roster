@@ -10,6 +10,8 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 describe('Repository', function() {
+  this.timeout(5000);
+
   describe('Events', function() {
     beforeEach(function() {
       return createSeed();
