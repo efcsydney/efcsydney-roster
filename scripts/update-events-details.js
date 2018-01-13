@@ -46,26 +46,29 @@ async function updateEvents() {
   ))[0];
 
   const promises = [];
-  services.forEach(async service => {
-    const positionMapper = await buildPositionMapper(service);
-    // log.debug(positionMapper);
-    serviceDetails[service.name].forEach(row => {
-      // Parse through each position and save it
-      Object.keys(positionMapper).forEach(position => {
-        const promise = Event.update(
-          { volunteerName: row[position] },
-          {
-            where: {
-              calendarDateId: dateMapper[row.Date],
-              positionId: positionMapper[position]
+  await Promise.all(
+    services.map(async service => {
+      const positionMapper = await buildPositionMapper(service);
+      // log.debug(positionMapper);
+      serviceDetails[service.name].forEach(row => {
+        // Parse through each position and save it
+        Object.keys(positionMapper).forEach(position => {
+          const promise = Event.update(
+            { volunteerName: row[position] },
+            {
+              where: {
+                calendarDateId: dateMapper[row.Date],
+                positionId: positionMapper[position]
+              }
             }
-          }
-        );
-        promises.push(promise);
+          );
+          promises.push(promise);
+        });
       });
-    });
-  });
-  Promise.all(promises);
+    })
+  );
+  await Promise.all(promises);
+  sequelizeClient.close();
 }
 
 updateEvents();

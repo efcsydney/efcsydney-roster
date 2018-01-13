@@ -8,6 +8,7 @@ cache:
 addons:
   ssh_known_hosts: 54.206.106.116
 script:
+- yarn test:frontend
 - cd client && yarn && NODE_ENV=qa NODE_PATH=src/ yarn build && cd ..
 before_deploy:
 - mkdir -p ~/.ssh/key
@@ -16,11 +17,15 @@ before_deploy:
 - eval "$(ssh-agent -s)"
 - chmod 400 ~/.ssh/key/efcsydney.pem
 deploy:
+- provider: script
   skip_cleanup: true
-  provider: script
-  script: yarn add dploy && yes | yarn deploy:qa
+  script: sh -x deploy.sh
   on:
     branch: qa
 after_deploy:
 - ssh -i ~/.ssh/key/efcsydney.pem ec2-user@54.206.106.116 "cd /opt/efcsydney-roster;
   . ~/.bash_profile; nvm use 8; yarn; yarn db-migrate"
+notifications:
+  slack:
+    rooms:
+      secure: iGVs0vWaQh/7YkhxNUHpffnry6b8xIc9AUP0/4FBb3g5qFmE2VGu6bhfDDI9apRvPtZT+tCcIcOYSe2eWI/ELZ17/3HnB02R1crifPiLU7ZETo1WwVrIqGetAGHqBJYZvSZELvVJtZMc2phoehAh8pCYScf1alvH7GmeQLW7a2Knr/kiV0WkIYjGhE8xG7sBakkCUx6V3tF0O9+6VJvEUWVKB/dEUvxMPc3Qte+9F9Mj5Tf9OEHmcWNSGaPK+xvXxqrfM/cLJQCUAajHUV0OA4A6o8W9yCRZevLaBBV+/cV6uBX+UnviwzaRZGjqlmTSlvdnaFEIN3g6W+1W3ig3BJka6ujHFwqxLa0jmFRnXGZpiaQqyeDqLcuua6OdXNtCUaVc0gigfXlNTlmZXpsbMJbuzSecK8kGk0izCWg/UYeeYmWy2SY2lpCgt5BoJbskB/7WtszQhO5+GEW9fh3sLVQsrzpoY95n8qXgUzx9ucmwhhEQKAOJyjWDpXPSMJugaEbWC0KLdgFjxOqSDXZf/++m6eD+I/kowpwkXDi1mWncNupbgUpocndmClQfGCcasZP9PIX9Fg81U+5/sWNy/gtK9Hoi6jqUFE+REBXohPAjwUIKVwrfxjm+PqAWkegmmCqyT2JDeXYIxLtnqFRY7lRWc/OpU059l0S0AsNKu14=

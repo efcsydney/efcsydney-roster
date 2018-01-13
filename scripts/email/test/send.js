@@ -82,6 +82,6 @@ mailOptions = {
   cc: config.get('reminderEmail.content.cc'),
   subject: config.get('reminderEmail.content.subject'),
   html: utils.getEmailHTML(mockData)
-}
+};
 
 utils.sendEmail(mailOptions);

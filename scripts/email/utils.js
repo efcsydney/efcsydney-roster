@@ -106,21 +106,23 @@ exports.getEmailHTML = events => {
  * @param mailOptions { from: 'from@example.com', to: 'a@xample.com, b@example.com ...', subject: 'whatever', html: '<html/>' }
  * @return {Promise}
  */
-exports.sendEmail = (mailOptions) => {
+exports.sendEmail = mailOptions => {
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
     host: config.get('emailService.smtp'),
-    auth: config.get('emailService.authentication'),
+    auth: config.get('emailService.authentication')
   });
 
   // send mail with defined transport object
-  return transporter.sendMail({
-    from: mailOptions.from,
-    to: mailOptions.to,
-    subject: mailOptions.subject,
-    html: mailOptions.html
-  }).then((info) => {
-    log.info('email sent');
-    return info;
-  });
+  return transporter
+    .sendMail({
+      from: mailOptions.from,
+      to: mailOptions.to,
+      subject: mailOptions.subject,
+      html: mailOptions.html
+    })
+    .then(info => {
+      log.info('email sent');
+      return info;
+    });
 };

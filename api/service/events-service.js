@@ -5,7 +5,7 @@ const CalendarDateRepository = require('../data/calendar-date-repository')
 const SerivceCalendarDateRepository = require('../data/service-calendar-date-repository').SerivceCalendarDateRepository;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const log = require('winston');
-const datetimeUtils = require('../utilities/datetime-util')
+const datetimeUtils = require('../utilities/datetime-util');
 const getDateString = datetimeUtils.getDateString;
 const getDateByWeeks = datetimeUtils.getDateByWeeks;
 
