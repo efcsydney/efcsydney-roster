@@ -4,7 +4,7 @@ const sequelizeClient = require('../infrastructure/sequelize-client')
 const Service = require('./service').Service;
 const CalendareDate = require('./calendar-date').CalendarDate;
 
-const SerivceCalendarDate = sequelizeClient.define('service_calendar_dates', {
+const ServiceCalendarDate = sequelizeClient.define('service_calendar_dates', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -27,21 +27,21 @@ const SerivceCalendarDate = sequelizeClient.define('service_calendar_dates', {
   }
 });
 
-SerivceCalendarDate.Service = SerivceCalendarDate.belongsTo(Service, {
+ServiceCalendarDate.Service = ServiceCalendarDate.belongsTo(Service, {
   as: 'service',
   foreignKey: 'serviceId'
 });
-Service.hasMany(SerivceCalendarDate);
+Service.hasMany(ServiceCalendarDate);
 
-SerivceCalendarDate.CalendareDate = SerivceCalendarDate.belongsTo(
+ServiceCalendarDate.CalendareDate = ServiceCalendarDate.belongsTo(
   CalendareDate,
   {
     as: 'calendarDate',
     foreignKey: 'calendarDateId'
   }
 );
-CalendareDate.hasMany(SerivceCalendarDate);
+CalendareDate.hasMany(ServiceCalendarDate);
 
 module.exports = {
-  SerivceCalendarDate
+  ServiceCalendarDate
 };

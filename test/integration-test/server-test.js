@@ -5,6 +5,8 @@ const app = require('../../app').app;
 const createSeed = require('../helpers/test-helper').createSeed;
 
 describe('Server', function() {
+  this.timeout(5000);
+
   beforeEach(function() {
     return createSeed();
   });
