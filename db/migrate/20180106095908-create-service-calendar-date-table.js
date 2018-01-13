@@ -3,14 +3,20 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable(
-      'footnotes',
+      'service_calendar_dates',
       {
         id: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true
         },
-        name: {
+        footnote: {
+          type: Sequelize.STRING
+        },
+        skipService: {
+          type: Sequelize.BOOLEAN
+        },
+        skipReason: {
           type: Sequelize.STRING
         },
         serviceId: {
@@ -44,6 +50,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('footnotes');
+    return queryInterface.dropTable('service_calendar_dates');
   }
 };

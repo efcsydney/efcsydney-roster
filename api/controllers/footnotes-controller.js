@@ -1,11 +1,11 @@
 const DtoMapper = require('../mapper/dto-mapper').DtoMapper;
-const FootnoteService = require('../service/footnote-service').FootnoteService;
+const ServiceInfoService = require('../service/service-info-service').ServiceInfoService;
 
 async function saveFootnote(req, res) {
   try {
 
     const footnote = DtoMapper.convertDtoToFootnoteModel({id: req.params.id, data: req.body});
-    await FootnoteService.saveFootnote(footnote);
+    await ServiceInfoService.saveFootnote(footnote);
 
     const response = {
       result: 'OK',

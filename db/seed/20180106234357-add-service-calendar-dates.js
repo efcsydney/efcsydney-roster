@@ -13,17 +13,19 @@ module.exports = {
       'SELECT id from services'
     ))[0];
 
-    const footnotes = [];
+    const serviceCalendarDates = [];
     calendarDatesData.forEach(calendarDate => {
       servicesData.forEach(service => {
-        footnotes.push({
-          name: '',
+        serviceCalendarDates.push({
+          footnote: '',
+          skipService: false,
+          skipReason: '',
           calendarDateId: calendarDate.id,
           serviceId: service.id
         });
       });
     });
-    return queryInterface.bulkInsert('footnotes', footnotes);
+    return queryInterface.bulkInsert('service_calendar_dates', serviceCalendarDates);
   },
 
   down: (queryInterface, Sequelize) => {

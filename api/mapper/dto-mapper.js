@@ -21,7 +21,7 @@ class DtoMapper {
   static mapFootnoteToDto(footnote) {
     return {
       id: footnote.id,
-      name: footnote.name
+      footnote: footnote.footnote
     };
   }
 

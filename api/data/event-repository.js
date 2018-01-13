@@ -3,7 +3,6 @@ const Event = require('../models/event').Event;
 const CalendarDate = require('../models/calendar-date').CalendarDate;
 const Position = require('../models/position').Position;
 const Service = require('../models/service').Service;
-const Footnote = require('../models/footnote').Footnote;
 const Op = Sequelize.Op;
 
 class EventRepository {
