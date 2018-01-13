@@ -2,8 +2,7 @@ const moment = require('moment');
 const EventRepository = require('../data/event-repository').EventRepository;
 const CalendarDateRepository = require('../data/calendar-date-repository')
   .CalendarDateRepository;
-const FootnoteRepository = require('../data/footnote-repository')
-  .FootnoteRepository;
+const ServiceCalendarDateRepository = require('../data/service-calendar-date-repository').ServiceCalendarDateRepository;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const log = require('winston');
 const datetimeUtils = require('../utilities/datetime-util');
@@ -57,7 +56,7 @@ class EventService {
     );
     const scheduledEventsByDate = EventMapper.groupEventsByCalendarDate(scheduledEvents);
 
-    const footnotes = await FootnoteRepository.getFootnotesByDateRange(
+    const footnotes = await ServiceCalendarDateRepository.getServiceInfoByDateRange(
       dateRange,
       service
     );

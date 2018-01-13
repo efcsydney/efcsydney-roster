@@ -1,15 +1,15 @@
 const Sequelize = require('sequelize');
-const Footnote = require('../models/footnote').Footnote;
+const SerivceCalendarDate = require('../models/service-calendar-date').SerivceCalendarDate;
 const CalendarDate = require('../models/calendar-date').CalendarDate;
 const Service = require('../models/service').Service;
 
 const Op = Sequelize.Op;
 
-class FootnoteRepository {
-  static getFootnotesByDateRange(dateRange, service) {
+class ServiceCalendarDateRepository {
+  static getServiceInfoByDateRange(dateRange, service) {
     const { from, to } = dateRange;
 
-    return Footnote.findAll({
+    return SerivceCalendarDate.findAll({
       include: [
         {
           model: CalendarDate,
@@ -27,18 +27,18 @@ class FootnoteRepository {
     });
   }
 
-  static updateFootnote(footnote){
-    return Footnote.update(
+  static updateServiceFootnote(serviceInfo){
+    return SerivceCalendarDate.update(
       {
-        name: footnote.name
+        footnote: serviceInfo.footnote
       },
       {
-        where: { id: footnote.id }
+        where: { id: serviceInfo.id }
       }
     );
   }
 }
 
 module.exports = {
-  FootnoteRepository
+  ServiceCalendarDateRepository
 };

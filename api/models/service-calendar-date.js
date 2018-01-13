@@ -4,15 +4,20 @@ const sequelizeClient = require('../infrastructure/sequelize-client')
 const Service = require('./service').Service;
 const CalendareDate = require('./calendar-date').CalendarDate;
 
-const Footnote = sequelizeClient.define('footnotes', {
+const SerivceCalendarDate = sequelizeClient.define('service_calendar_dates', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  name: {
-    type: Sequelize.STRING,
-    unique: true
+  footnote: {
+    type: Sequelize.STRING
+  },
+  skipService: {
+    type: Sequelize.BOOLEAN
+  },
+  skipReason: {
+    type: Sequelize.STRING
   },
   calendarDateId: {
     type: Sequelize.INTEGER
@@ -22,19 +27,19 @@ const Footnote = sequelizeClient.define('footnotes', {
   }
 });
 
-Footnote.Service = Footnote.belongsTo(Service, {
+SerivceCalendarDate.Service = SerivceCalendarDate.belongsTo(Service, {
   as: 'service',
   foreignKey: 'serviceId'
 });
-Service.hasMany(Footnote);
+Service.hasMany(SerivceCalendarDate);
 
-Footnote.CalendareDate = Footnote.belongsTo(CalendareDate, {
+SerivceCalendarDate.CalendareDate = SerivceCalendarDate.belongsTo(CalendareDate, {
   as: 'calendarDate',
   foreignKey: 'calendarDateId'
 });
-CalendareDate.hasMany(Footnote);
+CalendareDate.hasMany(SerivceCalendarDate);
 
 
 module.exports = {
-  Footnote
+  SerivceCalendarDate
 };

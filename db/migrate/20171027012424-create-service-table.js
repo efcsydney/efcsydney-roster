@@ -1,8 +1,6 @@
-'use strict';
-
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable(
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable(
       'services',
       {
         id: {
@@ -31,6 +29,13 @@ module.exports = {
       {
         charset: 'utf8'
       }
+    );
+    await queryInterface.bulkInsert(
+      'services',
+      [
+        { id: 1, name: 'english', locale: 'en-AU' },
+        { id: 2, name: 'chinese', locale: 'zh-TW' }
+      ]
     );
   },
   down: (queryInterface, Sequelize) => {

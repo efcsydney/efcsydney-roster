@@ -15,9 +15,7 @@ class EventMapper {
       const event = { position: e.position.name, volunteerName: e.volunteerName };
 
       // Check if the event date object is created already
-      const eventDate = eventDates.find(event => {
-        return event.date === e.calendarDate.date;
-      });
+      const eventDate = eventDates.find(event => event.date === e.calendarDate.date);
 
       // Create the event date object if not there already
       if (eventDate !== undefined) {
