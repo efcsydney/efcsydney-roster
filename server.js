@@ -1,9 +1,7 @@
 process.env.TZ = 'Australia/Sydney';
 
-if (process.env.NODE_ENV === 'production') {
-  require('newrelic.production');
-} else if (process.env.NODE_ENV === 'production') {
-  require('newrelic.qa');
+if (process.env.NODE_ENV === 'qa') {
+  require('newrelic');
 }
 
 const app = require('./app').app;
