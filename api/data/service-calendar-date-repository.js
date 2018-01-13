@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const SerivceCalendarDate = require('../models/service-calendar-date')
-  .SerivceCalendarDate;
+const ServiceCalendarDate = require('../models/service-calendar-date')
+  .ServiceCalendarDate;
 const CalendarDate = require('../models/calendar-date').CalendarDate;
 const Service = require('../models/service').Service;
 
@@ -10,7 +10,7 @@ class ServiceCalendarDateRepository {
   static getServiceInfoByDateRange(dateRange, service) {
     const { from, to } = dateRange;
 
-    return SerivceCalendarDate.findAll({
+    return ServiceCalendarDate.findAll({
       include: [
         {
           model: CalendarDate,
@@ -29,7 +29,7 @@ class ServiceCalendarDateRepository {
   }
 
   static updateServiceFootnote(serviceInfo) {
-    return SerivceCalendarDate.update(
+    return ServiceCalendarDate.update(
       {
         footnote: serviceInfo.footnote
       },
