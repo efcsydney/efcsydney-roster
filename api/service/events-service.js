@@ -2,6 +2,9 @@ const moment = require('moment');
 const EventRepository = require('../data/event-repository').EventRepository;
 const CalendarDateRepository = require('../data/calendar-date-repository')
   .CalendarDateRepository;
+const ServiceCalendarDateRepository = require('../data/service-calendar-date-repository')
+  .ServiceCalendarDateRepository;
+const EventMapper = require('../mapper/event-mapper').EventMapper;
 const log = require('winston');
 const datetimeUtils = require('../utilities/datetime-util');
 const getDateString = datetimeUtils.getDateString;
@@ -32,6 +35,40 @@ class EventService {
         return Promise.reject(new Error(msg));
       }
     });
+  }
+  static getWeekdayDatesForTimePeriod(dateRange, weekday = 7) {
+    const { from, to } = dateRange;
+    const firstSunday = moment(from).isoWeekday(weekday);
+    const lastSunday = moment(to).startOf('week');
+    let daysDiff = lastSunday.diff(firstSunday, 'days');
+    let days = [];
+    while (daysDiff > 0) {
+      days.push(firstSunday.clone().add(daysDiff, 'days'));
+      daysDiff = daysDiff - 7;
+    }
+    days.push(firstSunday);
+
+    return days;
+  }
+  static async getEventsByDateRange(dateRange, service = 'english') {
+    const scheduledEvents = await EventRepository.getEventsByDateRange(
+      dateRange,
+      service
+    );
+    const scheduledEventsByDate = EventMapper.groupEventsByCalendarDate(
+      scheduledEvents
+    );
+
+    const footnotes = await ServiceCalendarDateRepository.getServiceInfoByDateRange(
+      dateRange,
+      service
+    );
+    const eventsWithFootnotes = EventMapper.mapFootnotesToEvents(
+      footnotes,
+      scheduledEventsByDate
+    );
+
+    return eventsWithFootnotes;
   }
 }
 
