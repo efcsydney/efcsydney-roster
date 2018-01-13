@@ -6,7 +6,7 @@ const Service = require('../models/service').Service;
 
 const Op = Sequelize.Op;
 
-class SerivceCalendarDateRepository {
+class ServiceCalendarDateRepository {
   static getServiceInfoByDateRange(dateRange, service) {
     const { from, to } = dateRange;
 
@@ -41,5 +41,5 @@ class SerivceCalendarDateRepository {
 }
 
 module.exports = {
-  SerivceCalendarDateRepository
+  ServiceCalendarDateRepository
 };
