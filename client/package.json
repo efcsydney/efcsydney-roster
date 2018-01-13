@@ -14,6 +14,9 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "history": "^4.7.2",
     "js-cookie": "^2.2.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "history": "^4.7.2",
+    "js-cookie": "^2.2.0",
     "moment": "^2.19.1",
     "react": "^16.0.0",
     "react-add-to-calendar": "^0.1.4",
@@ -36,7 +39,6 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "test:ci": "CI=true npm test -- --coverage; ./scripts/codebeat-upload-coverage.sh",
     "eject": "react-scripts eject"
   }
 }

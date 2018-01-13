@@ -15,7 +15,7 @@ module.exports = {
           unique: true
         },
         locale: {
-          type: Sequelize.STRING,
+          type: Sequelize.STRING
         },
         createdAt: {
           allowNull: false,

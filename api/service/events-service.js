@@ -6,7 +6,7 @@ const FootnoteRepository = require('../data/footnote-repository')
   .FootnoteRepository;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const log = require('winston');
-const datetimeUtils = require('../utilities/datetime-util')
+const datetimeUtils = require('../utilities/datetime-util');
 const getDateString = datetimeUtils.getDateString;
 const getDateByWeeks = datetimeUtils.getDateByWeeks;
 

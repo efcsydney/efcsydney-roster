@@ -2,7 +2,6 @@ import { buildQuery } from '../utils';
 
 const EventsAPI = {
   retrieve(query) {
-    query.category = 'english';
     return fetch(`/api/events?${buildQuery(query)}`).then(response =>
       response.json()
     );
