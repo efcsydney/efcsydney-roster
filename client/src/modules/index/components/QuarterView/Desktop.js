@@ -28,11 +28,28 @@ export default class Desktop extends Component {
     const icalicon = { 'calendar-plus-o': 'left' };
     const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
     const formattedDay = day.format('YYYY-MM-DD');
-    let lastCellValue = null;
-    let isSingleValueRow = true;
+    let names = [];
+    roles.map(role => {
+      const member = _.find(members, { role }) || {};
+      names.push(member.name || '');
+    });
+    const isSingleValueRow = names.every((val, i, arr) => val === arr[0]);
+    const highlighted = formattedDay === highlightDate;
+    const nameCells = names.map((name, i) => {
+      return (
+        <NameCell
+          key={i}
+          colIndex={i}
+          isSingleValueRow={isSingleValueRow}
+          width={cellWidth}
+          onClick={() => onRoleClick(day, roles[i], name)}>
+          <Text>{name}</Text>
+        </NameCell>
+      );
+    });
 
     return (
-      <Row key={formattedDay} highlighted={formattedDay === highlightDate}>
+      <Row key={formattedDay} highlighted={highlighted}>
         <DayCell
           onClick={e => this.handleDayClick(e, day, footnote)}
           width={cellWidth}>
@@ -44,29 +61,7 @@ export default class Desktop extends Component {
           />
           {day.format('DD MMM')}
         </DayCell>
-        {(lastCellValue = null)}
-        {roles.forEach(role => {
-          const member = _.find(members, { role }) || {};
-          const name = member.name || '';
-          if (lastCellValue !== null && name !== lastCellValue) {
-            isSingleValueRow = false;
-          }
-          lastCellValue = name;
-        })}
-        {roles.map((role, i) => {
-          const member = _.find(members, { role }) || {};
-          const name = member.name || '';
-          return (
-            <NameCell
-              key={i}
-              colIndex={i}
-              isSingleValueRow={isSingleValueRow}
-              width={cellWidth}
-              onClick={() => onRoleClick(day, role, name)}>
-              <Text>{name}</Text>
-            </NameCell>
-          );
-        })}
+        {nameCells}
       </Row>
     );
   }
