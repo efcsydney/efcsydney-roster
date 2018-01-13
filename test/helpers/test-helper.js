@@ -30,8 +30,8 @@ const Event = require('../../api/models/event').Event;
 const CalendarDate = require('../../api/models/calendar-date').CalendarDate;
 const Position = require('../../api/models/position').Position;
 const Service = require('../../api/models/service').Service;
-const SerivceCalendarDate = require('../../api/models/service-calendar-date')
-  .SerivceCalendarDate;
+const ServiceCalendarDate = require('../../api/models/service-calendar-date')
+  .ServiceCalendarDate;
 
 async function createSeed() {
   await Service.bulkCreate([
@@ -67,7 +67,7 @@ async function createSeed() {
     { id: 4, date: '2017-10-29' },
     { id: 5, date: '2017-11-05' }
   ]);
-  await SerivceCalendarDate.bulkCreate([
+  await ServiceCalendarDate.bulkCreate([
     { id: 1, footnote: 'english footnote 1', serviceId: 1, calendarDateId: 1 },
     { id: 2, footnote: 'chinese footnote 1', serviceId: 2, calendarDateId: 1 },
     { id: 3, footnote: 'english footnote 2', serviceId: 1, calendarDateId: 2 },
