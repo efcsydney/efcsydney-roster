@@ -8,6 +8,7 @@ module.exports.sequelizeClient = new Sequelize(
   config.password,
   {
     dialect: config.dialect,
-    host: config.host
+    host: config.host,
+    logging: config.logging
   }
 );

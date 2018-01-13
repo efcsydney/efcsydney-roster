@@ -142,7 +142,7 @@ yarn deploy:qa
 ```
 
 
-Deploy to Production server (Todo) http://roster.efcsydney.org
+Deploy to Production server http://roster.efcsydney.org
 
 ```
 yarn deploy:prod

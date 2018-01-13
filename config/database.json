@@ -4,27 +4,31 @@
     "password": null,
     "database": "efcRoster",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": true
   },
   "test": {
     "username": "root",
     "password": null,
-    "database": "efcRosterTest",
+    "database": "test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false
   },
   "qa": {
     "username": "liamishandsome",
     "password": "liamishandsome",
     "database": "efcRosterQa",
     "host": "liamishandsome.ceavfbidxehi.ap-southeast-2.rds.amazonaws.com",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": true
   },
   "production": {
     "username": "rdsuser",
     "password": "12345678",
     "database": "efcRoster",
     "host": "dbidentifier.ccoogueru7pl.ap-southeast-2.rds.amazonaws.com",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": true
   }
 }
