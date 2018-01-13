@@ -6,6 +6,7 @@ const expect = chai.expect;
 const sinon = require('sinon');
 
 describe('Event Service', function() {
+  this.timeout(5000);
   describe('Compute date range', function() {
     let sandbox, clock, now;
     beforeEach(function() {
