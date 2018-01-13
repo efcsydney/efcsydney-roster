@@ -57,7 +57,7 @@ module.exports = {
   }
 };
 
-async function seedServiceCalendarDate(queryInterface){
+async function seedServiceCalendarDate(queryInterface) {
   const calendarDatesData = (await sequelizeClient.query(
     'SELECT id from calendar_dates'
   ))[0];
@@ -79,5 +79,8 @@ async function seedServiceCalendarDate(queryInterface){
       });
     });
   });
-  return queryInterface.bulkInsert('service_calendar_dates', serviceCalendarDates);
+  return queryInterface.bulkInsert(
+    'service_calendar_dates',
+    serviceCalendarDates
+  );
 }

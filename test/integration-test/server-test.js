@@ -161,7 +161,7 @@ describe('Server', function() {
   describe('update footnote', function() {
     it('updates a footnote', function() {
       const footnote = {
-        date: '2017-10-08' ,
+        date: '2017-10-08',
         category: 'english',
         footnote: 'Meeting (Election)'
       };

@@ -30,13 +30,10 @@ module.exports = {
         charset: 'utf8'
       }
     );
-    await queryInterface.bulkInsert(
-      'services',
-      [
-        { id: 1, name: 'english', locale: 'en-AU' },
-        { id: 2, name: 'chinese', locale: 'zh-TW' }
-      ]
-    );
+    await queryInterface.bulkInsert('services', [
+      { id: 1, name: 'english', locale: 'en-AU' },
+      { id: 2, name: 'chinese', locale: 'zh-TW' }
+    ]);
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('services');

@@ -12,7 +12,10 @@ class EventMapper {
     // We have all the event objects in date order and position order already
     events.forEach(e => {
       // Build the event
-      const event = { position: e.position.name, volunteerName: e.volunteerName };
+      const event = {
+        position: e.position.name,
+        volunteerName: e.volunteerName
+      };
 
       // Check if the event date object is created already
       const eventDate = eventDates.find(event => event.date === e.calendarDate.date);
@@ -33,11 +36,13 @@ class EventMapper {
   }
 
   static mapFootnotesToEvents(footnotes, events) {
-    return events.map((event) => {
-      const eventFootnote = footnotes.find((footnote) => footnote.calendarDate.date === event.date);
+    return events.map(event => {
+      const eventFootnote = footnotes.find(
+        footnote => footnote.calendarDate.date === event.date
+      );
       event.footnote = eventFootnote;
       return event;
-    })
+    });
   }
 }
 

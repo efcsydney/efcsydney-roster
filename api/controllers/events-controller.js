@@ -1,4 +1,3 @@
-
 const EventService = require('../service/events-service').EventService;
 const DtoMapper = require('../mapper/dto-mapper').DtoMapper;
 const log = require('../utilities/logger');
@@ -12,10 +11,12 @@ const log = require('../utilities/logger');
  */
 async function getEvents(req, res, next) {
   try {
-
     const dateRange = EventService.computeDateRange(req.query);
     const { category: service } = req.query;
-    const eventsByDateRange = await EventService.getEventsByDateRange(dateRange, service);
+    const eventsByDateRange = await EventService.getEventsByDateRange(
+      dateRange,
+      service
+    );
     const dto = DtoMapper.mapGroupEventsToDto(eventsByDateRange);
 
     res.json({

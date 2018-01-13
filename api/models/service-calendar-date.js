@@ -33,12 +33,14 @@ SerivceCalendarDate.Service = SerivceCalendarDate.belongsTo(Service, {
 });
 Service.hasMany(SerivceCalendarDate);
 
-SerivceCalendarDate.CalendareDate = SerivceCalendarDate.belongsTo(CalendareDate, {
-  as: 'calendarDate',
-  foreignKey: 'calendarDateId'
-});
+SerivceCalendarDate.CalendareDate = SerivceCalendarDate.belongsTo(
+  CalendareDate,
+  {
+    as: 'calendarDate',
+    foreignKey: 'calendarDateId'
+  }
+);
 CalendareDate.hasMany(SerivceCalendarDate);
-
 
 module.exports = {
   SerivceCalendarDate
