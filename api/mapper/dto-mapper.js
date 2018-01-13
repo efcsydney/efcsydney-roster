@@ -21,7 +21,7 @@ class DtoMapper {
   static mapFootnoteToDto(footnote) {
     return {
       id: footnote.id,
-      footnote: footnote.footnote
+      name: footnote.footnote
     };
   }
 
@@ -44,7 +44,7 @@ class DtoMapper {
     const { id, data } = dto;
     return {
       id: id,
-      name: data.footnote,
+      footnote: data.footnote,
       calendarDate: {
         date: getDateString(data.date)
       },
