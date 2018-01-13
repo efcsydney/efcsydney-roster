@@ -31,6 +31,7 @@ deploy:
 after_deploy:
 - ssh -i ~/.ssh/key/efcsydney.pem ec2-user@54.206.106.116 "cd /opt/efcsydney-roster;
   . ~/.bash_profile; nvm use 8; yarn; yarn db-migrate"
+- ssh -i ~/.ssh/key/efcsydney.pem ec2-user@54.206.106.116 "killall -2 node"
 notifications:
   slack:
     rooms:
