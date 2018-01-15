@@ -1,4 +1,6 @@
 process.env.TZ = 'Australia/Sydney';
+
+require('./newrelic');
 const app = require('./app').app;
 const logger = require('winston');
 
