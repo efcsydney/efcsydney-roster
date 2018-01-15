@@ -72,3 +72,7 @@ async function updateEvents() {
 }
 
 updateEvents();
+
+module.exports = {
+  readAndParseFile
+}
