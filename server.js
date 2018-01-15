@@ -1,6 +1,10 @@
 process.env.TZ = 'Australia/Sydney';
 
-if (process.env.NODE_ENV === 'qa') {
+const env = process.env.NODE_ENV;
+if (env === 'production' || env === 'qa') {
+  if (env === 'qa') {
+    process.env.NEW_RELIC_HOME = __dirname + '/newrelic.qa.js';
+  }
   require('newrelic');
 }
 
