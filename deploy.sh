@@ -22,7 +22,7 @@ echo "Upload"
 scp -i ~/.ssh/key/efcsydney.pem ./efcsydney-roster.tar.gz ec2-user@${ip}:/opt/
 
 echo "Replace"
-ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} "export NODE_ENV=${node_env}; cd /opt; rm -rf pre-efcsydney-roster; mv efcsydney-roster pre-efcsydney-roster; tar -xf efcsydney-roster.tar.gz"
+ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd /opt; rm -rf pre-efcsydney-roster; mv efcsydney-roster pre-efcsydney-roster; tar -xf efcsydney-roster.tar.gz'
 
 echo "After deploy"
-ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} "export NODE_ENV=${node_env}; cd /opt/efcsydney-roster; . ~/.bash_profile; nvm use 8; yarn; yarn db-migrate"
+ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd /opt/efcsydney-roster; . ~/.bash_profile; nvm use 8; yarn; yarn db-migrate'
