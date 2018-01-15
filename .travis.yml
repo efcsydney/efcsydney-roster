@@ -6,7 +6,9 @@ cache:
   - node_modules
   - client/node_modules
 addons:
-  ssh_known_hosts: 54.206.106.116
+  ssh_known_hosts: 
+  - 54.206.106.116
+  - 13.210.76.160
 services:
 - mysql
 before_script:
@@ -15,7 +17,7 @@ before_script:
 script:
 - yarn test
 - yarn test:frontend
-- cd client && yarn && NODE_ENV=qa NODE_PATH=src/ yarn build && cd ..
+- cd client && yarn && NODE_PATH=src/ yarn build && cd ..
 before_deploy:
 - mkdir -p ~/.ssh/key
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
@@ -25,12 +27,14 @@ before_deploy:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: sh -x deploy.sh
+  script: sh -x deploy.sh qa
   on:
     branch: qa
-after_deploy:
-- ssh -i ~/.ssh/key/efcsydney.pem ec2-user@54.206.106.116 "cd /opt/efcsydney-roster;
-  . ~/.bash_profile; nvm use 8; yarn; yarn db-migrate"
+- provider: script
+  skip_cleanup: true
+  script: sh -x deploy.sh prod
+  on:
+    branch: master
 notifications:
   slack:
     rooms:
