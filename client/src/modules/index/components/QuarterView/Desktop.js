@@ -94,7 +94,6 @@ export default class Desktop extends Component {
 
 const Text = styled.span`
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 `;
 const Grid = styled.div`
@@ -104,7 +103,6 @@ const Grid = styled.div`
   margin: 0;
   padding: 0;
   table-layout: fixed;
-  width: 100%;
 `;
 const Cell = styled.span`
   border-right: solid 1px #dadada;
@@ -112,7 +110,6 @@ const Cell = styled.span`
   overflow: hidden;
   padding: 10px;
   text-align: center;
-  text-overflow: ellipsis;
   white-space: nowrap;
   width: ${props => props.width};
 `;
