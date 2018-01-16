@@ -10,10 +10,14 @@ import EventsAPI from 'apis/events';
 import _ from 'lodash';
 import { getQueryParams } from 'utils';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { switchCategory } from 'modules/core/redux';
 
 const mapStateToProps = state => ({ category: state.core.meta.category });
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ switchCategory }, dispatch);
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   class App extends Component {
     state = {
       date: new Date(),
@@ -25,11 +29,18 @@ export default connect(mapStateToProps)(
     };
     loadData = ({ from, to, category }) => {
       let queryParams = {};
+      const defaultFrom = moment()
+        .startOf('quarter')
+        .format('YYYY-MM-DD');
+      const defaultTo = moment()
+        .endOf('quarter')
+        .format('YYYY-MM-DD');
       if (document.location.search.length > 0) {
         queryParams = getQueryParams(document.location.search);
       }
-      queryParams.from = from;
-      queryParams.to = to;
+
+      queryParams.from = from || defaultFrom;
+      queryParams.to = to || defaultTo;
       queryParams.category = category;
       this.setState({ isLoading: true, params: queryParams });
       return EventsAPI.retrieve(queryParams)
@@ -62,6 +73,12 @@ export default connect(mapStateToProps)(
         to: newDate.endOf('quarter').format('YYYY-MM-DD'),
         category
       });
+    };
+    handleCategoryChange = category => {
+      const { history } = this.props;
+      history.replace(category);
+
+      this.loadData({ category });
     };
     handleDayClick = ({ day, footnote }) => {
       this.setState({
@@ -123,19 +140,28 @@ export default connect(mapStateToProps)(
         });
       });
     };
+    handleHistoryChange = ({ pathname }) => {
+      const { history, category, switchCategory } = this.props;
+
+      pathname = pathname.replace('/', '');
+      if (pathname !== 'english' && pathname !== 'chinese') {
+        history.replace(category);
+        return;
+      }
+      this.loadData({ category: pathname });
+      switchCategory(pathname);
+    };
     componentWillMount() {
       const { category } = this.props;
       this.appendSentry();
-      this.loadData({
-        from: moment()
-          .startOf('quarter')
-          .format('YYYY-MM-DD'),
-        to: moment()
-          .endOf('quarter')
-          .format('YYYY-MM-DD'),
-        category
-      });
+      this.loadData({ category });
     }
+    componentDidMount() {
+      const { history } = this.props;
+
+      history.listen(this.handleHistoryChange);
+    }
+
     appendSentry() {
       const env = process.env.NODE_ENV;
       if (env === 'qa' || env === 'production') {
@@ -178,7 +204,7 @@ export default connect(mapStateToProps)(
       return (
         <Wrapper>
           {this.renderTagManager()}
-          <NavBar />
+          <NavBar onCategoryChange={this.handleCategoryChange} />
           <Content>
             <DateBar {...barProps} />
             <QuarterView

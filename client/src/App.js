@@ -1,9 +1,12 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import Index from './modules/index';
 
 export default () => (
-  <div>
+  <Switch>
     <Route exact path="/" component={Index} />
-  </div>
+    <Route exact path="/chinese" component={Index} />
+    <Route exact path="/english" component={Index} />
+    <Redirect to="/" />
+  </Switch>
 );

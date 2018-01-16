@@ -4,23 +4,44 @@ import Cookies from 'js-cookie';
 
 const PREFIX = 'core';
 
-export const switchCategory = createAction(`${PREFIX}/SWITCH_CATEGORY`);
-
-function getServiceName() {
-  const urlServiceRegex = document.URL.match(/(chinese|enghlish)/g);
-  let serviceName = urlServiceRegex;
-  if (serviceName) {
-    return serviceName;
+export const switchCategory = createAction(
+  `${PREFIX}/SWITCH_CATEGORY`,
+  payload => {
+    Cookies.set('selectedService', payload);
+    return payload;
   }
-  serviceName = Cookies.get('selectedService');
-  return serviceName ? serviceName : 'english';
+);
+
+function getCategory() {
+  let category = document.URL.match(/(chinese|english)/g);
+  if (category) {
+    Cookies.set('selectedService', category[0]);
+    return category[0];
+  }
+
+  category = Cookies.get('selectedService');
+  return category ? category : 'english';
+}
+
+function getLang() {
+  let category = document.URL.match(/(chinese|english)/g);
+  category = category ? category[0] : Cookies.get('selectedService');
+
+  switch (category) {
+    case 'chinese':
+      return 'zh-TW';
+    case 'english':
+      return 'en-AU';
+    default:
+      return 'en-US';
+  }
 }
 
 const defaultState = {
   data: [],
   meta: {
-    lang: 'en-US',
-    category: getServiceName()
+    lang: getLang(),
+    category: getCategory()
   }
 };
 

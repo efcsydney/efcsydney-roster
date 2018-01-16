@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import { switchCategory } from '../redux';
 import { media } from 'styled';
-import Cookies from 'js-cookie';
 
 const mapStateToProps = state => ({ value: state.core.meta.category });
 const mapDispatchToProps = dispatch =>
@@ -13,10 +13,16 @@ const mapDispatchToProps = dispatch =>
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   class NavBar extends Component {
+    static propTypes = {
+      onCategoryChange: PropTypes.func
+    };
+    static defaultProps = {
+      onCategoryChange: () => {}
+    };
     handleCategoryChange = ({ value }) => {
-      const { switchCategory } = this.props;
+      const { switchCategory, onCategoryChange } = this.props;
       switchCategory(value);
-      Cookies.set('selectedService', value);
+      onCategoryChange(value);
     };
     render() {
       const { value } = this.props;
