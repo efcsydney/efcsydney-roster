@@ -40,18 +40,18 @@ export default class QuarterView extends Component {
     });
   };
   setCalendarHeight = () => {
-    let calendarTop = ReactDOM.findDOMNode(
+    const calendarTop = ReactDOM.findDOMNode(
       this.calendarWrapper
     ).getBoundingClientRect().top;
 
-    return window.innerHeight - calendarTop - BottomDateBarHeight + 'px';
+    return window.innerHeight - calendarTop - BOTTOM_DATE_BAR_HEIGHT + 'px';
   };
   constructor(props) {
     super(props);
 
     this.state = {
       isMobile: false,
-      calendarHeight: '0px'
+      calendarHeight: 0
     };
   }
   componentWillMount() {
@@ -85,7 +85,7 @@ export default class QuarterView extends Component {
     );
   }
 }
-const BottomDateBarHeight = 44; // DateBar.js Wraper.border-radius(8)*2 + Arrow.height(28) = 44
+const BOTTOM_DATE_BAR_HEIGHT = 44; // DateBar.js Wraper.border-radius(8)*2 + Arrow.height(28) = 44
 const Wrapper = styled.div`
   background: #fff;
   border-radius: 0 0 8px 8px;

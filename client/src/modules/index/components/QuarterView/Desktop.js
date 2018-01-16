@@ -90,6 +90,7 @@ const Grid = styled.div`
   margin: 0;
   padding: 0;
   table-layout: fixed;
+  min-width:100%;
 `;
 const Cell = styled.span`
   border-right: solid 1px #dadada;
