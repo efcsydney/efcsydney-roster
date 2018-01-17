@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import { switchCategory } from '../redux';
 import { media } from 'styled';
+import i18n from 'i18n';
 
 const mapStateToProps = state => ({ value: state.core.meta.category });
 const mapDispatchToProps = dispatch =>
@@ -44,7 +45,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               value={value}
             />
           </Title>
-          <Org>EFC Sydney</Org>
+          <Org>{i18n.t('orgTitle')}</Org>
         </Wrapper>
       );
     }

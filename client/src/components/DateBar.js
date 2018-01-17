@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import leftArrowIcon from 'assets/arrow_left.svg';
 import rightArrowIcon from 'assets/arrow_right.svg';
@@ -8,7 +9,10 @@ import {
   getQuarterLastMonth
 } from '../utils';
 
-export default ({
+const mapStateToProps = state => ({ lang: state.core.meta.lang });
+
+const DateBar = ({
+  lang,
   date,
   position,
   onPrevClick,
@@ -19,21 +23,25 @@ export default ({
   const startMonth = getQuarterFirstMonth(date).format('MMM');
   const endMonth = getQuarterLastMonth(date).format('MMM');
   const year = days[0].format('YYYY');
+  const dateString =
+    lang === 'en-AU'
+      ? `${startMonth} - ${endMonth} ${year}`
+      : `${year}年${startMonth} - ${endMonth}`;
 
   return (
     <Wrapper position={position} {...otherProps}>
       <Arrow onClick={onPrevClick}>
         <img src={leftArrowIcon} role="presentation" alt="Prev" />
       </Arrow>
-      <Label>
-        {startMonth} - {endMonth} {year}
-      </Label>
+      <Label>{dateString}</Label>
       <Arrow onClick={onNextClick}>
         <img src={rightArrowIcon} role="presentation" alt="Next" />
       </Arrow>
     </Wrapper>
   );
 };
+
+export default connect(mapStateToProps)(DateBar);
 
 const Wrapper = styled.div`
   align-items: center;
