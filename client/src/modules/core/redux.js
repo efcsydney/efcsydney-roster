@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { createAction, handleAction } from 'redux-actions';
 import Cookies from 'js-cookie';
+import i18n from 'i18n';
 
 const PREFIX = 'core';
 
@@ -8,6 +9,10 @@ export const switchCategory = createAction(
   `${PREFIX}/SWITCH_CATEGORY`,
   payload => {
     Cookies.set('selectedService', payload);
+
+    const lang = payload === 'english' ? 'en-AU' : 'zh-TW';
+    i18n.changeLanguage(lang);
+
     return payload;
   }
 );
