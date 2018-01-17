@@ -16,15 +16,15 @@ describe('<DateBar/>', () => {
   it('should adopt date attribute and display the date range accordingly', () => {
     let renderedComponent;
 
-    renderedComponent = mount(<DateBar date="2018-01-01" />);
+    renderedComponent = mount(<DateBar date="2018-01-01" lang="en-AU" />);
     expect(renderedComponent.find('div').text()).toEqual('Jan - Mar 2018');
     renderedComponent.unmount();
 
-    renderedComponent = mount(<DateBar date="2018-02-28" />);
+    renderedComponent = mount(<DateBar date="2018-02-28" lang="en-AU" />);
     expect(renderedComponent.find('div').text()).toEqual('Jan - Mar 2018');
     renderedComponent.unmount();
 
-    renderedComponent = mount(<DateBar date="2018-04-01" />);
+    renderedComponent = mount(<DateBar date="2018-04-01" lang="en-AU" />);
     expect(renderedComponent.find('div').text()).toEqual('Apr - Jun 2018');
   });
 
