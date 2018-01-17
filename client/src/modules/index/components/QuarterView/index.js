@@ -57,9 +57,14 @@ export default class QuarterView extends Component {
   componentWillMount() {
     window.addEventListener('resize', _.debounce(this.handleWindowResize, 200));
   }
+<<<<<<< HEAD
   componentDidMount() {
+=======
+  componentDidMount(){
+>>>>>>> sync-latest-event
     this.handleWindowResize();
   }
+
   render() {
     const { date, data } = this.props;
     const { isMobile, calendarHeight } = this.state;
@@ -75,7 +80,7 @@ export default class QuarterView extends Component {
 
     return (
       <Wrapper
-        ref={input => {
+        ref={input =>{
           this.calendarWrapper = input;
         }}
         calendarHeight={calendarHeight}>
