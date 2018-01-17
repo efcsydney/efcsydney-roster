@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import AddToCalendar from 'react-add-to-calendar';
@@ -7,98 +8,108 @@ import './icalstyle.css';
 import moment from 'moment';
 import { findEvent, getCalData } from 'utils';
 
-export default class Mobile extends Component {
-  static propTypes = {
-    events: PropTypes.array,
-    days: PropTypes.array,
-    roles: PropTypes.array,
-    onDayClick: PropTypes.func,
-    onRoleClick: PropTypes.func
-  };
-  static defaultProps = {
-    events: [],
-    days: [],
-    roles: [],
-    onDayClick: () => {},
-    onRoleClick: () => {}
-  };
+const mapStateToProps = state => ({ lang: state.core.meta.lang });
 
-  scrollToThisWeek = () => {
-    const highlightedEl = document.getElementById('highlighted');
-    if (highlightedEl) {
-      highlightedEl.scrollIntoView();
+export default connect(mapStateToProps)(
+  class Mobile extends Component {
+    static propTypes = {
+      events: PropTypes.array,
+      days: PropTypes.array,
+      lang: PropTypes.string,
+      roles: PropTypes.array,
+      onDayClick: PropTypes.func,
+      onRoleClick: PropTypes.func
+    };
+    static defaultProps = {
+      events: [],
+      days: [],
+      lang: 'en-AU',
+      roles: [],
+      onDayClick: () => {},
+      onRoleClick: () => {}
+    };
+
+    scrollToThisWeek = () => {
+      const highlightedEl = document.getElementById('highlighted');
+      if (highlightedEl) {
+        highlightedEl.scrollIntoView();
+      }
+    };
+
+    componentWillReceiveProps(nextProps) {
+      const isInitialLoad =
+        !this.props.events.length && nextProps.events.length;
+      if (isInitialLoad) {
+        setTimeout(() => {
+          this.scrollToThisWeek();
+        }, 500);
+      }
     }
-  };
 
-  componentWillReceiveProps(nextProps) {
-    const isInitialLoad = !this.props.events.length && nextProps.events.length;
-    if (isInitialLoad) {
-      setTimeout(() => {
-        this.scrollToThisWeek();
-      }, 500);
+    render() {
+      const icalicon = { 'calendar-plus-o': 'left' };
+      const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
+      const { events, days, lang, roles, onDayClick, onRoleClick } = this.props;
+
+      return (
+        <Grid>
+          {days.map((day, i) => {
+            const event = findEvent(events, day);
+            const members = event ? event.members : [];
+            const footnote = event ? event.footnote : '';
+            const icalEvent = getCalData(day, roles, members);
+            const highlightDate = moment()
+              .isoWeekday(7)
+              .format('YYYY-MM-DD');
+            const highlighted = day.format('YYYY-MM-DD') === highlightDate;
+            const dateString =
+              lang === 'zh-TW' ? day.format('MMMDo') : day.format('DD MMM');
+            return (
+              <Day
+                key={i}
+                highlighted={highlighted}
+                id={highlighted ? 'highlighted' : undefined}>
+                <Header
+                  onClick={e => {
+                    const isAddCalendar =
+                      e.target.className.indexOf('react-add-to-calendar') !==
+                      -1;
+                    if (isAddCalendar) {
+                      e.stopPropagation();
+                      return;
+                    }
+                    onDayClick(day, footnote);
+                  }}>
+                  <Label>{dateString}</Label>
+                  <Action>
+                    <AddToCalendar
+                      event={icalEvent}
+                      listItems={icalitems}
+                      buttonTemplate={icalicon}
+                      buttonLabel="Remind Me"
+                    />
+                  </Action>
+                </Header>
+                {roles.map((role, i) => {
+                  const member = _.find(members, { role }) || {};
+                  const name = member.name || '';
+                  return (
+                    <Row key={i}>
+                      <Role>{role}</Role>
+                      <Name onClick={() => onRoleClick(day, role, name)}>
+                        {name}
+                      </Name>
+                    </Row>
+                  );
+                })}
+              </Day>
+            );
+          })}
+        </Grid>
+      );
     }
   }
-
-  render() {
-    const icalicon = { 'calendar-plus-o': 'left' };
-    const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
-    const { events, days, roles, onDayClick, onRoleClick } = this.props;
-
-    return (
-      <Grid>
-        {days.map((day, i) => {
-          const event = findEvent(events, day);
-          const members = event ? event.members : [];
-          const footnote = event ? event.footnote : '';
-          const icalEvent = getCalData(day, roles, members);
-          const highlightDate = moment()
-            .isoWeekday(7)
-            .format('YYYY-MM-DD');
-          const highlighted = day.format('YYYY-MM-DD') === highlightDate;
-          return (
-            <Day
-              key={i}
-              highlighted={highlighted}
-              id={highlighted ? 'highlighted' : undefined}>
-              <Header
-                onClick={e => {
-                  const isAddCalendar =
-                    e.target.className.indexOf('react-add-to-calendar') !== -1;
-                  if (isAddCalendar) {
-                    e.stopPropagation();
-                    return;
-                  }
-                  onDayClick(day, footnote);
-                }}>
-                <Label>{day.format('DD MMM')}</Label>
-                <Action>
-                  <AddToCalendar
-                    event={icalEvent}
-                    listItems={icalitems}
-                    buttonTemplate={icalicon}
-                    buttonLabel="Remind Me"
-                  />
-                </Action>
-              </Header>
-              {roles.map((role, i) => {
-                const member = _.find(members, { role }) || {};
-                const name = member.name || '';
-                return (
-                  <Row key={i}>
-                    <Role>{role}</Role>
-                    <Name onClick={() => onRoleClick(day, role, name)}>
-                      {name}
-                    </Name>
-                  </Row>
-                );
-              })}
-            </Day>
-          );
-        })}
-      </Grid>
-    );
-  }
-}
+);
 
 const Grid = styled.div`
   border-left: solid 1px #f0f3f8;
