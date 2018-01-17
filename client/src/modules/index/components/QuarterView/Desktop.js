@@ -12,6 +12,7 @@ const mapStateToProps = state => ({ lang: state.core.meta.lang });
 
 export default connect(mapStateToProps)(
   class Desktop extends Component {
+    displayName = 'Desktop';
     handleDayClick = (e, day, footnote) => {
       const isAddCalendar =
         e.target.className.indexOf('react-add-to-calendar') !== -1;
@@ -22,7 +23,7 @@ export default connect(mapStateToProps)(
       this.props.onDayClick(day, footnote);
     };
     renderDayRow(day, cellWidth) {
-      const { events, roles, lang, onRoleClick } = this.props;
+      const { events, roles, onRoleClick } = this.props;
       const event = findEvent(events, day);
       const members = event ? event.members : [];
       const footnote = event ? event.footnote : '';
@@ -53,9 +54,6 @@ export default connect(mapStateToProps)(
         );
       });
 
-      const dateString =
-        lang === 'zh-TW' ? day.format('MMMDo') : day.format('DD MMM');
-
       return (
         <Row key={formattedDay} highlighted={highlighted}>
           <DayCell
@@ -67,7 +65,7 @@ export default connect(mapStateToProps)(
               buttonTemplate={icalicon}
               buttonLabel=""
             />
-            {dateString}
+            {day.format(i18n.t(`${this.displayName}.dateFormat`))}
           </DayCell>
           {nameCells}
         </Row>
@@ -81,7 +79,7 @@ export default connect(mapStateToProps)(
         <Grid>
           <Row>
             <Header width={cellWidth}>
-              <Text>{i18n.t('dateRoleHeader')}</Text>
+              <Text>{i18n.t(`${this.displayName}.gridCanton`)}</Text>
             </Header>
             {roles.map((role, i) => (
               <Header key={i} width={cellWidth}>

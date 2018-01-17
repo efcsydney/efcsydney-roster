@@ -7,9 +7,9 @@ import {
   getQuarterFirstMonth,
   getQuarterLastMonth
 } from '../utils';
+import i18n from 'i18n';
 
 export default ({
-  lang,
   date,
   position,
   onPrevClick,
@@ -20,10 +20,11 @@ export default ({
   const startMonth = getQuarterFirstMonth(date).format('MMM');
   const endMonth = getQuarterLastMonth(date).format('MMM');
   const year = days[0].format('YYYY');
-  const dateString =
-    lang === 'en-AU'
-      ? `${startMonth} - ${endMonth} ${year}`
-      : `${year}年${startMonth} - ${endMonth}`;
+  const dateString = i18n.t('DateBar.dateString', {
+    year,
+    startMonth,
+    endMonth
+  });
 
   return (
     <Wrapper position={position} {...otherProps}>

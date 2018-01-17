@@ -14,7 +14,6 @@ import { bindActionCreators } from 'redux';
 import { switchCategory } from 'modules/core/redux';
 
 const mapStateToProps = state => ({
-  lang: state.core.meta.lang,
   category: state.core.meta.category
 });
 const mapDispatchToProps = dispatch =>
@@ -192,7 +191,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       }
     }
     render() {
-      const { lang } = this.props;
       const {
         date,
         isLoading,
@@ -203,7 +201,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
       const barProps = {
         date,
-        lang,
         onPrevClick: this.handleButtonClick.bind(this, 'prev'),
         onNextClick: this.handleButtonClick.bind(this, 'next')
       };

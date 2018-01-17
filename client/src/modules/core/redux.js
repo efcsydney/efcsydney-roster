@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux';
 import { createAction, handleAction } from 'redux-actions';
 import Cookies from 'js-cookie';
+import moment from 'moment';
+import 'moment/locale/en-au';
+import 'moment/locale/zh-tw';
 import i18n from 'i18n';
 
 const PREFIX = 'core';
@@ -8,11 +11,6 @@ const PREFIX = 'core';
 export const switchCategory = createAction(
   `${PREFIX}/SWITCH_CATEGORY`,
   payload => {
-    Cookies.set('selectedService', payload);
-
-    const lang = payload === 'english' ? 'en-AU' : 'zh-TW';
-    i18n.changeLanguage(lang);
-
     return payload;
   }
 );
@@ -55,20 +53,32 @@ export default combineReducers({
     lang: handleAction(
       switchCategory,
       (state, { payload }) => {
+        let lang;
         switch (payload) {
           case 'english':
-            return 'en-AU';
+            lang = 'en-AU';
+            break;
           case 'chinese':
-            return 'zh-TW';
+            lang = 'zh-TW';
+            break;
           default:
-            return 'en-US';
+            lang = 'en-US';
         }
+
+        // FIXME - Side effects
+        moment.locale(lang);
+        i18n.changeLanguage(lang);
+
+        return lang;
       },
       defaultState.meta.lang
     ),
     category: handleAction(
       switchCategory,
-      (state, { payload }) => payload,
+      (state, { payload }) => {
+        Cookies.set('selectedService', payload);
+        return payload;
+      },
       defaultState.meta.category
     )
   })
