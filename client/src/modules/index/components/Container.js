@@ -192,12 +192,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       }
     }
     render() {
+      const { lang } = this.props;
       const {
         date,
         isLoading,
         isEditingDay,
         isEditingRole,
-        lang,
         selectedData
       } = this.state;
 
