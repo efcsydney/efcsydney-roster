@@ -29,7 +29,7 @@ export default class Desktop extends Component {
     const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
     const formattedDay = day.format('YYYY-MM-DD');
     let names = [];
-    roles.map(role => {
+    roles.forEach(role => {
       const member = _.find(members, { role }) || {};
       names.push(member.name || '');
     });
@@ -98,10 +98,7 @@ const Grid = styled.div`
   margin: 0;
   padding: 0;
   table-layout: fixed;
-<<<<<<< HEAD
-=======
-  min-width:100%;
->>>>>>> sync-latest-event
+  min-width: 100%;
 `;
 const Cell = styled.span`
   border-right: solid 1px #dadada;
