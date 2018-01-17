@@ -9,9 +9,7 @@ import {
   getQuarterLastMonth
 } from '../utils';
 
-const mapStateToProps = state => ({ lang: state.core.meta.lang });
-
-const DateBar = ({
+export default ({
   lang,
   date,
   position,
@@ -40,8 +38,6 @@ const DateBar = ({
     </Wrapper>
   );
 };
-
-export default connect(mapStateToProps)(DateBar);
 
 const Wrapper = styled.div`
   align-items: center;
