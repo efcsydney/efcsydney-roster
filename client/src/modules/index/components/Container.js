@@ -197,11 +197,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         isLoading,
         isEditingDay,
         isEditingRole,
+        lang,
         selectedData
       } = this.state;
 
       const barProps = {
         date,
+        lang,
         onPrevClick: this.handleButtonClick.bind(this, 'prev'),
         onNextClick: this.handleButtonClick.bind(this, 'next')
       };
