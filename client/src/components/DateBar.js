@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 import leftArrowIcon from 'assets/arrow_left.svg';
 import rightArrowIcon from 'assets/arrow_right.svg';
