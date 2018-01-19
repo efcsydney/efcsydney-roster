@@ -9,7 +9,7 @@ const Service = require('../models/service').Service;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const config = require('config');
 const log = require('../utilities/logger');
-const { readAndParseFile } = require('../../scripts/update-events-details');
+const { readAndParseFile } = require('../utilities/csvHelper');
 const { EmailListItem } = require('../models/email-list-item');
 
 // This is mocked out for now, will be complete when DB is done
