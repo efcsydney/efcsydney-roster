@@ -1,13 +1,7 @@
-const Papa = require('papaparse');
-const fs = require('fs');
 const sequelizeClient = require('../api/infrastructure/sequelize-client')
   .sequelizeClient;
 const Event = require('../api/models/event').Event;
-
-function readAndParseFile(fileName) {
-  const fileContent = fs.readFileSync(fileName, { encoding: 'utf8' });
-  return Papa.parse(fileContent, { header: true }).data;
-}
+const { readAndParseFile } = require('../api/utilities/csv-helper');
 
 /**
  * Find positions for service and build  mapper
@@ -72,7 +66,3 @@ async function updateEvents() {
 }
 
 updateEvents();
-
-module.exports = {
-  readAndParseFile
-}
