@@ -28,9 +28,11 @@ describe('Server', function() {
           expect(res.body.data).to.eql([
             {
               date: '2017-10-15',
-              footnote: {
+              serviceInfo: {
                 id: 3,
-                name: 'english footnote 2'
+                footnote: 'english footnote 2',
+                skipService: false,
+                skipReason: '',
               },
               members: [
                 { role: 'Speaker', name: 'Rev. Kian Holik' },
@@ -45,9 +47,11 @@ describe('Server', function() {
             },
             {
               date: '2017-10-08',
-              footnote: {
+              serviceInfo: {
                 id: 1,
-                name: 'english footnote 1'
+                footnote: 'english footnote 1',
+                skipService: false,
+                skipReason: '',
               },
               members: [
                 { role: 'Speaker', name: 'May Chien' },
@@ -73,9 +77,11 @@ describe('Server', function() {
           expect(res.body.data).to.eql([
             {
               date: '2017-10-15',
-              footnote: {
+              serviceInfo: {
                 id: 4,
-                name: 'chinese footnote 2'
+                footnote: 'chinese footnote 2',
+                skipService: false,
+                skipReason: '',
               },
               members: [
                 { role: '證道', name: 'Christine Yang' },
@@ -94,9 +100,11 @@ describe('Server', function() {
             },
             {
               date: '2017-10-08',
-              footnote: {
+              serviceInfo: {
                 id: 2,
-                name: 'chinese footnote 1'
+                footnote: 'chinese footnote 1',
+                skipService: false,
+                skipReason: '',
               },
               members: [
                 { role: '證道', name: 'May Chien' },
@@ -160,16 +168,18 @@ describe('Server', function() {
         });
     });
   });
-  describe('update footnote', function() {
-    it('updates a footnote', function() {
+  describe('update serviceInfo', function() {
+    it('updates a serviceInfo', function() {
       const footnote = {
         date: '2017-10-08',
         category: 'english',
-        footnote: 'Meeting (Election)'
+        footnote: 'Meeting (Election)',
+        skipService: true,
+        skipReason: 'Combined Service',
       };
       const footnoteId = 1;
       return request(app)
-        .put(`/api/footnotes/${footnoteId}`)
+        .put(`/api/serviceInfo/${footnoteId}`)
         .send(footnote)
         .expect('Content-Type', /json/)
         .expect(201)

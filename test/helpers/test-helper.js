@@ -68,16 +68,16 @@ async function createSeed() {
     { id: 5, date: '2017-11-05' }
   ]);
   await ServiceCalendarDate.bulkCreate([
-    { id: 1, footnote: 'english footnote 1', serviceId: 1, calendarDateId: 1 },
-    { id: 2, footnote: 'chinese footnote 1', serviceId: 2, calendarDateId: 1 },
-    { id: 3, footnote: 'english footnote 2', serviceId: 1, calendarDateId: 2 },
-    { id: 4, footnote: 'chinese footnote 2', serviceId: 2, calendarDateId: 2 },
-    { id: 5, footnote: 'english footnote 3', serviceId: 1, calendarDateId: 3 },
-    { id: 6, footnote: 'chinese footnote 3', serviceId: 2, calendarDateId: 3 },
-    { id: 7, footnote: 'english footnote 4', serviceId: 1, calendarDateId: 4 },
-    { id: 8, footnote: 'chinese footnote 4', serviceId: 2, calendarDateId: 4 },
-    { id: 9, footnote: 'english footnote 5', serviceId: 1, calendarDateId: 5 },
-    { id: 10, footnote: 'chinese footnote 4', serviceId: 2, calendarDateId: 5 }
+    { id: 1, footnote: 'english footnote 1', skipService: false, skipReason: '', serviceId: 1, calendarDateId: 1 },
+    { id: 2, footnote: 'chinese footnote 1', skipService: false, skipReason: '', serviceId: 2, calendarDateId: 1 },
+    { id: 3, footnote: 'english footnote 2', skipService: false, skipReason: '', serviceId: 1, calendarDateId: 2 },
+    { id: 4, footnote: 'chinese footnote 2', skipService: false, skipReason: '', serviceId: 2, calendarDateId: 2 },
+    { id: 5, footnote: 'english footnote 3', skipService: false, skipReason: '', serviceId: 1, calendarDateId: 3 },
+    { id: 6, footnote: 'chinese footnote 3', skipService: false, skipReason: '', serviceId: 2, calendarDateId: 3 },
+    { id: 7, footnote: 'english footnote 4', skipService: false, skipReason: '', serviceId: 1, calendarDateId: 4 },
+    { id: 8, footnote: 'chinese footnote 4', skipService: false, skipReason: '', serviceId: 2, calendarDateId: 4 },
+    { id: 9, footnote: 'english footnote 5', skipService: false, skipReason: '', serviceId: 1, calendarDateId: 5 },
+    { id: 10, footnote: 'chinese footnote 4', skipService: false, skipReason: '', serviceId: 2, calendarDateId: 5 }
   ]);
   await Event.bulkCreate([
     {

@@ -5,7 +5,7 @@ class DtoMapper {
     return events.map(e => {
       return {
         date: e.date,
-        footnote: DtoMapper.mapFootnoteToDto(e.footnote),
+        serviceInfo: DtoMapper.mapServiceInfoToDto(e.serviceInfo),
         members: DtoMapper.mapEventsToDto(e.positions)
       };
     });
@@ -18,10 +18,12 @@ class DtoMapper {
     }));
   }
 
-  static mapFootnoteToDto(footnote) {
+  static mapServiceInfoToDto(serviceInfo) {
     return {
-      id: footnote.id,
-      name: footnote.footnote
+      id: serviceInfo.id,
+      footnote: serviceInfo.footnote,
+      skipService: serviceInfo.skipService,
+      skipReason: serviceInfo.skipReason,
     };
   }
 
@@ -40,11 +42,13 @@ class DtoMapper {
     };
   }
 
-  static convertDtoToFootnoteModel(dto) {
+  static convertDtoToServiceInfoModel(dto) {
     const { id, data } = dto;
     return {
       id: id,
       footnote: data.footnote,
+      skipService: data.skipService,
+      skipReason: data.skipReason,
       calendarDate: {
         date: getDateString(data.date)
       },
