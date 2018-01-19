@@ -1,7 +1,7 @@
 const sequelizeClient = require('../api/infrastructure/sequelize-client')
   .sequelizeClient;
 const Event = require('../api/models/event').Event;
-const { readAndParseFile } = require('../api/utilities/csvHelper');
+const { readAndParseFile } = require('../api/utilities/csv-helpe');
 
 /**
  * Find positions for service and build  mapper
