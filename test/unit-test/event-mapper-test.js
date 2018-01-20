@@ -64,7 +64,7 @@ describe('Event Mapper', function() {
     });
   });
 
-  describe('Map Footnotes to Group of Events', function() {
+  describe('Map ServiceInfo to Group of Events', function() {
     it('converts events model', function() {
       const groupEvents = [
         {
@@ -111,25 +111,31 @@ describe('Event Mapper', function() {
           ]
         }
       ];
-      const footNoteModel = [
+      const serviceInfoModel = [
         {
           id: 3,
           calendarDate: { date: '2017-11-05' },
-          name: 'Combined Service'
+          footnote: 'Combined Service',
+          skipService: false,
+          skipReason: 'Combined Service ...',
         },
         {
           id: 2,
           calendarDate: { date: '2017-11-12' },
-          name: ''
+          footnote: '',
+          skipService: false,
+          skipReason: 'Combined Service ...',
         }
       ];
 
       const expectedModel = [
         {
           date: '2017-11-05',
-          footnote: {
+          serviceInfo: {
             id: 3,
-            name: 'Combined Service'
+            footnote: 'Combined Service',
+            skipService: false,
+            skipReason: 'Combined Service ...',
           },
           positions: [
             { volunteerName: 'Kyle Huang', position: 'Speaker' },
@@ -138,9 +144,11 @@ describe('Event Mapper', function() {
         },
         {
           date: '2017-11-12',
-          footnote: {
+          serviceInfo: {
             id: 2,
-            name: ''
+            footnote: '',
+            skipService: false,
+            skipReason: 'Combined Service ...',
           },
           positions: [
             { volunteerName: 'Jimmy Wong', position: 'Speaker' },
@@ -149,19 +157,19 @@ describe('Event Mapper', function() {
         }
       ];
 
-      const actualModel = EventMapper.mapFootnotesToEvents(
-        footNoteModel,
+      const actualModel = EventMapper.mapServiceInfoToEvents(
+        serviceInfoModel,
         groupEvents
       );
 
       expect(2).to.eq(actualModel.length);
-      expect(actualModel[0].footnote.id).to.eq(expectedModel[0].footnote.id);
-      expect(actualModel[0].footnote.name).to.eq(
-        expectedModel[0].footnote.name
+      expect(actualModel[0].serviceInfo.id).to.eq(expectedModel[0].serviceInfo.id);
+      expect(actualModel[0].serviceInfo.footnote).to.eq(
+        expectedModel[0].serviceInfo.footnote
       );
-      expect(actualModel[1].footnote.id).to.eq(expectedModel[1].footnote.id);
-      expect(actualModel[1].footnote.name).to.eq(
-        expectedModel[1].footnote.name
+      expect(actualModel[1].serviceInfo.id).to.eq(expectedModel[1].serviceInfo.id);
+      expect(actualModel[1].serviceInfo.footnote).to.eq(
+        expectedModel[1].serviceInfo.footnote
       );
     });
   });
