@@ -29,7 +29,7 @@ function getServiceDetailsFromCsvFile(){
   return serviceDetails;
 }
 
-async function getDateMapper(){
+async function buildDateMapper(){
   // Build calendar dates mapper, which looks like: { '2017-01-01': 1 }
   const calendarDatesData = (await sequelizeClient.query(
     'SELECT id, date from calendar_dates'
@@ -54,7 +54,7 @@ async function updateEvents() {
   const serviceDetails = getServiceDetailsFromCsvFile();
 
   // Build calendar dates mapper, which looks like: { '2017-01-01': 1 }
-  const dateMapper = await getDateMapper();
+  const dateMapper = await buildDateMapper();
   const services = await getServices();
 
   const promises = [];
@@ -85,7 +85,7 @@ async function updateEvents() {
 async function updateCombinedServiceForEnglishService(){
   const serviceDetails = getServiceDetailsFromCsvFile();
   // Build calendar dates mapper, which looks like: { '2017-01-01': 1 }
-  const dateMapper = await getDateMapper();
+  const dateMapper = await buildDateMapper();
   const services = (await getServices()).filter((service) => service.name === 'english');
 
   const trimAndToLowerCase = (value) => value.trim().toLowerCase();
