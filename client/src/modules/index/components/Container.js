@@ -8,76 +8,74 @@ import EditRole from './EditRole';
 import EditDay from './EditDay';
 import EventsAPI from 'apis/events';
 import _ from 'lodash';
-import { getQueryParams, getMemberNames } from 'utils';
+import { getMemberNames } from 'utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { switchCategory } from 'modules/core/redux';
+import { requestRetrieveEvents } from 'modules/index/redux';
 
-const mapStateToProps = state => ({
-  category: state.core.meta.category
-});
+const mapStateToProps = state => {
+  const { meta: { category } } = state.core;
+  const { meta: { isLoading }, data } = state.index;
+  return {
+    data,
+    category,
+    isLoading
+  };
+};
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ switchCategory }, dispatch);
+  bindActionCreators({ switchCategory, requestRetrieveEvents }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   class App extends Component {
     state = {
       date: new Date(),
-      isLoading: true,
       isEditingRole: false,
       isEditingDay: false,
       selectedData: {},
       params: {}
     };
-    loadData = ({ from, to, category }) => {
-      // Get current events
-      let queryParams = {};
-      const defaultFrom = moment()
-        .startOf('quarter')
-        .format('YYYY-MM-DD');
-      const defaultTo = moment()
-        .endOf('quarter')
-        .format('YYYY-MM-DD');
-
-      if (document.location.search.length > 0) {
-        queryParams = getQueryParams(document.location.search);
-      }
-
-      queryParams.from = from || defaultFrom;
-      queryParams.to = to || defaultTo;
-      queryParams.category = category;
-
-      // Get previous events
-      const preQueryParams = {
-        from: moment(queryParams.from).subtract(1, 'Q').format('YYYY-MM-DD'),
-        to: moment(queryParams.to).subtract(1, 'Q').format('YYYY-MM-DD'),
-        category,
+    loadPrevData({ from, to, category }) {
+      const query = {
+        from: moment(from)
+          .subtract(1, 'Q')
+          .format('YYYY-MM-DD'),
+        to: moment(to)
+          .subtract(1, 'Q')
+          .format('YYYY-MM-DD'),
+        category
       };
 
-      EventsAPI.retrieve(preQueryParams)
+      return EventsAPI.retrieve(query);
+    }
+    loadData({ from, to, category }) {
+      const { requestRetrieveEvents } = this.props;
+      const query = {
+        from:
+          from ||
+          moment()
+            .startOf('quarter')
+            .format('YYYY-MM-DD'),
+        to:
+          to ||
+          moment()
+            .endOf('quarter')
+            .format('YYYY-MM-DD'),
+        category
+      };
+
+      this.loadPrevData(query)
         .then(data => {
           this.setState({
-            preQuarterMembers: getMemberNames(data.data),
+            preQuarterMembers: getMemberNames(data.data)
           });
         })
         .catch(e => {
           console.error(e); // eslint-disable-line
         });
 
-
-      this.setState({ isLoading: true, params: queryParams });
-      return EventsAPI.retrieve(queryParams)
-        .then(data => {
-          this.setState({
-            events: data,
-            isLoading: false
-          });
-        })
-        .catch(e => {
-          console.error(e); // eslint-disable-line
-          this.setState({ isLoading: false });
-        });
-    };
+      requestRetrieveEvents(query);
+    }
     handleButtonClick = direction => {
       const { date } = this.state;
       const { category } = this.props;
@@ -214,12 +212,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     render() {
       const {
         date,
-        isLoading,
         isEditingDay,
         isEditingRole,
         selectedData,
-        preQuarterMembers,
+        preQuarterMembers
       } = this.state;
+      const { data, isLoading } = this.props;
 
       const barProps = {
         date,
@@ -235,7 +233,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
             <DateBar {...barProps} />
             <QuarterView
               date={date}
-              data={this.state.events}
+              data={data}
               onRoleClick={this.handleRoleClick}
               onDayClick={this.handleDayClick}
             />
