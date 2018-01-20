@@ -1,90 +1,121 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { Modal, StateButton } from 'components';
 import styled from 'styled-components';
 import { Creatable } from 'react-select';
 import 'react-select/dist/react-select.css';
 import _ from 'lodash';
+import { requestModifyIdEvents, toggleEditRole } from 'modules/index/redux';
+import i18n from 'i18n';
 
 function getOptions(names) {
   names = names.map(name => ({ value: name, label: name }));
   return names;
 }
 
-export default class EditRole extends Component {
-  static propTypes = {
-    date: PropTypes.instanceOf(Date).isRequired,
-    member: PropTypes.string,
-    names: PropTypes.array,
-    onSave: PropTypes.func,
-    role: PropTypes.string
+const mapStateToProps = state => {
+  const { meta: { isSaving } } = state.index;
+  return {
+    isSaving
   };
-  handleNameChange = option => {
-    const value = _.get(option, 'value', null);
-    let state = { selectedName: value };
-    let { names } = this.props;
-    if (!_.find(names, value)) {
-      state.names = _.union(names, [value]).sort();
-    }
-    this.setState(state);
-  };
-  handleSaveClick = form => {
-    const { onSave } = this.props;
-    onSave(form);
-  };
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      names: props.names,
-      selectedName: props.member
+};
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      onSave: form => requestModifyIdEvents(form),
+      onClose: () => toggleEditRole(false)
+    },
+    dispatch
+  );
+export default connect(mapStateToProps, mapDispatchToProps)(
+  class EditRole extends Component {
+    displayName = 'EditRole';
+    static propTypes = {
+      date: PropTypes.instanceOf(Date).isRequired,
+      member: PropTypes.string,
+      names: PropTypes.array,
+      onSave: PropTypes.func,
+      role: PropTypes.string
     };
-  }
-  render() {
-    const { date, member, onSave, role, preQuarterMembers, ...otherProps } = this.props; // eslint-disable-line
-    const { selectedName, names } = this.state;
-    const formattedDate = moment(date).format('DD MMM, YYYY');
-    const finalMembers = _.union(names, preQuarterMembers);
+    getTrans(key) {
+      return i18n.t(`${this.displayName}.${key}`);
+    }
+    handleSave = form => {
+      const { onSave } = this.props;
+      onSave(form);
+    };
+    handleNameChange = option => {
+      const value = _.get(option, 'value', null);
+      let state = { selectedName: value };
+      let { names } = this.props;
+      if (!_.find(names, value)) {
+        state.names = _.union(names, [value]).sort();
+      }
+      this.setState(state);
+    };
+    constructor(props) {
+      super(props);
 
-    return (
-      <Modal {...otherProps}>
-        <Form>
-          <Row>
-            <Label>Date</Label>
-            <span>{formattedDate}</span>
-          </Row>
-          <Row>
-            <Label>Role</Label>
-            <span>{role}</span>
-          </Row>
-          <Row>
-            <Label>Name</Label>
-            <span>
-              <Select
-                multi={false}
-                value={selectedName}
-                onChange={this.handleNameChange}
-                options={getOptions(finalMembers)}
-                clearable={true}
-              />
-            </span>
-          </Row>
-          <Row align="center">
-            <StateButton
-              onClick={this.handleSaveClick.bind(this, {
-                date,
-                role,
-                name: selectedName
-              })}>
-              Save
-            </StateButton>
-          </Row>
-        </Form>
-      </Modal>
-    );
+      this.state = {
+        names: props.names,
+        selectedName: props.member
+      };
+    }
+    render() {
+      const {
+        date,
+        isSaving,
+        role,
+        preQuarterMembers,
+        ...otherProps
+      } = this.props; // eslint-disable-line
+      const { selectedName, names } = this.state;
+      const formattedDate = moment(date).format(this.getTrans('dateFormat'));
+      const finalMembers = _.union(names, preQuarterMembers);
+
+      return (
+        <Modal {...otherProps} title={this.getTrans('title')}>
+          <Form>
+            <Row>
+              <Label>{this.getTrans('dateTitle')}</Label>
+              <span>{formattedDate}</span>
+            </Row>
+            <Row>
+              <Label>{this.getTrans('roleTitle')}</Label>
+              <span>{role}</span>
+            </Row>
+            <Row>
+              <Label>{this.getTrans('nameTitle')}</Label>
+              <span>
+                <Select
+                  multi={false}
+                  value={selectedName}
+                  onChange={this.handleNameChange}
+                  options={getOptions(finalMembers)}
+                  clearable={true}
+                />
+              </span>
+            </Row>
+            <Row align="center">
+              <StateButton
+                kind={isSaving ? 'loading' : 'default'}
+                onClick={this.handleSave.bind(this, {
+                  date,
+                  role,
+                  name: selectedName
+                })}>
+                {this.getTrans('saveLabel')}
+              </StateButton>
+            </Row>
+          </Form>
+        </Modal>
+      );
+    }
   }
-}
+);
 
 const Form = styled.form`
   display: table;

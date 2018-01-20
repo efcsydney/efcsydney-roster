@@ -13,24 +13,25 @@ export default class QuarterView extends Component {
   displayName = 'QuarterView';
   static propTypes = {
     date: PropTypes.instanceOf(Date),
-    data: PropTypes.object,
+    data: PropTypes.array,
     onDayClick: PropTypes.func,
     onRoleClick: PropTypes.func
   };
   static defaultProps = {
     date: new Date(),
-    data: {},
+    data: [],
     onDayClick: () => {},
     onRoleClick: () => {}
   };
-  handleDayClick = (day, footnote) => {
+  handleDayClick = (day, serviceInfo) => {
     const { onDayClick } = this.props;
+    console.log(serviceInfo);
 
-    onDayClick({ day, footnote });
+    onDayClick({ day, serviceInfo });
   };
   handleRoleClick = (day, role, member) => {
     const { data, onRoleClick } = this.props;
-    const names = getMemberNames(data.data);
+    const names = getMemberNames(data);
 
     onRoleClick({ day, role, member, names });
   };
@@ -66,9 +67,9 @@ export default class QuarterView extends Component {
     const { date, data } = this.props;
     const { isMobile, calendarHeight } = this.state;
     const days = getQuarterDays(date, 7);
-    const roles = getRoles(data.data);
+    const roles = getRoles(data);
     const viewProps = {
-      events: data.data,
+      events: data,
       days,
       roles,
       onDayClick: this.handleDayClick,
@@ -88,7 +89,7 @@ export default class QuarterView extends Component {
   }
 }
 
-const BottomDateBarHeight = 44; // DateBar.js Wraper.border-radius(8)*2 + Arrow.height(28) = 44
+const BottomDateBarHeight = 50; // DateBar.js Wraper.border-radius(8)*2 + Arrow.height(28) = 44
 const Wrapper = styled.div`
   background: #fff;
   border-radius: 0 0 8px 8px;
@@ -97,5 +98,5 @@ const Wrapper = styled.div`
   position: absolute;
   overflow: scroll;
   width: 100%;
-  height: ${props => props.calendarHeight};
+  max-height: ${props => props.calendarHeight};
 `;

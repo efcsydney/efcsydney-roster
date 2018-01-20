@@ -21,6 +21,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     static defaultProps = {
       onCategoryChange: () => {}
     };
+    getTrans(key) {
+      return i18n.t(`${this.displayName}.${key}`);
+    }
     handleCategoryChange = ({ value }) => {
       const { switchCategory, onCategoryChange } = this.props;
       switchCategory(value);
@@ -39,15 +42,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               className="ServiceSelect"
               clearable={false}
               options={[
-                { value: 'english', label: 'English Sunday Service Roster' },
-                { value: 'chinese', label: '中文堂服事表' }
+                { value: 'english', label: this.getTrans('englishService') },
+                { value: 'chinese', label: this.getTrans('chineseService') }
               ]}
               onChange={this.handleCategoryChange}
               searchable={false}
               value={value}
             />
           </Title>
-          <Org>{i18n.t(`${this.displayName}.orgTitle`)}</Org>
+          <Org>{this.getTrans('orgTitle')}</Org>
         </Wrapper>
       );
     }
