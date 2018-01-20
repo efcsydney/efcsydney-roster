@@ -92,8 +92,7 @@ async function updateCombinedServiceForEnglishService(){
   const englishServices = serviceDetails.english
     .map((serviceDetail) => ({date: serviceDetail.Date, excluded: isCombinedService(serviceDetail)}));
 
-  const promises = [];
-  englishServices.forEach((service) => {
+  const promises = englishServices.map((service) => {
     const promise = ServiceCalendarDate.update({
       skipService: service.excluded,
       skipReason: (service.excluded) ? 'Combined Service' : ''
@@ -103,7 +102,7 @@ async function updateCombinedServiceForEnglishService(){
         serviceId: services[0].id
       }
     });
-    promises.push(promise);
+    return promise;
   });
 
   await Promise.all(promises);
