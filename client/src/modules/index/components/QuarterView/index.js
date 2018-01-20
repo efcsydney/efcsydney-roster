@@ -10,6 +10,7 @@ import './icalstyle.css';
 import ReactDOM from 'react-dom';
 
 export default class QuarterView extends Component {
+  displayName = 'QuarterView';
   static propTypes = {
     date: PropTypes.instanceOf(Date),
     data: PropTypes.object,
@@ -57,7 +58,7 @@ export default class QuarterView extends Component {
   componentWillMount() {
     window.addEventListener('resize', _.debounce(this.handleWindowResize, 200));
   }
-  componentDidMount(){
+  componentDidMount() {
     this.handleWindowResize();
   }
 
@@ -76,7 +77,7 @@ export default class QuarterView extends Component {
 
     return (
       <Wrapper
-        ref={input =>{
+        ref={input => {
           this.calendarWrapper = input;
         }}
         calendarHeight={calendarHeight}>
@@ -86,6 +87,7 @@ export default class QuarterView extends Component {
     );
   }
 }
+
 const BottomDateBarHeight = 44; // DateBar.js Wraper.border-radius(8)*2 + Arrow.height(28) = 44
 const Wrapper = styled.div`
   background: #fff;

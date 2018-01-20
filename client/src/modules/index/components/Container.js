@@ -13,7 +13,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { switchCategory } from 'modules/core/redux';
 
-const mapStateToProps = state => ({ category: state.core.meta.category });
+const mapStateToProps = state => ({
+  category: state.core.meta.category
+});
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ switchCategory }, dispatch);
 
@@ -152,8 +154,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       switchCategory(pathname);
     };
     componentWillMount() {
-      const { category } = this.props;
+      const { category, switchCategory } = this.props;
       this.appendSentry();
+
+      switchCategory(category);
       this.loadData({ category });
     }
     componentDidMount() {

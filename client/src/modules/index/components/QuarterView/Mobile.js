@@ -6,8 +6,10 @@ import AddToCalendar from 'react-add-to-calendar';
 import './icalstyle.css';
 import moment from 'moment';
 import { findEvent, getCalData } from 'utils';
+import i18n from 'i18n';
 
 export default class Mobile extends Component {
+  displayName = 'Mobile';
   static propTypes = {
     events: PropTypes.array,
     days: PropTypes.array,
@@ -55,6 +57,7 @@ export default class Mobile extends Component {
             .isoWeekday(7)
             .format('YYYY-MM-DD');
           const highlighted = day.format('YYYY-MM-DD') === highlightDate;
+
           return (
             <Day
               key={i}
@@ -70,7 +73,9 @@ export default class Mobile extends Component {
                   }
                   onDayClick(day, footnote);
                 }}>
-                <Label>{day.format('DD MMM')}</Label>
+                <Label>
+                  {day.format(i18n.t(`${this.displayName}.dateFormat`))}
+                </Label>
                 <Action>
                   <AddToCalendar
                     event={icalEvent}

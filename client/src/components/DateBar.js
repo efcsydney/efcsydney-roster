@@ -7,6 +7,7 @@ import {
   getQuarterFirstMonth,
   getQuarterLastMonth
 } from '../utils';
+import i18n from 'i18n';
 
 export default ({
   date,
@@ -19,15 +20,18 @@ export default ({
   const startMonth = getQuarterFirstMonth(date).format('MMM');
   const endMonth = getQuarterLastMonth(date).format('MMM');
   const year = days[0].format('YYYY');
+  const dateString = i18n.t('DateBar.dateString', {
+    year,
+    startMonth,
+    endMonth
+  });
 
   return (
     <Wrapper position={position} {...otherProps}>
       <Arrow onClick={onPrevClick}>
         <img src={leftArrowIcon} role="presentation" alt="Prev" />
       </Arrow>
-      <Label>
-        {startMonth} - {endMonth} {year}
-      </Label>
+      <Label>{dateString}</Label>
       <Arrow onClick={onNextClick}>
         <img src={rightArrowIcon} role="presentation" alt="Next" />
       </Arrow>
