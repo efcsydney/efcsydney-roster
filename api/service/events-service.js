@@ -59,12 +59,12 @@ class EventService {
       scheduledEvents
     );
 
-    const footnotes = await ServiceCalendarDateRepository.getServiceInfoByDateRange(
+    const serviceInfo = await ServiceCalendarDateRepository.getServiceInfoByDateRange(
       dateRange,
       service
     );
-    const eventsWithFootnotes = EventMapper.mapFootnotesToEvents(
-      footnotes,
+    const eventsWithFootnotes = EventMapper.mapServiceInfoToEvents(
+      serviceInfo,
       scheduledEventsByDate
     );
 

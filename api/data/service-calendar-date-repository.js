@@ -28,10 +28,12 @@ class ServiceCalendarDateRepository {
     });
   }
 
-  static updateServiceFootnote(serviceInfo) {
+  static updateServiceInfo(serviceInfo) {
     return ServiceCalendarDate.update(
       {
-        footnote: serviceInfo.footnote
+        footnote: serviceInfo.footnote,
+        skipService: serviceInfo.skipService,
+        skipReason: serviceInfo.skipReason,
       },
       {
         where: { id: serviceInfo.id }

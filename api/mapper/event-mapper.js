@@ -35,12 +35,12 @@ class EventMapper {
     return eventDate;
   }
 
-  static mapFootnotesToEvents(footnotes, events) {
+  static mapServiceInfoToEvents(serviceInfos, events) {
     return events.map(event => {
-      const eventFootnote = footnotes.find(
-        footnote => footnote.calendarDate.date === event.date
+      const eventServiceInfo = serviceInfos.find(
+        serviceInfo => serviceInfo.calendarDate.date === event.date
       );
-      event.footnote = eventFootnote;
+      event.serviceInfo = eventServiceInfo;
       return event;
     });
   }
