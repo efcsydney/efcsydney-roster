@@ -8,7 +8,7 @@ import EditRole from './EditRole';
 import EditDay from './EditDay';
 import EventsAPI from 'apis/events';
 import _ from 'lodash';
-import { getQueryParams } from 'utils';
+import { getQueryParams, getMemberNames } from 'utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { switchCategory } from 'modules/core/redux';
@@ -30,6 +30,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       params: {}
     };
     loadData = ({ from, to, category }) => {
+      // Get current events
       let queryParams = {};
       const defaultFrom = moment()
         .startOf('quarter')
@@ -37,6 +38,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       const defaultTo = moment()
         .endOf('quarter')
         .format('YYYY-MM-DD');
+
       if (document.location.search.length > 0) {
         queryParams = getQueryParams(document.location.search);
       }
@@ -44,6 +46,25 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       queryParams.from = from || defaultFrom;
       queryParams.to = to || defaultTo;
       queryParams.category = category;
+
+      // Get previous events
+      const preQueryParams = {
+        from: moment(queryParams.from).subtract(1, 'Q').format('YYYY-MM-DD'),
+        to: moment(queryParams.to).subtract(1, 'Q').format('YYYY-MM-DD'),
+        category,
+      };
+
+      EventsAPI.retrieve(preQueryParams)
+        .then(data => {
+          this.setState({
+            preQuarterMembers: getMemberNames(data.data),
+          });
+        })
+        .catch(e => {
+          console.error(e); // eslint-disable-line
+        });
+
+
       this.setState({ isLoading: true, params: queryParams });
       return EventsAPI.retrieve(queryParams)
         .then(data => {
@@ -196,7 +217,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         isLoading,
         isEditingDay,
         isEditingRole,
-        selectedData
+        selectedData,
+        preQuarterMembers,
       } = this.state;
 
       const barProps = {
@@ -229,6 +251,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               title="Edit Event"
               isOpen={isEditingRole}
               {...selectedData}
+              preQuarterMembers={preQuarterMembers}
               onClose={this.handleEditClose}
               onSave={this.handleEditSave}
             />
