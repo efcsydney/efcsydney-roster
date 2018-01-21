@@ -9,9 +9,6 @@ import { MOBILE_BREAKPOINT } from 'styled';
 import { getMemberNames, getQuarterDays, getRoles } from 'utils';
 import './icalstyle.css';
 import ReactDOM from 'react-dom';
-import moment from 'moment';
-import 'moment/locale/en-au';
-import 'moment/locale/zh-tw';
 
 const mapStateToProps = state => ({ lang: state.core.meta.lang });
 
@@ -71,7 +68,7 @@ export default connect(mapStateToProps)(
       this.handleWindowResize();
     }
     render() {
-      const { lang, date, data } = this.props;
+      const { date, data } = this.props;
       const { isMobile, calendarHeight } = this.state;
       const days = getQuarterDays(date, 7);
       const roles = getRoles(data.data);
@@ -82,7 +79,6 @@ export default connect(mapStateToProps)(
         onDayClick: this.handleDayClick,
         onRoleClick: this.handleRoleClick
       };
-
       return (
         <Wrapper
           ref={input => {

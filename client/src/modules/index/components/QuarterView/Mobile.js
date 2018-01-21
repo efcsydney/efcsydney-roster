@@ -45,7 +45,7 @@ export default class Mobile extends Component {
   render() {
     const icalicon = { 'calendar-plus-o': 'left' };
     const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
-    const { events, days, lang, roles, onDayClick, onRoleClick } = this.props;
+    const { events, days, roles, onDayClick, onRoleClick } = this.props;
 
     return (
       <Grid>
