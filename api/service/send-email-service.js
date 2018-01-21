@@ -9,10 +9,52 @@ const Service = require('../models/service').Service;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const config = require('config');
 const log = require('../utilities/logger');
+const { readAndParseFile } = require('../utilities/csv-helper');
+const { EmailListItem } = require('../models/email-list-item');
 
 // This is mocked out for now, will be complete when DB is done
 function getEmailList() {
-  return 'a@exmample.com, b@example.com';
+  const emailCsvFilePath = 'db/data/email-list.csv';
+
+  const emailList = parseCsvEmailFile(emailCsvFilePath);
+  const applyEmailTemplate = (emailTo) => {
+    if(emailTo.englishName){
+      return `${emailTo.englishName}<${emailTo.email}>`;
+    }
+    return `${emailTo.chineseName}<${emailTo.email}>`;
+  }
+  const emptyEmail = (emailTo) => !!emailTo.email;
+  //we need to return the following format
+  //新週報 <newsletter@efcsydney.org>, 教會音控 <ppt@efcsydney.org>, Eve Yeh<ginger_tab@hotmail.com>
+  const emailString = emailList
+    .filter(emptyEmail)
+    .map(applyEmailTemplate)
+    .join(',');
+
+  log.debug(emailString);
+  return emailString;
+}
+
+/*
+  This function is supposed to take an input of CSV file directory and return a list of JS object
+  [
+    {
+      email: 'fake_email@email.com,
+      englishName: '',
+      chineseName: '',
+    }
+  ]
+*/
+function parseCsvEmailFile(emailCsvFilePath){
+  const emailList = readAndParseFile(emailCsvFilePath);
+  const mapToEmailItem = (emailItem) => new EmailListItem(emailItem);
+  const excludeMetadataItem = (emailItem) => !emailItem.isMetaData;
+
+  const mappedEmailList = emailList
+    .map(mapToEmailItem)
+    .filter(excludeMetadataItem);
+
+  return mappedEmailList;
 }
 
 // This is a mock due to we only have one service at the moment
@@ -52,5 +94,7 @@ async function reminderEmail() {
 }
 
 module.exports = {
-  reminderEmail
+  reminderEmail,
+  getEmailList,
+  parseCsvEmailFile
 };

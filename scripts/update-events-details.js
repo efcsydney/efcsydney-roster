@@ -1,13 +1,8 @@
-const Papa = require('papaparse');
-const fs = require('fs');
 const sequelizeClient = require('../api/infrastructure/sequelize-client')
   .sequelizeClient;
 const Event = require('../api/models/event').Event;
-
-function readAndParseFile(fileName) {
-  const fileContent = fs.readFileSync(fileName, { encoding: 'utf8' });
-  return Papa.parse(fileContent, { header: true }).data;
-}
+const ServiceCalendarDate = require('../api/models/service-calendar-date').ServiceCalendarDate;
+const { readAndParseFile } = require('../api/utilities/csv-helper');
 
 /**
  * Find positions for service and build  mapper
@@ -25,12 +20,16 @@ async function buildPositionMapper(service) {
   }, {});
 }
 
-async function updateEvents() {
+function getServiceDetailsFromCsvFile(){
   const serviceDetails = {
     english: readAndParseFile('./db/data/english-events.csv'),
     chinese: readAndParseFile('./db/data/chinese-events.csv')
   };
 
+  return serviceDetails;
+}
+
+async function buildDateMapper(){
   // Build calendar dates mapper, which looks like: { '2017-01-01': 1 }
   const calendarDatesData = (await sequelizeClient.query(
     'SELECT id, date from calendar_dates'
@@ -39,11 +38,24 @@ async function updateEvents() {
     result[calendarDate.date] = calendarDate.id;
     return result;
   }, {});
-  // log.debug(dateMapper);
 
+  return dateMapper;
+}
+
+async function getServices(){
   const services = (await sequelizeClient.query(
     'SELECT id, name from services'
   ))[0];
+
+  return services;
+}
+
+async function updateEvents() {
+  const serviceDetails = getServiceDetailsFromCsvFile();
+
+  // Build calendar dates mapper, which looks like: { '2017-01-01': 1 }
+  const dateMapper = await buildDateMapper();
+  const services = await getServices();
 
   const promises = [];
   await Promise.all(
@@ -68,7 +80,41 @@ async function updateEvents() {
     })
   );
   await Promise.all(promises);
+}
+
+async function updateCombinedServiceForEnglishService(){
+  const serviceDetails = getServiceDetailsFromCsvFile();
+  // Build calendar dates mapper, which looks like: { '2017-01-01': 1 }
+  const dateMapper = await buildDateMapper();
+  const services = (await getServices()).filter((service) => service.name === 'english');
+
+  const trimAndToLowerCase = (value) => value.trim().toLowerCase();
+  const isCombinedService = (serviceDetail) => Object.keys(serviceDetail)
+    .map((position) => trimAndToLowerCase(serviceDetail[position]))
+    .includes('combined service');
+
+  const englishServices = serviceDetails.english
+    .map((serviceDetail) => ({date: serviceDetail.Date, excluded: isCombinedService(serviceDetail)}));
+
+  const promises = englishServices.map((service) => {
+    const promise = ServiceCalendarDate.update({
+      skipService: service.excluded,
+      skipReason: (service.excluded) ? 'Combined Service' : ''
+    },{
+      where: {
+        calendarDateId: dateMapper[service.date],
+        serviceId: services[0].id
+      }
+    });
+    return promise;
+  });
+  await Promise.all(promises);
+}
+
+async function syncDbFromServiceCsvFile(){
+  await updateEvents();
+  await updateCombinedServiceForEnglishService();
   sequelizeClient.close();
 }
 
-updateEvents();
+syncDbFromServiceCsvFile();

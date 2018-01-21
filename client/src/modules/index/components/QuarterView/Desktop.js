@@ -12,6 +12,7 @@ const mapStateToProps = state => ({ lang: state.core.meta.lang });
 
 export default connect(mapStateToProps)(
   class Desktop extends Component {
+    displayName = 'Desktop';
     handleDayClick = (e, day, footnote) => {
       const isAddCalendar =
         e.target.className.indexOf('react-add-to-calendar') !== -1;
@@ -81,7 +82,7 @@ export default connect(mapStateToProps)(
         <Grid>
           <Row>
             <Header width={cellWidth}>
-              <Text>{i18n.t('dateRoleHeader')}</Text>
+              <Text>{i18n.t(`${this.displayName}.gridCanton`)}</Text>
             </Header>
             {roles.map((role, i) => (
               <Header key={i} width={cellWidth}>
