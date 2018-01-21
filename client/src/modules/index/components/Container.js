@@ -15,13 +15,12 @@ import { switchCategory } from 'modules/core/redux';
 import { requestRetrieveEvents } from 'modules/index/redux';
 
 const mapStateToProps = state => {
-  const { meta: { category, lang } } = state.core;
+  const { meta: { category } } = state.core;
   const { meta: { isLoading }, data } = state.index;
   return {
     category,
     data,
-    isLoading,
-    lang
+    isLoading
   };
 };
 const mapDispatchToProps = dispatch =>
@@ -211,7 +210,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       }
     }
     render() {
-      const { lang } = this.props;
       const {
         date,
         isEditingDay,
@@ -223,7 +221,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
       const barProps = {
         date,
-        lang,
         onPrevClick: this.handleButtonClick.bind(this, 'prev'),
         onNextClick: this.handleButtonClick.bind(this, 'next')
       };
