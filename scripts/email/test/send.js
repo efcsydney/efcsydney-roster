@@ -6,41 +6,41 @@ const mockData = {
     {
       date: '2017-12-03',
       lang: 'zh-TW',
-      members: [
-        { role: '證道', name: '陳文禮' },
-        { role: '司會', name: '黃啟碩' },
-        { role: '詩歌讚美', name: '黃婷' },
-        { role: '司琴', name: '黃正芃' },
-        { role: '招待', name: '薛文正' },
-        { role: '招待', name: '吳愛倫' },
-        { role: '司獻', name: '傅慧' },
-        { role: '司獻', name: '何平' },
-        { role: '聖餐<br/>聖洗', name: '簡瑞蘭' },
-        { role: '投影', name: '宣志凌' },
-        { role: '音控', name: '紀哲威' },
-        { role: '燈光', name: '許天因' },
-        { role: '督堂', name: '許天因' },
-        { role: '愛餐', name: '平安' }
+      positions: [
+        { position: '證道', volunteerName: '陳文禮' },
+        { position: '司會', volunteerName: '黃啟碩' },
+        { position: '詩歌讚美', volunteerName: '黃婷' },
+        { position: '司琴', volunteerName: '黃正芃' },
+        { position: '招待', volunteerName: '薛文正' },
+        { position: '招待', volunteerName: '吳愛倫' },
+        { position: '司獻', volunteerName: '傅慧' },
+        { position: '司獻', volunteerName: '何平' },
+        { position: '聖餐<br/>聖洗', volunteerName: '簡瑞蘭' },
+        { position: '投影', volunteerName: '宣志凌' },
+        { position: '音控', volunteerName: '紀哲威' },
+        { position: '燈光', volunteerName: '許天因' },
+        { position: '督堂', volunteerName: '許天因' },
+        { position: '愛餐', volunteerName: '平安' }
       ]
     },
     {
       date: '2017-12-10',
       lang: 'zh-TW',
-      members: [
-        { role: '證道', name: '林培謙' },
-        { role: '司會', name: '李永慷' },
-        { role: '詩歌讚美', name: '董芳君' },
-        { role: '司琴', name: '黃正芃' },
-        { role: '招待', name: '薛文正' },
-        { role: '招待', name: '吳愛倫' },
-        { role: '司獻', name: '傅慧' },
-        { role: '司獻', name: '許天因' },
-        { role: '聖餐聖洗', name: '' },
-        { role: '投影', name: '宣志凌' },
-        { role: '音控', name: '黃啟碩' },
-        { role: '燈光', name: '許天因' },
-        { role: '督堂', name: '許天因' },
-        { role: '愛餐', name: '信實' }
+      positions: [
+        { position: '證道', volunteerName: '林培謙' },
+        { position: '司會', volunteerName: '李永慷' },
+        { position: '詩歌讚美', volunteerName: '董芳君' },
+        { position: '司琴', volunteerName: '黃正芃' },
+        { position: '招待', volunteerName: '薛文正' },
+        { position: '招待', volunteerName: '吳愛倫' },
+        { position: '司獻', volunteerName: '傅慧' },
+        { position: '司獻', volunteerName: '許天因' },
+        { position: '聖餐聖洗', volunteerName: '' },
+        { position: '投影', volunteerName: '宣志凌' },
+        { position: '音控', volunteerName: '黃啟碩' },
+        { position: '燈光', volunteerName: '許天因' },
+        { position: '督堂', volunteerName: '許天因' },
+        { position: '愛餐', volunteerName: '信實' }
       ]
     }
   ],
@@ -48,29 +48,29 @@ const mockData = {
     {
       date: '2017-12-03',
       lang: 'en-AU',
-      members: [
-        { role: 'Speaker', name: 'Video' },
-        { role: 'Moderator', name: 'Dan Kao' },
-        { role: 'P&W', name: 'Amy Chen' },
-        { role: 'Pianist', name: 'Angela Sun' },
-        { role: 'Usher/Offering', name: 'Christine Yang' },
-        { role: 'PA/PPT', name: 'Joseph Chiang' },
-        { role: 'Newsletter', name: 'Kai Chang' },
-        { role: 'Refreshment', name: 'Christine Yang' }
+      positions: [
+        { position: 'Speaker', volunteerName: 'Video' },
+        { position: 'Moderator', volunteerName: 'Dan Kao' },
+        { position: 'P&W', volunteerName: 'Amy Chen' },
+        { position: 'Pianist', volunteerName: 'Angela Sun' },
+        { position: 'Usher/Offering', volunteerName: 'Christine Yang' },
+        { position: 'PA/PPT', volunteerName: 'Joseph Chiang' },
+        { position: 'Newsletter', volunteerName: 'Kai Chang' },
+        { position: 'Refreshment', volunteerName: 'Christine Yang' }
       ]
     },
     {
       date: '2017-12-10',
       lang: 'en-AU',
-      members: [
-        { role: 'Speaker', name: 'Gary Tan' },
-        { role: 'Moderator', name: 'Bobby Lu' },
-        { role: 'P&W', name: 'Betty Chen' },
-        { role: 'Pianist', name: 'Amy Chen' },
-        { role: 'Usher/Offering', name: 'Cheer Lin' },
-        { role: 'PA/PPT', name: 'Joseph Chiang' },
-        { role: 'Newsletter', name: 'Kai Chang' },
-        { role: 'Refreshment', name: 'Christine Yang' }
+      positions: [
+        { position: 'Speaker', volunteerName: 'Gary Tan' },
+        { position: 'Moderator', volunteerName: 'Bobby Lu' },
+        { position: 'P&W', volunteerName: 'Betty Chen' },
+        { position: 'Pianist', volunteerName: 'Amy Chen' },
+        { position: 'Usher/Offering', volunteerName: 'Cheer Lin' },
+        { position: 'PA/PPT', volunteerName: 'Joseph Chiang' },
+        { position: 'Newsletter', volunteerName: 'Kai Chang' },
+        { position: 'Refreshment', volunteerName: 'Christine Yang' }
       ]
     }
   ]
@@ -80,7 +80,7 @@ mailOptions = {
   from: config.get('reminderEmail.content.from'),
   to: 'a@example.com, b@example.com',
   cc: config.get('reminderEmail.content.cc'),
-  subject: config.get('reminderEmail.content.subject'),
+  subject: 'test',
   html: utils.getEmailHTML(mockData)
 };
 

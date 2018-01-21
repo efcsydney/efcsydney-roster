@@ -6,13 +6,13 @@ const { EmailListItem } = require('../../api/models/email-list-item');
 describe('Send Email Service - Parsing Email CSV File and Build Email String', function() {
   this.timeout(5000);
   it('returns only items that have either a English or Chinese name or both and a valid email address or empty email', function() {
-    const emailCsvFilePath = 'db/data/email-list.csv';
+    const emailCsvFilePath = 'db/data/email-list-example.csv';
     const actualEmailList = parseCsvEmailFile(emailCsvFilePath);
     const expectedNumberOfItems = 50;
     expect(actualEmailList.length).to.eq(expectedNumberOfItems);
   });
   it('correctly ignores first few rows that contains only "metadata"', function() {
-    const emailCsvFilePath = 'db/data/email-list.csv';
+    const emailCsvFilePath = 'db/data/email-list-example.csv';
     const actualEmailList = parseCsvEmailFile(emailCsvFilePath);
 
     const expectedEmailListItem1 = {

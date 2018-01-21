@@ -2,7 +2,7 @@ const { mjml2html } = require('mjml');
 const _ = require('lodash');
 const moment = require('moment');
 const nodemailer = require('nodemailer');
-const log = require('winston');
+const log = require('../../api/utilities/logger');
 const config = require('config');
 
 require('moment/locale/en-au');
@@ -17,20 +17,20 @@ const cellStyle = `
   white-space: nowrap;
 `;
 
-const renderHeaderRow = members => `
+const renderHeaderRow = positions => `
   <tr>
     <th style="${cellStyle}">&nbsp;</th>
-    ${members
+    ${positions
       .map(
-        ({ role }) => `
-    <th style="${cellStyle}">${role}</th>
+        ({ position }) => `
+    <th style="${cellStyle}">${position}</th>
     `
       )
       .join('\n')}
   </tr>
 `;
 
-const renderMemberRow = ({ date, members, lang }) => {
+const renderMemberRow = ({ date, positions, lang }) => {
   moment.locale(lang);
   if (lang === 'zh-TW') {
     date = moment(date).format('MMMDo');
@@ -43,10 +43,10 @@ const renderMemberRow = ({ date, members, lang }) => {
   return `
     <tr>
       <td style="${cellStyle}">${date}</td>
-      ${members
+      ${positions
         .map(
-          ({ name }) => `
-      <td style="${cellStyle}">${name}</td>
+          ({ volunteerName }) => `
+      <td style="${cellStyle}">${volunteerName}</td>
       `
         )
         .join('\n')}
@@ -57,7 +57,7 @@ const renderMemberRow = ({ date, members, lang }) => {
 const renderTable = days => `
   <mj-section padding="5px 0 10px">
     <mj-table padding="0">
-      ${renderHeaderRow(days[0].members)}
+      ${renderHeaderRow(days[0].positions)}
       ${days.map(day => renderMemberRow(day)).join('')}
     </mj-table>
   </mj-section>

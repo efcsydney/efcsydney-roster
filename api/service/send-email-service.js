@@ -14,7 +14,7 @@ const { EmailListItem } = require('../models/email-list-item');
 
 // This is mocked out for now, will be complete when DB is done
 function getEmailList() {
-  const emailCsvFilePath = 'db/data/email-list.csv';
+  const emailCsvFilePath = config.get('reminderEmail.emailListFilePath');
 
   const emailList = parseCsvEmailFile(emailCsvFilePath);
   const applyEmailTemplate = (emailTo) => {
@@ -67,10 +67,13 @@ async function buildEventsForMultipleServices(from, to) {
         { from, to },
         service.name
       );
-      events[service.name] = EventMapper.convertEventsModelToDto(
+      events[service.name] = EventMapper.groupEventsByCalendarDate(
         eventsForService
       );
-      events[service.name].lang = service.locale;
+      events[service.name] = events[service.name].map((event) => {
+        event.lang = service.locale;
+        return event;
+      });
       return events;
     })
   );
@@ -82,13 +85,13 @@ async function reminderEmail() {
   const from = getDateString(new Date());
   const to = getDateByWeeks(from, 2);
   const events = await buildEventsForMultipleServices(from, to);
-  log.info(JSON.stringify(events));
+  // log.debug(JSON.stringify(events, null, 2));
 
   return sendEmail({
     from: config.get('reminderEmail.content.from'),
     to: getEmailList(),
     cc: config.get('reminderEmail.content.cc'),
-    subject: config.get('reminderEmail.content.subject'),
+    subject: `[自動提醒] 這週與下週的主日服事`,
     html: getEmailHTML(events)
   });
 }
