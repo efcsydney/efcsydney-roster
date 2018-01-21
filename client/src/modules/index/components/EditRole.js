@@ -42,9 +42,10 @@ export default class EditRole extends Component {
     };
   }
   render() {
-    const { date, member, onSave, role, ...otherProps } = this.props; // eslint-disable-line
+    const { date, member, onSave, role, preQuarterMembers, ...otherProps } = this.props; // eslint-disable-line
     const { selectedName, names } = this.state;
     const formattedDate = moment(date).format('DD MMM, YYYY');
+    const finalMembers = _.union(names, preQuarterMembers);
 
     return (
       <Modal {...otherProps}>
@@ -64,7 +65,7 @@ export default class EditRole extends Component {
                 multi={false}
                 value={selectedName}
                 onChange={this.handleNameChange}
-                options={getOptions(names)}
+                options={getOptions(finalMembers)}
                 clearable={true}
               />
             </span>

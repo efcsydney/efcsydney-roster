@@ -82,7 +82,6 @@ export default connect(mapStateToProps)(
         onDayClick: this.handleDayClick,
         onRoleClick: this.handleRoleClick
       };
-      moment.locale(lang);
 
       return (
         <Wrapper

@@ -8,14 +8,36 @@ i18next.init({
   resources: {
     'en-AU': {
       translation: {
-        dateRoleHeader: 'Date / Role',
-        orgTitle: 'EFC Sydney'
+        DateBar: {
+          dateString: '{{startMonth}} - {{endMonth}} {{year}}'
+        },
+        Desktop: {
+          dateFormat: 'DD MMM',
+          gridCanton: 'Date / Role'
+        },
+        Mobile: {
+          dateFormat: 'DD MMM'
+        },
+        NavBar: {
+          orgTitle: 'EFC Sydney'
+        }
       }
     },
     'zh-TW': {
       translation: {
-        dateRoleHeader: '日期',
-        orgTitle: '雪梨台福教會'
+        DateBar: {
+          dateString: '{{year}}年{{startMonth}} - {{endMonth}}'
+        },
+        Desktop: {
+          dateFormat: 'MMMDo',
+          gridCanton: '日期'
+        },
+        Mobile: {
+          dateFormat: 'MMMDo'
+        },
+        NavBar: {
+          orgTitle: '雪梨台福教會'
+        }
       }
     }
   }

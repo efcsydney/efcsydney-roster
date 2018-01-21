@@ -14,6 +14,7 @@ const mapDispatchToProps = dispatch =>
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   class NavBar extends Component {
+    displayName = 'NavBar';
     static propTypes = {
       onCategoryChange: PropTypes.func
     };
@@ -27,6 +28,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     };
     render() {
       const { value } = this.props;
+
       return (
         <Wrapper>
           <a href="/">
@@ -45,7 +47,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               value={value}
             />
           </Title>
-          <Org>{i18n.t('orgTitle')}</Org>
+          <Org>{i18n.t(`${this.displayName}.orgTitle`)}</Org>
         </Wrapper>
       );
     }
