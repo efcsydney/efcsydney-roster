@@ -135,6 +135,10 @@ This setup uses [concurrently](https://github.com/kimmobrunfeldt/concurrently) f
 
 ## Deploy
 
+Code with comments as Document
+* .travis.yml (travis setting)
+* deploy.sh   (server side setting)
+
 Deploy to QA server hostname: http://demo-roster.efcsydney.org
 
 ```
