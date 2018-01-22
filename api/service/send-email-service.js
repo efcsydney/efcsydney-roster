@@ -12,11 +12,11 @@ const log = require('../utilities/logger');
 const { readAndParseFile } = require('../utilities/csv-helper');
 const { EmailListItem } = require('../models/email-list-item');
 
+const emailCsvFilePath = config.get('reminderEmail.emailListFilePath');
+const emailListFromCsv = parseCsvEmailFile(emailCsvFilePath);
+
 // This is mocked out for now, will be complete when DB is done
 function getEmailList() {
-  const emailCsvFilePath = config.get('reminderEmail.emailListFilePath');
-
-  const emailList = parseCsvEmailFile(emailCsvFilePath);
   const applyEmailTemplate = (emailTo) => {
     if(emailTo.englishName){
       return `${emailTo.englishName}<${emailTo.email}>`;
@@ -26,8 +26,20 @@ function getEmailList() {
   const emptyEmail = (emailTo) => !!emailTo.email;
   //we need to return the following format
   //新週報 <newsletter@efcsydney.org>, 教會音控 <ppt@efcsydney.org>, Eve Yeh<ginger_tab@hotmail.com>
-  const emailString = emailList
+  const emailString = emailListFromCsv
     .filter(emptyEmail)
+    .map(applyEmailTemplate)
+    .join(',');
+
+  log.debug(emailString);
+  return emailString;
+}
+
+function getEmptyEmailList() {
+  const applyEmailTemplate = (emailTo) => emailTo.englishName ? `${emailTo.englishName}` : `${emailTo.chineseName}`;
+  const nonEmptyEmail = (emailTo) => !emailTo.email;
+  const emailString = emailListFromCsv
+    .filter(nonEmptyEmail)
     .map(applyEmailTemplate)
     .join(',');
 
@@ -99,5 +111,6 @@ async function reminderEmail() {
 module.exports = {
   reminderEmail,
   getEmailList,
+  getEmptyEmailList,
   parseCsvEmailFile
 };

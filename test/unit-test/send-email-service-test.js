@@ -1,6 +1,6 @@
 const chai = require('chai');
 const expect = chai.expect;
-const { parseCsvEmailFile, getEmailList } = require('../../api/service/send-email-service');
+const { parseCsvEmailFile, getEmailList, getEmptyEmailList } = require('../../api/service/send-email-service');
 const { EmailListItem } = require('../../api/models/email-list-item');
 
 describe('Send Email Service - Parsing Email CSV File and Build Email String', function() {
@@ -111,6 +111,12 @@ describe('Send Email Service - Parsing Email CSV File and Build Email String', f
   it('converts the email list as per template', function() {
     const expectedEmailListString = 'Becky Wang<becksafdsy_wq@abc.com>,';
     const actualEmailListString = getEmailList();
+
+    expect(actualEmailListString).to.contain(expectedEmailListString);
+  });
+  it('converts the email list as per template', function() {
+    const expectedEmailListString = 'Amy TEST,Raymond Tsang,Rev. Kian Holik,Yvonne Lu,Ted,劉富理,張明俊,Riley Hsu,王洪賢,章婕,Grace Chuang,黃盛玲';
+    const actualEmailListString = getEmptyEmailList();
 
     expect(actualEmailListString).to.contain(expectedEmailListString);
   });

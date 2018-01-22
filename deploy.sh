@@ -26,3 +26,8 @@ ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd 
 
 echo "After deploy"
 ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd /opt/efcsydney-roster; . ~/.bash_profile; nvm use 8; yarn; yarn db-migrate'
+
+echo "Do links"
+ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd /opt/efcsydney-roster; ln -s /opt/config/email-list.csv ./db/data/email-list.csv'
+ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd /opt/efcsydney-roster; ln -s /opt/config/local.yaml ./config/local.yaml'
+
