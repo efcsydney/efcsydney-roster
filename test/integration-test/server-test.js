@@ -164,7 +164,6 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(201)
         .then(function(res) {
-          console.log(res.body.data);
           expect(res.body.result).to.equal('OK');
           expect(res.body.data.date).to.equal(event.date);
           expect(res.body.data.role).to.equal(event.role);
