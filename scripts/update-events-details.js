@@ -82,38 +82,50 @@ async function updateEvents() {
   await Promise.all(promises);
 }
 
-async function updateCombinedServiceForEnglishService(){
+async function updateServiceInfo(){
   const serviceDetails = getServiceDetailsFromCsvFile();
   // Build calendar dates mapper, which looks like: { '2017-01-01': 1 }
   const dateMapper = await buildDateMapper();
-  const services = (await getServices()).filter((service) => service.name === 'english');
+  const services = await getServices();
+  const footnoteColumn = 'Occassion';
 
   const trimAndToLowerCase = (value) => value.trim().toLowerCase();
   const isCombinedService = (serviceDetail) => Object.keys(serviceDetail)
+    .filter((position) => position !== footnoteColumn)
     .map((position) => trimAndToLowerCase(serviceDetail[position]))
     .includes('combined service');
 
-  const englishServices = serviceDetails.english
-    .map((serviceDetail) => ({date: serviceDetail.Date, excluded: isCombinedService(serviceDetail)}));
+  const getFootnote = (serviceDetail) => serviceDetail[footnoteColumn].trim();
+  const toServiceInfoItem = (serviceDetail) => ({date: serviceDetail.Date,
+    excluded: isCombinedService(serviceDetail),
+    footnote: getFootnote(serviceDetail),
+  });
 
-  const promises = englishServices.map((service) => {
-    const promise = ServiceCalendarDate.update({
+  const englishServiceId =  services.filter((service) => service.name === 'english')[0].id;
+  const chineseServiceId =  services.filter((service) => service.name === 'chinese')[0].id;
+  const chineseServiceInfos = serviceDetails.chinese.map(toServiceInfoItem);
+  const englishServiceInfos = serviceDetails.english.map(toServiceInfoItem);
+
+  await Promise.all(chineseServiceInfos.map((chineseServiceInfo) => updateServiceInfoItem(chineseServiceInfo, chineseServiceId, dateMapper)));
+  await Promise.all(englishServiceInfos.map((englishServiceInfo) => updateServiceInfoItem(englishServiceInfo, englishServiceId, dateMapper)));
+}
+
+function updateServiceInfoItem(service, serviceId, dateMapper){
+    return ServiceCalendarDate.update({
       skipService: service.excluded,
-      skipReason: (service.excluded) ? 'Combined Service' : ''
+      skipReason: (service.excluded) ? 'Combined Service' : '',
+      footnote: service.footnote,
     },{
       where: {
         calendarDateId: dateMapper[service.date],
-        serviceId: services[0].id
+        serviceId: serviceId,
       }
     });
-    return promise;
-  });
-  await Promise.all(promises);
 }
 
 async function syncDbFromServiceCsvFile(){
   await updateEvents();
-  await updateCombinedServiceForEnglishService();
+  await updateServiceInfo();
   sequelizeClient.close();
 }
 
