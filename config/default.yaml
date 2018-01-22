@@ -4,7 +4,9 @@ emailService:
     user: ''
     pass: ''
 reminderEmail:
+  enabled: false
   content:
     from: ''
     cc: ''
-    subject: 'Reminder'
+  schedule: '00 * * * * *'
+  emailListFilePath: 'db/data/email-list-example.csv'

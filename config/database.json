@@ -29,6 +29,6 @@
     "database": "efcRoster",
     "host": "dbidentifier.ccoogueru7pl.ap-southeast-2.rds.amazonaws.com",
     "dialect": "mysql",
-    "logging": true
+    "logging": false
   }
 }

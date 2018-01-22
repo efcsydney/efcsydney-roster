@@ -1,0 +1,2 @@
+reminderEmail:
+  emailListFilePath: 'db/data/email-list.csv'

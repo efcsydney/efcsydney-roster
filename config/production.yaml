@@ -1,0 +1,3 @@
+reminderEmail:
+  emailListFilePath: 'db/data/email-list.csv'
+  schedule: '00 00 08 * * 3'

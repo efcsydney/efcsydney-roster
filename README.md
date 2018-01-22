@@ -49,7 +49,6 @@ Once MySql server is installed and the root user is configured, execute the foll
 ```
 yarn db-create  // create database
 yarn db-migrate // migrate database
-yarn db-seed    // seed database
 ```
 You can use other sequelize utilities eg. `node_modules/.bin/sequelize db:migrate:undo` to revert migrations
 
