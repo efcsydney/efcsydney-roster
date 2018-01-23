@@ -12,18 +12,28 @@ const cellStyle = `
   border: 1px solid #000;
   font-size: 12px;
   line-height: 1.3;
-  padding: 4px 2px;
+  padding: 6px 4px;
+  text-align: center;
+  white-space: nowrap;
+`;
+const cellHeaderStyle = `
+  background: #f0f0f0;
+  border: 1px solid #000;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1.3;
+  padding: 6px 4px;
   text-align: center;
   white-space: nowrap;
 `;
 
 const renderHeaderRow = positions => `
   <tr>
-    <th style="${cellStyle}">&nbsp;</th>
+    <th style="${cellHeaderStyle}">&nbsp;</th>
     ${positions
       .map(
         ({ position }) => `
-    <th style="${cellStyle}">${position}</th>
+    <th style="${cellHeaderStyle}">${position}</th>
     `
       )
       .join('\n')}
@@ -63,32 +73,137 @@ const renderTable = days => `
   </mj-section>
 `;
 
+const renderDraftTable = (title, emailList, emptyEmailList) => {
+  const emails = emailList.split(',').map(email => {
+    const regExp = /([^<]+)<([^>]+)>/;
+    const matches = email.match(regExp);
+    return {
+      name: matches[1].trim(),
+      email: matches[2].trim()
+    };
+  });
+
+  const thStyle = `
+    border: 1px solid #f99;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.3;
+    padding: 8px;
+    text-align: right;
+    vertical-align: top;
+    white-space: nowrap;
+    margin: 2px;
+  `;
+  const tdStyle = `
+    border: 1px solid #f99;
+    font-size: 12px;
+    line-height: 1.3;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+    margin: 2px;
+  `;
+  const tdWarnStyle = `
+    background: #fdf3f0;
+    border: 1px solid #f99;
+    border-collapse: separate;
+    font-size: 12px;
+    line-height: 1.3;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+    margin: 2px;
+  `;
+
+  emailList = emails
+    .map(
+      ({ name, email }) =>
+        `<span>${name} &amp;lt;<a href="mailto:${email}">${email}</a>&amp;gt;</span>`
+    )
+    .join(', ');
+
+  return `
+    <mj-table class="draft-table">
+      <tr>
+        <th style="${thStyle}">標題</th>
+        <td style="${tdStyle}">${title}</td>
+      </tr>
+      <tr>
+        <th style="${thStyle}">收件人</th>
+        <td style="${tdStyle}">${emailList}</td>
+      </tr>
+      <tr>
+        <th style="${thStyle}">缺少 Email</th>
+        <td style="${tdWarnStyle}">${emptyEmailList}</td>
+      </tr>
+    </mj-table>
+  `;
+};
+
 /**
  * Generate Email HTML according to events
  *
  * @method getEmailHTML
  * @param events {Object}
+ * @param emailList {String}
+ * @param missingList {String}
  * @return {String}
  */
-exports.getEmailHTML = events => {
+exports.getEmailHTML = (events, emailList, emptyEmailList) => {
+  const date = _.values(events.chinese)[0].date;
+  const title = `[EFCOS] ${moment(date).format('MMMDo')} 主日服事`;
   const mjml = `
     <mjml>
+      <mj-head>
+        <mj-style>
+        a:link, a:visited {
+          color: #15c;
+          text-decoration: none;
+        }
+        .alert {
+          color: #d14836;
+          border: solid 1px #f99;
+          border-radius: 3px;
+          background: #fdf3f0;
+        }
+        .draft-table {
+          border-collapse: separate;
+          margin: 50px;
+        }
+        .container {
+          font-family: Lato,Helvetica Neue,Arial,Helvetica,sans-serif;
+        }
+        </mj-style>
+      </mj-head>
       <mj-body>
-        <mj-container width="650px">
-          <mj-section padding="10px 0 7px">
-            <mj-text font-size="16px">各位弟兄姊妹平安</mj-text>
+        <mj-container width="960px" css-class="container">
+          <mj-wrapper padding="10px 0 5px">
+            <mj-section padding="10px 15px" css-class="alert">
+              <mj-text font-size="14px" color="#d14836">⚠️ &nbsp; 請參考以下系統幫您準備的服事提醒草稿，每週自動寄給服事助理工</mj-text>
+            </mj-section>
+          </mj-wrapper>
+          <mj-section padding="5px 0 0">
+            ${renderDraftTable(title, emailList, emptyEmailList)}
+            <mj-section padding="5px 0 0">
+              <mj-text>若需修改服事表請至：<a href="http://roster.efcsydney.org">http://roster.efcydney.org</a></mj-text>
+            </mj-section>
           </mj-section>
-          <mj-section padding="10px 0 15px">
-            <mj-text font-size="16px">溫馨提醒下兩週的同工預備心服事</mj-text>
+          <mj-section padding="5px 0 5px">
+            <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
           </mj-section>
-          <mj-section padding="0 0 10px">
+          <mj-section padding="5px 0 5px">
+            <mj-text font-size="14px">各位弟兄姊妹平安</mj-text>
+          </mj-section>
+          <mj-section padding="5px 0 5px">
+            <mj-text font-size="14px">溫馨提醒下兩週的同工預備心服事</mj-text>
+          </mj-section>
+          <mj-section padding="5px 0 5px">
             ${_.values(events)
               .map(days => renderTable(days))
               .join('\n')}
           </mj-section>
           <mj-section padding="0">
-            <mj-text font-size="14px">Regards,</mj-text>
-            <mj-text font-size="14px">Deborah</mj-text>
+            <mj-text font-size="12px" line-height="1.4">Regards<br/></mj-text>
           </mj-section>
         </mj-container>
       </mj-body>
