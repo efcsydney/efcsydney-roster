@@ -9,7 +9,10 @@ import { findEvent, getCalData } from 'utils';
 import i18n from 'i18n';
 
 const CAL_ICON = { 'calendar-plus-o': 'left' };
-const CAL_ENABLED_TYPES = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
+const CAL_ENABLED_TYPES = [
+  { apple: i18n.t('Desktop.addCalByDownloadCsv') },
+  { google: i18n.t('Desktop.addCalByGoogle') }
+];
 
 const mapStateToProps = state => ({ lang: state.core.meta.lang });
 
@@ -25,6 +28,9 @@ export default connect(mapStateToProps)(
       }
       this.props.onDayClick(day, footnote);
     };
+    getTrans(key) {
+      return i18n.t(`${this.displayName}.${key}`);
+    }
     renderNameCells(day, event) {
       const { roles, onRoleClick } = this.props;
       const members = event ? event.members : [];
@@ -74,19 +80,18 @@ export default connect(mapStateToProps)(
       const formattedDay = day.format('YYYY-MM-DD');
       const highlighted = formattedDay === highlightDate;
       const serviceInfo = _.get(event, 'serviceInfo', {});
-      const dateString = day.format(i18n.t(`${this.displayName}.dateFormat`));
 
       return (
         <Row key={formattedDay} highlighted={highlighted}>
           <DayCell
             onClick={e => this.handleDayClick(e, formattedDay, serviceInfo)}>
             {this.renderCalendar(day, roles, members)}
-            {dateString}
+            {day.format(this.getTrans('dateFormat'))}
           </DayCell>
-          <NameCell
+          <NoteCell
             onClick={e => this.handleDayClick(e, formattedDay, serviceInfo)}>
             {_.get(serviceInfo, 'footnote', '')}
-          </NameCell>
+          </NoteCell>
           {this.renderNameCells(day, event)}
         </Row>
       );
@@ -100,10 +105,10 @@ export default connect(mapStateToProps)(
           <thead>
             <Row>
               <Header width={cellWidth}>
-                <Text>{i18n.t(`${this.displayName}.gridCanton`)}</Text>
+                <Text>{this.getTrans('gridCanton')}</Text>
               </Header>
               <Header>
-                <Text>{i18n.t(`${this.displayName}.occassion`)}</Text>
+                <Text>{this.getTrans('occassion')}</Text>
               </Header>
               {roles.map((role, i) => (
                 <Header key={i}>
@@ -122,6 +127,10 @@ export default connect(mapStateToProps)(
 const Text = styled.span`
   overflow: hidden;
   white-space: nowrap;
+  &:empty:before {
+    color: #ccc;
+    content: '-';
+  }
 `;
 const Grid = styled.table`
   border-collapse: collapse;
@@ -140,6 +149,11 @@ const Cell = styled.td`
   text-align: center;
   white-space: nowrap;
   width: ${props => props.width};
+  &:empty:before {
+    padding: 0;
+    color: #ccc;
+    content: '-';
+  }
 `;
 const Header = Cell.extend`
   background-color: #eee;
@@ -163,6 +177,16 @@ const NameCell = Cell.extend`
     border-color: #eee;
     border-width: 1px 1px 1px 0;
   }
+`;
+const NoteCell = NameCell.extend`
+  line-height: 1.2;
+  min-width: 75px;
+  max-width: 120px;
+  overflow: hidden;
+  padding: 5px 8px;
+  text-overflow: ellipsis;
+  white-space: normal;
+  font-size: 12px;
 `;
 const Row = styled.tr`
   width: 100%;

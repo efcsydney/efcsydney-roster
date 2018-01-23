@@ -25,7 +25,9 @@ export default class Mobile extends Component {
     onDayClick: () => {},
     onRoleClick: () => {}
   };
-
+  getTrans(key) {
+    return i18n.t(`${this.displayName}.${key}`);
+  }
   scrollToThisWeek = () => {
     const highlightedEl = document.getElementById('highlighted');
     if (highlightedEl) {
@@ -42,10 +44,36 @@ export default class Mobile extends Component {
     }
   }
 
+  renderRolesList(day, roles, members, serviceInfo) {
+    const { onRoleClick } = this.props;
+
+    if (serviceInfo.skipService) {
+      return (
+        <Row>
+          <ExcludeReason>{serviceInfo.skipReason}</ExcludeReason>
+        </Row>
+      );
+    }
+
+    return roles.map((role, i) => {
+      const member = _.find(members, { role }) || {};
+      const name = member.name || '';
+      return (
+        <Row key={i}>
+          <Role>{role}</Role>
+          <Name onClick={() => onRoleClick(day, role, name)}>{name}</Name>
+        </Row>
+      );
+    });
+  }
+
   render() {
     const icalicon = { 'calendar-plus-o': 'left' };
-    const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
-    const { events, days, roles, onDayClick, onRoleClick } = this.props;
+    const icalitems = [
+      { apple: this.getTrans('addCalByDownloadCsv') },
+      { google: this.getTrans('addCalByGoogle') }
+    ];
+    const { events, days, roles, onDayClick } = this.props;
 
     return (
       <Grid>
@@ -76,29 +104,21 @@ export default class Mobile extends Component {
                   onDayClick(formattedDate, serviceInfo);
                 }}>
                 <Label>
-                  {day.format(i18n.t(`${this.displayName}.dateFormat`))}
+                  {day.format(this.getTrans('dateFormat'))}
+                  {serviceInfo.footnote && (
+                    <Footnote>( {serviceInfo.footnote} )</Footnote>
+                  )}
                 </Label>
                 <Action>
                   <AddToCalendar
                     event={icalEvent}
                     listItems={icalitems}
                     buttonTemplate={icalicon}
-                    buttonLabel="Remind Me"
+                    buttonLabel={this.getTrans('addCalLabel')}
                   />
                 </Action>
               </Header>
-              {roles.map((role, i) => {
-                const member = _.find(members, { role }) || {};
-                const name = member.name || '';
-                return (
-                  <Row key={i}>
-                    <Role>{role}</Role>
-                    <Name onClick={() => onRoleClick(day, role, name)}>
-                      {name}
-                    </Name>
-                  </Row>
-                );
-              })}
+              {this.renderRolesList(day, roles, members, serviceInfo)}
             </Day>
           );
         })}
@@ -124,6 +144,9 @@ const Cell = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   width: auto;
+`;
+const ExcludeReason = Cell.extend`
+  padding: 10px;
 `;
 const Header = Cell.extend`
   align-items: center;
@@ -198,7 +221,15 @@ const Label = styled.span`
   color: #000;
   display: inline-block;
   font-size: 15px;
+  line-height: 1.2;
   padding: 10px;
+  text-align: left;
+`;
+const Footnote = styled.span`
+  display: inline-block;
+  font-size: 11px;
+  margin-left: 5px;
+  vertical-align: baseline;
 `;
 const Action = styled.span`
   display: inline-block;

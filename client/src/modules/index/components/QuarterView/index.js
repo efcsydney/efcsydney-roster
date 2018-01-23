@@ -25,6 +25,7 @@ export default class QuarterView extends Component {
   };
   handleDayClick = (day, serviceInfo) => {
     const { onDayClick } = this.props;
+    console.log(serviceInfo);
 
     onDayClick({ day, serviceInfo });
   };
