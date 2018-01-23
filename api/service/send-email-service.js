@@ -17,13 +17,13 @@ const emailListFromCsv = parseCsvEmailFile(emailCsvFilePath);
 
 // This is mocked out for now, will be complete when DB is done
 function getEmailList() {
-  const applyEmailTemplate = (emailTo) => {
-    if(emailTo.englishName){
+  const applyEmailTemplate = emailTo => {
+    if (emailTo.englishName) {
       return `${emailTo.englishName}<${emailTo.email}>`;
     }
     return `${emailTo.chineseName}<${emailTo.email}>`;
-  }
-  const emptyEmail = (emailTo) => !!emailTo.email;
+  };
+  const emptyEmail = emailTo => !!emailTo.email;
   //we need to return the following format
   //新週報 <newsletter@efcsydney.org>, 教會音控 <ppt@efcsydney.org>, Eve Yeh<ginger_tab@hotmail.com>
   const emailString = emailListFromCsv
@@ -36,8 +36,9 @@ function getEmailList() {
 }
 
 function getEmptyEmailList() {
-  const applyEmailTemplate = (emailTo) => emailTo.englishName ? `${emailTo.englishName}` : `${emailTo.chineseName}`;
-  const nonEmptyEmail = (emailTo) => !emailTo.email;
+  const applyEmailTemplate = emailTo =>
+    emailTo.englishName ? `${emailTo.englishName}` : `${emailTo.chineseName}`;
+  const nonEmptyEmail = emailTo => !emailTo.email;
   const emailString = emailListFromCsv
     .filter(nonEmptyEmail)
     .map(applyEmailTemplate)
@@ -57,10 +58,10 @@ function getEmptyEmailList() {
     }
   ]
 */
-function parseCsvEmailFile(emailCsvFilePath){
+function parseCsvEmailFile(emailCsvFilePath) {
   const emailList = readAndParseFile(emailCsvFilePath);
-  const mapToEmailItem = (emailItem) => new EmailListItem(emailItem);
-  const excludeMetadataItem = (emailItem) => !emailItem.isMetaData;
+  const mapToEmailItem = emailItem => new EmailListItem(emailItem);
+  const excludeMetadataItem = emailItem => !emailItem.isMetaData;
 
   const mappedEmailList = emailList
     .map(mapToEmailItem)
@@ -82,7 +83,7 @@ async function buildEventsForMultipleServices(from, to) {
       events[service.name] = EventMapper.groupEventsByCalendarDate(
         eventsForService
       );
-      events[service.name] = events[service.name].map((event) => {
+      events[service.name] = events[service.name].map(event => {
         event.lang = service.locale;
         return event;
       });
@@ -97,6 +98,8 @@ async function reminderEmail() {
   const from = getDateString(new Date());
   const to = getDateByWeeks(from, 2);
   const events = await buildEventsForMultipleServices(from, to);
+  const emailList = getEmailList();
+  const emptyEmailList = getEmptyEmailList();
   // log.debug(JSON.stringify(events, null, 2));
 
   return sendEmail({
@@ -104,7 +107,7 @@ async function reminderEmail() {
     to: getEmailList(),
     cc: config.get('reminderEmail.content.cc'),
     subject: `[自動提醒] 這週與下週的主日服事`,
-    html: getEmailHTML(events)
+    html: getEmailHTML(events, emailList, emptyEmailList)
   });
 }
 
