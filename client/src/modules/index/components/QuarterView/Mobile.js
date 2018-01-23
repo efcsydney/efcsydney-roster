@@ -52,11 +52,12 @@ export default class Mobile extends Component {
         {days.map((day, i) => {
           const event = findEvent(events, day);
           const members = event ? event.members : [];
-          const footnote = event ? event.footnote : '';
+          const serviceInfo = _.get(event, 'serviceInfo', {});
           const icalEvent = getCalData(day, roles, members);
           const highlightDate = moment()
             .isoWeekday(7)
             .format('YYYY-MM-DD');
+          const formattedDate = day.format('YYYY-MM-DD');
           const highlighted = day.format('YYYY-MM-DD') === highlightDate;
 
           return (
@@ -72,7 +73,7 @@ export default class Mobile extends Component {
                     e.stopPropagation();
                     return;
                   }
-                  onDayClick(day, footnote);
+                  onDayClick(formattedDate, serviceInfo);
                 }}>
                 <Label>
                   {day.format(i18n.t(`${this.displayName}.dateFormat`))}

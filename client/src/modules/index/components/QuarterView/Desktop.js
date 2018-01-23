@@ -1,12 +1,15 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import AddToCalendar from 'react-add-to-calendar';
 import './icalstyle.css';
 import moment from 'moment';
 import { findEvent, getCalData } from 'utils';
 import i18n from 'i18n';
+
+const CAL_ICON = { 'calendar-plus-o': 'left' };
+const CAL_ENABLED_TYPES = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
 
 const mapStateToProps = state => ({ lang: state.core.meta.lang });
 
@@ -22,55 +25,69 @@ export default connect(mapStateToProps)(
       }
       this.props.onDayClick(day, footnote);
     };
-    renderDayRow(day, cellWidth) {
-      const { events, roles, lang, onRoleClick } = this.props;
+    renderNameCells(day, event) {
+      const { roles, onRoleClick } = this.props;
+      const members = event ? event.members : [];
+      const serviceInfo = _.get(event, 'serviceInfo', {});
+      const names = roles.map(role => {
+        const member = _.find(members, { role }) || {};
+        return member.name || '';
+      });
+
+      const isSkipService = serviceInfo.skipService || false;
+      if (isSkipService) {
+        const skipReason = serviceInfo.skipReason || '';
+        return (
+          <NameCell
+            colSpan={names.length}
+            onClick={e => this.handleDayClick(e, day, event.serviceInfo)}>
+            {skipReason}
+          </NameCell>
+        );
+      }
+
+      return names.map((name, i) => (
+        <NameCell key={i} onClick={() => onRoleClick(day, roles[i], name)}>
+          <Text>{name}</Text>
+        </NameCell>
+      ));
+    }
+    renderCalendar(day, roles, members) {
+      const event = getCalData(day, roles, members);
+
+      return (
+        <AddToCalendar
+          event={event}
+          listItems={CAL_ENABLED_TYPES}
+          buttonTemplate={CAL_ICON}
+          buttonLabel=""
+        />
+      );
+    }
+    renderDayRow(day) {
+      const { events, roles } = this.props;
       const event = findEvent(events, day);
       const members = event ? event.members : [];
-      const footnote = event ? event.footnote : '';
-      const icalEvent = getCalData(day, roles, members);
       const highlightDate = moment()
         .isoWeekday(7)
         .format('YYYY-MM-DD');
-      const icalicon = { 'calendar-plus-o': 'left' };
-      const icalitems = [{ apple: 'Apple Calendar' }, { google: 'Google' }];
       const formattedDay = day.format('YYYY-MM-DD');
-      let names = [];
-      roles.forEach(role => {
-        const member = _.find(members, { role }) || {};
-        names.push(member.name || '');
-      });
-      const isSingleValueRow = names.every((val, i, arr) => val === arr[0]);
       const highlighted = formattedDay === highlightDate;
-      const nameCells = names.map((name, i) => {
-        return (
-          <NameCell
-            key={i}
-            colIndex={i}
-            isSingleValueRow={isSingleValueRow}
-            width={cellWidth}
-            onClick={() => onRoleClick(day, roles[i], name)}>
-            <Text>{name}</Text>
-          </NameCell>
-        );
-      });
-
-      const dateString =
-        lang === 'zh-TW' ? day.format('MMMDo') : day.format('DD MMM');
+      const serviceInfo = _.get(event, 'serviceInfo', {});
+      const dateString = day.format(i18n.t(`${this.displayName}.dateFormat`));
 
       return (
         <Row key={formattedDay} highlighted={highlighted}>
           <DayCell
-            onClick={e => this.handleDayClick(e, day, footnote)}
-            width={cellWidth}>
-            <AddToCalendar
-              event={icalEvent}
-              listItems={icalitems}
-              buttonTemplate={icalicon}
-              buttonLabel=""
-            />
+            onClick={e => this.handleDayClick(e, formattedDay, serviceInfo)}>
+            {this.renderCalendar(day, roles, members)}
             {dateString}
           </DayCell>
-          {nameCells}
+          <NameCell
+            onClick={e => this.handleDayClick(e, formattedDay, serviceInfo)}>
+            {_.get(serviceInfo, 'footnote', '')}
+          </NameCell>
+          {this.renderNameCells(day, event)}
         </Row>
       );
     }
@@ -80,17 +97,22 @@ export default connect(mapStateToProps)(
 
       return (
         <Grid>
-          <Row>
-            <Header width={cellWidth}>
-              <Text>{i18n.t(`${this.displayName}.gridCanton`)}</Text>
-            </Header>
-            {roles.map((role, i) => (
-              <Header key={i} width={cellWidth}>
-                <Text>{role}</Text>
+          <thead>
+            <Row>
+              <Header width={cellWidth}>
+                <Text>{i18n.t(`${this.displayName}.gridCanton`)}</Text>
               </Header>
-            ))}
-          </Row>
-          {days.map(day => this.renderDayRow(day, cellWidth))}
+              <Header>
+                <Text>{i18n.t(`${this.displayName}.occassion`)}</Text>
+              </Header>
+              {roles.map((role, i) => (
+                <Header key={i}>
+                  <Text>{role}</Text>
+                </Header>
+              ))}
+            </Row>
+          </thead>
+          <tbody>{days.map(day => this.renderDayRow(day))}</tbody>
         </Grid>
       );
     }
@@ -101,18 +123,18 @@ const Text = styled.span`
   overflow: hidden;
   white-space: nowrap;
 `;
-const Grid = styled.div`
+const Grid = styled.table`
+  border-collapse: collapse;
   border-left: solid 1px #f0f3f8;
   border-radius: 0 0 8px 8px;
-  display: table;
   margin: 0;
   padding: 0;
   table-layout: fixed;
   min-width: 100%;
 `;
-const Cell = styled.span`
-  border-right: solid 1px #dadada;
-  display: table-cell;
+const Cell = styled.td`
+  border: solid 1px #eee;
+  border-width: 0 1px 0 0;
   overflow: hidden;
   padding: 10px;
   text-align: center;
@@ -128,7 +150,7 @@ const Header = Cell.extend`
   text-align: center;
 `;
 const DayCell = Cell.extend`
-  border-right: solid 1px #dadada;
+  border-right: solid 1px #eee;
   color: #666;
   cursor: pointer;
   font-weight: bold;
@@ -137,14 +159,12 @@ const DayCell = Cell.extend`
 `;
 const NameCell = Cell.extend`
   cursor: pointer;
-  border-right: ${props => (props.isSingleValueRow ? 'none' : '')};
-  color: ${props =>
-    props.isSingleValueRow && props.colIndex !== 3
-      ? 'rgba(255,255,255,0) !important'
-      : ''};
+  &[colspan] {
+    border-color: #eee;
+    border-width: 1px 1px 1px 0;
+  }
 `;
-const Row = styled.div`
-  display: table-row;
+const Row = styled.tr`
   width: 100%;
   &:nth-child(odd) {
     background-color: #f8f8f8;
