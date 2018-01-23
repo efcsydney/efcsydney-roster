@@ -179,7 +179,7 @@ exports.getEmailHTML = (events, emailList, emptyEmailList) => {
         <mj-container width="960px" css-class="container">
           <mj-wrapper padding="10px 0 5px">
             <mj-section padding="10px 15px" css-class="alert">
-              <mj-text font-size="14px" color="#d14836">⚠️ &nbsp; 請參考以下系統幫您準備的服事提醒草稿，每週自動寄給服事助理工</mj-text>
+              <mj-text font-size="14px" color="#d14836">⚠️ &nbsp; 請參考以下系統幫您準備的服事提醒草稿，每週自動寄給服事助理同工</mj-text>
             </mj-section>
           </mj-wrapper>
           <mj-section padding="5px 0 0">
