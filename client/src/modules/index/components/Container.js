@@ -7,31 +7,51 @@ import moment from 'moment';
 import EditRole from './EditRole';
 import EditDay from './EditDay';
 import EventsAPI from 'apis/events';
-import _ from 'lodash';
 import { getMemberNames } from 'utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { switchCategory } from 'modules/core/redux';
-import { requestRetrieveEvents } from 'modules/index/redux';
+import {
+  requestModifyServiceInfo,
+  requestModifyIdEvents,
+  requestRetrieveEvents,
+  setSelectedData,
+  toggleEditRole,
+  toggleEditDay
+} from 'modules/index/redux';
 
 const mapStateToProps = state => {
   const { meta: { category } } = state.core;
-  const { meta: { isLoading }, data } = state.index;
+  const {
+    meta: { isEditingDay, isEditingRole, isLoading },
+    data
+  } = state.index;
   return {
     data,
     category,
+    isEditingDay,
+    isEditingRole,
     isLoading
   };
 };
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ switchCategory, requestRetrieveEvents }, dispatch);
+  bindActionCreators(
+    {
+      setSelectedData,
+      switchCategory,
+      requestModifyIdEvents,
+      requestModifyServiceInfo,
+      requestRetrieveEvents,
+      toggleEditDay,
+      toggleEditRole
+    },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   class App extends Component {
     state = {
       date: new Date(),
-      isEditingRole: false,
-      isEditingDay: false,
       selectedData: {},
       params: {}
     };
@@ -101,65 +121,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
       this.loadData({ category });
     };
-    handleDayClick = ({ day, footnote }) => {
-      this.setState({
-        isEditingDay: true,
-        selectedData: { date: day.toDate(), footnote }
-      });
+    handleDayClick = data => {
+      const { toggleEditDay, setSelectedData } = this.props;
+      setSelectedData(data);
+      toggleEditDay(true);
     };
-    handleRoleClick = ({ day, member, role, names }) => {
-      this.setState({
-        isEditingRole: true,
-        selectedData: { date: day.toDate(), member, role, names }
-      });
-    };
-    handleEditDayClose = () => {
-      this.setState({
-        isEditingDay: false
-      });
-    };
-    handleEditClose = () => {
-      this.setState({
-        isEditingRole: false,
-        selectedData: null
-      });
-    };
-    handleEditSave = form => {
-      const { params: { mock } } = this.state;
-      if (mock) {
-        form.mock = mock;
-      }
-      EventsAPI.modify(form).then(() => {
-        const clonedEvents = _.clone(this.state.events);
-        const i = _.findIndex(clonedEvents.data, {
-          date: moment(form.date).format('YYYY-MM-DD')
-        });
-        const j = _.findIndex(clonedEvents.data[i].members, {
-          role: form.role
-        });
-        _.set(clonedEvents, `data.${i}.members.${j}.name`, form.name);
-        this.setState({
-          events: clonedEvents,
-          isEditingRole: false,
-          selectedData: null
-        });
-      });
-    };
-    handleEditDaySave = form => {
-      const { params: { mock } } = this.state;
-      if (mock) {
-        form.mock = mock;
-      }
-      EventsAPI.modify(form).then(() => {
-        const events = _.clone(this.state.events);
-        const date = moment(form.date).format('YYYY-MM-DD');
-        const i = _.findIndex(events.data, { date });
-        _.set(events, `data.${i}.footnote`, form.footnote);
-        this.setState({
-          events,
-          isEditingDay: false
-        });
-      });
+    handleRoleClick = data => {
+      const { toggleEditRole, setSelectedData } = this.props;
+      setSelectedData(data);
+      toggleEditRole(true);
     };
     handleHistoryChange = ({ pathname }) => {
       const { history, category, switchCategory } = this.props;
@@ -210,15 +180,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       }
     }
     render() {
-      const {
-        date,
-        isEditingDay,
-        isEditingRole,
-        selectedData,
-        preQuarterMembers
-      } = this.state;
-      const { data, isLoading } = this.props;
-
+      const { date, preQuarterMembers } = this.state;
+      const { data, isEditingDay, isEditingRole, isLoading } = this.props;
       const barProps = {
         date,
         onPrevClick: this.handleButtonClick.bind(this, 'prev'),
@@ -245,24 +208,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
             bgcolor="rgba(255, 255, 255, 0.7)"
           />
           {isEditingRole && (
-            <EditRole
-              title="Edit Event"
-              isOpen={isEditingRole}
-              {...selectedData}
-              preQuarterMembers={preQuarterMembers}
-              onClose={this.handleEditClose}
-              onSave={this.handleEditSave}
-            />
+            <EditRole isOpen={true} preQuarterMembers={preQuarterMembers} />
           )}
-          {isEditingDay && (
-            <EditDay
-              title="Edit Day"
-              isOpen={isEditingDay}
-              {...selectedData}
-              onClose={this.handleEditDayClose}
-              onSave={this.handleEditDaySave}
-            />
-          )}
+          {isEditingDay && <EditDay isOpen={true} />}
         </Wrapper>
       );
     }

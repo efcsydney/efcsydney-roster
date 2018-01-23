@@ -1,68 +1,131 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import dotProp from 'dot-prop-immutable';
+import _ from 'lodash';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import { Modal, StateButton } from 'components';
-//import { Creatable } from 'react-select';
+import { requestModifyServiceInfo, toggleEditDay } from 'modules/index/redux';
+import i18n from 'i18n';
 
-export default class EditDay extends Component {
-  static propTypes = {
-    date: PropTypes.instanceOf(Date).isRequired,
-    footnote: PropTypes.string,
-    onSave: PropTypes.func
-  };
-  handleFootnoteChange = e => {
-    const footnote = e.target.value;
-    this.setState({ footnote });
-  };
-  handleSaveClick = form => {
-    const { onSave } = this.props;
-    onSave(form);
-  };
-  constructor(props) {
-    super(props);
+const mapStateToProps = state => {
+  const {
+    meta: { isSaving, selectedData: { day, serviceInfo } }
+  } = state.index;
 
-    this.state = {
-      footnote: props.footnote || ''
+  return {
+    day,
+    serviceInfo,
+    isSaving
+  };
+};
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      onSave: form => requestModifyServiceInfo(form),
+      onClose: () => toggleEditDay(false)
+    },
+    dispatch
+  );
+export default connect(mapStateToProps, mapDispatchToProps)(
+  class EditDay extends Component {
+    displayName = 'EditDay';
+    static propTypes = {
+      day: PropTypes.string,
+      title: PropTypes.string,
+      isSaving: PropTypes.bool,
+      serviceInfo: PropTypes.object,
+      onSave: PropTypes.func
     };
-  }
-  render() {
-    const { date, ...otherProps } = this.props;
-    const { footnote } = this.state;
-    const formattedDate = moment(date).format('DD MMM, YYYY');
+    static defaultProps = {
+      isSaving: false,
+      serviceInfo: {},
+      onSave: () => {}
+    };
+    getTrans(key) {
+      return i18n.t(`${this.displayName}.${key}`);
+    }
+    handleFootnoteChange = e => {
+      const footnote = e.target.value || '';
+      const state = dotProp.set(this.state, 'serviceInfo.footnote', footnote);
 
-    return (
-      <Modal {...otherProps}>
-        <Form>
-          <Row>
-            <Label>Date</Label>
-            <span>{formattedDate}</span>
-          </Row>
-          <Row>
-            <Label>Note</Label>
-            <span>
-              <Input
-                type="text"
-                value={footnote}
-                placeholder="ex. Holy Communion"
-                onChange={this.handleFootnoteChange}
-              />
-            </span>
-          </Row>
-          <Row align="center">
-            <StateButton
-              onClick={this.handleSaveClick.bind(this, {
-                date,
-                footnote
-              })}>
-              Save
-            </StateButton>
-          </Row>
-        </Form>
-      </Modal>
-    );
+      this.setState(state);
+    };
+    handleSkipReasonChange = e => {
+      const skipReason = e.target.value || '';
+      let state = dotProp.set(this.state, 'serviceInfo.skipReason', skipReason);
+      state = dotProp.set(
+        state,
+        'serviceInfo.skipService',
+        _.isEmpty(skipReason.trim())
+      );
+
+      this.setState(state);
+    };
+    handleSave = e => {
+      e.preventDefault();
+
+      const { serviceInfo } = this.state;
+      const { onSave } = this.props;
+
+      onSave(serviceInfo);
+    };
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        serviceInfo: _.get(props, 'serviceInfo', {})
+      };
+    }
+    render() {
+      const { day, isSaving, ...otherProps } = this.props;
+      const { serviceInfo: { footnote, skipReason } } = this.state;
+      const formattedDate = moment(day).format(this.getTrans('dateFormat'));
+
+      return (
+        <Modal {...otherProps} title={this.getTrans('title')}>
+          <Form onSubmit={this.handleSave}>
+            <Row>
+              <Label>{this.getTrans('dateTitle')}</Label>
+              <span>{formattedDate}</span>
+            </Row>
+            <Row>
+              <Label>{this.getTrans('footnoteTitle')}</Label>
+              <span>
+                <Input
+                  type="text"
+                  value={footnote}
+                  placeholder={this.getTrans('footnotePlaceholder')}
+                  onChange={this.handleFootnoteChange}
+                />
+              </span>
+            </Row>
+            <Row>
+              <Label>{this.getTrans('skipReasonTitle')}</Label>
+              <span>
+                <Input
+                  type="text"
+                  value={skipReason}
+                  placeholder={this.getTrans('skipReasonPlaceholder')}
+                  onChange={this.handleSkipReasonChange}
+                />
+              </span>
+            </Row>
+            <Row align="center">
+              <StateButton
+                kind={isSaving ? 'loading' : 'default'}
+                type="submit">
+                {this.getTrans('saveLabel')}
+              </StateButton>
+            </Row>
+          </Form>
+        </Modal>
+      );
+    }
   }
-}
+);
 
 const Form = styled.form`
   display: table;
