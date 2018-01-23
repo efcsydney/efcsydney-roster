@@ -12,11 +12,11 @@ import i18n from 'i18n';
 
 const mapStateToProps = state => {
   const {
-    meta: { isSaving, selectedData: { date, serviceInfo } }
+    meta: { isSaving, selectedData: { day, serviceInfo } }
   } = state.index;
 
   return {
-    date,
+    day,
     serviceInfo,
     isSaving
   };
@@ -33,7 +33,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   class EditDay extends Component {
     displayName = 'EditDay';
     static propTypes = {
-      date: PropTypes.string,
+      day: PropTypes.string,
       title: PropTypes.string,
       isSaving: PropTypes.bool,
       serviceInfo: PropTypes.object,
@@ -80,9 +80,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       };
     }
     render() {
-      const { date, isSaving, ...otherProps } = this.props;
+      const { day, isSaving, ...otherProps } = this.props;
       const { serviceInfo: { footnote, skipReason } } = this.state;
-      const formattedDate = moment(date).format(this.getTrans('dateFormat'));
+      const formattedDate = moment(day).format(this.getTrans('dateFormat'));
 
       return (
         <Modal {...otherProps} title={this.getTrans('title')}>

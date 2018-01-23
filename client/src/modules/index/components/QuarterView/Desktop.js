@@ -19,14 +19,14 @@ const mapStateToProps = state => ({ lang: state.core.meta.lang });
 export default connect(mapStateToProps)(
   class Desktop extends Component {
     displayName = 'Desktop';
-    handleDayClick = (e, day, footnote) => {
+    handleDayClick = (e, day, serviceInfo) => {
       const isAddCalendar =
         e.target.className.indexOf('react-add-to-calendar') !== -1;
       if (isAddCalendar) {
         e.stopPropagation();
         return;
       }
-      this.props.onDayClick(day, footnote);
+      this.props.onDayClick(moment(day).format('YYYY-MM-DD'), serviceInfo);
     };
     getTrans(key) {
       return i18n.t(`${this.displayName}.${key}`);
@@ -46,7 +46,13 @@ export default connect(mapStateToProps)(
         return (
           <NameCell
             colSpan={names.length}
-            onClick={e => this.handleDayClick(e, day, event.serviceInfo)}>
+            onClick={e =>
+              this.handleDayClick(
+                e,
+                moment(day).format('YYYY-MM-DD'),
+                event.serviceInfo
+              )
+            }>
             {skipReason}
           </NameCell>
         );
