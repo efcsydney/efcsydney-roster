@@ -12,6 +12,8 @@ i18next.init({
           dateString: '{{startMonth}} - {{endMonth}} {{year}}'
         },
         Desktop: {
+          addCalByDownloadCsv: 'iCalendar',
+          addCalByGoogle: 'Google',
           dateFormat: 'DD MMM',
           gridCanton: 'Date / Role',
           occassion: 'Occassion'
@@ -35,6 +37,9 @@ i18next.init({
           title: 'Edit Role'
         },
         Mobile: {
+          addCalLabel: 'Remind Me',
+          addCalByDownloadCsv: 'Use iCalendar',
+          addCalByGoogle: 'Use Google Calendar',
           dateFormat: 'DD MMM'
         },
         NavBar: {
@@ -50,6 +55,8 @@ i18next.init({
           dateString: '{{year}}年{{startMonth}} - {{endMonth}}'
         },
         Desktop: {
+          addCalByDownloadCsv: 'iCalendar',
+          addCalByGoogle: 'Google 日曆',
           dateFormat: 'MMMDo',
           gridCanton: '日期',
           occassion: '型式'
@@ -73,6 +80,9 @@ i18next.init({
           title: '編輯服事人員'
         },
         Mobile: {
+          addCalLabel: '加到我的行事曆',
+          addCalByDownloadCsv: 'iCalendar',
+          addCalByGoogle: 'Google 日曆',
           dateFormat: 'MMMDo'
         },
         NavBar: {
