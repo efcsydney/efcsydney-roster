@@ -40,6 +40,10 @@ class ServiceCalendarDateRepository {
       }
     );
   }
+
+  static getServiceInfoById(serviceInfoId) {
+    return ServiceCalendarDate.findById(serviceInfoId);
+  }
 }
 
 module.exports = {

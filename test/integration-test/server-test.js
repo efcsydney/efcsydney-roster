@@ -165,6 +165,8 @@ describe('Server', function() {
         .expect(201)
         .then(function(res) {
           expect(res.body.result).to.equal('OK');
+          expect(res.body.data.date).to.equal(event.date);
+          expect(res.body.data.role).to.equal(event.role);
         });
     });
   });
@@ -185,6 +187,9 @@ describe('Server', function() {
         .expect(201)
         .then(function(res) {
           expect(res.body.result).to.equal('OK');
+          expect(res.body.data.id).to.equal(1);
+          expect(res.body.data.skipService).to.equal(footnote.skipService);
+          expect(res.body.data.footnote).to.equal(footnote.footnote);
         });
     });
   });
