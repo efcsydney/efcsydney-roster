@@ -6,16 +6,29 @@ class DtoMapper {
       return {
         date: e.date,
         serviceInfo: DtoMapper.mapServiceInfoToDto(e.serviceInfo),
-        members: DtoMapper.mapEventsToDto(e.positions)
+        members: DtoMapper.mapEventPositionsToDto(e.positions)
       };
     });
   }
 
-  static mapEventsToDto(events) {
-    return events.map(event => ({
+  static mapEventPositionsToDto(events) {
+    return events.map(DtoMapper.mapEventPositionToDto);
+  }
+
+  static mapEventPositionToDto(event) {
+    return {
       role: event.position,
       name: event.volunteerName
-    }));
+    }
+  }
+
+  static mapEventToDto(event){
+    return {
+      role: event.position.name,
+      name: event.volunteerName,
+      id: event.id,
+      date: event.calendarDate.date,
+    }
   }
 
   static mapServiceInfoToDto(serviceInfo) {

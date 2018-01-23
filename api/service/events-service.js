@@ -25,7 +25,7 @@ class EventService {
     return EventRepository.getEventByDatePosition({
       date: event.calendarDate.date,
       position: event.position.name
-    }).then(function(dbEvent) {
+    }).then(function (dbEvent) {
       if (dbEvent != null) {
         dbEvent.volunteerName = event.volunteerName;
         return EventRepository.updateEvent(dbEvent);
@@ -36,6 +36,22 @@ class EventService {
       }
     });
   }
+  static getEventByDatePosition(event) {
+    return EventRepository.getEventByDatePosition({
+      date: event.calendarDate.date,
+      position: event.position.name
+    }).then(function (dbEvent) {
+      if (dbEvent != null) {
+
+        return Promise.resolve(dbEvent);
+      } else {
+        const msg = `Error: missing event in DB: ${JSON.stringify(event)}`;
+        log.error(msg);
+        return Promise.reject(new Error(msg));
+      }
+    });
+  }
+
   static getWeekdayDatesForTimePeriod(dateRange, weekday = 7) {
     const { from, to } = dateRange;
     const firstSunday = moment(from).isoWeekday(weekday);
