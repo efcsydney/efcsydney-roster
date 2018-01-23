@@ -199,7 +199,7 @@ const Row = styled.tr`
   &:nth-child(even) ${DayCell} {
     background-color: #f8f8f8;
   }
-  ${NameCell} {
+  ${NameCell}, ${NoteCell} {
     background-color: ${props => (props.highlighted ? '#ffc' : 'transparent')};
     color: ${props => (props.highlighted ? '#333' : '#666')};
   }
