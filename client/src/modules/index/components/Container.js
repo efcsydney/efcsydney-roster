@@ -126,26 +126,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       setSelectedData(data);
       toggleEditDay(true);
     };
-    handleRoleClick = ({ day, member, role, names }) => {
-      const { toggleEditRole } = this.props;
-
+    handleRoleClick = data => {
+      const { toggleEditRole, setSelectedData } = this.props;
+      setSelectedData(data);
       toggleEditRole(true);
-
-      this.setState({
-        isEditingRole: true,
-        selectedData: { date: day.toDate(), member, role, names }
-      });
-    };
-    handleEditDayClose = () => {
-      this.setState({
-        isEditingDay: false
-      });
-    };
-    handleEditClose = () => {
-      this.setState({
-        isEditingRole: false,
-        selectedData: null
-      });
     };
     handleHistoryChange = ({ pathname }) => {
       const { history, category, switchCategory } = this.props;
@@ -196,7 +180,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       }
     }
     render() {
-      const { date, selectedData, preQuarterMembers } = this.state;
+      const { date, preQuarterMembers } = this.state;
       const { data, isEditingDay, isEditingRole, isLoading } = this.props;
       const barProps = {
         date,
@@ -224,15 +208,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
             bgcolor="rgba(255, 255, 255, 0.7)"
           />
           {isEditingRole && (
-            <EditRole
-              title="Edit Event"
-              isOpen={true}
-              {...selectedData}
-              preQuarterMembers={preQuarterMembers}
-              onClose={this.handleEditClose}
-            />
+            <EditRole isOpen={true} preQuarterMembers={preQuarterMembers} />
           )}
-          {isEditingDay && <EditDay title="Edit Day" isOpen={true} />}
+          {isEditingDay && <EditDay isOpen={true} />}
         </Wrapper>
       );
     }

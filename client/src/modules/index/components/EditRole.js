@@ -17,8 +17,15 @@ function getOptions(names) {
 }
 
 const mapStateToProps = state => {
-  const { meta: { isSaving } } = state.index;
+  const {
+    meta: { isSaving, selectedData: { day, role, member, names } }
+  } = state.index;
+
   return {
+    date: moment(day).format('YYYY-MM-DD'),
+    role,
+    member,
+    names,
     isSaving
   };
 };
@@ -34,7 +41,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   class EditRole extends Component {
     displayName = 'EditRole';
     static propTypes = {
-      date: PropTypes.instanceOf(Date).isRequired,
+      date: PropTypes.string,
       member: PropTypes.string,
       names: PropTypes.array,
       onSave: PropTypes.func,
