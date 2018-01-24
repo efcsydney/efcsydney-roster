@@ -1,0 +1,14 @@
+{
+  "development": {
+    "key": "12ec4839e5ab91ef6939",
+    "cluster": "ap1"
+  },
+  "qa": {
+    "key": "670212588bbe0700eef8",
+    "cluster": "ap1"
+  },
+  "production": {
+    "key": "917465291e3fe853664b",
+    "cluster": "ap1"
+  }
+}

@@ -2,6 +2,7 @@ const DtoMapper = require('../mapper/dto-mapper').DtoMapper;
 const ServiceInfoService = require('../service/service-info-service')
   .ServiceInfoService;
 const log = require('../utilities/logger');
+const pusher = require('../utilities/pusher');
 
 async function saveServiceInfo(req, res, next) {
   try {
@@ -12,13 +13,18 @@ async function saveServiceInfo(req, res, next) {
     log.info(serviceInfo);
     await ServiceInfoService.saveServiceInfo(serviceInfo);
 
-    const updatedServiceInfo = await ServiceInfoService.getServiceInfoById(serviceInfo.id);
+    const updatedServiceInfo = await ServiceInfoService.getServiceInfoById(
+      serviceInfo.id
+    );
+    const data = DtoMapper.mapServiceInfoToDto(updatedServiceInfo);
 
     const response = {
       result: 'OK',
       error: { message: '' },
-      data: DtoMapper.mapServiceInfoToDto(updatedServiceInfo),
+      data
     };
+
+    pusher.trigger('index', 'serviceInfo-modified', data);
 
     return res.status(201).json(response);
   } catch (err) {

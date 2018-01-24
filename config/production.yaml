@@ -1,3 +1,8 @@
 reminderEmail:
   emailListFilePath: 'db/data/email-list.csv'
   schedule: '00 00 08 * * 3'
+pusher:
+  appId: '451838'
+  key: '917465291e3fe853664b'
+  secret: 'a98f1cecf1259a62e649'
+  cluster: 'ap1'
