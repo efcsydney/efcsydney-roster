@@ -4,6 +4,7 @@ import QuarterView from './QuarterView';
 import { LoadingIndicator, DateBar, TagManager } from 'components';
 import { NavBar } from 'modules/core';
 import moment from 'moment';
+import pusher from 'utils/pusher';
 import EditRole from './EditRole';
 import EditDay from './EditDay';
 import EventsAPI from 'apis/events';
@@ -15,7 +16,9 @@ import {
   requestModifyServiceInfo,
   requestModifyIdEvents,
   requestRetrieveEvents,
+  setEvent,
   setSelectedData,
+  setServiceInfo,
   toggleEditRole,
   toggleEditDay
 } from 'modules/index/redux';
@@ -37,11 +40,13 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      setSelectedData,
-      switchCategory,
       requestModifyIdEvents,
       requestModifyServiceInfo,
       requestRetrieveEvents,
+      setEvent,
+      setSelectedData,
+      setServiceInfo,
+      switchCategory,
       toggleEditDay,
       toggleEditRole
     },
@@ -126,6 +131,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       setSelectedData(data);
       toggleEditDay(true);
     };
+    handleEventModified = data => {
+      const { setEvent } = this.props;
+      setEvent(data);
+    };
+    handleServiceInfoModified = data => {
+      const { setServiceInfo } = this.props;
+      setServiceInfo(data);
+    };
     handleRoleClick = data => {
       const { toggleEditRole, setSelectedData } = this.props;
       setSelectedData(data);
@@ -145,6 +158,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     componentWillMount() {
       const { category, switchCategory } = this.props;
       this.appendSentry();
+
+      this.channel = pusher.subscribe('index');
+      this.channel.bind('event-modified', this.handleEventModified);
+      this.channel.bind('serviceInfo-modified', this.handleServiceInfoModified);
 
       switchCategory(category);
       this.loadData({ category });
