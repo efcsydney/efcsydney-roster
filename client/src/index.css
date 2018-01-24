@@ -60,3 +60,12 @@ body {
   left: -1000em;
   top: -1000em;
 }
+
+@media print {
+  html, body {
+    background-color: #fff !important;
+  }
+  .react-add-to-calendar {
+    display: none;
+  }
+}
