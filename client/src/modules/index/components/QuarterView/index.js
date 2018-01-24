@@ -8,6 +8,7 @@ import { MOBILE_BREAKPOINT } from 'styled';
 import { getMemberNames, getQuarterDays, getRoles } from 'utils';
 import './icalstyle.css';
 import ReactDOM from 'react-dom';
+import { media } from 'styled';
 
 export default class QuarterView extends Component {
   displayName = 'QuarterView';
@@ -90,10 +91,14 @@ const BottomDateBarHeight = 50; // DateBar.js Wraper.border-radius(8)*2 + Arrow.
 const Wrapper = styled.div`
   background: #fff;
   border-radius: 0 0 8px 8px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
   font-size: 13px;
   position: absolute;
   overflow: scroll;
   width: 100%;
   max-height: ${props => props.calendarHeight};
+  ${media.print`
+    overflow: visible;
+    max-height: none;
+  `};
 `;

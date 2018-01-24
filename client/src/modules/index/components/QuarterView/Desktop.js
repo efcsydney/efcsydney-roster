@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { media } from 'styled';
 import AddToCalendar from 'react-add-to-calendar';
 import './icalstyle.css';
 import moment from 'moment';
@@ -137,6 +138,10 @@ const Text = styled.span`
     color: #ccc;
     content: '-';
   }
+  ${media.print`
+    white-space: normal;
+    line-height: 1.2;
+  `};
 `;
 const Grid = styled.table`
   border-collapse: collapse;
@@ -146,6 +151,11 @@ const Grid = styled.table`
   padding: 0;
   table-layout: fixed;
   min-width: 100%;
+  ${media.print`
+    font-size: 11px;
+    min-width: 0;
+    width: 100%;
+  `};
 `;
 const Cell = styled.td`
   border: solid 1px #eee;
@@ -160,6 +170,12 @@ const Cell = styled.td`
     color: #ccc;
     content: '-';
   }
+  ${media.print`
+    font-size: 11px;
+    line-height: 1.3;
+    padding: 8px 4px;
+    white-space: normal;
+  `};
 `;
 const Header = Cell.extend`
   background-color: #eee;
@@ -168,6 +184,9 @@ const Header = Cell.extend`
   color: #666;
   font-weight: bold;
   text-align: center;
+  ${media.print`
+    font-size: 11px;
+  `};
 `;
 const DayCell = Cell.extend`
   border-right: solid 1px #eee;
@@ -176,6 +195,10 @@ const DayCell = Cell.extend`
   font-weight: bold;
   overflow: visible;
   text-align: right;
+  ${media.print`
+    text-align: center;
+    white-space: nowrap;
+  `};
 `;
 const NameCell = Cell.extend`
   cursor: pointer;
@@ -220,4 +243,10 @@ const Row = styled.tr`
     border-bottom: none;
     border-bottom-right-radius: 8px;
   }
+  ${media.print`
+    ${NameCell}, ${NoteCell} {
+      background-color: transparent;
+      color: #666;
+    }
+  `};
 `;
