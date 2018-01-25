@@ -17,10 +17,11 @@ before_script:
 script:
 - yarn test
 - yarn test:frontend
-- if [$TRAVIS_BRANCH == "qa" && $TRAVIS_PULL_REQUEST == "false"]; then
-    cd client && yarn && NODE_ENV=qa NODE_PATH=src/ yarn build && cd ..
+- |
+  if [ $TRAVIS_BRANCH == "qa" ]; then
+    cd client && yarn && NODE_ENV=qa NODE_PATH=src/ yarn build && cd ..;
   else
-    cd client && yarn && NODE_PATH=src/ yarn build && cd ..
+    cd client && yarn && NODE_PATH=src/ yarn build && cd ..;
   fi
 before_deploy:
 - mkdir -p ~/.ssh/key
