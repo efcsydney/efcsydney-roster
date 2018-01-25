@@ -74,12 +74,10 @@ const renderTable = days => `
 `;
 
 const renderDraftTable = (title, emailList, emptyEmailList) => {
-  const emails = emailList.split(',').map(email => {
-    const regExp = /([^<]+)<([^>]+)>/;
-    const matches = email.match(regExp);
+  const emails = emailList.map(item => {
     return {
-      name: matches[1].trim(),
-      email: matches[2].trim()
+      name: item.englishName,
+      email: item.email
     };
   });
 
