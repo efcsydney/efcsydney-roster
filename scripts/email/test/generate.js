@@ -4,11 +4,11 @@ const fs = require('fs');
 const { getEmailHTML } = require('../utils');
 const {
   getEmailList,
-  getEmptyEmailList
+  getEmptyEmailListString
 } = require('../../../api/service/send-email-service');
 
 const emailList = getEmailList();
-const emptyEmailList = getEmptyEmailList();
+const emptyEmailList = getEmptyEmailListString();
 const mockData = {
   chinese: [
     {

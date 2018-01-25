@@ -15,27 +15,33 @@ const { EmailListItem } = require('../models/email-list-item');
 const emailCsvFilePath = config.get('reminderEmail.emailListFilePath');
 const emailListFromCsv = parseCsvEmailFile(emailCsvFilePath);
 
-// This is mocked out for now, will be complete when DB is done
-function getEmailList() {
+
+/**
+ * Generate email list string include names and emails
+ *
+ * @return {String} example: 新週報 <newsletter@efcsydney.org>, 教會音控 <ppt@efcsydney.org>, Ava<ava_tab@example.com>
+ */
+function getEmailListString() {
   const applyEmailTemplate = emailTo => {
     if (emailTo.englishName) {
       return `${emailTo.englishName}<${emailTo.email}>`;
     }
     return `${emailTo.chineseName}<${emailTo.email}>`;
   };
-  const emptyEmail = emailTo => !!emailTo.email;
-  //we need to return the following format
-  //新週報 <newsletter@efcsydney.org>, 教會音控 <ppt@efcsydney.org>, Eve Yeh<ginger_tab@hotmail.com>
-  const emailString = emailListFromCsv
-    .filter(emptyEmail)
-    .map(applyEmailTemplate)
-    .join(',');
-
-  log.debug(emailString);
-  return emailString;
+  return getEmailList()
+  .map(applyEmailTemplate)
+  .join(',');
 }
 
-function getEmptyEmailList() {
+/*
+ * Generate email list in javascript objects
+ */
+function getEmailList() {
+  const emptyEmail = emailTo => !!emailTo.email;
+  return emailListFromCsv.filter(emptyEmail)
+}
+
+function getEmptyEmailListString() {
   const applyEmailTemplate = emailTo =>
     emailTo.englishName ? `${emailTo.englishName}` : `${emailTo.chineseName}`;
   const nonEmptyEmail = emailTo => !emailTo.email;
@@ -98,13 +104,13 @@ async function reminderEmail() {
   const from = getDateString(new Date());
   const to = getDateByWeeks(from, 2);
   const events = await buildEventsForMultipleServices(from, to);
-  const emailList = getEmailList();
-  const emptyEmailList = getEmptyEmailList();
+  const emailList = getEmailListString();
+  const emptyEmailList = getEmptyEmailListString();
   // log.debug(JSON.stringify(events, null, 2));
 
   return sendEmail({
     from: config.get('reminderEmail.content.from'),
-    to: getEmailList(),
+    to: getEmailListString(),
     cc: config.get('reminderEmail.content.cc'),
     subject: `[自動提醒] 這週與下週的主日服事`,
     html: getEmailHTML(events, emailList, emptyEmailList)
@@ -114,6 +120,7 @@ async function reminderEmail() {
 module.exports = {
   reminderEmail,
   getEmailList,
-  getEmptyEmailList,
+  getEmailListString,
+  getEmptyEmailListString,
   parseCsvEmailFile
 };
