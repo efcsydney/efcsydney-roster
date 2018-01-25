@@ -104,16 +104,13 @@ async function reminderEmail() {
   const from = getDateString(new Date());
   const to = getDateByWeeks(from, 2);
   const events = await buildEventsForMultipleServices(from, to);
-  const emailList = getEmailListString();
-  const emptyEmailList = getEmptyEmailListString();
-  // log.debug(JSON.stringify(events, null, 2));
 
   return sendEmail({
     from: config.get('reminderEmail.content.from'),
-    to: getEmailListString(),
+    to: config.get('reminderEmail.content.to'),
     cc: config.get('reminderEmail.content.cc'),
     subject: `[自動提醒] 這週與下週的主日服事`,
-    html: getEmailHTML(events, emailList, emptyEmailList)
+    html: getEmailHTML(events, getEmailList(), getEmptyEmailListString())
   });
 }
 
