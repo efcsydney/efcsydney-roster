@@ -62,6 +62,18 @@ body {
 }
 
 @media print {
+  @page {
+    size: A4 landscape;
+    margin: 7mm;
+    zoom: 100%;
+  }
+  body {
+    zoom: 100%;;
+    transform: scale(1);
+  }
+  table {
+    page-break-inside: avoid;
+  }
   html, body {
     background-color: #fff !important;
   }
