@@ -8,5 +8,11 @@ export const media = {
       @media (max-width: ${MOBILE_BREAKPOINT}px) {
         ${css(...args)};
       }
+    `,
+  print: (...args) =>
+    css`
+      @media print {
+        ${css(...args)};
+      }
     `
 };

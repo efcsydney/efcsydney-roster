@@ -73,6 +73,9 @@ const Wrapper = styled.div`
     margin-bottom: 0;
     justify-content: center;
   `};
+  ${media.print`
+    height: 52px;
+  `};
 `;
 const Logo = styled.img.attrs({ src: '/logo.png' })`
   display: inline-block;
