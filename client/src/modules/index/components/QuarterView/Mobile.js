@@ -121,6 +121,7 @@ export default class Mobile extends Component {
             </Day>
           );
         })}
+        <BottomDateBarSpace></BottomDateBarSpace>
       </Grid>
     );
   }
@@ -234,4 +235,9 @@ const Action = styled.span`
   display: inline-block;
   margin-left: auto;
   margin-right: 20px;
+`;
+const BottomDateBarSpace = styled.div`
+  position:absolute;
+  height: 50px;
+  width: 100%;
 `;
