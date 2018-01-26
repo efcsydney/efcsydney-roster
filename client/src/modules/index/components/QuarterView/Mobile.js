@@ -104,7 +104,7 @@ export default class Mobile extends Component {
                     onClick={() => {
                       onDayClick(formattedDate, serviceInfo);
                     }}>
-                    ( {serviceInfo.footnote} )
+                    {serviceInfo.footnote}
                   </Footnote>
                 )}
                 <Action>
