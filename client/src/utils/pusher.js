@@ -6,6 +6,8 @@ const env = process.env.NODE_ENV;
 const key = _.get(config, `${env}.key`, null);
 const cluster = _.get(config, `${env}.cluster`, null);
 
+console.log(`[Pusher] Using pusher on ${env} environment`); // eslint-disable-line
+
 const pusher = new Pusher(key, {
   cluster,
   encrypted: true
