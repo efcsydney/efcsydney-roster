@@ -2,7 +2,13 @@
 
 const fs = require('fs');
 const { getEmailHTML } = require('../utils');
+const {
+  getEmailList,
+  getEmptyEmailListString
+} = require('../../../api/service/send-email-service');
 
+const emailList = getEmailList();
+const emptyEmailList = getEmptyEmailListString();
 const mockData = {
   chinese: [
     {
@@ -17,7 +23,7 @@ const mockData = {
         { position: '招待', volunteerName: '吳愛倫' },
         { position: '司獻', volunteerName: '傅慧' },
         { position: '司獻', volunteerName: '何平' },
-        { position: '聖餐<br/>聖洗', volunteerName: '簡瑞蘭' },
+        { position: '聖餐聖洗', volunteerName: '簡瑞蘭' },
         { position: '投影', volunteerName: '宣志凌' },
         { position: '音控', volunteerName: '紀哲威' },
         { position: '燈光', volunteerName: '許天因' },
@@ -78,7 +84,7 @@ const mockData = {
   ]
 };
 
-const htmlOutput = getEmailHTML(mockData);
+const htmlOutput = getEmailHTML(mockData, emailList, emptyEmailList);
 fs.writeFile('./sample.html', htmlOutput, err => {
   if (err) {
     return console.log(err); // eslint-disable-line
