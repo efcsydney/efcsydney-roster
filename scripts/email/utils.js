@@ -56,7 +56,7 @@ const renderMemberRow = ({ date, positions, lang }) => {
       ${positions
         .map(
           ({ volunteerName }) => `
-      <td style="${cellStyle}">${volunteerName}</td>
+      <td style="${cellStyle}">${volunteerName ? volunteerName : '&nbsp;'}</td>
       `
         )
         .join('\n')}
@@ -83,7 +83,7 @@ const renderDraftTable = (title, emailList, emptyEmailList) => {
 
   const thStyle = `
     border: 1px solid #f99;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: normal;
     line-height: 1.3;
     padding: 8px;
@@ -94,7 +94,7 @@ const renderDraftTable = (title, emailList, emptyEmailList) => {
   `;
   const tdStyle = `
     border: 1px solid #f99;
-    font-size: 12px;
+    font-size: 11px;
     line-height: 1.3;
     padding: 8px;
     text-align: left;
@@ -105,7 +105,7 @@ const renderDraftTable = (title, emailList, emptyEmailList) => {
     background: #fdf3f0;
     border: 1px solid #f99;
     border-collapse: separate;
-    font-size: 12px;
+    font-size: 11px;
     line-height: 1.3;
     padding: 8px;
     text-align: left;
@@ -132,7 +132,11 @@ const renderDraftTable = (title, emailList, emptyEmailList) => {
       </tr>
       <tr>
         <th style="${thStyle}">缺少 Email</th>
-        <td style="${tdWarnStyle}">${emptyEmailList}</td>
+        ${
+          !_.isEmpty(emptyEmailList)
+            ? `<td style="${tdWarnStyle}">${emptyEmailList}</td>`
+            : `<td style="${tdStyle}">無</td>`
+        }
       </tr>
     </mj-table>
   `;
@@ -158,12 +162,6 @@ exports.getEmailHTML = (events, emailList, emptyEmailList) => {
           color: #15c;
           text-decoration: none;
         }
-        .alert {
-          color: #d14836;
-          border: solid 1px #f99;
-          border-radius: 3px;
-          background: #fdf3f0;
-        }
         .draft-table {
           border-collapse: separate;
           margin: 50px;
@@ -176,7 +174,7 @@ exports.getEmailHTML = (events, emailList, emptyEmailList) => {
       <mj-body>
         <mj-container width="960px" css-class="container">
           <mj-wrapper padding="10px 0 5px">
-            <mj-section padding="10px 15px" css-class="alert">
+            <mj-section padding="10px 15px" border="solid 1px #f99" background-color="#fdf3f0" css-class="alert">
               <mj-text font-size="14px" color="#d14836">⚠️ &nbsp; 請參考以下系統幫您準備的服事提醒草稿，每週自動寄給服事助理同工</mj-text>
             </mj-section>
           </mj-wrapper>
