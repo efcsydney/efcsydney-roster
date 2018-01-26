@@ -192,7 +192,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     }
     renderTagManager() {
       const env = this.env;
-      console.log(`[TagManager] Using Google TagManager on ${env} environment`); // eslint-disable-line
 
       if (env === 'qa') {
         return <TagManager gtmId="GTM-W8CJV63" />;
