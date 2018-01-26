@@ -155,6 +155,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       this.loadData({ category: pathname });
       switchCategory(pathname);
     };
+    constructor(props) {
+      super(props);
+
+      this.env = process.env.REACT_APP_ENV || process.env.NODE_ENV;
+    }
     componentWillMount() {
       const { category, switchCategory } = this.props;
       this.appendSentry();
@@ -173,7 +178,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     }
 
     appendSentry() {
-      const env = process.env.NODE_ENV;
+      const env = this.env;
       if (env === 'qa' || env === 'production') {
         const sentryInit = document.createElement('script');
         const sentryInitHTML = document.createTextNode(
@@ -186,8 +191,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       }
     }
     renderTagManager() {
-      const env = process.env.NODE_ENV;
-
+      const env = this.env;
       console.log(`[TagManager] Using Google TagManager on ${env} environment`); // eslint-disable-line
 
       if (env === 'qa') {

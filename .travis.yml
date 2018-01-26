@@ -19,11 +19,9 @@ script:
 - yarn test:frontend
 - |
   if [ $TRAVIS_BRANCH == 'qa' ]; then
-    echo 'QA';
-    cd client && yarn && NODE_ENV=qa NODE_PATH=src/ yarn build && cd ..;
+    cd client && yarn && REACT_APP_ENV=qa yarn build && cd ..;
   else
-    echo 'Production';
-    cd client && yarn && NODE_PATH=src/ yarn build && cd ..;
+    cd client && yarn && yarn build && cd ..;
   fi
 before_deploy:
 - mkdir -p ~/.ssh/key
