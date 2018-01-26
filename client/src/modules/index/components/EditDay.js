@@ -11,13 +11,11 @@ import { requestModifyServiceInfo, toggleEditDay } from 'modules/index/redux';
 import i18n from 'i18n';
 
 const mapStateToProps = state => {
-  const {
-    meta: { isSaving, selectedData: { day, serviceInfo } }
-  } = state.index;
+  const { meta: { isSaving, selectedData } } = state.index;
 
   return {
-    day,
-    serviceInfo,
+    day: _.get(selectedData, 'day', null),
+    serviceInfo: _.get(selectedData, 'serviceInfo', {}),
     isSaving
   };
 };

@@ -24,6 +24,9 @@ export default class Modal extends Component {
   componentWillMount() {
     window.addEventListener('keyup', this.handleKeyup);
   }
+  componentWillUnmount() {
+    window.removeEventListener('keyup', this.handleKeyup);
+  }
   render() {
     const { isOpen, title, children, onClose } = this.props;
 
