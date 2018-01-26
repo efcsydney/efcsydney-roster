@@ -100,12 +100,17 @@ export default combineReducers({
       },
       [setEvent]: (state, { payload }) => {
         const dayIndex = _.findIndex(state, { date: payload.date });
+        if (dayIndex === -1) {
+          return state;
+        }
+
         const memberIndex = _.findIndex(state[dayIndex].members, {
           role: payload.role
         });
-        if (dayIndex === -1 || memberIndex === -1) {
+        if (memberIndex === -1) {
           return state;
         }
+
         return dotProp.set(
           state,
           `${dayIndex}.members.${memberIndex}.name`,
