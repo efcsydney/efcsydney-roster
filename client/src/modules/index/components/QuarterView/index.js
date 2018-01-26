@@ -80,7 +80,8 @@ export default class QuarterView extends Component {
         ref={input => {
           this.calendarWrapper = input;
         }}
-        calendarHeight={calendarHeight}>
+        calendarHeight={calendarHeight}
+        isMobile={isMobile}>
         {isMobile && <Mobile {...viewProps} />}
         {!isMobile && <Desktop {...viewProps} />}
       </Wrapper>
@@ -95,7 +96,7 @@ const Wrapper = styled.div`
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   font-size: 13px;
   position: absolute;
-  overflow: scroll;
+  overflow: ${props => props.isMobile ? 'inherit' : 'scroll'} ;
   width: 100%;
   max-height: ${props => props.calendarHeight};
 `;
