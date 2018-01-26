@@ -1,2 +1,7 @@
 reminderEmail:
   emailListFilePath: 'db/data/email-list.csv'
+pusher:
+  appId: '451837'
+  key: '670212588bbe0700eef8'
+  secret: 'b9e0fda23c8fc0e92535'
+  cluster: 'ap1'

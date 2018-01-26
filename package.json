@@ -33,6 +33,7 @@
     "nodemon": "^1.12.1",
     "papaparse": "^4.3.6",
     "prettier": "^1.9.2",
+    "pusher": "^1.5.1",
     "query-string": "^5.0.1",
     "raven": "^2.3.0",
     "react-add-to-calendar": "^0.1.4",
