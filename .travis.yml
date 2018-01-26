@@ -18,9 +18,11 @@ script:
 - yarn test
 - yarn test:frontend
 - |
-  if [ $TRAVIS_BRANCH == "qa" ]; then
+  if [ $TRAVIS_BRANCH == 'qa' ]; then
+    echo 'QA';
     cd client && yarn && NODE_ENV=qa NODE_PATH=src/ yarn build && cd ..;
   else
+    echo 'Production';
     cd client && yarn && NODE_PATH=src/ yarn build && cd ..;
   fi
 before_deploy:
