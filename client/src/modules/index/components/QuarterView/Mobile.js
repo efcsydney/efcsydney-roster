@@ -94,14 +94,14 @@ export default class Mobile extends Component {
               id={highlighted ? 'highlighted' : undefined}>
               <Header>
                 <Label
-                  onClick={e => {
+                  onClick={() => {
                     onDayClick(formattedDate, serviceInfo);
                   }}>
                   {day.format(this.getTrans('dateFormat'))}
                 </Label>
                 {serviceInfo.footnote && (
                   <Footnote
-                    onClick={e => {
+                    onClick={() => {
                       onDayClick(formattedDate, serviceInfo);
                     }}>
                     ( {serviceInfo.footnote} )
