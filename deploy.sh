@@ -13,6 +13,7 @@ fi
 
 echo "Clean up"
 rm -rf client/node_modules
+rm -rf log
 
 echo "Tar"
 cd ../
@@ -30,6 +31,7 @@ ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd 
 echo "Do links"
 ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd /opt/efcsydney-roster; ln -s /opt/config/email-list.csv ./db/data/email-list.csv'
 ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd /opt/efcsydney-roster; ln -s /opt/config/local.yaml ./config/local.yaml'
+ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd /opt/efcsydney-roster; ln -s /opt/config/log/ ./log'
 
 echo "Restart Node Process Using Monit, Config in the /etc/monit.d/roster"
 ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'sudo monit restart all'
