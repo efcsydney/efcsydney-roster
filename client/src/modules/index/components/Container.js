@@ -127,7 +127,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       history.replace(category);
 
       this.loadData({
-        from: moment(date).format('YYYY-MM-DD'),
+        from: moment(date)
+          .startOf('quarter')
+          .format('YYYY-MM-DD'),
         to: moment(date)
           .endOf('quarter')
           .format('YYYY-MM-DD'),
