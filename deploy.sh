@@ -13,6 +13,7 @@ fi
 
 echo "Clean up Useless files"
 rm -rf client/node_modules
+rm -rf log
 
 echo "Compress all the code into tarball"
 cd ../
