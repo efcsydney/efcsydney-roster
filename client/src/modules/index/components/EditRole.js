@@ -17,15 +17,14 @@ function getOptions(names) {
 }
 
 const mapStateToProps = state => {
-  const {
-    meta: { isSaving, selectedData: { day, role, member, names } }
-  } = state.index;
+  const { meta: { isSaving, selectedData } } = state.index;
+  const day = _.get(selectedData, 'day');
 
   return {
     date: moment(day).format('YYYY-MM-DD'),
-    role,
-    member,
-    names,
+    member: _.get(selectedData, 'member', null),
+    names: _.get(selectedData, 'names', []),
+    role: _.get(selectedData, 'role', null),
     isSaving
   };
 };
