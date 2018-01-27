@@ -16,7 +16,6 @@
     "cross-env": "^5.1.3",
     "database-cleaner": "^1.2.0",
     "dot-prop-immutable": "^1.4.0",
-    "dploy": "^1.2.0",
     "express": "4.13.3",
     "fs": "0.0.2",
     "global": "^4.3.2",
@@ -33,6 +32,7 @@
     "nodemon": "^1.12.1",
     "papaparse": "^4.3.6",
     "prettier": "^1.9.2",
+    "pusher": "^1.5.1",
     "query-string": "^5.0.1",
     "raven": "^2.3.0",
     "react-add-to-calendar": "^0.1.4",
@@ -48,7 +48,6 @@
   "scripts": {
     "build": "cd client && npm run build",
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "start:qa": "NODE_ENV=qa PORT=80 REACT_APP_ENV=qa nodemon server.js",
     "server": "node server.js",
     "client": "node start-client.js",
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
@@ -58,8 +57,6 @@
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
     "db-rollback-all": "sequelize db:migrate:undo:all",
-    "deploy:qa": "dploy qa",
-    "deploy:prod": "dploy prod",
     "prettier": "prettier --single-quote --write '{,!(node_modules|client)/**/}*.js'",
     "db-update-events": "node ./scripts/update-events-details.js"
   },

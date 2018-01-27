@@ -51,7 +51,9 @@ export const requestModifyServiceInfo = createAction(
     return payload;
   }
 );
+export const setEvent = createAction(`${PREFIX}/SET_EVENT`);
 export const setSelectedData = createAction(`${PREFIX}/SET_SELECTED_DATA`);
+export const setServiceInfo = createAction(`${PREFIX}/SET_SERVICE_INFO`);
 export const toggleEditRole = createAction(`${PREFIX}/TOGGLE_EDIT_ROLE`);
 export const toggleEditDay = createAction(`${PREFIX}/TOGGLE_EDIT_DAY`);
 
@@ -95,6 +97,35 @@ export default combineReducers({
           `${dayIndex}.serviceInfo`,
           payload.serviceInfo
         );
+      },
+      [setEvent]: (state, { payload }) => {
+        const dayIndex = _.findIndex(state, { date: payload.date });
+        if (dayIndex === -1) {
+          return state;
+        }
+
+        const memberIndex = _.findIndex(state[dayIndex].members, {
+          role: payload.role
+        });
+        if (memberIndex === -1) {
+          return state;
+        }
+
+        return dotProp.set(
+          state,
+          `${dayIndex}.members.${memberIndex}.name`,
+          payload.name
+        );
+      },
+      [setServiceInfo]: (state, { payload }) => {
+        const dayIndex = _.findIndex(
+          state,
+          day => day.serviceInfo.id === payload.id
+        );
+        if (dayIndex === -1) {
+          return state;
+        }
+        return dotProp.set(state, `${dayIndex}.serviceInfo`, payload);
       }
     },
     defaultState.data

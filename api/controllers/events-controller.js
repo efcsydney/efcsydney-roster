@@ -1,6 +1,7 @@
 const EventService = require('../service/events-service').EventService;
 const DtoMapper = require('../mapper/dto-mapper').DtoMapper;
 const log = require('../utilities/logger');
+const pusher = require('../utilities/pusher');
 
 /**
  * Get Events
@@ -37,12 +38,15 @@ async function saveEvent(req, res, next) {
     await EventService.saveEvent(event);
 
     const updateEvent = await EventService.getEventByDatePosition(event);
+    const data = DtoMapper.mapEventToDto(updateEvent);
 
     const response = {
       result: 'OK',
       error: { message: '' },
-      data: DtoMapper.mapEventToDto(updateEvent),
+      data
     };
+
+    pusher.trigger('index', 'event-modified', data);
 
     return res.status(201).json(response);
   } catch (err) {

@@ -8,6 +8,7 @@ import {
   getQuarterLastMonth
 } from '../utils';
 import i18n from 'i18n';
+import { media } from 'styled';
 
 export default ({
   date,
@@ -62,6 +63,13 @@ const Wrapper = styled.div`
     left: 10px;
     right: 10px;
   `}
+  ${media.print`
+    ${props =>
+      props.position === 'bottom' &&
+      `
+      display: none;
+    `}
+  `}
 `;
 const Arrow = styled.a`
   align-items: center;
@@ -86,6 +94,9 @@ const Arrow = styled.a`
     height: 18px;
     display: inline-block;
   }
+  ${media.print`
+    display: none;
+  `};
 `;
 Arrow.displayName = 'Arrow';
 
