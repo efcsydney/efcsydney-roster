@@ -13,6 +13,7 @@ fi
 
 echo "Clean up"
 rm -rf client/node_modules
+rm -rf log
 
 echo "Tar"
 cd ../
