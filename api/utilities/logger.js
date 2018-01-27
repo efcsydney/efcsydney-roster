@@ -1,8 +1,6 @@
-const config = require('config');
 const winston = require('winston');
 const winstonDailyRotateFile = require('winston-daily-rotate-file');
 winston.emitErrs = true;
-const writeFile = config.get('logging.write-file');
 /*
 * The source code is copied from the posts : http://tostring.it/2014/06/23/advanced-logging-with-nodejs/ and
 * http://thisdavej.com/using-winston-a-versatile-logging-library-for-node-js/
@@ -31,14 +29,8 @@ const consoleTransport = new winston.transports.Console({
   colorize: true
 });
 
-let transports = [consoleTransport];
-if (writeFile) {
-  transports.push(errorLogTransport);
-  transports.push(debugLogTransport);
-}
-
 const logger = new winston.Logger({
-  transports,
+  transports: [errorLogTransport, debugLogTransport, consoleTransport],
   exitOnError: false
 });
 
