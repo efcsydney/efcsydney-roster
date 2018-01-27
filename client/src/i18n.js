@@ -19,6 +19,7 @@ i18next.init({
           occassion: 'Occassion'
         },
         EditDay: {
+          cancelLink: 'Cancel',
           dateFormat: 'DD MMM, YYYY',
           dateTitle: 'Date',
           footnotePlaceholder: 'ex. Holy Communion',
@@ -29,6 +30,7 @@ i18next.init({
           title: 'Edit Day'
         },
         EditRole: {
+          cancelLink: 'Cancel',
           dateFormat: 'DD MMM, YYYY',
           dateTitle: 'Date',
           roleTitle: 'Role',
@@ -38,8 +40,8 @@ i18next.init({
         },
         Mobile: {
           addCalLabel: 'Remind Me',
-          addCalByDownloadCsv: 'Use iCalendar',
-          addCalByGoogle: 'Use Google Calendar',
+          addCalByDownloadCsv: 'iCalendar',
+          addCalByGoogle: 'Google Calendar',
           dateFormat: 'DD MMM'
         },
         NavBar: {
@@ -62,6 +64,7 @@ i18next.init({
           occassion: '型式'
         },
         EditDay: {
+          cancelLink: '取消',
           dateFormat: 'YYYY年MMMDo',
           dateTitle: '日期',
           footnotePlaceholder: '範例：聯合崇拜',
@@ -72,6 +75,7 @@ i18next.init({
           title: '日期特別設定'
         },
         EditRole: {
+          cancelLink: '取消',
           dateFormat: 'YYYY年MMMDo',
           dateTitle: '日期',
           roleTitle: '服事',

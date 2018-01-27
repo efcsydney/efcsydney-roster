@@ -44,12 +44,15 @@ export default class Mobile extends Component {
   }
 
   renderRolesList(day, roles, members, serviceInfo) {
-    const { onRoleClick } = this.props;
+    const { onDayClick, onRoleClick } = this.props;
+    const formattedDate = day.format('YYYY-MM-DD');
 
     if (serviceInfo.skipService) {
       return (
         <Row>
-          <ExcludeReason>{serviceInfo.skipReason}</ExcludeReason>
+          <ExcludeReason onClick={() => onDayClick(formattedDate, serviceInfo)}>
+            {serviceInfo.skipReason}
+          </ExcludeReason>
         </Row>
       );
     }
@@ -145,6 +148,8 @@ const Cell = styled.span`
   width: auto;
 `;
 const ExcludeReason = Cell.extend`
+  cursor: pointer;
+  color: #ef4b3c;
   padding: 10px;
 `;
 const Header = Cell.extend`
@@ -153,6 +158,7 @@ const Header = Cell.extend`
   background-color: #eee;
   border: solid 1px #dadada;
   border-width: 1px 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   display: flex;
   font-weight: bold;
   overflow: visible;
@@ -205,6 +211,7 @@ const Day = styled.div`
   flex-direction: column;
   ${Name} {
     background-color: ${props => (props.highlighted ? '#ffc' : 'transparent')};
+    border-bottom: solid 1px #eee;
   }
   &:last-child {
     border-radius: 0 0 8px 8px;
@@ -232,6 +239,9 @@ const Footnote = styled.span`
   display: inline-block;
   font-size: 11px;
   margin-left: 5px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   vertical-align: baseline;
 `;
 const Action = styled.span`

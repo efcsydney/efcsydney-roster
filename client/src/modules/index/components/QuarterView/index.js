@@ -80,7 +80,7 @@ export default class QuarterView extends Component {
           this.calendarWrapper = input;
         }}
         calendarHeight={calendarHeight}
-		isMobile={isMobile}>
+        isMobile={isMobile}>
         {isMobile && <Mobile {...viewProps} />}
         {!isMobile && <Desktop {...viewProps} />}
       </Wrapper>
