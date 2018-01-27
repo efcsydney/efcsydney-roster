@@ -92,22 +92,21 @@ export default class Mobile extends Component {
               key={i}
               highlighted={highlighted}
               id={highlighted ? 'highlighted' : undefined}>
-              <Header
-                onClick={e => {
-                  const isAddCalendar =
-                    e.target.className.indexOf('react-add-to-calendar') !== -1;
-                  if (isAddCalendar) {
-                    e.stopPropagation();
-                    return;
-                  }
-                  onDayClick(formattedDate, serviceInfo);
-                }}>
-                <Label>
+              <Header>
+                <Label
+                  onClick={() => {
+                    onDayClick(formattedDate, serviceInfo);
+                  }}>
                   {day.format(this.getTrans('dateFormat'))}
-                  {serviceInfo.footnote && (
-                    <Footnote>( {serviceInfo.footnote} )</Footnote>
-                  )}
                 </Label>
+                {serviceInfo.footnote && (
+                  <Footnote
+                    onClick={() => {
+                      onDayClick(formattedDate, serviceInfo);
+                    }}>
+                    {serviceInfo.footnote}
+                  </Footnote>
+                )}
                 <Action>
                   <AddToCalendar
                     event={icalEvent}
@@ -121,6 +120,7 @@ export default class Mobile extends Component {
             </Day>
           );
         })}
+        <BottomDateBarSpace />
       </Grid>
     );
   }
@@ -148,6 +148,7 @@ const ExcludeReason = Cell.extend`
   padding: 10px;
 `;
 const Header = Cell.extend`
+  cursor: pointer;
   align-items: center;
   background-color: #eee;
   border: solid 1px #dadada;
@@ -197,6 +198,7 @@ const Row = styled.div`
   }
 `;
 const Day = styled.div`
+  cursor: pointer;
   color: ${props => (props.highlighted ? '#333' : '#666')};
   display: flex;
   flex-wrap: no-wrap;
@@ -217,6 +219,7 @@ const Day = styled.div`
   }
 `;
 const Label = styled.span`
+  cursor: pointer;
   color: #000;
   display: inline-block;
   font-size: 15px;
@@ -225,6 +228,7 @@ const Label = styled.span`
   text-align: left;
 `;
 const Footnote = styled.span`
+  cursor: pointer;
   display: inline-block;
   font-size: 11px;
   margin-left: 5px;
@@ -234,4 +238,9 @@ const Action = styled.span`
   display: inline-block;
   margin-left: auto;
   margin-right: 20px;
+`;
+const BottomDateBarSpace = styled.div`
+  position: absolute;
+  height: 50px;
+  width: 100%;
 `;

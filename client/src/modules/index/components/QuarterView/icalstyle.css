@@ -2583,6 +2583,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 html,
 body {
   height: 100%;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling: touch;
   background: #f5f5f5;
   font-family: "Open Sans", sans-serif;
   color: #555;
