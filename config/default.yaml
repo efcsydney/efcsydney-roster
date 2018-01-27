@@ -1,3 +1,5 @@
+logging:
+  write-file: true
 emailService:
   smtp: 'smtp.gmail.com'
   authentication:
