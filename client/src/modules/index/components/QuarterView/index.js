@@ -97,7 +97,7 @@ const Wrapper = styled.div`
   position: absolute;
   overflow: ${props => (props.isMobile ? 'inherit' : 'scroll')};
   width: 100%;
-  max-height: ${props => (props.isMobile ? props.calendarHeight : 'none')};
+  max-height: ${props => (props.isMobile ? 'none' : props.calendarHeight)};
   ${media.print`
     overflow: visible;
     max-height: none;
