@@ -122,9 +122,17 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     };
     handleCategoryChange = category => {
       const { history } = this.props;
+      const { date } = this.state;
+
       history.replace(category);
 
-      this.loadData({ category });
+      this.loadData({
+        from: moment(date).format('YYYY-MM-DD'),
+        to: moment(date)
+          .endOf('quarter')
+          .format('YYYY-MM-DD'),
+        category
+      });
     };
     handleDayClick = data => {
       const { toggleEditDay, setSelectedData } = this.props;
