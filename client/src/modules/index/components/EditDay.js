@@ -22,6 +22,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      toggleEditDay,
       onSave: form => requestModifyServiceInfo(form),
       onClose: () => toggleEditDay(false)
     },
@@ -78,7 +79,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       };
     }
     render() {
-      const { day, isSaving, ...otherProps } = this.props;
+      const { day, isSaving, toggleEditDay, ...otherProps } = this.props;
       const { serviceInfo: { footnote, skipReason } } = this.state;
       const formattedDate = moment(day).format(this.getTrans('dateFormat'));
 
@@ -117,6 +118,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                 type="submit">
                 {this.getTrans('saveLabel')}
               </StateButton>
+              <CancelLink onClick={() => toggleEditDay(false)}>
+                {this.getTrans('cancelLink')}
+              </CancelLink>
             </Row>
           </Form>
         </Modal>
@@ -193,3 +197,11 @@ const Input = styled.input`
   }
 `;
 Input.displayName = 'Input';
+
+const CancelLink = styled.a`
+  color: #369;
+  cursor: pointer;
+  text-decoration: none;
+  margin-left: 15px;
+`;
+CancelLink.displayName = 'CancelLink';

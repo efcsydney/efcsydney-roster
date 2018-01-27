@@ -31,6 +31,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      toggleEditRole,
       onSave: form => requestModifyIdEvents(form),
       onClose: () => toggleEditRole(false)
     },
@@ -76,6 +77,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         isSaving,
         role,
         preQuarterMembers,
+        toggleEditRole,
         ...otherProps
       } = this.props; // eslint-disable-line
       const { selectedName, names } = this.state;
@@ -115,6 +117,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                 })}>
                 {this.getTrans('saveLabel')}
               </StateButton>
+              <CancelLink onClick={() => toggleEditRole(false)}>
+                {this.getTrans('cancelLink')}
+              </CancelLink>
             </Row>
           </Form>
         </Modal>
@@ -147,4 +152,10 @@ const Label = styled.label`
 `;
 const Select = styled(Creatable)`
   width: 180px;
+`;
+const CancelLink = styled.a`
+  color: #369;
+  cursor: pointer;
+  text-decoration: none;
+  margin-left: 15px;
 `;
