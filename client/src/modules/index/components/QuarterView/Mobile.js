@@ -160,7 +160,9 @@ const Header = Cell.extend`
   border-width: 1px 0;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   display: flex;
+  flex-wrap: nowrap;
   font-weight: bold;
+  justify-content: space-between;
   overflow: visible;
   padding: 0;
   width: auto;
@@ -228,7 +230,7 @@ const Day = styled.div`
 const Label = styled.span`
   cursor: pointer;
   color: #000;
-  display: inline-block;
+  flex: 0;
   font-size: 15px;
   line-height: 1.2;
   padding: 10px;
@@ -236,18 +238,18 @@ const Label = styled.span`
 `;
 const Footnote = styled.span`
   cursor: pointer;
-  display: inline-block;
+  flex: 2;
   font-size: 11px;
   margin-left: 5px;
-  max-width: 150px;
   overflow: hidden;
+  text-align: left;
   text-overflow: ellipsis;
   vertical-align: baseline;
 `;
 const Action = styled.span`
-  display: inline-block;
+  flex: 0;
   margin-left: auto;
-  margin-right: 20px;
+  margin-right: 5px;
 `;
 const BottomDateBarSpace = styled.div`
   position: absolute;

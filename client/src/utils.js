@@ -1,6 +1,7 @@
 import queryString from 'query-string';
 import _ from 'lodash';
 import moment from 'moment';
+import i18n from 'i18n';
 
 export const sanitize = obj => {
   const query = _.clone(obj);
@@ -34,10 +35,10 @@ export function getCalData(day, roles, members) {
       return message;
     },
     []
-  ).join(', ');
+  ).join(',');
 
   return {
-    title: 'EFC Sydney English Service',
+    title: i18n.t('common.title'),
     description,
     location: '10 Carlotta St, Artarmon NSW 2064, Australia',
     startTime: day
