@@ -8,6 +8,9 @@ i18next.init({
   resources: {
     'en-AU': {
       translation: {
+        common: {
+          title: 'EFCOS English Service Roster'
+        },
         DateBar: {
           dateString: '{{startMonth}} - {{endMonth}} {{year}}'
         },
@@ -39,7 +42,7 @@ i18next.init({
           title: 'Edit Role'
         },
         Mobile: {
-          addCalLabel: 'Remind Me',
+          addCalLabel: 'Add To Calendar',
           addCalByDownloadCsv: 'iCalendar',
           addCalByGoogle: 'Google Calendar',
           dateFormat: 'DD MMM'
@@ -53,6 +56,9 @@ i18next.init({
     },
     'zh-TW': {
       translation: {
+        common: {
+          title: 'EFCOS 中文堂事工輪值'
+        },
         DateBar: {
           dateString: '{{year}}年{{startMonth}} - {{endMonth}}'
         },
