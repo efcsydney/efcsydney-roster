@@ -37,7 +37,7 @@ export default class Modal extends Component {
             <Header>{title}</Header>
             <Body>{children}</Body>
             <CloseLink onClick={() => onClose()}>
-              <IconClose color="#ffffff" size={24} />
+              <IconClose color="#999" size={32} />
             </CloseLink>
           </Popup>
         </Mask>
@@ -49,10 +49,11 @@ export default class Modal extends Component {
 const Mask = styled.div`
   background: rgba(0, 0, 0, 0.7);
   bottom: 0;
-  display: flex;
   left: 0;
+  overflow: auto;
   position: fixed;
   right: 0;
+  text-align: center;
   top: 0;
   z-index: 3;
 `;
@@ -60,45 +61,55 @@ const Popup = styled.div`
   background: #fff;
   border-radius: 5px;
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.04);
-  height: 350px;
-  margin: 50px auto;
-  max-width: 420px;
-  padding: 50px 20px;
+  display: inline-block;
+  margin: 6vh auto;
+  max-width: 85%;
+  min-width: 500px;
   position: relative;
-  width: 90%;
+  text-align: left;
   ${media.mobile`
-    height: 300px;
-    margin: 20px auto;
-    padding: 20px;
-    width: 95%;
+    margin: 4vh auto;
+    max-width: 90%;
+    min-width: 320px;
   `};
 `;
 const Header = styled.div`
   border-radius: 5px 5px 0 0;
   color: #4a4a4a;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
-  margin-bottom: 30px;
+  padding: 50px 50px 30px;
   text-align: center;
   ${media.mobile`
-    padding: 10px;
-    margin-bottom: 0;
+    padding: 30px 10px 15px;
   `};
 `;
 const Body = styled.div`
-  background: #fff;
-  margin: 0 auto;
+  font-size: 15px;
+  padding: 0 50px 20px;
+  ${media.mobile`
+    padding: 0 10px 30px;
+  `};
 `;
 const CloseLink = styled.span`
   align-items: center;
   background: #000;
   border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   display: flex;
   height: 42px;
   justify-content: center;
   position: absolute;
-  right: -10px;
-  top: -10px;
+  right: -20px;
+  top: -20px;
   width: 42px;
+  ${media.mobile`
+    background: transparent;
+    box-shadow: none;
+    right: none;
+    left: 10px;
+    top: 10px;
+    background; none;
+  `};
 `;

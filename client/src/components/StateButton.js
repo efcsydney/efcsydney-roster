@@ -36,13 +36,16 @@ const spin = keyframes`
     transform: rotate(360deg);
   }
 `;
-const SpinIcon = styled(SpinnerIcon)`animation: ${spin} infinite 2s linear;`;
+const SpinIcon = styled(SpinnerIcon)`
+  animation: ${spin} infinite 2s linear;
+`;
 const Button = styled.button.attrs({ type: 'button' })`
   background-color: #588c25;
   border-radius: 3px;
   border: 1px solid #466d1d;
   box-sizing: border-box;
   color: #fff;
+  font-size: inherit;
   min-width: 110px;
   padding: 12px;
 `;
