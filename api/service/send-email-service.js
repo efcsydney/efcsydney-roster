@@ -11,6 +11,7 @@ const config = require('config');
 const log = require('../utilities/logger');
 const { readAndParseFile } = require('../utilities/csv-helper');
 const { EmailListItem } = require('../models/email-list-item');
+const _ = require('lodash');
 
 const emailCsvFilePath = config.get('reminderEmail.emailListFilePath');
 const emailListFromCsv = parseCsvEmailFile(emailCsvFilePath);
@@ -29,8 +30,8 @@ function getEmailListString() {
     return `${emailTo.chineseName}<${emailTo.email}>`;
   };
   return getEmailList()
-  .map(applyEmailTemplate)
-  .join(',');
+    .map(applyEmailTemplate)
+    .join(',');
 }
 
 /*
@@ -104,14 +105,37 @@ async function reminderEmail() {
   const from = getDateString(new Date());
   const to = getDateByWeeks(from, 2);
   const events = await buildEventsForMultipleServices(from, to);
+  const nameList = getNameList(events);
+  const emailList = getEmailList();
+  // Get the email list that need to be included in reminder email
+  const reminderEmailList = emailList.filter(e => {
+    return nameList.includes(e.englishName) || nameList.includes(e.chineseName)
+  });
+  // Find the names of people that is included in the reminder
+  let nameListWithEmail = reminderEmailList.map(e => e.englishName)
+  nameListWithEmail = nameListWithEmail.concat(reminderEmailList.map(e => e.chineseName)).filter(e => e != '');
+  // Find the names of people that need to be reminded but is not in the reminder list
+  const nameListWithoutEmail = nameList
+    .filter(n => !nameListWithEmail.includes(n))
+    .filter(n => n !== 'Combined Service' && n !== '暫停' && n !== '一家一菜')
+    .join(',');
 
   return sendEmail({
     from: config.get('reminderEmail.content.from'),
     to: config.get('reminderEmail.content.to'),
     cc: config.get('reminderEmail.content.cc'),
     subject: `[自動提醒] 這週與下週的主日服事`,
-    html: getEmailHTML(events, getEmailList(), getEmptyEmailListString())
+    html: getEmailHTML(events, reminderEmailList, nameListWithoutEmail)
   });
+}
+
+function getNameList(events) {
+  return _.uniq(events.english
+    .concat(events.chinese)
+    .map(e => e.positions)
+    .reduce((result, e) => result.concat(e), [])
+    .map(e => e.volunteerName)
+    .filter(e => e != ''));
 }
 
 module.exports = {
@@ -121,3 +145,4 @@ module.exports = {
   getEmptyEmailListString,
   parseCsvEmailFile
 };
+reminderEmail()
