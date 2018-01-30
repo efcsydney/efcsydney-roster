@@ -107,6 +107,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                 />
               </span>
             </Row>
+            <HelpText>
+              {`${this.getTrans('promptSelection')}: ${
+                selectedName
+                  ? selectedName
+                  : this.getTrans('promptSelectionNone')
+              }`}
+            </HelpText>
             <Row align="center">
               <StateButton
                 kind={isSaving ? 'loading' : 'default'}
@@ -136,12 +143,21 @@ const Form = styled.form`
 const Row = styled.div`
   align-items: center;
   display: flex;
+  position: relative;
   min-height: 50px;
   &:last-child {
     text-align: center;
     padding: 20px 0;
   }
   justify-content: ${props => props.align || 'flex-start'};
+`;
+const HelpText = styled.div`
+  color: #666;
+  cursor: default;
+  display: inline-block;
+  font-size: 10px;
+  margin-left: 100px;
+  z-index: 2;
 `;
 const Label = styled.label`
   display: inline-block;
