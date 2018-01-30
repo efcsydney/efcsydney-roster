@@ -145,4 +145,3 @@ module.exports = {
   getEmptyEmailListString,
   parseCsvEmailFile
 };
-reminderEmail()
