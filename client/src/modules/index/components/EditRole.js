@@ -155,9 +155,8 @@ const HelpText = styled.div`
   color: #666;
   cursor: default;
   display: inline-block;
-  font-size: 10px;
+  font-size: 13px;
   margin-left: 100px;
-  z-index: 2;
 `;
 const Label = styled.label`
   display: inline-block;
