@@ -1,3 +1,4 @@
+const _ = require('lodash');
 
 const csvEmailHeaders = {
   email: 'email (primary)',
@@ -8,8 +9,8 @@ const csvEmailHeaders = {
 class EmailListItem {
   constructor(csvItem){
     this.email = csvItem[csvEmailHeaders.email] || '';
-    this.englishName = csvItem[csvEmailHeaders.englishName] || '';
-    this.chineseName = csvItem[csvEmailHeaders.chineseName] || '';
+    this.englishName = _.trim(csvItem[csvEmailHeaders.englishName]) || '';
+    this.chineseName = _.trim(csvItem[csvEmailHeaders.chineseName]) || '';
     this.isMetaData = EmailListItem.isCsvMetaData(this.email, this.englishName, this.chineseName);
   }
 
