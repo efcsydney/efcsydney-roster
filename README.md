@@ -1,5 +1,7 @@
 # efcsydney-roster
 
+![Travis CI](https://travis-ci.org/efcsydney/efcsydney-roster.svg?branch=master)
+
 ## Reference
 
 * [Using create-react-app with a server](https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/)
