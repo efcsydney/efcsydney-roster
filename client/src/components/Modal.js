@@ -21,6 +21,9 @@ export default class Modal extends Component {
       onClose();
     }
   };
+  handlePopupClick = e => {
+    e.stopPropagation();
+  };
   componentWillMount() {
     window.addEventListener('keyup', this.handleKeyup);
   }
@@ -32,11 +35,11 @@ export default class Modal extends Component {
 
     return (
       <Portal isOpen={isOpen}>
-        <Mask>
-          <Popup>
+        <Mask onClick={onClose}>
+          <Popup onClick={this.handlePopupClick}>
             <Header>{title}</Header>
             <Body>{children}</Body>
-            <CloseLink onClick={() => onClose()}>
+            <CloseLink onClick={onClose}>
               <IconClose color="#999" size={32} />
             </CloseLink>
           </Popup>

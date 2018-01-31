@@ -157,7 +157,6 @@ const HelpText = styled.div`
   display: inline-block;
   font-size: 13px;
   margin-left: 100px;
-  z-index: 2;
 `;
 const Label = styled.label`
   display: inline-block;
