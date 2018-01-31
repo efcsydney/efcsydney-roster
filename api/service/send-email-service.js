@@ -95,11 +95,10 @@ async function buildEventsForMultipleServices(from, to) {
       events[service.name] = EventMapper.groupEventsByCalendarDate(
         eventsForService
       );
-      events[service.name] = events[service.name].map(event => {
+      events[service.name].forEach((event, index) => {
         event.lang = service.locale;
-        event.serviceInfo = serviceInfo;
-        return event;
-      });
+        event.serviceInfo = serviceInfo[index];
+      })
       return events;
     })
   );
