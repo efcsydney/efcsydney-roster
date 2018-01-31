@@ -5,6 +5,8 @@ const datetimeUtil = require('../utilities/datetime-util');
 const getDateString = datetimeUtil.getDateString;
 const getDateByWeeks = datetimeUtil.getDateByWeeks;
 const EventRepository = require('../data/event-repository').EventRepository;
+const ServiceCalendarDateRepository = require('../data/service-calendar-date-repository')
+  .ServiceCalendarDateRepository;
 const Service = require('../models/service').Service;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
 const config = require('config');
@@ -14,7 +16,6 @@ const { EmailListItem } = require('../models/email-list-item');
 
 const emailCsvFilePath = config.get('reminderEmail.emailListFilePath');
 const emailListFromCsv = parseCsvEmailFile(emailCsvFilePath);
-
 
 /**
  * Generate email list string include names and emails
@@ -29,8 +30,8 @@ function getEmailListString() {
     return `${emailTo.chineseName}<${emailTo.email}>`;
   };
   return getEmailList()
-  .map(applyEmailTemplate)
-  .join(',');
+    .map(applyEmailTemplate)
+    .join(',');
 }
 
 /*
@@ -38,7 +39,7 @@ function getEmailListString() {
  */
 function getEmailList() {
   const emptyEmail = emailTo => !!emailTo.email;
-  return emailListFromCsv.filter(emptyEmail)
+  return emailListFromCsv.filter(emptyEmail);
 }
 
 function getEmptyEmailListString() {
@@ -79,10 +80,14 @@ function parseCsvEmailFile(emailCsvFilePath) {
 // This is a mock due to we only have one service at the moment
 async function buildEventsForMultipleServices(from, to) {
   const events = {};
-  services = await Service.findAll();
+  let services = await Service.findAll();
   await Promise.all(
     services.map(async service => {
       const eventsForService = await EventRepository.getEventsByDateRange(
+        { from, to },
+        service.name
+      );
+      const serviceInfo = await ServiceCalendarDateRepository.getServiceInfoByDateRange(
         { from, to },
         service.name
       );
@@ -91,6 +96,7 @@ async function buildEventsForMultipleServices(from, to) {
       );
       events[service.name] = events[service.name].map(event => {
         event.lang = service.locale;
+        event.serviceInfo = serviceInfo;
         return event;
       });
       return events;
