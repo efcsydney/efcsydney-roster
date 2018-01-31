@@ -26,10 +26,21 @@ const cellHeaderStyle = `
   text-align: center;
   white-space: nowrap;
 `;
+const emptyCellStyle = `
+  color: #999;
+  font-size: 12px;
+  line-height: 1.3;
+  padding: 6px 4px;
+  text-align: center;
+  white-space: nowrap;
+`;
 
-const renderHeaderRow = positions => `
+const renderHeaderRow = (lang, positions) => `
   <tr>
-    <th style="${cellHeaderStyle}">&nbsp;</th>
+    <th style="${cellHeaderStyle}">${lang === 'zh-TW' ? '日期' : 'Date'}</th>
+    <th style="${cellHeaderStyle}">${
+  lang === 'zh-TW' ? '型式' : 'Occasion'
+}</th>
     ${positions
       .map(
         ({ position }) => `
@@ -40,7 +51,7 @@ const renderHeaderRow = positions => `
   </tr>
 `;
 
-const renderMemberRow = ({ date, positions, lang }) => {
+const renderMemberRow = ({ date, serviceInfo, positions, lang }) => {
   moment.locale(lang);
   if (lang === 'zh-TW') {
     date = moment(date).format('MMMDo');
@@ -50,28 +61,44 @@ const renderMemberRow = ({ date, positions, lang }) => {
     date = moment(date).format('ll');
   }
 
+  const footnote =
+    serviceInfo.footnote || `<span style="${emptyCellStyle}">-</span>`;
+  const contentCells = !serviceInfo.skipService
+    ? positions
+        .map(
+          ({ volunteerName }) => `
+      <td style="${cellStyle}">${
+            volunteerName
+              ? volunteerName
+              : `<span style="${emptyCellStyle}">-</span>`
+          }</td>
+      `
+        )
+        .join('\n')
+    : `<td style="${cellStyle}" colspan=${positions.length}>${
+        serviceInfo.skipReason
+      }</td>`;
+
   return `
     <tr>
       <td style="${cellStyle}">${date}</td>
-      ${positions
-        .map(
-          ({ volunteerName }) => `
-      <td style="${cellStyle}">${volunteerName ? volunteerName : '&nbsp;'}</td>
-      `
-        )
-        .join('\n')}
+      <td style="${cellStyle}">${footnote}</td>
+      ${contentCells}
     </tr>
   `;
 };
 
-const renderTable = days => `
-  <mj-section padding="5px 0 10px">
-    <mj-table padding="0">
-      ${renderHeaderRow(days[0].positions)}
-      ${days.map(day => renderMemberRow(day)).join('')}
-    </mj-table>
-  </mj-section>
-`;
+const renderTable = days => {
+  days.sort((a, b) => (a.date > b.date ? 1 : -1));
+  return `
+    <mj-section padding="5px 0 10px">
+      <mj-table padding="0">
+        ${renderHeaderRow(days[0].lang, days[0].positions)}
+        ${days.map(day => renderMemberRow(day)).join('')}
+      </mj-table>
+    </mj-section>
+  `;
+};
 
 const renderDraftTable = (title, emailList, emptyEmailList) => {
   const emails = emailList.map(item => {
@@ -174,7 +201,7 @@ exports.getEmailHTML = (events, emailList, emptyEmailList) => {
       <mj-body>
         <mj-container width="960px" css-class="container">
           <mj-wrapper padding="10px 0 5px">
-            <mj-section padding="10px 15px" border="solid 1px #f99" background-color="#fdf3f0" css-class="alert">
+            <mj-section padding="10px 15px" border="solid 1px #f99" background-color="#fdf3f0">
               <mj-text font-size="14px" color="#d14836">⚠️ &nbsp; 請參考以下系統幫您準備的服事提醒草稿，每週自動寄給服事助理同工</mj-text>
             </mj-section>
           </mj-wrapper>
