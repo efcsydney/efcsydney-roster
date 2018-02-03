@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
-import { MOBILE_BREAKPOINT } from '../../../styled';
-import { getMemberNames, getQuarterDays, getRoles } from '../../../utils';
+import { MOBILE_BREAKPOINT } from 'styled';
+import { getMemberNames, getQuarterDays, getRoles } from 'utils';
 import './icalstyle.css';
 
 export default class QuarterView extends Component {

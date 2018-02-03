@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import styled from 'styled-components';
-import { Modal, StateButton } from '../../components';
+import { Modal, StateButton } from 'components';
 //import { Creatable } from 'react-select';
 
 export default class EditDay extends Component {
