@@ -81,7 +81,7 @@ function parseCsvEmailFile(emailCsvFilePath) {
 // This is a mock due to we only have one service at the moment
 async function buildEventsForMultipleServices(from, to) {
   const events = {};
-  let services = await Service.findAll();
+  const services = await Service.findAll();
   await Promise.all(
     services.map(async service => {
       const eventsForService = await EventRepository.getEventsByDateRange(
@@ -98,7 +98,7 @@ async function buildEventsForMultipleServices(from, to) {
       events[service.name].forEach((event, index) => {
         event.lang = service.locale;
         event.serviceInfo = serviceInfo[index];
-      })
+      });
       return events;
     })
   );
