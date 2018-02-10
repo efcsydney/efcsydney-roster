@@ -13,6 +13,7 @@ import i18n from 'i18n';
 
 function getOptions(names) {
   names = names.map(name => ({ value: name, label: name }));
+  names = names.filter(name => name.label !== 'Combined Service');
   return names;
 }
 

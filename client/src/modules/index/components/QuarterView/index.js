@@ -1,3 +1,4 @@
+/*global window*/
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -36,8 +37,17 @@ export default class QuarterView extends Component {
     onRoleClick({ day, role, member, names });
   };
   handleWindowResize = () => {
+    const isMobile = document.body.offsetWidth <= MOBILE_BREAKPOINT;
+
+    if (isMobile) {
+      window.screen.lockOrientation &&
+        window.screen.lockOrientation('portrait');
+    } else {
+      window.screen.lockOrientation && window.screen.lockOrientation('default');
+    }
+
     this.setState({
-      isMobile: document.body.offsetWidth <= MOBILE_BREAKPOINT,
+      isMobile,
       calendarHeight: this.setCalendarHeight()
     });
   };

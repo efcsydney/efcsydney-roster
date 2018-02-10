@@ -6,6 +6,7 @@ import AddToCalendar from 'react-add-to-calendar';
 import './icalstyle.css';
 import moment from 'moment';
 import { findEvent, getCalData } from 'utils';
+import IconEdit from 'react-icons/lib/fa/pencil';
 import i18n from 'i18n';
 
 export default class Mobile extends Component {
@@ -102,6 +103,12 @@ export default class Mobile extends Component {
                   }}>
                   {day.format(this.getTrans('dateFormat'))}
                 </Label>
+                <SettingLink
+                  onClick={() => {
+                    onDayClick(formattedDate, serviceInfo);
+                  }}>
+                  <IconEdit />
+                </SettingLink>
                 {serviceInfo.footnote && (
                   <Footnote
                     onClick={() => {
@@ -212,7 +219,7 @@ const Day = styled.div`
   display: flex;
   flex-wrap: no-wrap;
   flex-direction: column;
-  ${Name} {
+  ${Name}, ${ExcludeReason} {
     background-color: ${props => (props.highlighted ? '#ffc' : 'transparent')};
     border-bottom: solid 1px #eee;
   }
@@ -234,8 +241,16 @@ const Label = styled.span`
   flex: 0;
   font-size: 15px;
   line-height: 1.2;
-  padding: 10px;
+  padding: 10px 5px 10px 10px;
   text-align: left;
+`;
+const SettingLink = styled.span`
+  color: #333;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 0;
+  padding: 10px 5px 10px 0;
+  flex: 0;
 `;
 const Footnote = styled.span`
   cursor: pointer;
