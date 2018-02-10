@@ -59,6 +59,9 @@ const Mask = styled.div`
   text-align: center;
   top: 0;
   z-index: 3;
+  ${media.print`
+    display: none;
+  `};
 `;
 const Popup = styled.div`
   background: #fff;
@@ -74,6 +77,9 @@ const Popup = styled.div`
     margin: 4vh auto;
     max-width: 90%;
     min-width: 320px;
+    .Select-menu {
+      height: 120px;
+    }
   `};
 `;
 const Header = styled.div`

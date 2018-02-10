@@ -80,4 +80,7 @@ body {
   .react-add-to-calendar {
     display: none;
   }
+  #_hj_feedback_container {
+    display: none;
+  }
 }
