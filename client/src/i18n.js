@@ -25,11 +25,11 @@ i18next.init({
           cancelLink: 'Cancel',
           dateFormat: 'DD MMM, YYYY',
           dateTitle: 'Date',
-          footnotePlaceholder: 'ex. Holy Communion',
+          footnotePlaceholder: 'e.g. Holy Communion',
           footnoteTitle: 'Occassion',
           saveLabel: 'Save',
           skipReasonTitle: 'Skip Reason',
-          skipReasonPlaceholder: 'ex. Combined Service',
+          skipReasonPlaceholder: 'e.g. Combined Service',
           title: 'Edit Day'
         },
         EditRole: {
@@ -44,7 +44,7 @@ i18next.init({
           title: 'Edit Role'
         },
         Mobile: {
-          addCalLabel: 'Add To Calendar',
+          addCalLabel: 'Add Calendar',
           addCalByDownloadCsv: 'iCalendar',
           addCalByGoogle: 'Google Calendar',
           dateFormat: 'DD MMM'

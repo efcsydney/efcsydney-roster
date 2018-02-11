@@ -24,10 +24,18 @@ export default class Modal extends Component {
   handlePopupClick = e => {
     e.stopPropagation();
   };
+  componentDidMount() {
+    const { isOpen } = this.props;
+
+    document.body.style.overflowX = 'hidden';
+    document.body.style.overflowY = isOpen ? 'hidden' : 'visible';
+  }
   componentWillMount() {
     window.addEventListener('keyup', this.handleKeyup);
   }
   componentWillUnmount() {
+    document.body.style.overflowX = 'hidden';
+    document.body.style.overflowY = 'visible';
     window.removeEventListener('keyup', this.handleKeyup);
   }
   render() {
@@ -59,6 +67,9 @@ const Mask = styled.div`
   text-align: center;
   top: 0;
   z-index: 3;
+  ${media.print`
+    display: none;
+  `};
 `;
 const Popup = styled.div`
   background: #fff;
@@ -74,6 +85,9 @@ const Popup = styled.div`
     margin: 4vh auto;
     max-width: 90%;
     min-width: 320px;
+    .Select-menu {
+      height: 120px;
+    }
   `};
 `;
 const Header = styled.div`
@@ -84,7 +98,8 @@ const Header = styled.div`
   padding: 50px 50px 30px;
   text-align: center;
   ${media.mobile`
-    padding: 30px 10px 15px;
+    font-size: 20px;
+    padding: 20px 10px 15px;
   `};
 `;
 const Body = styled.div`

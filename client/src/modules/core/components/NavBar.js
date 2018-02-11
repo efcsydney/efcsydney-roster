@@ -42,8 +42,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               className="ServiceSelect"
               clearable={false}
               options={[
-                { value: 'english', label: this.getTrans('englishService') },
-                { value: 'chinese', label: this.getTrans('chineseService') }
+                { value: 'english', label: 'English Sunday Service Roster' },
+                { value: 'chinese', label: '中文堂服事表' }
               ]}
               onChange={this.handleCategoryChange}
               searchable={false}
@@ -93,6 +93,13 @@ const Title = styled.span`
   &:visited {
     color: #fff;
     text-decoration: none;
+  }
+  .Select-option {
+    white-space: nowrap;
+  }
+  .Select-menu-outer {
+    min-width: 100%;
+    width: auto;
   }
   ${media.mobile`
     font-size: 14px;

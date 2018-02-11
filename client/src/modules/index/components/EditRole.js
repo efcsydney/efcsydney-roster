@@ -10,9 +10,11 @@ import 'react-select/dist/react-select.css';
 import _ from 'lodash';
 import { requestModifyIdEvents, toggleEditRole } from 'modules/index/redux';
 import i18n from 'i18n';
+import { media } from 'styled';
 
 function getOptions(names) {
   names = names.map(name => ({ value: name, label: name }));
+  names = names.filter(name => name.label !== 'Combined Service');
   return names;
 }
 
@@ -150,6 +152,9 @@ const Row = styled.div`
     padding: 20px 0;
   }
   justify-content: ${props => props.align || 'flex-start'};
+  ${media.mobile`
+    min-height: 40px;
+  `};
 `;
 const HelpText = styled.div`
   color: #666;
