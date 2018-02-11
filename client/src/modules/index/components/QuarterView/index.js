@@ -39,13 +39,6 @@ export default class QuarterView extends Component {
   handleWindowResize = () => {
     const isMobile = document.body.offsetWidth <= MOBILE_BREAKPOINT;
 
-    if (isMobile) {
-      window.screen.lockOrientation &&
-        window.screen.lockOrientation('portrait');
-    } else {
-      window.screen.lockOrientation && window.screen.lockOrientation('default');
-    }
-
     this.setState({
       isMobile,
       calendarHeight: this.setCalendarHeight()
