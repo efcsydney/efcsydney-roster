@@ -44,7 +44,7 @@ i18next.init({
           title: 'Edit Role'
         },
         Mobile: {
-          addCalLabel: 'Add To Calendar',
+          addCalLabel: 'Add Calendar',
           addCalByDownloadCsv: 'iCalendar',
           addCalByGoogle: 'Google Calendar',
           dateFormat: 'DD MMM'

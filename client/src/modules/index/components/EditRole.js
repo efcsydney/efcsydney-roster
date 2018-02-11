@@ -10,6 +10,7 @@ import 'react-select/dist/react-select.css';
 import _ from 'lodash';
 import { requestModifyIdEvents, toggleEditRole } from 'modules/index/redux';
 import i18n from 'i18n';
+import { media } from 'styled';
 
 function getOptions(names) {
   names = names.map(name => ({ value: name, label: name }));
@@ -64,9 +65,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       }
       this.setState(state);
     };
-    handleOrientationChange = () => {
-      this.selectRef.scrollIntoView('start');
-    };
     constructor(props) {
       super(props);
 
@@ -74,18 +72,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         names: props.names,
         selectedName: props.member
       };
-    }
-    componentDidMount() {
-      window.addEventListener(
-        'orientationChange',
-        this.handleOrientationChange
-      );
-    }
-    componentWillUnmount() {
-      window.removeEventListener(
-        'orientationChange',
-        this.handleOrientationChange
-      );
     }
     render() {
       const {
@@ -116,12 +102,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               <span>
                 <Select
                   multi={false}
-                  ref={el => {
-                    this.selectRef = el;
-                  }}
                   value={selectedName}
                   onChange={this.handleNameChange}
-                  onFocus={e => e.target.scrollIntoView('end')}
                   options={getOptions(finalMembers)}
                   clearable={true}
                 />
@@ -170,6 +152,9 @@ const Row = styled.div`
     padding: 20px 0;
   }
   justify-content: ${props => props.align || 'flex-start'};
+  ${media.mobile`
+    min-height: 40px;
+  `};
 `;
 const HelpText = styled.div`
   color: #666;

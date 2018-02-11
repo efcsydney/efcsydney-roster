@@ -27,13 +27,15 @@ export default class Modal extends Component {
   componentDidMount() {
     const { isOpen } = this.props;
 
-    document.body.style.overflow = isOpen ? 'hidden' : 'visible';
+    document.body.style.overflowX = 'hidden';
+    document.body.style.overflowY = isOpen ? 'hidden' : 'visible';
   }
   componentWillMount() {
     window.addEventListener('keyup', this.handleKeyup);
   }
   componentWillUnmount() {
     document.body.style.overflowX = 'hidden';
+    document.body.style.overflowY = 'visible';
     window.removeEventListener('keyup', this.handleKeyup);
   }
   render() {
@@ -100,7 +102,8 @@ const Header = styled.div`
   padding: 50px 50px 30px;
   text-align: center;
   ${media.mobile`
-    padding: 30px 10px 15px;
+    font-size: 20px;
+    padding: 20px 10px 15px;
   `};
 `;
 const Body = styled.div`
