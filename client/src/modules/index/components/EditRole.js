@@ -64,6 +64,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       }
       this.setState(state);
     };
+    handleOrientationChange = () => {
+      this.selectRef.scrollIntoView('start');
+    };
     constructor(props) {
       super(props);
 
@@ -71,6 +74,18 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         names: props.names,
         selectedName: props.member
       };
+    }
+    componentDidMount() {
+      window.addEventListener(
+        'orientationChange',
+        this.handleOrientationChange
+      );
+    }
+    componentWillUnmount() {
+      window.removeEventListener(
+        'orientationChange',
+        this.handleOrientationChange
+      );
     }
     render() {
       const {
@@ -101,8 +116,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               <span>
                 <Select
                   multi={false}
+                  ref={el => {
+                    this.selectRef = el;
+                  }}
                   value={selectedName}
                   onChange={this.handleNameChange}
+                  onFocus={e => e.target.scrollIntoView('end')}
                   options={getOptions(finalMembers)}
                   clearable={true}
                 />

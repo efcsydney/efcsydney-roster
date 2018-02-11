@@ -24,10 +24,16 @@ export default class Modal extends Component {
   handlePopupClick = e => {
     e.stopPropagation();
   };
+  componentDidMount() {
+    const { isOpen } = this.props;
+
+    document.body.style.overflow = isOpen ? 'hidden' : 'visible';
+  }
   componentWillMount() {
     window.addEventListener('keyup', this.handleKeyup);
   }
   componentWillUnmount() {
+    document.body.style.overflowX = 'hidden';
     window.removeEventListener('keyup', this.handleKeyup);
   }
   render() {
@@ -79,10 +85,6 @@ const Popup = styled.div`
     min-width: 320px;
     .Select-menu {
       height: 120px;
-    }
-    // The last option could be blocked by the keyboard window
-    .Select-option:last-of-type {
-      margin-bottom: 40px;
     }
   `};
 `;
