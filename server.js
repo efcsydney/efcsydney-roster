@@ -3,6 +3,7 @@ process.env.TZ = 'Australia/Sydney';
 require('./newrelic');
 const app = require('./app').app;
 const logger = require('winston');
+const databaseUtil = require('./api/utilities/database-util');
 
 app.listen(app.get('port'), () => {
   logger.info(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
@@ -26,5 +27,14 @@ new CronJob(config.get('reminderEmail.schedule'), async function() {
     logger.debug('scheduler stop');
   },
   true, /* Start the job right now */
+  'Australia/Sydney'
+);
+
+new Cronjob(config.get('databaseBackup.schedule'), async function() {
+    databaseUtil.backupDatabase();
+  }, function() {
+    logger.debug('database backup stopped');
+  },
+  true,
   'Australia/Sydney'
 );

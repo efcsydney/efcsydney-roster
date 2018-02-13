@@ -58,7 +58,8 @@
     "db-migrate": "sequelize db:migrate",
     "db-rollback-all": "sequelize db:migrate:undo:all",
     "prettier": "prettier --single-quote --write '{,!(node_modules|client)/**/}*.js'",
-    "db-update-events": "node ./scripts/update-events-details.js"
+    "db-update-events": "node ./scripts/update-events-details.js",
+    "db-backup": "node ./scripts/backup-database.js"
   },
   "devDependencies": {
     "concurrently": "3.1.0",
