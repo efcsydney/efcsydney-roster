@@ -13,8 +13,14 @@ import store from 'store';
 import moment from 'moment';
 import dotProp from 'dot-prop-immutable';
 
-const PREFIX = 'index';
+//===========
+// Constants
+//===========
+export const PREFIX = 'index';
 
+//=================
+// Action Creators
+//=================
 export const receiveRetrieveEvents = createAction(
   `${PREFIX}/RECEIVE_RETRIEVE_EVENTS`
 );
@@ -63,6 +69,9 @@ export const setServiceInfo = createAction(`${PREFIX}/SET_SERVICE_INFO`);
 export const toggleEditRole = createAction(`${PREFIX}/TOGGLE_EDIT_ROLE`);
 export const toggleEditDay = createAction(`${PREFIX}/TOGGLE_EDIT_DAY`);
 
+//=================
+// Default State
+//=================
 export const defaultState = {
   data: [],
   meta: {
@@ -75,6 +84,9 @@ export const defaultState = {
   }
 };
 
+//=========
+// Reducer
+//=========
 export const dataReducer = handleActions(
   {
     [receiveRetrieveEvents]: (state, { payload }) => payload,
@@ -157,21 +169,31 @@ const queryReducer = handleAction(
   defaultState.meta.query
 );
 
-const isEditingDayReducer = handleActions(
-  {
-    [toggleEditDay]: (state, { payload }) =>
-      _.isBoolean(payload) ? payload : !state,
-    [receiveModifyServiceInfo]: () => false
-  },
+// Avoid duplications for isEditingDayReducer and isEditingRoleReducer
+const createIsEditingReducer = (
+  toggleEditAction,
+  receiveModifyAction,
+  defaultValue
+) => {
+  return handleActions(
+    {
+      [toggleEditAction]: (state, { payload }) =>
+        _.isBoolean(payload) ? payload : !state,
+      [receiveModifyAction]: () => false
+    },
+    defaultValue
+  );
+};
+
+const isEditingDayReducer = createIsEditingReducer(
+  toggleEditDay,
+  receiveModifyServiceInfo,
   defaultState.meta.isEditingDay
 );
 
-const isEditingRoleReducer = handleActions(
-  {
-    [toggleEditRole]: (state, { payload }) =>
-      _.isBoolean(payload) ? payload : !state,
-    [receiveModifyIdEvents]: () => false
-  },
+const isEditingRoleReducer = createIsEditingReducer(
+  toggleEditRole,
+  receiveModifyIdEvents,
   defaultState.meta.isEditingRole
 );
 
