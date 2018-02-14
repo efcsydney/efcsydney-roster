@@ -1,6 +1,12 @@
 import _ from 'lodash';
 import { combineReducers } from 'redux';
-import { createAction, handleAction, handleActions } from 'redux-actions';
+import reduceReducers from 'reduce-reducers';
+import {
+  combineActions,
+  createAction,
+  handleAction,
+  handleActions
+} from 'redux-actions';
 import ServiceInfoAPI from 'apis/serviceInfo';
 import EventsAPI from 'apis/events';
 import store from 'store';
@@ -57,7 +63,7 @@ export const setServiceInfo = createAction(`${PREFIX}/SET_SERVICE_INFO`);
 export const toggleEditRole = createAction(`${PREFIX}/TOGGLE_EDIT_ROLE`);
 export const toggleEditDay = createAction(`${PREFIX}/TOGGLE_EDIT_DAY`);
 
-const defaultState = {
+export const defaultState = {
   data: [],
   meta: {
     isEditingDay: false,
@@ -69,120 +75,132 @@ const defaultState = {
   }
 };
 
-export default combineReducers({
-  data: handleActions(
+export const dataReducer = handleActions(
+  {
+    [receiveRetrieveEvents]: (state, { payload }) => payload,
+    [receiveModifyIdEvents]: (state, { payload }) => {
+      const dayIndex = _.findIndex(state, {
+        date: moment(payload.date).format('YYYY-MM-DD')
+      });
+      const roleIndex = _.findIndex(state[dayIndex].members, {
+        role: payload.role
+      });
+
+      return dotProp.set(
+        state,
+        `${dayIndex}.members.${roleIndex}.name`,
+        payload.name
+      );
+    },
+    [receiveModifyServiceInfo]: (state, { payload }) => {
+      const dayIndex = _.findIndex(state, day => {
+        const id = _.get(day, 'serviceInfo.id', null);
+        return id === payload.id;
+      });
+      return dotProp.set(state, `${dayIndex}.serviceInfo`, payload.serviceInfo);
+    },
+    [setEvent]: (state, { payload }) => {
+      const dayIndex = _.findIndex(state, { date: payload.date });
+      if (dayIndex === -1) {
+        return state;
+      }
+
+      const memberIndex = _.findIndex(state[dayIndex].members, {
+        role: payload.role
+      });
+      if (memberIndex === -1) {
+        return state;
+      }
+
+      return dotProp.set(
+        state,
+        `${dayIndex}.members.${memberIndex}.name`,
+        payload.name
+      );
+    },
+    [setServiceInfo]: (state, { payload }) => {
+      const dayIndex = _.findIndex(
+        state,
+        day => day.serviceInfo.id === payload.id
+      );
+      if (dayIndex === -1) {
+        return state;
+      }
+      return dotProp.set(state, `${dayIndex}.serviceInfo`, payload);
+    }
+  },
+  defaultState.data
+);
+
+export const selectedDataReducer = reduceReducers(
+  handleAction(
+    setSelectedData,
+    (state, { payload }) => payload,
+    defaultState.meta.selectedData
+  ),
+  handleAction(
+    combineActions(toggleEditDay, toggleEditRole),
     {
-      [receiveRetrieveEvents]: (state, { payload }) => payload,
-      [receiveModifyIdEvents]: (state, { payload }) => {
-        const dayIndex = _.findIndex(state, {
-          date: moment(payload.date).format('YYYY-MM-DD')
-        });
-        const roleIndex = _.findIndex(state[dayIndex].members, {
-          role: payload.role
-        });
-
-        return dotProp.set(
-          state,
-          `${dayIndex}.members.${roleIndex}.name`,
-          payload.name
-        );
-      },
-      [receiveModifyServiceInfo]: (state, { payload }) => {
-        const dayIndex = _.findIndex(state, day => {
-          const id = _.get(day, 'serviceInfo.id', null);
-          return id === payload.id;
-        });
-        return dotProp.set(
-          state,
-          `${dayIndex}.serviceInfo`,
-          payload.serviceInfo
-        );
-      },
-      [setEvent]: (state, { payload }) => {
-        const dayIndex = _.findIndex(state, { date: payload.date });
-        if (dayIndex === -1) {
-          return state;
-        }
-
-        const memberIndex = _.findIndex(state[dayIndex].members, {
-          role: payload.role
-        });
-        if (memberIndex === -1) {
-          return state;
-        }
-
-        return dotProp.set(
-          state,
-          `${dayIndex}.members.${memberIndex}.name`,
-          payload.name
-        );
-      },
-      [setServiceInfo]: (state, { payload }) => {
-        const dayIndex = _.findIndex(
-          state,
-          day => day.serviceInfo.id === payload.id
-        );
-        if (dayIndex === -1) {
-          return state;
-        }
-        return dotProp.set(state, `${dayIndex}.serviceInfo`, payload);
+      next(state, { payload }) {
+        const isClosing =
+          payload === false || (state && _.isUndefined(payload));
+        return isClosing ? null : state;
       }
     },
-    defaultState.data
-  ),
+    defaultState.meta.selectedData
+  )
+);
+
+const queryReducer = handleAction(
+  requestRetrieveEvents,
+  (state, { payload }) => payload,
+  defaultState.meta.query
+);
+
+const isEditingDayReducer = handleActions(
+  {
+    [toggleEditDay]: (state, { payload }) =>
+      _.isBoolean(payload) ? payload : !state,
+    [receiveModifyServiceInfo]: () => false
+  },
+  defaultState.meta.isEditingDay
+);
+
+const isEditingRoleReducer = handleActions(
+  {
+    [toggleEditRole]: (state, { payload }) =>
+      _.isBoolean(payload) ? payload : !state,
+    [receiveModifyIdEvents]: () => false
+  },
+  defaultState.meta.isEditingRole
+);
+
+const isLoadingReducer = handleActions(
+  {
+    [requestRetrieveEvents]: () => true,
+    [receiveRetrieveEvents]: () => false
+  },
+  defaultState.meta.isLoading
+);
+
+const isSavingReducer = handleActions(
+  {
+    [requestModifyIdEvents]: () => true,
+    [receiveModifyIdEvents]: () => false,
+    [requestModifyServiceInfo]: () => true,
+    [receiveModifyServiceInfo]: () => false
+  },
+  defaultState.meta.isSaving
+);
+
+export default combineReducers({
+  data: dataReducer,
   meta: combineReducers({
-    query: handleAction(
-      requestRetrieveEvents,
-      (state, { payload }) => payload,
-      defaultState.meta.query
-    ),
-    isEditingDay: handleActions(
-      {
-        [toggleEditDay]: (state, { payload }) =>
-          _.isBoolean(payload) ? payload : !state,
-        [receiveModifyServiceInfo]: () => false
-      },
-      defaultState.meta.isEditingDay
-    ),
-    isEditingRole: handleActions(
-      {
-        [toggleEditRole]: (state, { payload }) =>
-          _.isBoolean(payload) ? payload : !state,
-        [receiveModifyIdEvents]: () => false
-      },
-      defaultState.meta.isEditingRole
-    ),
-    isLoading: handleActions(
-      {
-        [requestRetrieveEvents]: () => true,
-        [receiveRetrieveEvents]: () => false
-      },
-      defaultState.meta.isLoading
-    ),
-    isSaving: handleActions(
-      {
-        [requestModifyIdEvents]: () => true,
-        [receiveModifyIdEvents]: () => false,
-        [requestModifyServiceInfo]: () => true,
-        [receiveModifyServiceInfo]: () => false
-      },
-      defaultState.meta.isSaving
-    ),
-    selectedData: handleActions(
-      {
-        [toggleEditDay]: (state, { payload }) => {
-          const isClosing =
-            payload === false || (state && _.isUndefined(payload));
-          return isClosing ? null : state;
-        },
-        [toggleEditRole]: (state, { payload }) => {
-          const isClosing =
-            payload === false || (state && _.isUndefined(payload));
-          return isClosing ? null : state;
-        },
-        [setSelectedData]: (state, { payload }) => payload
-      },
-      defaultState.meta.selectedData
-    )
+    query: queryReducer,
+    isEditingDay: isEditingDayReducer,
+    isEditingRole: isEditingRoleReducer,
+    isLoading: isLoadingReducer,
+    isSaving: isSavingReducer,
+    selectedData: selectedDataReducer
   })
 });
