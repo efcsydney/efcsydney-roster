@@ -33,7 +33,7 @@ function backupDatabase() {
 
   log.info(`[BEGIN] DatabaseUtil#backupDatabase; file: ${getBackupFileName()}, at: ${moment()}`);
 
-  exec(getBackupQuery(), function(err, stdout, stderr) {
+  exec(getBackupQuery(), function(err) {
     if (err) {
       log.error(`[ERROR] DatabaseUtil#backupDatabase; reason: ${err.message}`);
     } else {

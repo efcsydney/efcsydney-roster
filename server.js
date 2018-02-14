@@ -30,7 +30,7 @@ new CronJob(config.get('reminderEmail.schedule'), async function() {
   'Australia/Sydney'
 );
 
-new Cronjob(config.get('databaseBackup.schedule'), async function() {
+new CronJob(config.get('databaseBackup.schedule'), async function() {
     databaseUtil.backupDatabase();
   }, function() {
     logger.debug('database backup stopped');
