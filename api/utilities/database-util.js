@@ -9,7 +9,7 @@ const config = require('config');
 const BACKUP_DIR = config.get('databaseBackup.backupDirectory');
 
 function getDateString() {
-  return moment().format("YYYYMMDD");
+  return moment().format('YYYYMMDD');
 }
 
 function getBackupFileName() {
