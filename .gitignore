@@ -7,3 +7,4 @@ scripts/email/test/sample.html
 config/local.yaml
 .rev
 .vscode/*
+backup/*
