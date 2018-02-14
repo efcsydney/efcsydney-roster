@@ -17,5 +17,5 @@ pusher:
   secret: '1f9c945bdba3e872e3a9'
   cluster: 'ap1'
 databaseBackup:
-  schedule: '* * * * *'
+  schedule: '0 0 * * *'
   backupDirectory: 'backup'
