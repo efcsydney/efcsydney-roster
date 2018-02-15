@@ -2,7 +2,7 @@ process.env.TZ = 'Australia/Sydney';
 
 require('./newrelic');
 const app = require('./app').app;
-const logger = require('winston');
+const logger = require('./api/utilities/logger');
 const databaseUtil = require('./api/utilities/database-util');
 
 app.listen(app.get('port'), () => {
