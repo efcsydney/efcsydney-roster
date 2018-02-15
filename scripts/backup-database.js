@@ -1,4 +1,4 @@
 
-const databaseUrl = require('../api/utilities/database-util');
+const databaseUtil = require('../api/utilities/database-util');
 
-databaseUrl.backupDatabase();
+databaseUtil.backupDatabase();

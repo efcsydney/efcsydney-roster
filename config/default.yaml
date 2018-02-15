@@ -18,4 +18,4 @@ pusher:
   cluster: 'ap1'
 databaseBackup:
   schedule: '0 0 * * *'
-  backupDirectory: 'backup'
+  backupDirectory: '../backup'
