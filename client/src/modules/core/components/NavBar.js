@@ -42,8 +42,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               className="ServiceSelect"
               clearable={false}
               options={[
-                { value: 'english', label: 'English Sunday Service Roster' },
-                { value: 'chinese', label: '中文堂服事表' }
+                { value: 'english', label: '英文堂 English Service' },
+                { value: 'chinese', label: '中文堂 Mandarin Service' }
               ]}
               onChange={this.handleCategoryChange}
               searchable={false}
