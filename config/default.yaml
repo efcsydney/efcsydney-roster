@@ -10,6 +10,11 @@ reminderEmail:
     to: ''
     cc: ''
   schedule: '00 * * * * *'
+  skipRoles:
+    - 和音
+    - 吉他鼓
+    - 插花
+    - 週報
   emailListFilePath: 'db/data/email-list-example.csv'
 pusher:
   appId: '451836'
