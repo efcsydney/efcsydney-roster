@@ -197,7 +197,7 @@ const isEditingRoleReducer = createIsEditingReducer(
   defaultState.meta.isEditingRole
 );
 
-const isLoadingReducer = handleActions(
+export const isLoadingReducer = handleActions(
   {
     [requestRetrieveEvents]: () => true,
     [receiveRetrieveEvents]: () => false
@@ -205,7 +205,7 @@ const isLoadingReducer = handleActions(
   defaultState.meta.isLoading
 );
 
-const isSavingReducer = handleActions(
+export const isSavingReducer = handleActions(
   {
     [requestModifyIdEvents]: () => true,
     [receiveModifyIdEvents]: () => false,
