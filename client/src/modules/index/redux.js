@@ -163,7 +163,7 @@ export const selectedDataReducer = reduceReducers(
   )
 );
 
-const queryReducer = handleAction(
+export const queryReducer = handleAction(
   requestRetrieveEvents,
   (state, { payload }) => payload,
   defaultState.meta.query
@@ -185,13 +185,13 @@ const createIsEditingReducer = (
   );
 };
 
-const isEditingDayReducer = createIsEditingReducer(
+export const isEditingDayReducer = createIsEditingReducer(
   toggleEditDay,
   receiveModifyServiceInfo,
   defaultState.meta.isEditingDay
 );
 
-const isEditingRoleReducer = createIsEditingReducer(
+export const isEditingRoleReducer = createIsEditingReducer(
   toggleEditRole,
   receiveModifyIdEvents,
   defaultState.meta.isEditingRole

@@ -1,16 +1,21 @@
 import {
   defaultState,
-  dataReducer,
-  isLoadingReducer,
+  // actions
   toggleEditDay,
   toggleEditRole,
   receiveRetrieveEvents,
+  requestRetrieveEvents,
   receiveModifyIdEvents,
   receiveModifyServiceInfo,
   setSelectedData,
   setServiceInfo,
-  selectedDataReducer,
-  requestRetrieveEvents
+  // reducers
+  dataReducer,
+  isEditingDayReducer,
+  isEditingRoleReducer,
+  isLoadingReducer,
+  queryReducer,
+  selectedDataReducer
 } from './redux';
 import moment from 'moment';
 
@@ -172,6 +177,19 @@ describe('index', () => {
     });
   });
 
+  describe('queryReducer', () => {
+    xit('should be updated by #requestRetrieveEvents', () => {
+      const state = {};
+      const payload = {
+        category: 'english',
+        from: '2018-01-01',
+        to: '2018-03-31'
+      };
+      const result = queryReducer(state, requestRetrieveEvents(payload));
+      expect(result).toEqual(payload);
+    });
+  });
+
   describe('selectedDataReducer', () => {
     const initState = defaultState.meta.selectedData; // null
     const mockState = {
@@ -209,6 +227,32 @@ describe('index', () => {
 
       result = selectedDataReducer(mockState, toggleEditDay(true));
       expect(result).toEqual(mockState);
+    });
+  });
+
+  describe('isEditingDayReducer', () => {
+    it('should be updated by #toggleEditDay', () => {
+      let result = isEditingDayReducer(false, toggleEditDay());
+      expect(result).toBeTruthy();
+      result = isEditingDayReducer(true, toggleEditDay());
+      expect(result).toBeFalsy();
+    });
+    it('should be updated by #receiveModifyServiceInfo', () => {
+      const result = isEditingDayReducer(true, receiveModifyServiceInfo({}));
+      expect(result).toBeFalsy();
+    });
+  });
+
+  describe('isEditingRoleReducer', () => {
+    it('should be updated by #toggleEditDay', () => {
+      let result = isEditingRoleReducer(false, toggleEditRole());
+      expect(result).toBeTruthy();
+      result = isEditingRoleReducer(true, toggleEditRole());
+      expect(result).toBeFalsy();
+    });
+    it('should be updated by #receiveModifyServiceInfo', () => {
+      const result = isEditingRoleReducer(true, receiveModifyIdEvents({}));
+      expect(result).toBeFalsy();
     });
   });
 
