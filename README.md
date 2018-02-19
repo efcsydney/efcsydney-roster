@@ -153,3 +153,31 @@ Deploy to Production server http://roster.efcsydney.org
 ```
 yarn deploy:prod
 ```
+
+## Database Backup & Restore
+
+Backup database
+
+```
+yarn db-backup
+```
+
+A new sql dump file will be created in the BACKUP directory(see `config/default.yml`). The file conforms to the following naming convension:
+
+`<database_schema_name>_<YYYYMMDD>.sql`
+
+e.g. `efcRosterQa_20180101.sql`
+
+Restore
+
+```
+yarn db-restore <YYYYMMDD>
+```
+
+An argument is required to specify the database version.
+
+e.g.
+
+```
+yarn db-restore 20180101
+```

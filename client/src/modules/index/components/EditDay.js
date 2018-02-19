@@ -94,6 +94,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               <Label>{this.getTrans('footnoteTitle')}</Label>
               <span>
                 <Input
+                  data-hj-whitelist
+                  autoFocus
                   type="text"
                   value={footnote}
                   placeholder={this.getTrans('footnotePlaceholder')}
@@ -105,6 +107,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               <Label>{this.getTrans('skipReasonTitle')}</Label>
               <span>
                 <Input
+                  data-hj-whitelist
                   type="text"
                   value={skipReason}
                   placeholder={this.getTrans('skipReasonPlaceholder')}

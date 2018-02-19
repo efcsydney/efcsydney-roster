@@ -101,6 +101,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               <Label>{this.getTrans('nameTitle')}</Label>
               <span>
                 <Select
+                  inputProps={{ 'data-hj-whitelist': true }}
+                  autofocus
                   multi={false}
                   value={selectedName}
                   onChange={this.handleNameChange}

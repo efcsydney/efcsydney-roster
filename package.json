@@ -62,7 +62,7 @@
     "prettier": "prettier --single-quote --write '{,!(node_modules|client)/**/}*.js'",
     "db-update-events": "node ./scripts/update-events-details.js",
     "db-backup": "node ./scripts/backup-database.js",
-    "db-restore": " $DATE node ./scripts/restore-database.js"
+    "db-restore": "node ./scripts/restore-database.js $DATE"
   },
   "devDependencies": {
     "concurrently": "3.1.0",
