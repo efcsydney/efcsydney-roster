@@ -37,6 +37,7 @@
     "raven": "^2.3.0",
     "react-add-to-calendar": "^0.1.4",
     "react-google-tag-manager": "^2.2.1",
+    "reduce-reducers": "^0.1.2",
     "sequelize": "^4.22.5",
     "sequelize-cli": "^3.2.0",
     "sinon": "^4.1.2",
