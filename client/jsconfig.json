@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+      "module": "commonjs",
+      "target": "es6",
+      "baseUrl": "./src",
+      "paths": {
+          "utils": ["./utils.js"],
+          "i18n": ["./i18n.js"]
+      }
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
