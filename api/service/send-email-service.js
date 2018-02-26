@@ -114,11 +114,13 @@ async function reminderEmail() {
   const emailList = getEmailList();
   // Get the email list that need to be included in reminder email
   const reminderEmailList = emailList.filter(e => {
-    return nameList.includes(e.englishName) || nameList.includes(e.chineseName)
+    return nameList.includes(e.englishName) || nameList.includes(e.chineseName);
   });
   // Find the names of people that is included in the reminder
-  let nameListWithEmail = reminderEmailList.map(e => e.englishName)
-  nameListWithEmail = nameListWithEmail.concat(reminderEmailList.map(e => e.chineseName)).filter(e => e != '');
+  let nameListWithEmail = reminderEmailList.map(e => e.englishName);
+  nameListWithEmail = nameListWithEmail
+    .concat(reminderEmailList.map(e => e.chineseName))
+    .filter(e => e != '');
   // Find the names of people that need to be reminded but is not in the reminder list
   const nameListWithoutEmail = nameList
     .filter(n => !nameListWithEmail.includes(n))
@@ -134,17 +136,25 @@ async function reminderEmail() {
   });
 }
 
+function filterPositions(positions = [], blacklist) {
+  blacklist = blacklist || config.get('reminderEmail.skipRoles') || [];
+  return positions.filter(({ position }) => !blacklist.includes(position));
+}
+
 function getNameList(events) {
-  return _.uniq(events.english
-    .concat(events.chinese)
-    .map(e => e.positions)
-    .reduce((result, e) => result.concat(e), [])
-    .map(e => e.volunteerName)
-    .filter(e => e != ''));
+  return _.uniq(
+    events.english
+      .concat(events.chinese)
+      .map(day => filterPositions(day.positions))
+      .reduce((result, e) => result.concat(e), [])
+      .map(e => e.volunteerName)
+      .filter(e => e != '')
+  );
 }
 
 module.exports = {
   reminderEmail,
+  filterPositions,
   getEmailList,
   getEmailListString,
   getEmptyEmailListString,
