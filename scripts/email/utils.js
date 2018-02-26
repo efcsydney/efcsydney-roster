@@ -35,21 +35,48 @@ const emptyCellStyle = `
   white-space: nowrap;
 `;
 
-const renderHeaderRow = (lang, positions) => `
-  <tr>
-    <th style="${cellHeaderStyle}">${lang === 'zh-TW' ? '日期' : 'Date'}</th>
-    <th style="${cellHeaderStyle}">${
-  lang === 'zh-TW' ? '型式' : 'Occasion'
-}</th>
-    ${positions
-      .map(
-        ({ position }) => `
-    <th style="${cellHeaderStyle}">${position}</th>
-    `
-      )
-      .join('\n')}
-  </tr>
-`;
+function decorateDay(day, blacklist) {
+  let positions = day.positions || [];
+  positions = _.filter(
+    positions,
+    ({ position }) => blacklist.indexOf(position) === -1
+  );
+
+  day.positions = positions;
+
+  return day;
+}
+
+function removePositionNumber(position) {
+  const regExp = /([^\d]+)(\d)$/;
+  const matches = position.match(regExp);
+  return matches ? matches[1] : position;
+}
+
+const renderHeaderRow = (lang, roles) => {
+  const dateLabel = lang === 'zh-TW' ? '日期' : 'Date';
+  const footnoteLabel = lang === 'zh-TW' ? '型式' : 'Occasion';
+  const positions = roles.map(({ position }) => removePositionNumber(position));
+
+  return `
+    <tr>
+      <th style="${cellHeaderStyle}">${dateLabel}</th>
+      <th style="${cellHeaderStyle}">${footnoteLabel}</th>
+      ${_.uniq(positions)
+        .map(cell => {
+          const colSpan = _.filter(positions, val => cell === val).length;
+          return `
+          <th
+            colspan=${colSpan}
+            style="${cellHeaderStyle}">
+            ${cell}
+          </th>
+        `;
+        })
+        .join('\n')}
+    </tr>
+  `;
+};
 
 const renderMemberRow = ({ date, serviceInfo, positions, lang }) => {
   moment.locale(lang);
@@ -89,11 +116,18 @@ const renderMemberRow = ({ date, serviceInfo, positions, lang }) => {
 };
 
 const renderTable = days => {
+  const blacklist = config.get('reminderEmail.skipRoles');
+
   days.sort((a, b) => (a.date > b.date ? 1 : -1));
+  days = days.map(day => decorateDay(day, blacklist));
+
+  const lang = _.get(days, '0.lang', 'zh-TW');
+  const roles = _.get(days, '0.positions', 'zh-TW');
+
   return `
     <mj-section padding="5px 0 10px">
       <mj-table padding="0">
-        ${renderHeaderRow(days[0].lang, days[0].positions)}
+        ${renderHeaderRow(lang, roles)}
         ${days.map(day => renderMemberRow(day)).join('')}
       </mj-table>
     </mj-section>
