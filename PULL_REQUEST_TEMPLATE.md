@@ -1,8 +1,8 @@
 **Description**
-Please provide short description to your pull request.
+_Please provide short description to your pull request._
 
 **Proposed Changes**
-Changes proposed in this pull request:
+_Changes proposed in this pull request_
 
 *
 *
