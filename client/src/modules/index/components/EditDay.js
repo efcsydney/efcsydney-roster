@@ -6,8 +6,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
-import { Modal, StateButton } from 'components';
+import { Modal, StateButton, SwitchButton } from 'components';
 import { requestModifyServiceInfo, toggleEditDay } from 'modules/index/redux';
+import { media } from 'styled';
 import i18n from 'i18n';
 
 const mapStateToProps = state => {
@@ -53,13 +54,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       this.setState(state);
     };
     handleSkipReasonChange = e => {
-      const skipReason = e.target.value || '';
-      let state = dotProp.set(this.state, 'serviceInfo.skipReason', skipReason);
-      state = dotProp.set(
-        state,
-        'serviceInfo.skipService',
-        _.isEmpty(skipReason.trim())
-      );
+      const skipService = !!e.target.checked;
+      const skipReason = skipService ? this.getTrans('skipReason') : '';
+      let state = _.clone(this.state);
+      state = dotProp.set(state, 'serviceInfo.skipReason', skipReason);
+      state = dotProp.set(state, 'serviceInfo.skipService', skipService);
 
       this.setState(state);
     };
@@ -104,13 +103,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               </span>
             </Row>
             <Row>
-              <Label>{this.getTrans('skipReasonTitle')}</Label>
+              <Label>{this.getTrans('skipReason')}</Label>
               <span>
-                <Input
-                  data-hj-whitelist
-                  type="text"
-                  value={skipReason}
-                  placeholder={this.getTrans('skipReasonPlaceholder')}
+                <SwitchButton
+                  checked={!_.isEmpty(skipReason)}
                   onChange={this.handleSkipReasonChange}
                 />
               </span>
@@ -156,7 +152,10 @@ const Label = styled.label`
   font-weight: bold;
   padding-right: 15px;
   text-align: right;
-  width: 80px;
+  width: 125px;
+  ${media.mobile`
+    width: 60px;
+  `};
 `;
 Label.displayName = 'Label';
 

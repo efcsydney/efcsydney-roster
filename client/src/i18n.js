@@ -28,8 +28,7 @@ i18next.init({
           footnotePlaceholder: 'e.g. Holy Communion',
           footnoteTitle: 'Occassion',
           saveLabel: 'Save',
-          skipReasonTitle: 'Skip Reason',
-          skipReasonPlaceholder: 'e.g. Combined Service',
+          skipReason: 'Combined Service',
           title: 'Edit Day'
         },
         EditRole: {
@@ -78,8 +77,7 @@ i18next.init({
           footnotePlaceholder: '範例：聯合崇拜',
           footnoteTitle: '型式',
           saveLabel: '儲存',
-          skipReasonTitle: '跳過',
-          skipReasonPlaceholder: '範例：聖誕晚會',
+          skipReason: '聯合崇拜',
           title: '日期特別設定'
         },
         EditRole: {
