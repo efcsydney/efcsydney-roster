@@ -1,14 +1,14 @@
-**Description**
+#### Description
 _Please provide short description to your pull request._
 
-**Proposed Changes**
+#### Proposed Changes
 _Changes proposed in this pull request_
 
 *
 *
 *
 
-**Checklist**
+#### Checklist
 _Put an `x` in the boxes that apply. This is simply a reminder of what we are going to look for before merging your code._
 
 - [ ] Deployed to QA env successfully
