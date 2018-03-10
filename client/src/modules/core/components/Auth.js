@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { LoadingIndicator } from 'components';
@@ -19,32 +18,58 @@ export default class Auth extends Component {
     isChecking: true,
     hasLogin: false
   };
-  componentDidMount() {
+  addUser(rawData) {
+    const { displayName, email, uid, photoURL } = rawData;
+
+    return firebase
+      .database()
+      .ref(`users/${uid}`)
+      .set({
+        id: uid,
+        email,
+        displayName,
+        avatarUrl: photoURL,
+        isEnabled: false
+      });
+  }
+  handleUserReceived = (dbData, authData) => {
     const { onFail, onSuccess } = this.props;
-    this.setState({ isChecking: true });
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
+    let hasLogin = false;
+
+    if (!dbData) {
+      this.addUser(authData);
+      onFail();
+    } else {
+      if (dbData.isEnabled) {
+        hasLogin = true;
         onSuccess();
       } else {
         onFail();
       }
-      this.setState({
-        isChecking: false,
-        hasLogin: !_.isEmpty(user)
-      });
+    }
+    this.setState({
+      isChecking: false,
+      hasLogin
     });
+  };
+  handleAuthStateChanged = user => {
+    const { uid } = user;
+
+    firebase
+      .database()
+      .ref(`users/${uid}`)
+      .on('value', snapshot => this.handleUserReceived(snapshot.val(), user));
+  };
+  componentDidMount() {
+    this.setState({ isChecking: true });
+    firebase.auth().onAuthStateChanged(this.handleAuthStateChanged);
   }
   render() {
     const { children } = this.props;
     const { isChecking } = this.state;
+
     if (isChecking) {
-      return (
-        <LoadingIndicator
-          height="500px"
-          active={true}
-          bgcolor="rgba(255, 255, 255, 0.7)"
-        />
-      );
+      return <LoadingIndicator active={true} height="auto" />;
     }
 
     return <div>{children}</div>;
