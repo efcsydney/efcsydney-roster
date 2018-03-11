@@ -53,8 +53,15 @@ export default class Auth extends Component {
     });
   };
   handleAuthStateChanged = user => {
-    const { uid } = user;
+    if (!user) {
+      this.setState({
+        hasLogin: false,
+        isChecking: true
+      });
+      return;
+    }
 
+    const { uid } = user;
     firebase
       .database()
       .ref(`users/${uid}`)
