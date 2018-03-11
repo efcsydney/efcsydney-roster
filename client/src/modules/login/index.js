@@ -19,7 +19,7 @@ export default class Login extends Component {
       <Wrapper>
         <NavBar hasSwitcher={false} title="Roster System" />
         <Body>
-          <Auth onSuccess={this.handleAuthSuccess} style={{ width: '500px' }}>
+          <Auth onSuccess={this.handleAuthSuccess}>
             <LoginButton onClick={this.handleLogin} />
           </Auth>
         </Body>

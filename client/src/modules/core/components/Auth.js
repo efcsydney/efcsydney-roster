@@ -1,3 +1,10 @@
+/**
+ * <Auth
+ *   onSuccess={}
+ *   onFail={}>
+ *   Content shows after checking
+ * </Auth>
+ */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { LoadingIndicator } from 'components';
@@ -15,22 +22,19 @@ export default class Auth extends Component {
     onSuccess: () => {}
   };
   state = {
-    isChecking: true,
+    isChecking: false,
     hasLogin: false
   };
   addUser(rawData) {
     const { displayName, email, uid, photoURL } = rawData;
 
-    return firebase
-      .database()
-      .ref(`users/${uid}`)
-      .set({
-        id: uid,
-        email,
-        displayName,
-        avatarUrl: photoURL,
-        isEnabled: false
-      });
+    return this.userRef.set({
+      id: uid,
+      email,
+      displayName,
+      avatarUrl: photoURL,
+      isEnabled: false
+    });
   }
   handleUserReceived = (dbData, authData) => {
     const { onFail, onSuccess } = this.props;
@@ -38,38 +42,58 @@ export default class Auth extends Component {
 
     if (!dbData) {
       this.addUser(authData);
-      onFail();
+      onFail('no-permission');
     } else {
       if (dbData.isEnabled) {
         hasLogin = true;
         onSuccess();
       } else {
-        onFail();
+        onFail('no-permission');
       }
     }
-    this.setState({
-      isChecking: false,
-      hasLogin
-    });
+
+    if (this.mounted) {
+      this.setState({
+        isChecking: false,
+        hasLogin
+      });
+    }
   };
   handleAuthStateChanged = user => {
+    const { onFail } = this.props;
+
     if (!user) {
       this.setState({
         hasLogin: false,
-        isChecking: true
+        isChecking: false
       });
+      onFail('not-login');
       return;
     }
 
     const { uid } = user;
-    firebase
-      .database()
-      .ref(`users/${uid}`)
-      .on('value', snapshot => this.handleUserReceived(snapshot.val(), user));
+    this.userRef = firebase.database().ref(`users/${uid}`);
+
+    this.userRef
+      .once('value')
+      .then(snapshot => this.handleUserReceived(snapshot.val(), user));
   };
+  constructor(props) {
+    super(props);
+    this.userRef = null;
+  }
   componentDidMount() {
+    this.mounted = true;
     this.setState({ isChecking: true });
     firebase.auth().onAuthStateChanged(this.handleAuthStateChanged);
+  }
+  componentWillUnmount() {
+    this.mounted = false;
+    if (this.userRef) {
+      this.userRef.off('value', this.handleUserReceived);
+    }
+    this.handleUserReceived = () => {};
+    this.handleAuthStateChanged = () => {};
   }
   render() {
     const { children } = this.props;

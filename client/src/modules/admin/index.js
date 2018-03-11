@@ -13,7 +13,7 @@ export default class AdminIndex extends Component {
       <div>
         <NavBar hasSwitcher={false} title="Roster System" />
         <GridWrapper>
-          <Auth height="500px" onFail={this.handleAuthFail}>
+          <Auth onFail={this.handleAuthFail}>
             <Grid>
               <tbody>
                 <tr>
