@@ -69,8 +69,3 @@ const Grid = styled.table`
   border-radius: 4px;
   width: 100%;
 `;
-const Cell = styled.td`
-  border-radius: 4px;
-  text-align: center;
-  padding: 10px;
-`;
