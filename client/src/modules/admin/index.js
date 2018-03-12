@@ -1,24 +1,54 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
+import ServicesAPI from 'apis/services';
 import { Auth, NavBar } from 'modules/core';
 import styled from 'styled-components';
 
 export default class AdminIndex extends Component {
+  state = {
+    data: []
+  };
   handleAuthFail = () => {
     const { history } = this.props;
 
     history.replace('login');
   };
+  handleAuthSuccess = () => {
+    ServicesAPI.retrieve().then(({ data }) => {
+      this.setState({ data });
+    });
+  };
   render() {
+    const { data } = this.state;
     return (
       <div>
         <NavBar hasSwitcher={false} title="Roster System" />
         <GridWrapper>
-          <Auth onFail={this.handleAuthFail}>
+          <Auth onFail={this.handleAuthFail} onSuccess={this.handleAuthSuccess}>
             <Grid>
-              <tbody>
+              <thead>
                 <tr>
-                  <Cell>It's our admin portal</Cell>
+                  <th>Service Title</th>
+                  <th>Positions</th>
+                  <th>Footnote Label</th>
+                  <th>Occurrence</th>
+                  <th>Actions</th>
                 </tr>
+              </thead>
+              <tbody>
+                {data.map(
+                  ({ footnoteLabel, frequency, label, id, positions }) => (
+                    <tr>
+                      <td>{label}</td>
+                      <td>{positions.length}</td>
+                      <td>{footnoteLabel}</td>
+                      <td>{_.capitalize(frequency)}</td>
+                      <td>
+                        <a href={`edit/${id}`}>Edit</a>
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </Grid>
           </Auth>
