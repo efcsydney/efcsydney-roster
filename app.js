@@ -3,6 +3,7 @@ app = express();
 module.exports.app = app;
 const bodyParser = require('body-parser');
 const eventsController = require('./api/controllers/events-controller');
+const servicesController = require('./api/controllers/services-controller');
 const exception = require('./api/middleware/exception-handler');
 const serviceInfoController = require('./api/controllers/service-info-controller');
 const Raven = require('raven');
@@ -29,6 +30,8 @@ if (['production', 'qa'].includes(process.env.NODE_ENV)) {
 app.get('/', (req, res) => {
   res.json({ message: 'Hello Guys! Welcome to roster!' });
 });
+
+app.get('/api/services', servicesController.getServices);
 
 app.get('/api/events', eventsController.getEvents);
 

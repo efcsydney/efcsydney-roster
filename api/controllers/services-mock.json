@@ -1,0 +1,130 @@
+{
+  "result": "OK",
+  "data": [
+     {
+        "id": 1,
+        "name": "english",
+        "label": "英文堂 English Service",
+        "locale": "en-AU",
+        "frequency": "sunday",
+        "footnoteLabel": "Occassion",
+        "positions": [
+           {
+              "id": 1,
+              "name": "Speaker",
+              "order": 1
+           },
+           {
+              "id": 2,
+              "name": "Moderator",
+              "order": 2
+           },
+           {
+              "id": 3,
+              "name": "P&W",
+              "order": 3
+           }
+        ]
+     },
+     {
+        "id": 2,
+        "name": "chinese",
+        "label": "中文堂 English Service",
+        "locale": "zh-TW",
+        "frequency": "sunday",
+        "footnoteLabel": "型式",
+        "positions": [
+           {
+              "id": 9,
+              "name": "證道",
+              "order": 1
+           },
+           {
+              "id": 10,
+              "name": "翻譯",
+              "order": 2
+           },
+           {
+              "id": 11,
+              "name": "司會",
+              "order": 3
+           }
+        ]
+     },
+     {
+        "id": 3,
+        "name": "prayer",
+        "label": "Prayer Meeting",
+        "locale": "zh-TW",
+        "frequency": "saturday",
+        "footnoteLabel": "Topic",
+        "positions": [
+           {
+              "id": 28,
+              "name": "Leader",
+              "order": 1
+           }
+        ]
+     },
+     {
+        "id": 4,
+        "name": "preschool-junior",
+        "label": "主日學小班",
+        "locale": "zh-TW",
+        "frequency": "month",
+        "footnoteLabel": "課程：耶穌花園（幼兒級）",
+        "positions": [
+           {
+              "id": 29,
+              "name": "老師",
+              "order": 1
+           },
+           {
+              "id": 30,
+              "name": "助教",
+              "order": 2
+           }
+        ]
+     },
+     {
+        "id": 5,
+        "name": "preschool-middle",
+        "label": "主日學中班",
+        "locale": "zh-TW",
+        "frequency": "month",
+        "footnoteLabel": "課程：耶穌花園（中小級）",
+        "positions": [
+           {
+              "id": 31,
+              "name": "老師",
+              "order": 1
+           },
+           {
+              "id": 32,
+              "name": "助教",
+              "order": 2
+           }
+        ]
+     },
+     {
+        "id": 6,
+        "name": "preschool-senior",
+        "label": "主日學大班",
+        "locale": "zh-TW",
+        "frequency": "month",
+        "footnoteLabel": "課程：耶穌花園（高小級）",
+        "positions": [
+           {
+              "id": 33,
+              "name": "老師",
+              "order": 1
+           },
+           {
+              "id": 34,
+              "name": "助教",
+              "order": 2
+           }
+        ]
+     }
+  ]
+}
