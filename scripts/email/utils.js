@@ -35,6 +35,18 @@ const emptyCellStyle = `
   white-space: nowrap;
 `;
 
+function decorateDay(day, blacklist) {
+  let positions = day.positions || [];
+  positions = _.filter(
+    positions,
+    ({ position }) => blacklist.indexOf(position) === -1
+  );
+
+  day.positions = positions;
+
+  return day;
+}
+
 function removePositionNumber(position) {
   const regExp = /([^\d]+)(\d)$/;
   const matches = position.match(regExp);
@@ -104,7 +116,10 @@ const renderMemberRow = ({ date, serviceInfo, positions, lang }) => {
 };
 
 const renderTable = days => {
+  const blacklist = config.get('reminderEmail.skipRoles');
+
   days.sort((a, b) => (a.date > b.date ? 1 : -1));
+  days = days.map(day => decorateDay(day, blacklist));
 
   const lang = _.get(days, '0.lang', 'zh-TW');
   const roles = _.get(days, '0.positions', 'zh-TW');
