@@ -18,6 +18,12 @@ const Service = sequelizeClient.define('services', {
   },
   frequencyId: {
     type: Sequelize.INTEGER
+  },
+  label: {
+    type: Sequelize.STRING
+  },
+  footnoteLabel: {
+    type: Sequelize.STRING
   }
 });
 
@@ -25,7 +31,7 @@ Service.Frequency = Service.belongsTo(Frequency, {
   as: 'frequency',
   foreignKey: 'frequencyId'
 });
-Frequency.hasMany(Service);
+Frequency.hasMany(Service, { foreignKey: 'frequencyId' });
 
 module.exports = {
   Service

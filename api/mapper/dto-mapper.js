@@ -22,7 +22,7 @@ class DtoMapper {
     }
   }
 
-  static mapEventToDto(event){
+  static mapEventToDto(event) {
     return {
       role: event.position.name,
       name: event.volunteerName,
@@ -67,6 +67,33 @@ class DtoMapper {
       },
       service: { name: data.category }
     };
+  }
+
+  static mapServiceToDto(services) {
+    return services.map(service => (
+      {
+        id: service.id,
+        name: service.name,
+        locale: service.locale,
+        label: service.label,
+        footnoteLabel: service.footnoteLabel,
+        frequency: DtoMapper.mapFrequencyToDto(service.frequency),
+        positions: DtoMapper.mapPositionToDto(service.positions)
+      }
+    ));
+  }
+
+  static mapFrequencyToDto(frequency) {
+    return frequency.name;
+  }
+
+  static mapPositionToDto(positions) {
+    return positions.map(position => (
+      {
+        id: position.id,
+        name: position.name,
+        order: position.order
+      }));
   }
 }
 

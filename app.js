@@ -3,6 +3,7 @@ app = express();
 module.exports.app = app;
 const bodyParser = require('body-parser');
 const eventsController = require('./api/controllers/events-controller');
+const servicesController = require('./api/controllers/services-controller');
 const exception = require('./api/middleware/exception-handler');
 const serviceInfoController = require('./api/controllers/service-info-controller');
 const Raven = require('raven');
@@ -35,6 +36,8 @@ app.get('/api/events', eventsController.getEvents);
 app.put('/api/events', eventsController.saveEvent);
 
 app.put('/api/serviceInfo/:id', serviceInfoController.saveServiceInfo);
+
+app.get('/api/services', servicesController.getServices);
 
 if (isServerEnvironment()) {
   // The error handler must be before any other error middleware
