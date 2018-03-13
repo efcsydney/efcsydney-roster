@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import ServicesAPI from 'apis/services';
 import { Auth, NavBar } from 'modules/core';
 import styled from 'styled-components';
-
+import { Button, Grid, Row, Cell, HeaderCell } from 'components';
+import { Link } from 'react-router-dom';
+import IconPencil from 'react-icons/lib/fa/pencil';
 export default class AdminIndex extends Component {
   state = {
     data: []
@@ -21,51 +23,56 @@ export default class AdminIndex extends Component {
   render() {
     const { data } = this.state;
     return (
-      <div>
+      <Wrapper>
         <NavBar hasSwitcher={false} title="Roster System" />
-        <GridWrapper>
+        <Body>
           <Auth onFail={this.handleAuthFail} onSuccess={this.handleAuthSuccess}>
             <Grid>
               <thead>
-                <tr>
-                  <th>Service Title</th>
-                  <th>Positions</th>
-                  <th>Footnote Label</th>
-                  <th>Occurrence</th>
-                  <th>Actions</th>
-                </tr>
+                <Row>
+                  <HeaderCell>ID</HeaderCell>
+                  <HeaderCell>Service Title</HeaderCell>
+                  <HeaderCell>Positions</HeaderCell>
+                  <HeaderCell>Footnote Label</HeaderCell>
+                  <HeaderCell>Occurrence</HeaderCell>
+                  <HeaderCell>Actions</HeaderCell>
+                </Row>
               </thead>
               <tbody>
                 {data.map(
                   ({ footnoteLabel, frequency, label, id, positions }) => (
-                    <tr>
-                      <td>{label}</td>
-                      <td>{positions.length}</td>
-                      <td>{footnoteLabel}</td>
-                      <td>{_.capitalize(frequency)}</td>
-                      <td>
-                        <a href={`edit/${id}`}>Edit</a>
-                      </td>
-                    </tr>
+                    <Row>
+                      <Cell>{id}</Cell>
+                      <Cell>
+                        <Link to={`/admin/edit/${id}`}>{label}</Link>
+                      </Cell>
+                      <Cell>{positions.length}</Cell>
+                      <Cell>{footnoteLabel}</Cell>
+                      <Cell>{_.capitalize(frequency)}</Cell>
+                      <Cell>
+                        <Link to={`/admin/edit/${id}`}>
+                          <Button kind="blue">
+                            <IconEdit />
+                            Edit
+                          </Button>
+                        </Link>
+                      </Cell>
+                    </Row>
                   )
                 )}
               </tbody>
             </Grid>
           </Auth>
-        </GridWrapper>
-      </div>
+        </Body>
+      </Wrapper>
     );
   }
 }
 
-const GridWrapper = styled.div`
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+const Wrapper = styled.div``;
+const Body = styled.div`
   margin: 10px;
-  min-height: 500px;
 `;
-const Grid = styled.table`
-  border-radius: 4px;
-  width: 100%;
+const IconEdit = styled(IconPencil)`
+  margin-right: 4px;
 `;

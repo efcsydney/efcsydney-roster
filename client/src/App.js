@@ -11,6 +11,7 @@ export default () => (
     <Route exact path="/english" component={Index} />
     <Route exact path="/login" component={Login} />
     <Route exact path="/admin" component={Admin} />
+    <Route path="/admin/edit/:id" component={Admin} />
     <Redirect to="/" />
   </Switch>
 );
