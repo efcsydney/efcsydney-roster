@@ -38,7 +38,8 @@ module.exports = {
         ]
       }
     );
-
+    //We need the frequencyId only for data migration purpose
+    //this column will be dropped at the end of the migration
     await queryInterface.addColumn(
       'calendar_dates',
       'frequencyId',
@@ -63,9 +64,14 @@ module.exports = {
       }
     );
 
-    await seedSaturdayFrequency(queryInterface);
     await seedSundayFrequency(queryInterface);
+    await seedSaturdayFrequency(queryInterface);
     await seedMonthlyFrequency(queryInterface);
+
+    await queryInterface.removeColumn(
+      'calendar_dates',
+      'frequencyId'
+    );
   },
 
   down: (queryInterface, Sequelize) => {

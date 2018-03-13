@@ -15,6 +15,30 @@ module.exports = {
       }
     );
 
+    await queryInterface.addColumn(
+      'services',
+      'label',
+      Sequelize.STRING,
+      {
+        after: 'frequencyId'
+      },
+      {
+        charset: 'utf8'
+      }
+    );
+
+    await queryInterface.addColumn(
+      'services',
+      'footnoteLabel',
+      Sequelize.STRING,
+      {
+        after: 'label'
+      },
+      {
+        charset: 'utf8'
+      }
+    );
+
     await sequelizeClient.query(
       'UPDATE services SET frequencyId = 1'
     );
