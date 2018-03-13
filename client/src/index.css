@@ -9,6 +9,11 @@ body {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
+a, a:link, a:visited, a:hover {
+  color: #428bca;
+  text-decoration: none;
+}
+
 .react-add-to-calendar__button {
   border: none !important;
   background: none !important;
