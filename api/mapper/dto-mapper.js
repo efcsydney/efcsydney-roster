@@ -1,4 +1,5 @@
 const getDateString = require('../utilities/datetime-util').getDateString;
+const log = require('../utilities/logger');
 
 class DtoMapper {
   static mapGroupEventsToDto(events) {
@@ -69,31 +70,46 @@ class DtoMapper {
     };
   }
 
-  static mapServiceToDto(services) {
-    return services.map(service => (
-      {
-        id: service.id,
-        name: service.name,
-        locale: service.locale,
-        label: service.label,
-        footnoteLabel: service.footnoteLabel,
-        frequency: DtoMapper.mapFrequencyToDto(service.frequency),
-        positions: DtoMapper.mapPositionToDto(service.positions)
-      }
-    ));
+  static mapServiceToDto(service) {
+    return {
+      id: service.id,
+      name: service.name,
+      locale: service.locale,
+      label: service.label,
+      footnoteLabel: service.footnoteLabel,
+      frequency: DtoMapper.mapFrequencyToDto(service.frequency),
+      positions: DtoMapper.mapPositionToDto(service.positions)
+    }
+  }
+
+  static mapServicesToDto(services) {
+    return services.map(service => DtoMapper.mapServiceToDto(service));
   }
 
   static mapFrequencyToDto(frequency) {
+    if (!frequency) return '';
     return frequency.name;
   }
 
   static mapPositionToDto(positions) {
+    if (!positions) return null;
     return positions.map(position => (
       {
         id: position.id,
         name: position.name,
         order: position.order
       }));
+  }
+
+  static mapServiceDtoToModel(dto) {
+    const { id, data } = dto;
+
+    return {
+      id,
+      name: data.name,
+      footnoteLabel: data.footnoteLabel,
+      positions: data.positions
+    };
   }
 }
 

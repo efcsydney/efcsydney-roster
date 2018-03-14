@@ -16,6 +16,37 @@ class ServiceRepository {
       }]
     });
   }
+
+  static getServiceById(id){
+    return Service.findOne({
+      where: {id: id},
+      include:[{
+        model: Frequency,
+        as: 'frequency'
+      },{
+        model: Position
+      }]
+    })
+  }
+
+  static createService(service) {
+    return Service.create({
+      name: service.name,
+      footnoteLabel: service.footnoteLabel,
+    }).then(result => result);
+  }
+
+  static updateService(service){
+    return Service.update(
+      {
+        name: service.name,
+        footnoteLabel: service.footnoteLabel,
+      },
+      {
+        where: { id: service.id }
+      }
+    ).then(() => service);
+  }
 }
 
 module.exports = {

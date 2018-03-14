@@ -8,7 +8,7 @@ const log = require('../utilities/logger');
 async function getServices(req, res, next) {
   try {
     const services = await ServicesService.getServices();
-    const dto = DtoMapper.mapServiceToDto(services);
+    const dto = DtoMapper.mapServicesToDto(services);
 
     res.json({
       result: 'OK',
@@ -20,8 +20,28 @@ async function getServices(req, res, next) {
   }
 }
 
+/**
+ * Get Services
+ */
+async function saveService(req, res, next) {
+  try {
+    const incomingDto = {id: req.params.id, data: req.body};
+    const service = DtoMapper.mapServiceDtoToModel(incomingDto);
+    const updatedService = await ServicesService.saveService(service);
+    const outgoingDto = DtoMapper.mapServiceToDto(updatedService);
+
+    res.json({
+      result: 'OK',
+      error: { message: '' },
+      data: outgoingDto
+    });
+  } catch (err) {
+    next(err);
+  }
+}
 
 
 module.exports = {
   getServices,
+  saveService
 };

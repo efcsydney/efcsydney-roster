@@ -9,6 +9,24 @@ class PositionRepository {
       order: [['id', 'ASC']]
     });
   }
+
+  static createPosition(position){
+    return Position.create(position);
+  }
+
+  static updatePosition(position){
+    return Position.update({
+      name: position.name,
+      order: position.order,
+    },
+    {
+      where: { id: position.id }
+    })
+  }
+
+  static bulkCreatePositions(positions){
+    return Position.bulkCreate(positions, { updateOnDuplicate: true });
+  }
 }
 
 module.exports = {
