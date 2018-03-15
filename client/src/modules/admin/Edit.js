@@ -12,6 +12,14 @@ export default class Edit extends Component {
     data: {},
     onClose: () => {}
   };
+  constructor(props) {
+    super(props);
+    this.state = { label: props.data.label || '' };
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({ label: nextProps.data.label });
+  }
+
   render() {
     let {
       data: { label, frequency, footnoteLabel, positions },
@@ -27,7 +35,15 @@ export default class Edit extends Component {
           </Row>
           <Row>
             <Label>Service Title</Label>
-            <span>{label}</span>
+            <span>
+              <input
+                type="text"
+                value={this.state.label}
+                onChange={e => {
+                  this.setState({ label: e.target.value });
+                }}
+              />
+            </span>
           </Row>
           <Row>
             <Label>Footnote</Label>
