@@ -21,10 +21,7 @@ export default class Edit extends Component {
   }
 
   render() {
-    let {
-      data: { label, frequency, footnoteLabel, positions },
-      onClose
-    } = this.props;
+    let { data: { frequency, footnoteLabel, positions }, onClose } = this.props;
     positions = positions || [];
     return (
       <Modal isOpen={true} title="Edit Service" onClose={onClose}>
