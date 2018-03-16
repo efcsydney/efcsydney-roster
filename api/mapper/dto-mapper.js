@@ -111,6 +111,7 @@ class DtoMapper {
       id,
       name: data.name,
       footnoteLabel: data.footnoteLabel,
+      label: data.label,
       frequencyId: frequency.id,
       positions: data.positions
     };

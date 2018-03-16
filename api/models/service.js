@@ -21,6 +21,9 @@ const Service = sequelizeClient.define('services', {
   },
   footnoteLabel: {
     type: Sequelize.STRING
+  },
+  label: {
+    type: Sequelize.STRING
   }
 });
 
