@@ -32,9 +32,9 @@ module.exports = {
     );
 
     await queryInterface.bulkInsert('frequencies', [
-      { id: 1, name: 'Every Sunday' },
-      { id: 2, name: 'Every Saturday'},
-      { id: 3, name: 'Monthly' },]);
+      { id: 1, name: 'Sunday' },
+      { id: 2, name: 'Saturday'},
+      { id: 3, name: 'Month' },]);
   },
 
   down: (queryInterface, Sequelize) => {
