@@ -19,9 +19,6 @@ const Service = sequelizeClient.define('services', {
   frequencyId: {
     type: Sequelize.INTEGER
   },
-  label: {
-    type: Sequelize.STRING
-  },
   footnoteLabel: {
     type: Sequelize.STRING
   }
