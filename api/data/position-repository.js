@@ -24,7 +24,7 @@ class PositionRepository {
     })
   }
 
-  static bulkCreatePositions(positions){
+  static bulkCreateOrUpdatePositions(positions){
     return Position.bulkCreate(positions, { updateOnDuplicate: true });
   }
 }

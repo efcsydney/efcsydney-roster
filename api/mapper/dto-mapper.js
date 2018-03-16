@@ -1,4 +1,6 @@
 const getDateString = require('../utilities/datetime-util').getDateString;
+const FrequencyRepository = require('../data/frequency-repository').FrequencyRepository;
+
 const log = require('../utilities/logger');
 
 class DtoMapper {
@@ -101,13 +103,15 @@ class DtoMapper {
       }));
   }
 
-  static mapServiceDtoToModel(dto) {
+  static async mapServiceDtoToModel(dto) {
     const { id, data } = dto;
+    const frequency = await FrequencyRepository.getFrequencyByName(data.frequency);
 
     return {
       id,
       name: data.name,
       footnoteLabel: data.footnoteLabel,
+      frequencyId: frequency.id,
       positions: data.positions
     };
   }

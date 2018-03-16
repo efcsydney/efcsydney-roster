@@ -24,7 +24,7 @@ class ServicesService {
     const serviceId = updatedService.id;
     const positions = service.positions.map(position => { position.serviceId = serviceId; return position; });
 
-    await PositionRepository.bulkCreatePositions(positions);
+    await PositionRepository.bulkCreateOrUpdatePositions(positions);
 
     return await ServicesService.getServiceById(serviceId);
   }

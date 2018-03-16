@@ -26,7 +26,7 @@ async function getServices(req, res, next) {
 async function saveService(req, res, next) {
   try {
     const incomingDto = {id: req.params.id, data: req.body};
-    const service = DtoMapper.mapServiceDtoToModel(incomingDto);
+    const service = await DtoMapper.mapServiceDtoToModel(incomingDto);
     const updatedService = await ServicesService.saveService(service);
     const outgoingDto = DtoMapper.mapServiceToDto(updatedService);
 

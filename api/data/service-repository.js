@@ -33,6 +33,7 @@ class ServiceRepository {
     return Service.create({
       name: service.name,
       footnoteLabel: service.footnoteLabel,
+      frequencyId: service.frequencyId,
     }).then(result => result);
   }
 
@@ -41,6 +42,7 @@ class ServiceRepository {
       {
         name: service.name,
         footnoteLabel: service.footnoteLabel,
+        frequencyId: service.frequencyId,
       },
       {
         where: { id: service.id }
