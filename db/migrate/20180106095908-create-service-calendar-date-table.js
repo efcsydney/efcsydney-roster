@@ -52,7 +52,7 @@ module.exports = {
     await seedServiceCalendarDate(queryInterface);
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('service_calendar_dates');
   }
 };

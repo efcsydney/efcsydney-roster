@@ -1,5 +1,3 @@
-const sequelizeClient = require('../../api/infrastructure/sequelize-client')
-  .sequelizeClient;
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -37,7 +35,7 @@ module.exports = {
       { id: 3, name: 'Month' },]);
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('frequencies');
   }
 };

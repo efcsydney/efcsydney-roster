@@ -76,7 +76,7 @@ const mockData = {
   ]
 };
 
-mailOptions = {
+const mailOptions = {
   from: config.get('reminderEmail.content.from'),
   to: 'a@example.com, b@example.com',
   cc: config.get('reminderEmail.content.cc'),

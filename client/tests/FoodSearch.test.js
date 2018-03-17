@@ -57,7 +57,7 @@ describe('FoodSearch', () => {
         wrapper.find('.remove.icon').props().style,
       ).not.toEqual(jasmine.objectContaining(
         { visibility: 'hidden' }
-      ));;
+      ));
     });
 
     it('should call `Client.search() with `value`', () => {

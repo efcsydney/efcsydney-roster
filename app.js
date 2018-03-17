@@ -1,5 +1,5 @@
 const express = require('express');
-app = express();
+const app = express();
 module.exports.app = app;
 const bodyParser = require('body-parser');
 const eventsController = require('./api/controllers/events-controller');

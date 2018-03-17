@@ -1,6 +1,5 @@
 const ServicesService = require('../service/services-service').ServicesService;
 const DtoMapper = require('../mapper/dto-mapper').DtoMapper;
-const log = require('../utilities/logger');
 
 /**
  * Get Services
