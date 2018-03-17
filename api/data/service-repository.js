@@ -27,22 +27,11 @@ class ServiceRepository {
   }
 
   static createService(service) {
-    return Service.create({
-      name: service.name,
-      footnoteLabel: service.footnoteLabel,
-      label: service.label,
-      frequencyId: service.frequencyId,
-    }).then(result => result);
+    return Service.create(service).then(result => result);
   }
 
   static updateService(service){
-    return Service.update(
-      {
-        name: service.name,
-        footnoteLabel: service.footnoteLabel,
-        frequencyId: service.frequencyId,
-        label: service.label,
-      },
+    return Service.update(service,
       {
         where: { id: service.id }
       }
