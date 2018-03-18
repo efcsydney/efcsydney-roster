@@ -31,6 +31,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello Guys! Welcome to roster!' });
 });
 
+app.get('/api/services', servicesController.getServices);
+
 app.get('/api/events', eventsController.getEvents);
 
 app.put('/api/events', eventsController.saveEvent);
