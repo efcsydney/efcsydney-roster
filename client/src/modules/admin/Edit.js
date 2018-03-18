@@ -1,31 +1,55 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { Modal, StateButton } from 'components';
+import { Modal, StateButton, Input } from 'components';
 import styled from 'styled-components';
 
 export default class Edit extends Component {
   static propTypes = {
     data: PropTypes.object,
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
+    onSave: PropTypes.func
   };
   static defaultProps = {
     data: {},
-    onClose: () => {}
+    onClose: () => {},
+    onSave: () => {}
+  };
+  handleChange = change => {
+    const data = _.clone(this.state.data);
+
+    this.setState({
+      data: {
+        ...data,
+        ...change
+      }
+    });
+  };
+  handleSubmit = e => {
+    const { onSave } = this.props;
+    const { data } = this.state;
+
+    e.preventDefault();
+
+    onSave(data);
   };
   constructor(props) {
     super(props);
-    this.state = { label: props.data.label || '' };
-  }
-  componentWillReceiveProps(nextProps) {
-    this.setState({ label: nextProps.data.label });
-  }
 
+    const { data } = props;
+    this.state = { data };
+  }
   render() {
-    let { data: { frequency, footnoteLabel, positions }, onClose } = this.props;
-    positions = positions || [];
+    const { onClose } = this.props;
+    const { data } = this.state;
+    const frequency = _.get(data, 'frequency', '');
+    const label = _.get(data, 'label', '');
+    const footnoteLabel = _.get(data, 'footnoteLabel', '');
+    const positions = _.get(data, 'positions', []);
+
     return (
       <Modal isOpen={true} title="Edit Service" onClose={onClose}>
-        <Form>
+        <Form onSubmit={this.handleSubmit}>
           <Row>
             <Label>Frequency</Label>
             <span>{frequency}</span>
@@ -33,12 +57,12 @@ export default class Edit extends Component {
           <Row>
             <Label>Service Title</Label>
             <span>
-              <input
+              <Input
+                data-hj-whitelist
                 type="text"
-                value={this.state.label}
-                onChange={e => {
-                  this.setState({ label: e.target.value });
-                }}
+                value={label}
+                maxLength={30}
+                onChange={e => this.handleChange({ label: e.target.value })}
               />
             </span>
           </Row>
