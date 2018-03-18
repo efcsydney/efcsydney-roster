@@ -20,8 +20,7 @@ if (isServerEnvironment()) {
 
 app.use(bodyParser.json());
 
-app.set('port-http', process.env.PORT || 3001);
-app.set('port-https', process.env.PORT || 3002);
+app.set('port', process.env.PORT || 3001);
 
 // Express only serves static assets in production
 if (['production', 'qa'].includes(process.env.NODE_ENV)) {
@@ -29,15 +28,7 @@ if (['production', 'qa'].includes(process.env.NODE_ENV)) {
 }
 
 app.get('/', (req, res) => {
-  const ip = req.headers.host.slice(0,-5);
-  const port = req.headers.host.slice(-4);
-  if (port == app.get('port-http')){
-    res.writeHead(301,{Location: `https://${ip}:${app.get('port-https')}${req.url}`});
-    res.end();
-  }else{
-    res.json({ message: 'Hello Guys! Welcome to roster!'});
-    res.end();
-  }
+  res.json({ message: 'Hello Guys! Welcome to roster!' });
 });
 
 app.get('/api/services', servicesController.getServices);
