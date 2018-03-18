@@ -1,7 +1,5 @@
 const getDateString = require('../../api/utilities/datetime-util')
   .getDateString;
-const addByMonth = require('../../api/utilities/datetime-util')
-  .addByMonth;
 const sequelizeClient = require('../../api/infrastructure/sequelize-client')
   .sequelizeClient;
 
@@ -74,12 +72,12 @@ module.exports = {
     );
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('calendar_dates_frequencies');
   }
 };
 
-async function seedSundayFrequency(queryInterface) {
+async function seedSundayFrequency() {
   //all records in calendar_dates table are Sudnay dates
   await sequelizeClient.query(
     'UPDATE calendar_dates SET frequencyId = 1'
@@ -94,9 +92,9 @@ async function seedSaturdayFrequency(queryInterface) {
   // First Saturday in 2017
   const dateTime = new Date(2017, 0, 7);
   const calendarDates = [];
-  for (i = 0; i < 500; i++) {
+  for (let i = 0; i < 500; i++) {
     // Get date string and add to calendarDates
-    dateString = getDateString(dateTime);
+    let dateString = getDateString(dateTime);
     calendarDates.push({ date: dateString, frequencyId: 2 });
     // Jump to next Saturday
     dateTime.setDate(dateTime.getDate() + 7);
@@ -122,7 +120,7 @@ async function updateCalendarDayField(){
   );
 }
 
-async function seedMonthlyFrequency(queryInterface) {
+async function seedMonthlyFrequency() {
   await updateCalendarDayField();
   //update frequency
   await sequelizeClient.query(

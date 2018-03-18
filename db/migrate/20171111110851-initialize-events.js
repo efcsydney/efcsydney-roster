@@ -1,9 +1,8 @@
 const sequelizeClient = require('../../api/infrastructure/sequelize-client')
   .sequelizeClient;
-const log = require('winston');
 
 module.exports = {
-  up: async function up(queryInterface, Sequelize) {
+  up: async function up(queryInterface) {
     const calendarDatesData = (await sequelizeClient.query(
       'SELECT id from calendar_dates'
     ))[0];
@@ -25,7 +24,7 @@ module.exports = {
     return queryInterface.bulkInsert('events', events);
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.bulkDelete('events', null, {});
   }
 };

@@ -1,7 +1,6 @@
 const getDateString = require('../utilities/datetime-util').getDateString;
 const FrequencyRepository = require('../data/frequency-repository').FrequencyRepository;
 
-const log = require('../utilities/logger');
 
 class DtoMapper {
   static mapGroupEventsToDto(events) {

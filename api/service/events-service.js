@@ -1,7 +1,5 @@
 const moment = require('moment');
 const EventRepository = require('../data/event-repository').EventRepository;
-const CalendarDateRepository = require('../data/calendar-date-repository')
-  .CalendarDateRepository;
 const ServiceCalendarDateRepository = require('../data/service-calendar-date-repository')
   .ServiceCalendarDateRepository;
 const EventMapper = require('../mapper/event-mapper').EventMapper;

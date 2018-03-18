@@ -1,5 +1,3 @@
-const log = require('../utilities/logger');
-const getDateString = require('../utilities/datetime-util').getDateString;
 const ServiceRepository = require('../data/service-repository').ServiceRepository;
 const PositionRepository = require('../data/position-repository').PositionRepository;
 

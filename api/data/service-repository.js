@@ -1,9 +1,6 @@
-const Sequelize = require('sequelize');
 const Service = require('../models/service').Service;
 const Frequency = require('../models/frequency').Frequency;
 const Position = require('../models/position').Position;
-
-const Op = Sequelize.Op;
 
 class ServiceRepository {
   static getAll() {
@@ -30,22 +27,11 @@ class ServiceRepository {
   }
 
   static createService(service) {
-    return Service.create({
-      name: service.name,
-      footnoteLabel: service.footnoteLabel,
-      label: service.label,
-      frequencyId: service.frequencyId,
-    }).then(result => result);
+    return Service.create(service).then(result => result);
   }
 
   static updateService(service){
-    return Service.update(
-      {
-        name: service.name,
-        footnoteLabel: service.footnoteLabel,
-        frequencyId: service.frequencyId,
-        label: service.label,
-      },
+    return Service.update(service,
       {
         where: { id: service.id }
       }

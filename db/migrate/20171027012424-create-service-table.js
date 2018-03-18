@@ -35,7 +35,7 @@ module.exports = {
       { id: 2, name: 'chinese', locale: 'zh-TW' }
     ]);
   },
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('services');
   }
 };

@@ -1,6 +1,5 @@
 const ServicesService = require('../service/services-service').ServicesService;
 const DtoMapper = require('../mapper/dto-mapper').DtoMapper;
-const log = require('../utilities/logger');
 
 /**
  * Get Services
@@ -20,12 +19,27 @@ async function getServices(req, res, next) {
   }
 }
 
+async function getServiceById(req, res, next) {
+  try {
+    const id = req.params.id;
+    const data = await ServicesService.getServiceById(id);
+
+    res.json({
+      result: 'OK',
+      error: { message: '' },
+      data
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 /**
  * Get Services
  */
 async function saveService(req, res, next) {
   try {
-    const incomingDto = {id: req.params.id, data: req.body};
+    const incomingDto = { id: req.params.id, data: req.body };
     const service = await DtoMapper.mapServiceDtoToModel(incomingDto);
     const updatedService = await ServicesService.saveService(service);
     const outgoingDto = DtoMapper.mapServiceToDto(updatedService);
@@ -40,8 +54,8 @@ async function saveService(req, res, next) {
   }
 }
 
-
 module.exports = {
   getServices,
+  getServiceById,
   saveService
 };
