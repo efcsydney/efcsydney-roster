@@ -55,11 +55,10 @@ export default connect(mapStateToProps)(
               <Grid>
                 <thead>
                   <Row>
-                    <HeaderCell>ID</HeaderCell>
                     <HeaderCell>Service Title</HeaderCell>
                     <HeaderCell>Positions</HeaderCell>
                     <HeaderCell>Footnote Label</HeaderCell>
-                    <HeaderCell>Occurrence</HeaderCell>
+                    <HeaderCell>Frequency</HeaderCell>
                     <HeaderCell>Actions</HeaderCell>
                   </Row>
                 </thead>
@@ -67,7 +66,6 @@ export default connect(mapStateToProps)(
                   {data.map(
                     ({ footnoteLabel, frequency, label, id, positions }) => (
                       <Row key={id}>
-                        <Cell>{id}</Cell>
                         <Cell>
                           <Link to={`/admin/edit/${id}`}>{label}</Link>
                         </Cell>
