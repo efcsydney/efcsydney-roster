@@ -1,4 +1,4 @@
-const DtoMapper = require('../mapper/dto-mapper').DtoMapper;
+const DtoMapper = require('../mapper/dto-mapper');
 const ServiceInfoService = require('../service/service-info-service')
   .ServiceInfoService;
 const log = require('../utilities/logger');
