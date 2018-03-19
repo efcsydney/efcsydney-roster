@@ -3,7 +3,7 @@ const Frequency = require('../models/frequency').Frequency;
 const Position = require('../models/position').Position;
 
 class ServiceRepository {
-  static getAll() {
+  static getServices() {
     return Service.findAll({
       include:[{
         model: Frequency,
