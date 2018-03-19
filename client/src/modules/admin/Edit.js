@@ -68,7 +68,17 @@ export default class Edit extends Component {
           </Row>
           <Row>
             <Label>Footnote</Label>
-            <span>{footnoteLabel}</span>
+            <span>
+              <Input
+                data-hj-whitelist
+                type="text"
+                value={footnoteLabel}
+                maxLength={30}
+                onChange={e =>
+                  this.handleChange({ footnoteLabel: e.target.value })
+                }
+              />
+            </span>
           </Row>
           <Row>
             <Label>Positions</Label>
