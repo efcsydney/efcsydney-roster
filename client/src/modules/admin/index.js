@@ -35,9 +35,16 @@ export default connect(mapStateToProps)(
 
       history.push('/admin');
     };
+    handleEditSave = data => {
+      console.log(data); // eslint-disable-line
+    };
     render() {
       const { data } = this.state;
       const { selectedId } = this.props;
+      const isEditing = !!(selectedId && _.isNumber(selectedId));
+      const selectedData = isEditing ? _.find(data, { id: selectedId }) : null;
+      const isLoaded = isEditing && !!selectedData;
+
       return (
         <Wrapper>
           <NavBar hasSwitcher={false} title="Roster System" />
@@ -80,9 +87,10 @@ export default connect(mapStateToProps)(
               </Grid>
             </Auth>
           </Body>
-          {!!(selectedId && _.isNumber(selectedId)) && (
+          {isLoaded && (
             <Edit
-              data={_.find(data, { id: selectedId })}
+              data={selectedData}
+              onSave={this.handleEditSave}
               onClose={this.handleEditClose}
             />
           )}
