@@ -83,9 +83,9 @@ export default class Edit extends Component {
           <Row>
             <Label>Positions</Label>
             <span>
-              <ul>
-                {positions.map(({ id, name }) => <li key={id}>{name}</li>)}
-              </ul>
+              <ol>
+                {positions.map(({ id, name, order }) => <li key={id} value={order}>{name}</li>)}
+              </ol>
             </span>
           </Row>
           <Row align="center">
