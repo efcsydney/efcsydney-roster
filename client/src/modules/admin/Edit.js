@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { Modal, StateButton, Input } from 'components';
 import styled from 'styled-components';
+import { set } from 'dot-prop-immutable';
 
 export default class Edit extends Component {
   static propTypes = {
@@ -16,7 +17,11 @@ export default class Edit extends Component {
     onSave: () => {}
   };
   handleChange = change => {
-    const data = _.clone(this.state.data);
+    let data = _.clone(this.state.data);
+
+    _.forOwn(change, (change, key) => {
+      data = set(data, key, change);
+    });
 
     this.setState({
       data: {
@@ -83,9 +88,38 @@ export default class Edit extends Component {
           <Row>
             <Label>Positions</Label>
             <span>
-              <ul>
-                {positions.map(({ id, name }) => <li key={id}>{name}</li>)}
-              </ul>
+              <PositionList>
+                {positions.map(({ id, name, order }) => {
+                  const offset = _.findIndex(positions, { id });
+                  return (
+                    <PositionItem key={id} value={order}>
+                      <NumberInput
+                        data-hj-whitelist
+                        type="number"
+                        value={order}
+                        onChange={e =>
+                          this.handleChange({
+                            [`positions.${offset}.order`]: parseInt(
+                              e.target.value,
+                              10
+                            )
+                          })
+                        }
+                      />
+                      <Input
+                        data-hj-whitelist
+                        type="text"
+                        value={name}
+                        onChange={e =>
+                          this.handleChange({
+                            [`positions.${offset}.name`]: e.target.value
+                          })
+                        }
+                      />
+                    </PositionItem>
+                  );
+                })}
+              </PositionList>
             </span>
           </Row>
           <Row align="center">
@@ -124,3 +158,28 @@ const Label = styled.label`
   width: 125px;
 `;
 Label.displayName = 'Label';
+
+const PositionList = styled.ol`
+  background: #eee;
+  border-radius: 4px;
+  padding: 5px;
+`;
+PositionList.displayName = 'PositionList';
+
+const PositionItem = styled.li`
+  align-items: center;
+  display: flex;
+  margin-bottom: 4px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+PositionItem.displayName = 'PositionItem';
+
+const NumberInput = Input.extend`
+  min-width: 50px;
+  margin-right: 4px;
+  text-align: center;
+  width: 50px;
+`;
+NumberInput.displayName = 'NumberInput';
