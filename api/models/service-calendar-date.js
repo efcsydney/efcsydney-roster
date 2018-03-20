@@ -42,6 +42,9 @@ ServiceCalendarDate.CalendareDate = ServiceCalendarDate.belongsTo(
 );
 CalendareDate.hasMany(ServiceCalendarDate);
 
+
+//Adde something here
+
 module.exports = {
   ServiceCalendarDate
 };

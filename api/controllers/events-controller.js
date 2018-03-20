@@ -1,5 +1,5 @@
 const EventService = require('../service/events-service').EventService;
-const DtoMapper = require('../mapper/dto-mapper').DtoMapper;
+const DtoMapper = require('../mapper/dto-mapper');
 const log = require('../utilities/logger');
 const pusher = require('../utilities/pusher');
 

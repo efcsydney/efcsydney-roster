@@ -1,6 +1,6 @@
 const getDateString = require('../utilities/datetime-util').getDateString;
 const FrequencyRepository = require('../data/frequency-repository').FrequencyRepository;
-
+const _ = require('lodash');
 
 class DtoMapper {
   static mapGroupEventsToDto(events) {
@@ -78,28 +78,13 @@ class DtoMapper {
       locale: service.locale,
       label: service.label,
       footnoteLabel: service.footnoteLabel,
-      frequency: DtoMapper.mapFrequencyToDto(service.frequency),
-      positions: DtoMapper.mapPositionToDto(service.positions)
+      frequency:  _.get(service.frequency, 'name', ''),
+      positions: _.get(service, 'positions', []),
     }
   }
 
   static mapServicesToDto(services) {
-    return services.map(service => DtoMapper.mapServiceToDto(service));
-  }
-
-  static mapFrequencyToDto(frequency) {
-    if (!frequency) return '';
-    return frequency.name;
-  }
-
-  static mapPositionToDto(positions) {
-    if (!positions) return null;
-    return positions.map(position => (
-      {
-        id: position.id,
-        name: position.name,
-        order: position.order
-      }));
+    return services.map(DtoMapper.mapServiceToDto);
   }
 
   static async mapServiceDtoToModel(dto) {
@@ -108,13 +93,10 @@ class DtoMapper {
 
     return {
       id,
-      name: data.name,
-      footnoteLabel: data.footnoteLabel,
-      label: data.label,
+      ...data,
       frequencyId: frequency.id,
-      positions: data.positions
     };
   }
 }
 
-module.exports = { DtoMapper };
+module.exports = DtoMapper;

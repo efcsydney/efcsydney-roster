@@ -1,31 +1,31 @@
-const ServiceRepository = require('../data/service-repository').ServiceRepository;
-const PositionRepository = require('../data/position-repository').PositionRepository;
+const { getServices, getServiceById, createService, updateService } = require('../data/service-repository').ServiceRepository;
+const { bulkCreateOrUpdatePositions } = require('../data/position-repository').PositionRepository;
 
 class ServicesService {
   static async getServices() {
-    const services = await ServiceRepository.getAll();
+    const services = await getServices();
     return services;
   }
 
   static async getServiceById(id) {
-    const service = await ServiceRepository.getServiceById(id);
+    const service = await getServiceById(id);
     return service;
   }
 
   static async saveService(service) {
     let updatedService;
-    if (!service.id || service.id < 1) {
-      updatedService = await ServiceRepository.createService(service);
+    if (!service.id) {
+      updatedService = await createService(service);
     } else {
-      updatedService = await ServiceRepository.updateService(service);
+      updatedService = await updateService(service);
     }
     const serviceId = updatedService.id;
-    const positions = service.positions.map(position => { position.serviceId = serviceId; return position; });
+    const positions = service.positions.map(position => ({ serviceId, ...position }));
 
-    await PositionRepository.bulkCreateOrUpdatePositions(positions);
+    await bulkCreateOrUpdatePositions(positions);
 
-    return await ServicesService.getServiceById(serviceId);
+    return await getServiceById(serviceId);
   }
 }
 
-module.exports = { ServicesService };
+module.exports = ServicesService;
