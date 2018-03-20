@@ -1,7 +1,8 @@
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable(
-      'services',
+      'frequencies',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -11,9 +12,6 @@ module.exports = {
         name: {
           type: Sequelize.STRING,
           unique: true
-        },
-        locale: {
-          type: Sequelize.STRING
         },
         createdAt: {
           allowNull: false,
@@ -30,12 +28,16 @@ module.exports = {
         charset: 'utf8'
       }
     );
-    await queryInterface.bulkInsert('services', [
-      { id: 1, name: 'english', locale: 'en-AU' },
-      { id: 2, name: 'chinese', locale: 'zh-TW' }
-    ]);
+
+    await queryInterface.bulkInsert('frequencies', [
+      { id: 1, name: 'Sunday' },
+      { id: 2, name: 'Saturday'},
+      { id: 3, name: 'Month' },]);
   },
+
   down: (queryInterface) => {
-    return queryInterface.dropTable('services');
+    return queryInterface.dropTable('frequencies');
   }
 };
+
+

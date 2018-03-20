@@ -1,5 +1,5 @@
 const express = require('express');
-app = express();
+const app = express();
 module.exports.app = app;
 const bodyParser = require('body-parser');
 const eventsController = require('./api/controllers/events-controller');
@@ -39,6 +39,12 @@ app.put('/api/events', eventsController.saveEvent);
 
 app.put('/api/serviceInfo/:id', serviceInfoController.saveServiceInfo);
 
+app.get('/api/services', servicesController.getServices);
+
+app.get('/api/services/:id', servicesController.getServiceById);
+
+app.put('/api/services/:id', servicesController.saveService);
+
 if (isServerEnvironment()) {
   // The error handler must be before any other error middleware
   app.use(Raven.errorHandler());
@@ -47,5 +53,5 @@ if (isServerEnvironment()) {
 app.use(exception.errorHandler);
 
 function isServerEnvironment() {
-  return (env === 'qa' || env === 'production')
+  return env === 'qa' || env === 'production';
 }

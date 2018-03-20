@@ -1,4 +1,6 @@
 const getDateString = require('../utilities/datetime-util').getDateString;
+const FrequencyRepository = require('../data/frequency-repository').FrequencyRepository;
+
 
 class DtoMapper {
   static mapGroupEventsToDto(events) {
@@ -22,7 +24,7 @@ class DtoMapper {
     }
   }
 
-  static mapEventToDto(event){
+  static mapEventToDto(event) {
     return {
       role: event.position.name,
       name: event.volunteerName,
@@ -66,6 +68,51 @@ class DtoMapper {
         date: getDateString(data.date)
       },
       service: { name: data.category }
+    };
+  }
+
+  static mapServiceToDto(service) {
+    return {
+      id: service.id,
+      name: service.name,
+      locale: service.locale,
+      label: service.label,
+      footnoteLabel: service.footnoteLabel,
+      frequency: DtoMapper.mapFrequencyToDto(service.frequency),
+      positions: DtoMapper.mapPositionToDto(service.positions)
+    }
+  }
+
+  static mapServicesToDto(services) {
+    return services.map(service => DtoMapper.mapServiceToDto(service));
+  }
+
+  static mapFrequencyToDto(frequency) {
+    if (!frequency) return '';
+    return frequency.name;
+  }
+
+  static mapPositionToDto(positions) {
+    if (!positions) return null;
+    return positions.map(position => (
+      {
+        id: position.id,
+        name: position.name,
+        order: position.order
+      }));
+  }
+
+  static async mapServiceDtoToModel(dto) {
+    const { id, data } = dto;
+    const frequency = await FrequencyRepository.getFrequencyByName(data.frequency);
+
+    return {
+      id,
+      name: data.name,
+      footnoteLabel: data.footnoteLabel,
+      label: data.label,
+      frequencyId: frequency.id,
+      positions: data.positions
     };
   }
 }

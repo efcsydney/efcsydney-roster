@@ -1,0 +1,129 @@
+const getDateString = require('../../api/utilities/datetime-util')
+  .getDateString;
+const sequelizeClient = require('../../api/infrastructure/sequelize-client')
+  .sequelizeClient;
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable(
+      'calendar_dates_frequencies',
+      {
+        calendarDateId: {
+          type: Sequelize.INTEGER,
+        },
+        frequencyId: {
+          type: Sequelize.INTEGER,
+        },
+        createdAt: {
+          allowNull: false,
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.fn('NOW')
+        },
+        updatedAt: {
+          allowNull: false,
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.fn('NOW')
+        }
+      },
+      {
+        charset: 'utf8',
+        uniqueKeys: [
+          {
+            name: 'unique on calendar date and frequency',
+            singleField: false,
+            fields: ['calendarDateId', 'frequencyId']
+          }
+        ]
+      }
+    );
+    //We need the frequencyId only for data migration purpose
+    //this column will be dropped at the end of the migration
+    await queryInterface.addColumn(
+      'calendar_dates',
+      'frequencyId',
+      Sequelize.INTEGER,
+      {
+        after: 'date'
+      },
+      {
+        charset: 'utf8'
+      }
+    );
+
+    await queryInterface.addColumn(
+      'calendar_dates',
+      'day',
+      Sequelize.INTEGER,
+      {
+        after: 'frequencyId'
+      },
+      {
+        charset: 'utf8'
+      }
+    );
+
+    await seedSundayFrequency(queryInterface);
+    await seedSaturdayFrequency(queryInterface);
+    await seedMonthlyFrequency(queryInterface);
+
+    await queryInterface.removeColumn(
+      'calendar_dates',
+      'frequencyId'
+    );
+  },
+
+  down: (queryInterface) => {
+    return queryInterface.dropTable('calendar_dates_frequencies');
+  }
+};
+
+async function seedSundayFrequency() {
+  //all records in calendar_dates table are Sudnay dates
+  await sequelizeClient.query(
+    'UPDATE calendar_dates SET frequencyId = 1'
+  );
+
+  await sequelizeClient.query(
+    'INSERT INTO calendar_dates_frequencies (calendarDateId, frequencyId) SELECT id, 1 FROM calendar_dates WHERE frequencyId = 1'
+  );
+}
+
+async function seedSaturdayFrequency(queryInterface) {
+  // First Saturday in 2017
+  const dateTime = new Date(2017, 0, 7);
+  const calendarDates = [];
+  for (let i = 0; i < 500; i++) {
+    // Get date string and add to calendarDates
+    let dateString = getDateString(dateTime);
+    calendarDates.push({ date: dateString, frequencyId: 2 });
+    // Jump to next Saturday
+    dateTime.setDate(dateTime.getDate() + 7);
+  }
+  //insert all Saturday dates into calendar-dates table
+  await queryInterface.bulkInsert('calendar_dates', calendarDates);
+
+  //update frequency
+  await sequelizeClient.query(
+    'INSERT INTO calendar_dates_frequencies (calendarDateId, frequencyId) SELECT id, 2 FROM calendar_dates WHERE frequencyId = 2'
+  );
+}
+
+async function updateCalendarDayField(){
+  await sequelizeClient.query(
+    `UPDATE calendar_dates c
+    INNER JOIN
+      calendar_dates d
+    ON
+      c.id = d.id
+    SET
+      c.day = CONVERT(SUBSTRING(d.date, 9, 2), SIGNED INTEGER)`
+  );
+}
+
+async function seedMonthlyFrequency() {
+  await updateCalendarDayField();
+  //update frequency
+  await sequelizeClient.query(
+    'INSERT INTO calendar_dates_frequencies (calendarDateId, frequencyId) SELECT id, 3 FROM calendar_dates WHERE day = 1'
+  );
+}

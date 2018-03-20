@@ -25,7 +25,7 @@ Position.Service = Position.belongsTo(Service, {
   as: 'service',
   foreignKey: 'serviceId'
 });
-Service.hasMany(Position);
+Service.hasMany(Position, { foreignKey: 'serviceId' });
 
 module.exports = {
   Position

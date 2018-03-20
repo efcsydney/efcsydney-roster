@@ -1,18 +1,19 @@
 const Sequelize = require('sequelize');
 const sequelizeClient = require('../infrastructure/sequelize-client')
   .sequelizeClient;
-const CalendarDate = sequelizeClient.define('calendar_dates', {
+
+const Frequency = sequelizeClient.define('frequencies', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  date: {
-    type: Sequelize.DATEONLY,
+  name: {
+    type: Sequelize.STRING,
     unique: true
-  }
+  },
 });
 
 module.exports = {
-  CalendarDate
+  Frequency
 };

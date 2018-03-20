@@ -19,7 +19,12 @@ function getDateByWeeks(from, weeks) {
   return getDateString(date);
 }
 
+function addByMonth(date, month){
+  return moment(date).add(month);
+}
+
 module.exports = {
   getDateString,
-  getDateByWeeks
+  getDateByWeeks,
+  addByMonth
 };
