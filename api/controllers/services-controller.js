@@ -1,9 +1,6 @@
-const ServicesService = require('../service/services-service').ServicesService;
-const DtoMapper = require('../mapper/dto-mapper').DtoMapper;
+const ServicesService = require('../service/services-service');
+const DtoMapper = require('../mapper/dto-mapper');
 
-/**
- * Get Services
- */
 async function getServices(req, res, next) {
   try {
     const services = await ServicesService.getServices();
@@ -34,9 +31,6 @@ async function getServiceById(req, res, next) {
   }
 }
 
-/**
- * Get Services
- */
 async function saveService(req, res, next) {
   try {
     const incomingDto = { id: req.params.id, data: req.body };
