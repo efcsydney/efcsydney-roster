@@ -73,7 +73,11 @@ class DtoMapper {
 
   static mapServiceToDto(service) {
     return {
-      ...service,
+      id: service.id,
+      name: service.name,
+      locale: service.locale,
+      label: service.label,
+      footnoteLabel: service.footnoteLabel,
       frequency:  _.get(service.frequency, 'name', ''),
       positions: _.get(service, 'positions', []),
     }
