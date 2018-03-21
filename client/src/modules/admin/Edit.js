@@ -30,6 +30,18 @@ export default class Edit extends Component {
       }
     });
   };
+  handlePositionAdd = () => {
+    let { data, data: { positions } } = this.state;
+
+    data = set(data, `positions.${positions.length}`, {
+      name: '',
+      order: positions.length + 1
+    });
+
+    this.setState({
+      data
+    });
+  };
   handleSubmit = e => {
     const { onSave } = this.props;
     const { data } = this.state;
@@ -89,10 +101,10 @@ export default class Edit extends Component {
             <Label>Positions</Label>
             <span>
               <PositionList>
-                {positions.map(({ id, name, order }) => {
+                {positions.map(({ id, name, order }, i) => {
                   const offset = _.findIndex(positions, { id });
                   return (
-                    <PositionItem key={id} value={order}>
+                    <PositionItem key={i} value={order}>
                       <NumberInput
                         data-hj-whitelist
                         type="number"
@@ -119,6 +131,11 @@ export default class Edit extends Component {
                     </PositionItem>
                   );
                 })}
+                <PositionItem>
+                  <AddPositionLink onClick={this.handlePositionAdd}>
+                    Add New Position
+                  </AddPositionLink>
+                </PositionItem>
               </PositionList>
             </span>
           </Row>
@@ -183,3 +200,11 @@ const NumberInput = Input.extend`
   width: 50px;
 `;
 NumberInput.displayName = 'NumberInput';
+
+const AddPositionLink = styled.a`
+  cursor: pointer;
+  display: block;
+  font-size: 12px;
+  text-align: right;
+  width: 100%;
+`;
