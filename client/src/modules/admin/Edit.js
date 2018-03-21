@@ -69,7 +69,19 @@ export default class Edit extends Component {
         <Form onSubmit={this.handleSubmit}>
           <Row>
             <Label>Frequency</Label>
-            <span>{frequency}</span>
+            <span>
+              <select
+                value={frequency}
+                onChange={e =>
+                  this.handleChange({
+                    frequency: e.target.value
+                  })
+                }>
+                <option value="Sunday">Sunday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Month">Monthly</option>
+              </select>
+            </span>
           </Row>
           <Row>
             <Label>Service Title</Label>
