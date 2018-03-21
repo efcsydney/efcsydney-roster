@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { Modal, StateButton, Input } from 'components';
 import styled from 'styled-components';
-import { set } from 'dot-prop-immutable';
+import dotProp, { set } from 'dot-prop-immutable';
+import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 
 export default class Edit extends Component {
   static propTypes = {
@@ -37,6 +38,14 @@ export default class Edit extends Component {
       name: '',
       order: positions.length + 1
     });
+
+    this.setState({
+      data
+    });
+  };
+  handlePositionDelete = offset => {
+    let { data } = this.state;
+    data = dotProp.delete(data, `positions.${offset}`);
 
     this.setState({
       data
@@ -109,12 +118,11 @@ export default class Edit extends Component {
               />
             </span>
           </Row>
-          <Row>
-            <Label>Positions</Label>
+          <Row style={{ alignItems: 'flex-start' }}>
+            <Label style={{ paddingTop: '10px' }}>Positions</Label>
             <span>
               <PositionList>
                 {positions.map(({ id, name, order }, i) => {
-                  const offset = _.findIndex(positions, { id });
                   return (
                     <PositionItem key={i} value={order}>
                       <NumberInput
@@ -123,7 +131,7 @@ export default class Edit extends Component {
                         value={order}
                         onChange={e =>
                           this.handleChange({
-                            [`positions.${offset}.order`]: parseInt(
+                            [`positions.${i}.order`]: parseInt(
                               e.target.value,
                               10
                             )
@@ -136,10 +144,15 @@ export default class Edit extends Component {
                         value={name}
                         onChange={e =>
                           this.handleChange({
-                            [`positions.${offset}.name`]: e.target.value
+                            [`positions.${i}.name`]: e.target.value
                           })
                         }
                       />
+                      {!id && (
+                        <IconDelete
+                          onClick={this.handlePositionDelete.bind(this, i)}
+                        />
+                      )}
                     </PositionItem>
                   );
                 })}
@@ -219,4 +232,10 @@ const AddPositionLink = styled.a`
   font-size: 12px;
   text-align: right;
   width: 100%;
+`;
+
+const IconDelete = styled(IconMinusCircle)`
+  color: #a00;
+  font-size: 20px;
+  margin-left: 4px;
 `;
