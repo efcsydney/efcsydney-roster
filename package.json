@@ -17,6 +17,7 @@
     "database-cleaner": "^1.2.0",
     "dot-prop-immutable": "^1.4.0",
     "express": "4.13.3",
+    "firebase": "^4.10.1",
     "fs": "0.0.2",
     "global": "^4.3.2",
     "jquery": "^3.2.1",
@@ -43,6 +44,7 @@
     "sinon": "^4.1.2",
     "sql.js": "0.3.2",
     "supertest": "^3.0.0",
+    "tinycolor2": "^1.4.1",
     "winston": "^2.4.0",
     "winston-daily-rotate-file": "^1.7.2"
   },

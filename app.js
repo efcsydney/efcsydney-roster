@@ -31,6 +31,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello Guys! Welcome to roster!' });
 });
 
+app.get('/api/services', servicesController.getServices);
+
 app.get('/api/events', eventsController.getEvents);
 
 app.put('/api/events', eventsController.saveEvent);
@@ -38,6 +40,8 @@ app.put('/api/events', eventsController.saveEvent);
 app.put('/api/serviceInfo/:id', serviceInfoController.saveServiceInfo);
 
 app.get('/api/services', servicesController.getServices);
+
+app.get('/api/services/:id', servicesController.getServiceById);
 
 app.put('/api/services/:id', servicesController.saveService);
 
@@ -49,5 +53,5 @@ if (isServerEnvironment()) {
 app.use(exception.errorHandler);
 
 function isServerEnvironment() {
-  return (env === 'qa' || env === 'production')
+  return env === 'qa' || env === 'production';
 }

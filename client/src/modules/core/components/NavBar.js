@@ -16,9 +16,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   class NavBar extends Component {
     displayName = 'NavBar';
     static propTypes = {
+      hasSwitcher: PropTypes.bool,
+      title: PropTypes.string,
       onCategoryChange: PropTypes.func
     };
     static defaultProps = {
+      hasSwitcher: true,
+      title: '',
       onCategoryChange: () => {}
     };
     getTrans(key) {
@@ -30,7 +34,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       onCategoryChange(value);
     };
     render() {
-      const { value } = this.props;
+      const { hasSwitcher, title, value } = this.props;
 
       return (
         <Wrapper>
@@ -38,17 +42,20 @@ export default connect(mapStateToProps, mapDispatchToProps)(
             <Logo />
           </a>
           <Title>
-            <Select
-              className="ServiceSelect"
-              clearable={false}
-              options={[
-                { value: 'english', label: '英文堂 English Service' },
-                { value: 'chinese', label: '中文堂 Mandarin Service' }
-              ]}
-              onChange={this.handleCategoryChange}
-              searchable={false}
-              value={value}
-            />
+            {title}
+            {hasSwitcher && (
+              <Select
+                className="ServiceSelect"
+                clearable={false}
+                options={[
+                  { value: 'english', label: '英文堂 English Service' },
+                  { value: 'chinese', label: '中文堂 Mandarin Service' }
+                ]}
+                onChange={this.handleCategoryChange}
+                searchable={false}
+                value={value}
+              />
+            )}
           </Title>
           <Org>{this.getTrans('orgTitle')}</Org>
         </Wrapper>

@@ -16,6 +16,22 @@ async function getServices(req, res, next) {
   }
 }
 
+async function getServiceById(req, res, next) {
+  try {
+    const id = req.params.id;
+    const data = await ServicesService.getServiceById(id);
+
+    res.json({
+      result: 'OK',
+      error: { message: '' },
+      data
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+
 async function saveService(req, res, next) {
   try {
     const incomingDto = { id: req.params.id, data: req.body };
@@ -33,8 +49,8 @@ async function saveService(req, res, next) {
   }
 }
 
-
 module.exports = {
   getServices,
+  getServiceById,
   saveService
 };
