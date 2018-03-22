@@ -26,6 +26,7 @@ export default class Login extends Component {
     firebase.auth().signInWithPopup(provider);
   };
   handleBackClick = () => {
+    const { history } = this.props;
     this.setState({ loginError: false });
     history.replace('/');
   }
