@@ -4,7 +4,7 @@ import Button from 'components/Button';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import { injectGlobal } from 'styled-components';
-import IconFrown from 'react-icons/lib/fa/frown-o';
+import IconInfo from 'react-icons/lib/md/info-outline';
 
 export default class Login extends Component {
   constructor(props) {
@@ -32,11 +32,11 @@ export default class Login extends Component {
   }
   renderLoginError = () => {
     return (
-      <Wrapper>
+      <Wrapper style={{maxWidth: '50%'}}>
         <SadFaceIcon />
-        <Title>Oops!</Title>
-        <P>You have logged in successfully. However, the system administrator needs to verify if you have the permission to access the Admin Portal. Please inform the the administrator to help you.</P>
-        <Button onClick={this.handleBackClick}>Back</Button>
+        <Title>Almost there!</Title>
+        <P>You have logged in successfully.<br /><br />However the System Administartor needs to review and grant your account permission before you can access Admin Portal. Please contact the system administartor for further assistance.</P>
+        <Button style={{maxWidth: '200px', margin: '20px auto'}} onClick={this.handleBackClick}>Go to Home</Button>
       </Wrapper>
     );
   }
@@ -77,14 +77,14 @@ const LoginButton = styled.a`
 `;
 const Title = styled.h1`
   font-size: 200%;
-  color: red;
+  color: #2d5faf;
   text-align: center;
 `;
 const P = styled.p`
   font-size: 1.5em;
   text-align: center;
 `;
-const SadFaceIcon = styled(IconFrown) `
+const SadFaceIcon = styled(IconInfo) `
   display: block;
   margin: 0 auto;
   width:250px;
