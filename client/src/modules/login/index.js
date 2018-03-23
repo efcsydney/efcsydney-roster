@@ -11,10 +11,13 @@ export default class Login extends Component {
     super(props);
     this.state = { loginError: false };
   }
-  handleAuthSuccess = () => {
+  redirectTo = (page) => {
     const { history } = this.props;
+    history.replace(page);
+  }
+  handleAuthSuccess = () => {
     this.setState({ loginError: false });
-    history.replace('/admin');
+    this.redirectTo('/admin');
   };
   handleAuthFail = (reason) => {
     if (reason === 'no-permission') {
@@ -26,9 +29,8 @@ export default class Login extends Component {
     firebase.auth().signInWithPopup(provider);
   };
   handleBackClick = () => {
-    const { history } = this.props;
     this.setState({ loginError: false });
-    history.replace('/');
+    this.redirectTo('/');
   }
   renderLoginError = () => {
     return (
