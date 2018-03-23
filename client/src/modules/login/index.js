@@ -4,7 +4,7 @@ import Button from 'components/Button';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import { injectGlobal } from 'styled-components';
-import SadFaceIcon from 'react-icons/lib/fa/frown-o';
+import IconFrown from 'react-icons/lib/fa/frown-o';
 
 export default class Login extends Component {
   constructor(props) {
@@ -25,16 +25,18 @@ export default class Login extends Component {
     const provider = new firebase.auth.FacebookAuthProvider();
     firebase.auth().signInWithPopup(provider);
   };
-  handleBackToLogin = () => {
+  handleBackClick = () => {
+    const { history } = this.props;
     this.setState({ loginError: false });
+    history.replace('/');
   }
   renderLoginError = () => {
     return (
       <Wrapper>
-        <ICON />
-        <H1>Oops!</H1>
-        <P> Your login has failed.</P>
-        <Button onClick={this.handleBackToLogin}>Back</Button>
+        <SadFaceIcon />
+        <Title>Oops!</Title>
+        <P>You have logged in successfully. However, the system administrator needs to verify if you have the permission to access the Admin Portal. Please inform the the administrator to help you.</P>
+        <Button onClick={this.handleBackClick}>Back</Button>
       </Wrapper>
     );
   }
@@ -73,16 +75,16 @@ const LoginButton = styled.a`
   width: 247px;
   height: 40px;
 `;
-const H1 = styled.h1`
-  font-size:200%;
-  color:red;
-  text-align:center;
+const Title = styled.h1`
+  font-size: 200%;
+  color: red;
+  text-align: center;
 `;
 const P = styled.p`
-  font-size:1.5em;
-  text-align:center;
+  font-size: 1.5em;
+  text-align: center;
 `;
-const ICON = styled(SadFaceIcon)`
+const SadFaceIcon = styled(IconFrown) `
   display: block;
   margin: 0 auto;
   width:250px;
