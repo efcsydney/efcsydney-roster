@@ -36,7 +36,20 @@ export default connect(mapStateToProps)(
       history.push('/admin');
     };
     handleEditSave = data => {
-      console.log(data); // eslint-disable-line
+      const { history } = this.props;
+      const { data: prevData } = this.state;
+      const nextData = _.clone(prevData);
+
+      const { id, ...body } = data;
+      const offset = _.findIndex(prevData, { id: id });
+
+      ServicesAPI.modify(id, body)
+        .then(({ data }) => {
+          nextData[offset] = data;
+          this.setState({ data: nextData });
+        })
+        .catch(e => alert(e.message))
+        .finally(() => history.push('/admin'));
     };
     render() {
       const { data } = this.state;
