@@ -25,10 +25,7 @@ export default class Edit extends Component {
     });
 
     this.setState({
-      data: {
-        ...data,
-        ...change
-      }
+      data
     });
   };
   handlePositionAdd = () => {
@@ -53,11 +50,17 @@ export default class Edit extends Component {
   };
   handleSubmit = e => {
     const { onSave } = this.props;
-    const { data } = this.state;
+    const { data, data: { positions } } = this.state;
 
     e.preventDefault();
 
-    onSave(data);
+    onSave({
+      ...data,
+      positions: _.filter(
+        positions,
+        position => !_.isEmpty(position.name.trim())
+      )
+    });
   };
   constructor(props) {
     super(props);
