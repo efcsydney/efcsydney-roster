@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { Modal, StateButton, Input } from 'components';
 import styled from 'styled-components';
+import dotProp, { set } from 'dot-prop-immutable';
+import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 
 export default class Edit extends Component {
   static propTypes = {
@@ -16,22 +18,49 @@ export default class Edit extends Component {
     onSave: () => {}
   };
   handleChange = change => {
-    const data = _.clone(this.state.data);
+    let data = _.clone(this.state.data);
+
+    _.forOwn(change, (change, key) => {
+      data = set(data, key, change);
+    });
 
     this.setState({
-      data: {
-        ...data,
-        ...change
-      }
+      data
+    });
+  };
+  handlePositionAdd = () => {
+    let { data, data: { positions } } = this.state;
+
+    data = set(data, `positions.${positions.length}`, {
+      name: '',
+      order: positions.length + 1
+    });
+
+    this.setState({
+      data
+    });
+  };
+  handlePositionDelete = offset => {
+    let { data } = this.state;
+    data = dotProp.delete(data, `positions.${offset}`);
+
+    this.setState({
+      data
     });
   };
   handleSubmit = e => {
     const { onSave } = this.props;
-    const { data } = this.state;
+    const { data, data: { positions } } = this.state;
 
     e.preventDefault();
 
-    onSave(data);
+    onSave({
+      ...data,
+      positions: _.filter(
+        positions,
+        position => !_.isEmpty(position.name.trim())
+      )
+    });
   };
   constructor(props) {
     super(props);
@@ -92,12 +121,50 @@ export default class Edit extends Component {
               />
             </span>
           </Row>
-          <Row>
-            <Label>Positions</Label>
+          <Row style={{ alignItems: 'flex-start' }}>
+            <Label style={{ paddingTop: '10px' }}>Positions</Label>
             <span>
-              <ul>
-                {positions.map(({ id, name }) => <li key={id}>{name}</li>)}
-              </ul>
+              <PositionList>
+                {positions.map(({ id, name, order }, i) => {
+                  return (
+                    <PositionItem key={i} value={order}>
+                      <NumberInput
+                        data-hj-whitelist
+                        type="number"
+                        value={order}
+                        onChange={e =>
+                          this.handleChange({
+                            [`positions.${i}.order`]: parseInt(
+                              e.target.value,
+                              10
+                            )
+                          })
+                        }
+                      />
+                      <Input
+                        data-hj-whitelist
+                        type="text"
+                        value={name}
+                        onChange={e =>
+                          this.handleChange({
+                            [`positions.${i}.name`]: e.target.value
+                          })
+                        }
+                      />
+                      {!id && (
+                        <IconDelete
+                          onClick={this.handlePositionDelete.bind(this, i)}
+                        />
+                      )}
+                    </PositionItem>
+                  );
+                })}
+                <PositionItem>
+                  <AddPositionLink onClick={this.handlePositionAdd}>
+                    Add New Position
+                  </AddPositionLink>
+                </PositionItem>
+              </PositionList>
             </span>
           </Row>
           <Row align="center">
@@ -136,3 +203,42 @@ const Label = styled.label`
   width: 125px;
 `;
 Label.displayName = 'Label';
+
+const PositionList = styled.ol`
+  background: #eee;
+  border-radius: 4px;
+  padding: 5px;
+`;
+PositionList.displayName = 'PositionList';
+
+const PositionItem = styled.li`
+  align-items: center;
+  display: flex;
+  margin-bottom: 4px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+PositionItem.displayName = 'PositionItem';
+
+const NumberInput = Input.extend`
+  min-width: 50px;
+  margin-right: 4px;
+  text-align: center;
+  width: 50px;
+`;
+NumberInput.displayName = 'NumberInput';
+
+const AddPositionLink = styled.a`
+  cursor: pointer;
+  display: block;
+  font-size: 12px;
+  text-align: right;
+  width: 100%;
+`;
+
+const IconDelete = styled(IconMinusCircle)`
+  color: #a00;
+  font-size: 20px;
+  margin-left: 4px;
+`;
