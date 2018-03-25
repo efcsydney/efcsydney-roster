@@ -1,0 +1,170 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Production ECS Host",
+  "Resources": {
+    "SecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "EC2 security group for docker deployment",
+        "VpcId": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "VPC-VPCID"
+          }
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "1",
+            "ToPort": "65535",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "0",
+            "ToPort": "65535",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "udp",
+            "FromPort": "0",
+            "ToPort": "65535",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      }
+    },
+    "InstanceRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyName": "s3ConfigReadAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                  ],
+                  "Resource": [
+                    "arn:aws:s3:::*"
+                  ],
+                  "Sid": "ConfigReadAccess"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "IamInstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "InstanceRole"
+          }
+        ]
+      }
+    },
+    "LaunchConfiguration": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "ImageId": "ami-e3b75981",
+        "InstanceType": "t2.micro",
+        "KeyName": "efcsydney",
+        "SecurityGroups": [
+          {
+            "Ref": "SecurityGroup"
+          }
+        ],
+        "AssociatePublicIpAddress": true,
+        "IamInstanceProfile": {
+          "Ref": "IamInstanceProfile"
+        }
+      }
+    },
+    "AutoScalingGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "LaunchConfigurationName": {
+          "Ref": "LaunchConfiguration"
+        },
+        "AvailabilityZones": [
+          {
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-AvailabilityZone-A"
+            }
+          },
+          {
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-AvailabilityZone-B"
+            }
+          },
+          {
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-AvailabilityZone-C"
+            }
+          }
+        ],
+        "VPCZoneIdentifier": [
+          {
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-PublicSubnet-A"
+            }
+          },
+          {
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-PublicSubnet-B"
+            }
+          },
+          {
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-PublicSubnet-C"
+            }
+          }
+        ],
+        "MaxSize": 2,
+        "MinSize": 1,
+        "DesiredCapacity": 1,
+        "HealthCheckGracePeriod": 30,
+        "HealthCheckType": "EC2",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "efcsydney-roster",
+            "PropagateAtLaunch": true
+          },
+          {
+            "Key": "ImageId",
+            "Value": "ami-e3b75981",
+            "PropagateAtLaunch": true
+          }
+        ],
+        "TerminationPolicies": [
+          "OldestInstance"
+        ]
+      }
+    }
+  }
+}
