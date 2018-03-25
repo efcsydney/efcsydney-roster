@@ -1,5 +1,5 @@
 const API_DEV_PORT = 3001;
 const WEB_DEV_PORT = 3000;
-const INSECURE_PORT = 3003;
+const INSECURE_PORT = 80;
 
 module.exports = { API_DEV_PORT, WEB_DEV_PORT, INSECURE_PORT };
