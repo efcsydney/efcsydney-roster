@@ -4,7 +4,7 @@ const url = require('url');
 const logger = require('./api/utilities/logger');
 const { INSECURE_PORT, WEB_DEV_PORT } = require('./app-config');
 
-class InsecureApp {
+class InsecurePort {
   constructor() {
     // initialize the new express instance
     this.app = express();
@@ -38,4 +38,4 @@ class InsecureApp {
   }
 }
 
-module.exports = { InsecureApp };
+module.exports = { InsecurePort };

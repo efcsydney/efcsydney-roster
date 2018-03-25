@@ -2,13 +2,13 @@ process.env.TZ = 'Australia/Sydney';
 
 require('./newrelic');
 const app = require('./app').app;
-const { InsecureApp } = require('./app-insecure');
+const { InsecurePort } = require('./insecure-port');
 const logger = require('./api/utilities/logger');
 const databaseUtil = require('./api/utilities/database-util');
 
 app.listen(app.get('port'), () => {
   logger.info(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
-  new InsecureApp().listen();
+  new InsecurePort().listen();
 });
 
 // cron job for scheduled email
