@@ -1,4 +1,4 @@
-const { Server, createServer } = require('http')
+const { createServer } = require('http')
 const express = require('express');
 const url = require('url');
 const logger = require('./api/utilities/logger');
@@ -20,7 +20,7 @@ class InsecurePort {
   routes() {
     const securePort = this.app.get('port');
     // tell the express instance to run this callback for each request
-    this.app.use((req, res, next) => {
+    this.app.use((req, res) => {
       // check if it is a secure (https) request
       // if not redirect to the equivalent https url
 
