@@ -9,6 +9,7 @@ class InsecurePort {
     // initialize the new express instance
     this.app = express();
 
+    this.app.set('protocol', (process.env.PORT) ? 'https' : 'http');
     this.app.set('secure-port', (process.env.PORT) ? SECURE_PORT : WEB_DEV_PORT);
     // pass this express instance to the http server
     this.server = createServer(this.app);
@@ -19,6 +20,7 @@ class InsecurePort {
 
   routes() {
     const securePort = this.app.get('secure-port');
+    const protocol = this.app.get('protocol');
     // tell the express instance to run this callback for each request
     this.app.use((req, res) => {
       // check if it is a secure (https) request
@@ -26,7 +28,7 @@ class InsecurePort {
 
       const originalUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
       const parser = url.parse(originalUrl);
-      const redirectUrl = `${parser.protocol}//${parser.hostname}:${securePort}${req.originalUrl}`;
+      const redirectUrl = `${protocol}://${parser.hostname}:${securePort}${req.originalUrl}`;
       logger.info(`Redirect from ${originalUrl} to ${redirectUrl}`);
       res.redirect(redirectUrl);
     });
