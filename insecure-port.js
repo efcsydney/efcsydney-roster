@@ -2,14 +2,14 @@ const { createServer } = require('http')
 const express = require('express');
 const url = require('url');
 const logger = require('./api/utilities/logger');
-const { INSECURE_PORT, WEB_DEV_PORT } = require('./app-config');
+const { INSECURE_PORT, WEB_DEV_PORT, SECURE_PORT } = require('./app-config');
 
 class InsecurePort {
   constructor() {
     // initialize the new express instance
     this.app = express();
 
-    this.app.set('port', process.env.PORT || WEB_DEV_PORT);
+    this.app.set('secure-port', (process.env.PORT) ? SECURE_PORT : WEB_DEV_PORT);
     // pass this express instance to the http server
     this.server = createServer(this.app);
 
@@ -18,7 +18,7 @@ class InsecurePort {
   }
 
   routes() {
-    const securePort = this.app.get('port');
+    const securePort = this.app.get('secure-port');
     // tell the express instance to run this callback for each request
     this.app.use((req, res) => {
       // check if it is a secure (https) request
