@@ -77,14 +77,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       const {
         date,
         isSaving,
+        members,
         role,
-        preQuarterMembers,
         toggleEditRole,
         ...otherProps
       } = this.props; // eslint-disable-line
-      const { selectedName, names } = this.state;
+      const { selectedName } = this.state;
       const formattedDate = moment(date).format(this.getTrans('dateFormat'));
-      const finalMembers = _.union(names, preQuarterMembers);
 
       return (
         <Modal {...otherProps} title={this.getTrans('title')}>
@@ -106,7 +105,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                   multi={false}
                   value={selectedName}
                   onChange={this.handleNameChange}
-                  options={getOptions(finalMembers)}
+                  options={getOptions(members)}
                   clearable={true}
                 />
               </span>

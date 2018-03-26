@@ -151,6 +151,11 @@ export const selectedDataReducer = reduceReducers(
     defaultState.meta.selectedData
   ),
   handleAction(
+    receiveModifyIdEvents,
+    () => null,
+    defaultState.meta.selectedData
+  ),
+  handleAction(
     combineActions(toggleEditDay, toggleEditRole),
     {
       next(state, { payload }) {

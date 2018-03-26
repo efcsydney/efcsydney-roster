@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import QuarterView from './QuarterView';
@@ -5,7 +6,6 @@ import { LoadingIndicator, DateBar, TagManager } from 'components';
 import { NavBar } from 'modules/core';
 import moment from 'moment';
 import pusher from 'utils/pusher';
-import EditRole from './EditRole';
 import EditDay from './EditDay';
 import EventsAPI from 'apis/events';
 import { getMemberNames } from 'utils';
@@ -211,9 +211,22 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         return <div />;
       }
     }
+    getAllNames() {
+      const { data } = this.props;
+      const { preQuarterMembers } = this.state;
+
+      return _(data)
+        .map(event => event.members.map(member => member.name))
+        .flatten()
+        .union(preQuarterMembers)
+        .filter(name => !_.isEmpty(name))
+        .map(name => name.trim())
+        .sort()
+        .value();
+    }
     render() {
-      const { date, preQuarterMembers } = this.state;
-      const { data, isEditingDay, isEditingRole, isLoading } = this.props;
+      const { date } = this.state;
+      const { data, isEditingDay, isLoading } = this.props;
       const barProps = {
         date,
         onPrevClick: this.handleButtonClick.bind(this, 'prev'),
@@ -227,8 +240,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(
           <Content>
             <DateBar {...barProps} />
             <QuarterView
+              className="quarter-view"
               date={date}
               data={data}
+              members={this.getAllNames()}
               onRoleClick={this.handleRoleClick}
               onDayClick={this.handleDayClick}
             />
@@ -239,9 +254,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
             active={isLoading}
             bgcolor="rgba(255, 255, 255, 0.7)"
           />
-          {isEditingRole && (
-            <EditRole isOpen={true} preQuarterMembers={preQuarterMembers} />
-          )}
           {isEditingDay && <EditDay isOpen={true} />}
         </Wrapper>
       );
