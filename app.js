@@ -21,7 +21,7 @@ if (isServerEnvironment()) {
 
 app.use(bodyParser.json());
 
-app.set('port', (process.env.PORT) ? INCOMING_PORT : API_DEV_PORT);
+app.set('port', process.env.PORT || API_DEV_PORT);
 
 // Express only serves static assets in production
 if (['production', 'qa'].includes(process.env.NODE_ENV)) {
