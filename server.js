@@ -8,7 +8,7 @@ const databaseUtil = require('./api/utilities/database-util');
 
 app.listen(app.get('port'), () => {
   logger.info(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
-  //new InsecurePort().listen();
+  new InsecurePort().listen();
 });
 
 // cron job for scheduled email

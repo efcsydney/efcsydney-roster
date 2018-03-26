@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 module.exports.app = app;
-const { API_DEV_PORT } = require('./app-config');
+const { API_DEV_PORT, INCOMING_PORT } = require('./app-config');
 const bodyParser = require('body-parser');
 const eventsController = require('./api/controllers/events-controller');
 const servicesController = require('./api/controllers/services-controller');
@@ -21,7 +21,7 @@ if (isServerEnvironment()) {
 
 app.use(bodyParser.json());
 
-app.set('port', process.env.PORT || API_DEV_PORT);
+app.set('port', (process.env.PORT) ? INCOMING_PORT : API_DEV_PORT);
 
 // Express only serves static assets in production
 if (['production', 'qa'].includes(process.env.NODE_ENV)) {
