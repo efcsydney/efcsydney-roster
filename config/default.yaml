@@ -24,3 +24,5 @@ pusher:
 databaseBackup:
   schedule: '0 0 * * *'
   backupDirectory: '../backup'
+port:
+  secure: 3002
