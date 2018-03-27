@@ -78,7 +78,7 @@ class DtoMapper {
       locale: service.locale,
       label: service.label,
       footnoteLabel: service.footnoteLabel,
-      frequency:  _.get(service.frequency, 'name', ''),
+      frequency:  service.frequency,
       positions: _.get(service, 'positions', []),
     }
   }
