@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 module.exports.app = app;
-const { API_DEV_PORT, INCOMING_PORT } = require('./app-config');
 const bodyParser = require('body-parser');
 const eventsController = require('./api/controllers/events-controller');
 const servicesController = require('./api/controllers/services-controller');
@@ -22,7 +21,8 @@ if (isServerEnvironment()) {
 
 app.use(bodyParser.json());
 
-app.set('port', process.env.PORT || API_DEV_PORT);
+app.set('port', process.env.PORT || 3001);
+app.set('secure-port', 3002);
 
 if (['production', 'qa'].includes(process.env.NODE_ENV)) {
   app.use(httpRedirect);
@@ -36,6 +36,8 @@ if (['production', 'qa'].includes(process.env.NODE_ENV)) {
 app.get('/', (req, res) => {
   res.json({ message: 'Hello Guys! Welcome to roster!' });
 });
+
+app.get('/api/services', servicesController.getServices);
 
 app.get('/api/events', eventsController.getEvents);
 
