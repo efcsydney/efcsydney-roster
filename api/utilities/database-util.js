@@ -41,7 +41,7 @@ function getRestoreQuery(filename) {
 }
 
 function getFileRotation(filename) {
-  return `rm -y ${BACKUP_DIR}/${filename}`;
+  return `rm -f ${BACKUP_DIR}/${filename}`;
 }
 
 function backupDatabase() {
