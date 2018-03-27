@@ -24,13 +24,13 @@ app.use(bodyParser.json());
 
 app.set('port', process.env.PORT || API_DEV_PORT);
 
+if (['production', 'qa'].includes(process.env.NODE_ENV)) {
+  app.use(httpRedirect);
+}
+
 // Express only serves static assets in production
 if (['production', 'qa'].includes(process.env.NODE_ENV)) {
   app.use(express.static('client/build'));
-}
-
-if (['production', 'qa'].includes(process.env.NODE_ENV)) {
-  app.use(httpRedirect);
 }
 
 app.get('/', (req, res) => {
