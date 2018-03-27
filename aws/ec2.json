@@ -144,6 +144,11 @@
             }
           }
         ],
+        "LoadBalancerNames" : [ {
+          "Fn::ImportValue": {
+            "Fn::Sub": "efcsydney-elb"
+          }
+        } ],
         "MaxSize": 2,
         "MinSize": 1,
         "DesiredCapacity": 1,
