@@ -118,20 +118,20 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 const Wrapper = styled.div`
   position: absolute;
   left: -1px;
-  right: 0;
+  right: -1px;
   top: -1px;
-  bottom: 0;
-  min-width: 120px;
+  bottom: -1px;
   text-align: left;
 `;
 // Ref - https://gist.github.com/MartinHaeusler/6dfc3769df20f534a150efda39573f0d
 const Select = styled(Creatable)`
-  positiond: relative;
+  position: relative;
   width: 180px;
   &.inline-select,
   .Select-control {
     border-radius: 0;
-    width: 100px;
+    min-width: 100px;
+    width: 100%;
     height: 100%;
   }
   ${props =>
