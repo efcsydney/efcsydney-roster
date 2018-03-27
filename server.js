@@ -5,14 +5,11 @@ const app = require('./app').app;
 const logger = require('./api/utilities/logger');
 const databaseUtil = require('./api/utilities/database-util');
 
-//listen for non secure port
-app.listen(app.get('port'), () => {
-  logger.info(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
-});
-
-//listen for secure port
-app.listen(app.get('secure-port'), () => {
-  logger.info(`Find the server at: https://localhost:${app.get('secure-port')}/`); // eslint-disable-line no-console
+const ports = [app.get('port'), app.get('secure-port')];
+ports.forEach(port => {
+  app.listen(port, () => {
+    logger.info(`Find the server at: http://localhost:${port}/`);
+  })
 });
 
 // cron job for scheduled email
