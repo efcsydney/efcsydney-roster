@@ -25,7 +25,7 @@ app.set('port', process.env.PORT || 3001);
 app.set('secure-port', 3002);
 
 if (['production', 'qa'].includes(process.env.NODE_ENV)) {
-  //app.use(httpRedirect);
+  app.use(httpRedirect);
 }
 
 // Express only serves static assets in production
