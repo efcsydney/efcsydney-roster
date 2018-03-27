@@ -8,12 +8,16 @@ const config = require('config');
 
 const BACKUP_DIR = config.get('databaseBackup.backupDirectory');
 
-function getDateString() {
+function getCurrentDateString() {
   return moment().format('YYYYMMDD');
 }
 
-function getBackupFileName() {
-  return `${dbConfig.database}_${getDateString()}.sql`;
+function getLastMonthString() {
+  return moment().subtract(30, 'days').format('YYYYMMDD');
+}
+
+function getBackupFileName(date) {
+  return `${dbConfig.database}_${date}.sql`;
 }
 
 function getRestoreFileName(dateString) {
@@ -28,25 +32,38 @@ function ensurePathExists(path) {
 
 // The command has to be in single line only. Multi-line interpolated string is seperated by
 // carriage return and will cause the command fails to execute on the shell.
-function getBackupQuery() {
-  return `mysqldump -u ${dbConfig.username} -h ${dbConfig.host} ${dbConfig.database} > ${BACKUP_DIR}/${getBackupFileName()}`;
+function getBackupQuery(filename) {
+  return `mysqldump -u ${dbConfig.username} -h ${dbConfig.host} ${dbConfig.database} > ${BACKUP_DIR}/${filename}`;
 }
 
 function getRestoreQuery(filename) {
   return `mysql -u ${dbConfig.username} -h ${dbConfig.host} ${dbConfig.database} < ${BACKUP_DIR}/${filename}`;
 }
 
+function getFileRotation(filename) {
+  return `rm -y ${BACKUP_DIR}/${filename}`;
+}
+
 function backupDatabase() {
-  const backupFileName = getBackupFileName();
+  const backupFileName = getBackupFileName(getCurrentDateString());
+  const removeFileName = getBackupFileName(getLastMonthString());
   ensurePathExists(BACKUP_DIR);
 
   log.info(`[BEGIN] DatabaseUtil#backupDatabase; file: ${backupFileName}, at: ${moment()}`);
 
-  exec(getBackupQuery(), function(err) {
+  exec(getBackupQuery(backupFileName), function(err) {
     if (err) {
       log.error(`[ERROR] DatabaseUtil#backupDatabase; reason: ${err.message}`);
     } else {
-      log.info(`[END] DatabaseUtil#backupDatabase; file: ${backupFileName}, at: ${moment()}`);
+      log.info(`[END] DatabaseUtil#backupDatabase; Create file: ${backupFileName}, at: ${moment()}`);
+    }
+  });
+
+  exec(getFileRotation(removeFileName), function(err) {
+    if (err) {
+      log.error(`[ERROR] DatabaseUtil#backupDatabase; reason: ${err.message}`);
+    } else {
+      log.info(`[END] DatabaseUtil#backupDatabase; Remove file: ${removeFileName}, at: ${moment()}`);
     }
   });
 }
