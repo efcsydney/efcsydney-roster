@@ -1,10 +1,11 @@
 const log = require('../utilities/logger');
+const config = require('config');
 /*
   http://expressjs.com/en/guide/error-handling.html
 */
 const httpRedirect = function(req, res, next) {
   log.debug(`Incoming port number ${req.socket.localPort}`);
-  const securePort = 3002;
+  const securePort = config.get('port.secure');
   if (req.socket.localPort == securePort) {
     // request was via https, so do no special handling
     log.debug('secure channel - pass through');
