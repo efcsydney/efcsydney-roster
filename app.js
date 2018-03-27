@@ -22,6 +22,7 @@ if (isServerEnvironment()) {
 app.use(bodyParser.json());
 
 app.set('port', process.env.PORT || 3001);
+app.set('secure-port', 3002);
 
 if (['production', 'qa'].includes(process.env.NODE_ENV)) {
   app.use(httpRedirect);

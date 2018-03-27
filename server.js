@@ -10,7 +10,7 @@ app.listen(app.get('port'), () => {
 });
 
 app.listen(app.get('secure-port'), () => {
-  logger.info(`Find the server at: http://localhost:${app.get('secure-port')}/`); // eslint-disable-line no-console
+  logger.info(`Find the server at: https://localhost:${app.get('secure-port')}/`); // eslint-disable-line no-console
 });
 
 // cron job for scheduled email
