@@ -6,10 +6,14 @@ const { InsecurePort } = require('./insecure-port');
 const logger = require('./api/utilities/logger');
 const databaseUtil = require('./api/utilities/database-util');
 
+const ports = [app.get('port'), app.get('secure-port')];
+ports.forEach(port => {
+  app.listen(port, () => {
+    logger.info(`Find the server at: http://localhost:${port}/`);
+  })
 //listen for non secure port
 app.listen(app.get('port'), () => {
   logger.info(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
-  //new InsecurePort().listen();
 });
 
 //listen for secure port
