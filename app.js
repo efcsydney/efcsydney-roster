@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const eventsController = require('./api/controllers/events-controller');
 const servicesController = require('./api/controllers/services-controller');
 const exception = require('./api/middleware/exception-handler');
+const httpRedirect = require('./api/middleware/http-redirect');
 const serviceInfoController = require('./api/controllers/service-info-controller');
 const Raven = require('raven');
 const env = process.env.NODE_ENV;
@@ -25,6 +26,10 @@ app.set('port', process.env.PORT || 3001);
 // Express only serves static assets in production
 if (['production', 'qa'].includes(process.env.NODE_ENV)) {
   app.use(express.static('client/build'));
+}
+
+if (['production', 'qa'].includes(process.env.NODE_ENV)) {
+  app.use(httpRedirect);
 }
 
 app.get('/', (req, res) => {
