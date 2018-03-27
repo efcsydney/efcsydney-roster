@@ -9,14 +9,9 @@ import { Creatable } from 'react-select';
 import 'react-select/dist/react-select.css';
 import _ from 'lodash';
 import { requestModifyIdEvents, toggleEditRole } from 'modules/index/redux';
+import { getOptions } from 'modules/index/utils';
 import i18n from 'i18n';
 import { media } from 'styled';
-
-function getOptions(names) {
-  names = names.map(name => ({ value: name, label: name }));
-  names = names.filter(name => name.label !== 'Combined Service');
-  return names;
-}
 
 const mapStateToProps = state => {
   const { meta: { isSaving, selectedData } } = state.index;
@@ -101,7 +96,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               <span>
                 <Select
                   inputProps={{ 'data-hj-whitelist': true }}
-                  autofocus
+                  autoFocus
                   multi={false}
                   value={selectedName}
                   onChange={this.handleNameChange}

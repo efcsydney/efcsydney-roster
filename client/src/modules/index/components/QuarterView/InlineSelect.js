@@ -7,13 +7,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { requestModifyIdEvents, toggleEditRole } from 'modules/index/redux';
 import styled from 'styled-components';
+import { getOptions } from 'modules/index/utils';
 import 'react-select/dist/react-select.css';
-
-function getOptions(names) {
-  names = names.map(name => ({ value: name, label: name }));
-  names = names.filter(name => name.label !== 'Combined Service');
-  return names;
-}
 
 const mapStateToProps = state => {
   const { meta: { isSaving } } = state.index;
