@@ -86,7 +86,7 @@
                     },
                     {
                         "LoadBalancerPort": 443,
-                        "InstancePort": 80,
+                        "InstancePort": 3002,
                         "Protocol": "HTTPS",
                         "InstanceProtocol": "HTTP",
                         "SSLCertificateId": {
@@ -100,13 +100,13 @@
                             "",
                             [
                                 "HTTP:",
-                                "80/"
+                                "3002/"
                             ]
                         ]
                     },
                     "HealthyThreshold": 3,
                     "UnhealthyThreshold": 5,
-                    "Interval": 30,
+                    "Interval": 10,
                     "Timeout": 5
                 },
                 "Tags": [
