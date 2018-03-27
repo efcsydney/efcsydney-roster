@@ -11,9 +11,9 @@ app.listen(app.get('port'), () => {
   //new InsecurePort().listen();
 });
 
-app.listen(app.get('secure-port'), () => {
-  logger.info(`Find the server at: https://localhost:${app.get('secure-port')}/`); // eslint-disable-line no-console
-});
+// app.listen(app.get('secure-port'), () => {
+//   logger.info(`Find the server at: https://localhost:${app.get('secure-port')}/`); // eslint-disable-line no-console
+// });
 
 // cron job for scheduled email
 const config = require('config');
