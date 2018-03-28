@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -8,6 +9,7 @@ import './icalstyle.css';
 import moment from 'moment';
 import { findEvent, getCalData } from 'utils';
 import i18n from 'i18n';
+import InlineSelect from './InlineSelect';
 
 const CAL_ICON = { 'calendar-plus-o': 'left' };
 const CAL_ENABLED_TYPES = [
@@ -15,11 +17,25 @@ const CAL_ENABLED_TYPES = [
   { google: i18n.t('Desktop.addCalByGoogle') }
 ];
 
-const mapStateToProps = state => ({ lang: state.core.meta.lang });
+const mapStateToProps = state => {
+  const lang = _.get(state.core, 'meta.lang', 'en-AU');
+  const selectedData = _.get(state.index, 'meta.selectedData', null);
 
+  return { lang, selectedData };
+};
 export default connect(mapStateToProps)(
   class Desktop extends Component {
     displayName = 'Desktop';
+    static propTypes = {
+      lang: PropTypes.string,
+      members: PropTypes.array,
+      selectedData: PropTypes.object
+    };
+    static defaultProps = {
+      lang: 'en-AU',
+      members: [],
+      selectedData: {}
+    };
     handleDayClick = (e, day, serviceInfo) => {
       const isAddCalendar =
         e.target.className.indexOf('react-add-to-calendar') !== -1;
@@ -33,7 +49,7 @@ export default connect(mapStateToProps)(
       return i18n.t(`${this.displayName}.${key}`);
     }
     renderNameCells(day, event) {
-      const { roles, onRoleClick } = this.props;
+      const { roles, onRoleClick, selectedData } = this.props;
       const members = event ? event.members : [];
       const serviceInfo = _.get(event, 'serviceInfo', {});
       const names = roles.map(role => {
@@ -59,11 +75,34 @@ export default connect(mapStateToProps)(
         );
       }
 
-      return names.map((name, i) => (
-        <NameCell key={i} onClick={() => onRoleClick(day, roles[i], name)}>
-          <Text>{name}</Text>
-        </NameCell>
-      ));
+      const dateString = moment(day).format('YYYY-MM-DD');
+      const selectedDateString = selectedData
+        ? moment(selectedData.day).format('YYYY-MM-DD')
+        : '';
+      const selectedRole = _.get(selectedData, 'role', null);
+      const isSelectedDay = dateString === selectedDateString;
+      return roles.map((role, i) => {
+        const member = _.find(members, { role }) || {};
+        const name = _.get(member, 'name', '');
+        const roleName = _.get(member, 'role', '');
+        const isSelected = isSelectedDay && selectedRole === roleName;
+        return (
+          <NameCell
+            isSelected={isSelected}
+            key={i}
+            onClick={() => onRoleClick(day, roles[i], name)}>
+            <Text>{name}</Text>
+            {isSelected && (
+              <InlineSelect
+                date={selectedDateString}
+                role={selectedRole}
+                names={this.props.members}
+                value={name}
+              />
+            )}
+          </NameCell>
+        );
+      });
     }
     renderCalendar(day, roles, members) {
       const event = getCalData(day, roles, members);
@@ -108,7 +147,7 @@ export default connect(mapStateToProps)(
       const cellWidth = `${100 / (roles.length + 1)}%`;
 
       return (
-        <Grid>
+        <Grid role="grid">
           <thead>
             <Row>
               <Header width={cellWidth}>
@@ -160,7 +199,6 @@ const Grid = styled.table`
 const Cell = styled.td`
   border: solid 1px #eee;
   border-width: 0 1px 0 0;
-  overflow: hidden;
   padding: 10px;
   text-align: center;
   white-space: nowrap;
@@ -202,10 +240,12 @@ const DayCell = Cell.extend`
 `;
 const NameCell = Cell.extend`
   cursor: pointer;
+  position: relative;
   &[colspan] {
     border-color: #eee;
     border-width: 1px 1px 1px 0;
   }
+  ${props => props.isSelected && `z-index: 1`};
 `;
 const NoteCell = NameCell.extend`
   line-height: 1.2;

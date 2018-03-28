@@ -9,14 +9,9 @@ import { Creatable } from 'react-select';
 import 'react-select/dist/react-select.css';
 import _ from 'lodash';
 import { requestModifyIdEvents, toggleEditRole } from 'modules/index/redux';
+import { getOptions } from 'modules/index/utils';
 import i18n from 'i18n';
 import { media } from 'styled';
-
-function getOptions(names) {
-  names = names.map(name => ({ value: name, label: name }));
-  names = names.filter(name => name.label !== 'Combined Service');
-  return names;
-}
 
 const mapStateToProps = state => {
   const { meta: { isSaving, selectedData } } = state.index;
@@ -77,14 +72,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       const {
         date,
         isSaving,
+        members,
         role,
-        preQuarterMembers,
         toggleEditRole,
         ...otherProps
       } = this.props; // eslint-disable-line
-      const { selectedName, names } = this.state;
+      const { selectedName } = this.state;
       const formattedDate = moment(date).format(this.getTrans('dateFormat'));
-      const finalMembers = _.union(names, preQuarterMembers);
 
       return (
         <Modal {...otherProps} title={this.getTrans('title')}>
@@ -102,11 +96,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               <span>
                 <Select
                   inputProps={{ 'data-hj-whitelist': true }}
-                  autofocus
+                  autoFocus
                   multi={false}
                   value={selectedName}
                   onChange={this.handleNameChange}
-                  options={getOptions(finalMembers)}
+                  options={getOptions(members)}
                   clearable={true}
                 />
               </span>

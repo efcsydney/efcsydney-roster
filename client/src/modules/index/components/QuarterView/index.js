@@ -16,12 +16,14 @@ export default class QuarterView extends Component {
   static propTypes = {
     date: PropTypes.instanceOf(Date),
     data: PropTypes.array,
+    members: PropTypes.array,
     onDayClick: PropTypes.func,
     onRoleClick: PropTypes.func
   };
   static defaultProps = {
     date: new Date(),
     data: [],
+    members: [],
     onDayClick: () => {},
     onRoleClick: () => {}
   };
@@ -67,13 +69,14 @@ export default class QuarterView extends Component {
   }
 
   render() {
-    const { date, data } = this.props;
+    const { date, data, members } = this.props;
     const { isMobile, calendarHeight } = this.state;
     const days = getQuarterDays(date, 7);
     const roles = getRoles(data);
     const viewProps = {
       events: data,
       days,
+      members,
       roles,
       onDayClick: this.handleDayClick,
       onRoleClick: this.handleRoleClick

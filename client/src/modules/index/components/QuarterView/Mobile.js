@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import AddToCalendar from 'react-add-to-calendar';
@@ -8,133 +9,148 @@ import moment from 'moment';
 import { findEvent, getCalData } from 'utils';
 import IconEdit from 'react-icons/lib/fa/pencil';
 import i18n from 'i18n';
+import EditRole from '../EditRole';
 
-export default class Mobile extends Component {
-  displayName = 'Mobile';
-  static propTypes = {
-    events: PropTypes.array,
-    days: PropTypes.array,
-    roles: PropTypes.array,
-    onDayClick: PropTypes.func,
-    onRoleClick: PropTypes.func
+const mapStateToProps = state => {
+  const { meta: { isEditingRole } } = state.index;
+  return {
+    isEditingRole
   };
-  static defaultProps = {
-    events: [],
-    days: [],
-    roles: [],
-    onDayClick: () => {},
-    onRoleClick: () => {}
-  };
-  getTrans(key) {
-    return i18n.t(`${this.displayName}.${key}`);
-  }
-  scrollToThisWeek = () => {
-    const highlightedEl = document.getElementById('highlighted');
-    if (highlightedEl) {
-      highlightedEl.scrollIntoView();
+};
+export default connect(mapStateToProps)(
+  class Mobile extends Component {
+    displayName = 'Mobile';
+    static propTypes = {
+      events: PropTypes.array,
+      days: PropTypes.array,
+      members: PropTypes.array,
+      roles: PropTypes.array,
+      onDayClick: PropTypes.func,
+      onRoleClick: PropTypes.func
+    };
+    static defaultProps = {
+      events: [],
+      days: [],
+      roles: [],
+      onDayClick: () => {},
+      onRoleClick: () => {}
+    };
+    getTrans(key) {
+      return i18n.t(`${this.displayName}.${key}`);
     }
-  };
+    scrollToThisWeek = () => {
+      const highlightedEl = document.getElementById('highlighted');
+      if (highlightedEl) {
+        highlightedEl.scrollIntoView();
+      }
+    };
 
-  componentWillReceiveProps(nextProps) {
-    const isInitialLoad = !this.props.events.length && nextProps.events.length;
-    if (isInitialLoad) {
-      setTimeout(() => {
-        this.scrollToThisWeek();
-      }, 500);
+    componentWillReceiveProps(nextProps) {
+      const isInitialLoad =
+        !this.props.events.length && nextProps.events.length;
+      if (isInitialLoad) {
+        setTimeout(() => {
+          this.scrollToThisWeek();
+        }, 500);
+      }
     }
-  }
 
-  renderRolesList(day, roles, members, serviceInfo) {
-    const { onDayClick, onRoleClick } = this.props;
-    const formattedDate = day.format('YYYY-MM-DD');
+    renderRolesList(day, roles, members, serviceInfo) {
+      const { onDayClick, onRoleClick } = this.props;
+      const formattedDate = day.format('YYYY-MM-DD');
 
-    if (serviceInfo.skipService) {
+      if (serviceInfo.skipService) {
+        return (
+          <Row>
+            <ExcludeReason
+              onClick={() => onDayClick(formattedDate, serviceInfo)}>
+              {serviceInfo.skipReason}
+            </ExcludeReason>
+          </Row>
+        );
+      }
+
+      return roles.map((role, i) => {
+        const member = _.find(members, { role }) || {};
+        const name = member.name || '';
+        return (
+          <Row key={i}>
+            <Role>{role}</Role>
+            <Name onClick={() => onRoleClick(day, role, name)}>{name}</Name>
+          </Row>
+        );
+      });
+    }
+
+    render() {
+      const icalicon = { 'calendar-plus-o': 'left' };
+      const icalitems = [
+        { apple: this.getTrans('addCalByDownloadCsv') },
+        { google: this.getTrans('addCalByGoogle') }
+      ];
+      const { events, days, isEditingRole, roles, onDayClick } = this.props;
+
       return (
-        <Row>
-          <ExcludeReason onClick={() => onDayClick(formattedDate, serviceInfo)}>
-            {serviceInfo.skipReason}
-          </ExcludeReason>
-        </Row>
-      );
-    }
+        <Grid>
+          {days.map((day, i) => {
+            const event = findEvent(events, day);
+            const members = event ? event.members : [];
+            const serviceInfo = _.get(event, 'serviceInfo', {});
+            const icalEvent = getCalData(day, roles, members);
+            const highlightDate = moment()
+              .isoWeekday(7)
+              .format('YYYY-MM-DD');
+            const formattedDate = day.format('YYYY-MM-DD');
+            const highlighted = day.format('YYYY-MM-DD') === highlightDate;
 
-    return roles.map((role, i) => {
-      const member = _.find(members, { role }) || {};
-      const name = member.name || '';
-      return (
-        <Row key={i}>
-          <Role>{role}</Role>
-          <Name onClick={() => onRoleClick(day, role, name)}>{name}</Name>
-        </Row>
-      );
-    });
-  }
-
-  render() {
-    const icalicon = { 'calendar-plus-o': 'left' };
-    const icalitems = [
-      { apple: this.getTrans('addCalByDownloadCsv') },
-      { google: this.getTrans('addCalByGoogle') }
-    ];
-    const { events, days, roles, onDayClick } = this.props;
-
-    return (
-      <Grid>
-        {days.map((day, i) => {
-          const event = findEvent(events, day);
-          const members = event ? event.members : [];
-          const serviceInfo = _.get(event, 'serviceInfo', {});
-          const icalEvent = getCalData(day, roles, members);
-          const highlightDate = moment()
-            .isoWeekday(7)
-            .format('YYYY-MM-DD');
-          const formattedDate = day.format('YYYY-MM-DD');
-          const highlighted = day.format('YYYY-MM-DD') === highlightDate;
-
-          return (
-            <Day
-              key={i}
-              highlighted={highlighted}
-              id={highlighted ? 'highlighted' : undefined}>
-              <Header>
-                <Label
-                  onClick={() => {
-                    onDayClick(formattedDate, serviceInfo);
-                  }}>
-                  {day.format(this.getTrans('dateFormat'))}
-                </Label>
-                <SettingLink
-                  onClick={() => {
-                    onDayClick(formattedDate, serviceInfo);
-                  }}>
-                  <IconEdit />
-                </SettingLink>
-                {serviceInfo.footnote && (
-                  <Footnote
+            return (
+              <Day
+                key={i}
+                highlighted={highlighted}
+                id={highlighted ? 'highlighted' : undefined}>
+                <Header>
+                  <Label
                     onClick={() => {
                       onDayClick(formattedDate, serviceInfo);
                     }}>
-                    {serviceInfo.footnote}
-                  </Footnote>
-                )}
-                <Action>
-                  <AddToCalendar
-                    event={icalEvent}
-                    listItems={icalitems}
-                    buttonTemplate={icalicon}
-                    buttonLabel={this.getTrans('addCalLabel')}
-                  />
-                </Action>
-              </Header>
-              {this.renderRolesList(day, roles, members, serviceInfo)}
-            </Day>
-          );
-        })}
-        <BottomDateBarSpace />
-      </Grid>
-    );
+                    {day.format(this.getTrans('dateFormat'))}
+                  </Label>
+                  <SettingLink
+                    onClick={() => {
+                      onDayClick(formattedDate, serviceInfo);
+                    }}>
+                    <IconEdit />
+                  </SettingLink>
+                  {serviceInfo.footnote && (
+                    <Footnote
+                      onClick={() => {
+                        onDayClick(formattedDate, serviceInfo);
+                      }}>
+                      {serviceInfo.footnote}
+                    </Footnote>
+                  )}
+                  <Action>
+                    <AddToCalendar
+                      event={icalEvent}
+                      listItems={icalitems}
+                      buttonTemplate={icalicon}
+                      buttonLabel={this.getTrans('addCalLabel')}
+                    />
+                  </Action>
+                </Header>
+                {this.renderRolesList(day, roles, members, serviceInfo)}
+              </Day>
+            );
+          })}
+          {isEditingRole && (
+            <EditRole isOpen={true} members={this.props.members} />
+          )}
+          <BottomDateBarSpace />
+        </Grid>
+      );
+    }
   }
-}
+);
 
 const Grid = styled.div`
   border-left: solid 1px #f0f3f8;
