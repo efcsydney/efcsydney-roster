@@ -1,0 +1,39 @@
+version: '2.3'
+
+
+services:
+  db:
+    image: mysql:5.7.21
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        MYSQL_USER: "user"
+        MYSQL_PASSWORD: "password"
+        MYSQL_DATABASE: "efcRoster"
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
+
+  adminer:
+    image: adminer
+    links:
+        - db:db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8080:8080
+
+  efc:
+    image: efc-roster:latest
+    build: .
+    links:
+        - db:db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
