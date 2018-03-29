@@ -101,19 +101,13 @@ const Title = styled.h1`
 const P = styled.p`
   font-size: 1.5em;
   text-align: center;
-<<<<<<< HEAD
+  line-height: 1.5;
 `;
 const SadFaceIcon = styled(IconInfo)`
   display: block;
   margin: 0 auto;
   width: 250px;
-  =======: 1.5;
-`;
-const SadFaceIcon = styled(IconInfo)`
-  display: block;
-  margin: 0 auto;
-  width: 250px;
-  >>>>>>>: 1000%;
+  font-size: 1000%;
 `;
 const Body = styled.div`
   align-items: center;
