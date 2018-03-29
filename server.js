@@ -6,7 +6,7 @@ const { InsecurePort } = require('./insecure-port');
 const logger = require('./api/utilities/logger');
 const databaseUtil = require('./api/utilities/database-util');
 
-const ports = [app.get('port')];
+const ports = [app.get('port'), app.get('secure-port')];
 ports.forEach(port => {
   app.listen(port, () => {
     logger.info(`Find the server at: http://localhost:${port}/`);
