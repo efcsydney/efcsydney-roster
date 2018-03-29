@@ -5,6 +5,7 @@ import { Modal, StateButton, Input } from 'components';
 import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
+import Select from 'react-select';
 
 export default class Edit extends Component {
   static propTypes = {
@@ -82,17 +83,20 @@ export default class Edit extends Component {
           <Row>
             <Label>Frequency</Label>
             <span>
-              <select
+              <StyleSelect
                 value={frequency}
+                clearable={false}
+                options={[
+                  { value: 'Sunday', label: 'Sunday' },
+                  { value: 'Saturday', label: 'Saturday' },
+                  { value: 'Month', label: 'Month' }
+                ]}
                 onChange={e =>
                   this.handleChange({
-                    frequency: e.target.value
+                    frequency: e.value
                   })
-                }>
-                <option value="Sunday">Sunday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Month">Monthly</option>
-              </select>
+                }
+              />
             </span>
           </Row>
           <Row>
@@ -242,3 +246,8 @@ const IconDelete = styled(IconMinusCircle)`
   font-size: 20px;
   margin-left: 4px;
 `;
+
+const StyleSelect = styled(Select)`
+  width: 165px;
+`;
+StyleSelect.displayName = 'StyleSelect';

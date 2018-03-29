@@ -1,0 +1,16 @@
+#!/bin/bash
+
+config_bucket=%{config_bucket}
+echo ECS_CLUSTER=%{cluster_name} > /etc/ecs/ecs.config
+mkdir /etc/ecs/config
+yum install -y aws-cli
+aws s3 cp s3://$config_bucket/config/ /etc/ecs/config/ --recursive
+
+yum update -y
+yum install -y gcc-c++ make
+curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash -
+yum install -y nodejs
+
+yum install -y wget 
+wget http://download.redis.io/redis-stable.tar.gz && tar xvzf redis-stable.tar.gz && cd redis-stable && make
+npm install redis-dump -g
