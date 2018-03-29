@@ -11,19 +11,19 @@ export default class Login extends Component {
     super(props);
     this.state = { loginError: false };
   }
-  redirectTo = (page) => {
+  redirectTo = page => {
     const { history } = this.props;
     history.replace(page);
-  }
+  };
   handleAuthSuccess = () => {
     this.setState({ loginError: false });
     this.redirectTo('/admin');
   };
-  handleAuthFail = (reason) => {
+  handleAuthFail = reason => {
     if (reason === 'no-permission') {
       this.setState({ loginError: true });
     }
-  }
+  };
   handleLogin = () => {
     const provider = new firebase.auth.FacebookAuthProvider();
     firebase.auth().signInWithPopup(provider);
@@ -31,24 +31,35 @@ export default class Login extends Component {
   handleBackClick = () => {
     this.setState({ loginError: false });
     this.redirectTo('/');
-  }
+  };
   renderLoginError = () => {
     return (
-      <Wrapper style={{maxWidth: '50%'}}>
+      <Wrapper style={{ maxWidth: '50%' }}>
         <SadFaceIcon />
         <Title>Almost there!</Title>
-        <P>You have logged in successfully.<br /><br />However the System Administartor needs to review and grant your account permission before you can access Admin Portal. Please contact the system administartor for further assistance.</P>
-        <Button style={{maxWidth: '200px', margin: '20px auto'}} onClick={this.handleBackClick}>Go to Home</Button>
+        <P>
+          You have logged in successfully.<br />
+          <br />However the System Administartor needs to review and grant your
+          account permission before you can access Admin Portal. Please contact
+          the system administartor for further assistance.
+        </P>
+        <Button
+          kind="green"
+          theme="solid"
+          style={{ maxWidth: '200px', margin: '20px auto' }}
+          onClick={this.handleBackClick}>
+          Go to Home
+        </Button>
       </Wrapper>
     );
-  }
+  };
   renderLoginButton = () => {
     return (
       <Auth onSuccess={this.handleAuthSuccess} onFail={this.handleAuthFail}>
         <LoginButton onClick={this.handleLogin} />
       </Auth>
     );
-  }
+  };
 
   render() {
     const { loginError } = this.state;
@@ -85,11 +96,12 @@ const Title = styled.h1`
 const P = styled.p`
   font-size: 1.5em;
   text-align: center;
+  line-height: 1.5;
 `;
-const SadFaceIcon = styled(IconInfo) `
+const SadFaceIcon = styled(IconInfo)`
   display: block;
   margin: 0 auto;
-  width:250px;
+  width: 250px;
   font-size: 1000%;
 `;
 const Body = styled.div`
