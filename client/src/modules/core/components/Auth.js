@@ -74,9 +74,9 @@ export default class Auth extends Component {
     const { uid } = user;
     this.userRef = firebase.database().ref(`users/${uid}`);
 
-    this.userRef
-      .once('value')
-      .then(snapshot => this.handleUserReceived(snapshot.val(), user));
+    this.userRef.on('value', snapshot =>
+      this.handleUserReceived(snapshot.val(), user)
+    );
   };
   constructor(props) {
     super(props);

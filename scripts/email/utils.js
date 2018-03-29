@@ -122,7 +122,11 @@ const renderTable = days => {
   days = days.map(day => decorateDay(day, blacklist));
 
   const lang = _.get(days, '0.lang', 'zh-TW');
-  const roles = _.get(days, '0.positions', 'zh-TW');
+  const roles = _.get(days, '0.positions', []);
+
+  if (!days.length) {
+    return '';
+  }
 
   return `
     <mj-section padding="5px 0 10px">

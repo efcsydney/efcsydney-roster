@@ -155,15 +155,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       toggleEditRole(true);
     };
     handleHistoryChange = ({ pathname }) => {
-      const { history, category, switchCategory } = this.props;
+      const { switchCategory } = this.props;
 
       pathname = pathname.replace('/', '');
-      if (pathname !== 'english' && pathname !== 'chinese') {
-        history.replace(category);
-        return;
+      if (_.includes(['english', 'chinese'], pathname)) {
+        this.loadData({ category: pathname });
+        switchCategory(pathname);
       }
-      this.loadData({ category: pathname });
-      switchCategory(pathname);
     };
     constructor(props) {
       super(props);
