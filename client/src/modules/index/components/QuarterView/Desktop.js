@@ -97,8 +97,8 @@ export default connect(mapStateToProps)(
         );
       });
     }
-    renderCalendar(day, roles, members) {
-      const event = getCalData(day, roles, members);
+    renderCalendar(day, members) {
+      const event = getCalData(day, members);
 
       return (
         <AddToCalendar
@@ -119,6 +119,7 @@ export default connect(mapStateToProps)(
         <Row key={date} highlighted={isHighlighted}>
           <DayCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
             {moment(date).format(this.getTrans('dateFormat'))}
+            {this.renderCalendar(date, members)}
           </DayCell>
           <NoteCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
             {_.get(serviceInfo, 'footnote', '')}

@@ -23,12 +23,10 @@ export function findEvent(events, day) {
   );
 }
 
-export function getCalData(dateString, roles, members) {
+export function getCalData(dateString, members) {
   const description = _.reduce(
-    roles,
-    (message, role) => {
-      const member = _.find(members, { role }) || {};
-      const name = member.name || '';
+    members,
+    (message, { name, role }) => {
       if (name) {
         message.push(`${role} - ${name}`);
       }

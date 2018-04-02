@@ -25,7 +25,9 @@ function getCategory() {
 }
 
 function getLang() {
-  let category = document.URL.match(/(chinese|english)/g);
+  let category = document.URL.match(
+    /(chinese|english|preschool-junior|preschool-midddle|preschool-senior|prayer)/g
+  );
   category = category ? category[0] : Cookies.get('selectedService');
 
   switch (category) {

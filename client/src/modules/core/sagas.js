@@ -7,17 +7,29 @@ import {
   switchCategory
 } from './redux';
 import ServicesAPI from 'apis/services';
-import moment from 'moment';
 import Cookies from 'js-cookie';
+import moment from 'moment';
 import 'moment/locale/en-au';
 import 'moment/locale/zh-tw';
 import i18n from 'i18n';
 
 export default function* coreSagas() {
-  yield takeEvery(retrieveServices.toString(), function*(action) {
+  yield takeEvery(retrieveServices.toString(), function*() {
     try {
       const data = yield call(ServicesAPI.retrieve);
-      yield put(retrieveServicesComplete(data.data));
+      const services = data.data;
+      yield put(retrieveServicesComplete(services));
+
+      const state = yield select();
+      const category = _.get(state, 'core.meta.category');
+      const selectedService = _.find(services, { name: category });
+
+      if (selectedService) {
+        const { locale } = selectedService;
+        moment.locale(locale);
+        i18n.changeLanguage(locale);
+        yield put(setMeta({ lang: locale }));
+      }
     } catch (error) {
       yield put(retrieveServicesComplete(error));
     }
@@ -29,10 +41,13 @@ export default function* coreSagas() {
     const selectedService = _.find(services, { name: payload });
 
     if (selectedService) {
-      const { lang } = selectedService;
-      moment.locale(lang);
-      i18n.changeLanguage(lang);
-      yield put(setMeta({ lang }));
+      const { locale } = selectedService;
+      moment.locale(locale);
+      i18n.changeLanguage(locale);
+
+      console.log(locale);
+
+      yield put(setMeta({ lang: locale }));
     }
 
     Cookies.set('selectedService', payload);
