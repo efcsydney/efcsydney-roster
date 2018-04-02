@@ -45,8 +45,6 @@ export default function* coreSagas() {
       moment.locale(locale);
       i18n.changeLanguage(locale);
 
-      console.log(locale);
-
       yield put(setMeta({ lang: locale }));
     }
 
