@@ -19,7 +19,7 @@ const CAL_ENABLED_TYPES = [
 
 const mapStateToProps = state => {
   const services = _.get(state.core, 'data.services', []);
-  const selectedServiceName = _.get(state.core, 'meta.service', 'english');
+  const selectedServiceName = _.get(state.core, 'meta.category', 'english');
 
   return {
     events: _.get(state.index, 'data', []),
