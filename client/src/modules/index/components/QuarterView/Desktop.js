@@ -7,7 +7,7 @@ import { media } from 'styled';
 import AddToCalendar from 'react-add-to-calendar';
 import './icalstyle.css';
 import moment from 'moment';
-import { findEvent, getCalData } from 'utils';
+import { getCalData } from 'utils';
 import i18n from 'i18n';
 import InlineSelect from './InlineSelect';
 
@@ -18,69 +18,62 @@ const CAL_ENABLED_TYPES = [
 ];
 
 const mapStateToProps = state => {
-  const lang = _.get(state.core, 'meta.lang', 'en-AU');
-  const selectedData = _.get(state.index, 'meta.selectedData', null);
+  const services = _.get(state.core, 'data.services', []);
+  const selectedServiceName = _.get(state.core, 'meta.service', 'english');
 
-  return { lang, selectedData };
+  return {
+    events: _.get(state.index, 'data', []),
+    selectedService: _.find(services, { name: selectedServiceName }),
+    selectedData: _.get(state.index, 'meta.selectedData', null)
+  };
 };
 export default connect(mapStateToProps)(
   class Desktop extends Component {
     displayName = 'Desktop';
     static propTypes = {
-      lang: PropTypes.string,
+      events: PropTypes.array,
       members: PropTypes.array,
-      selectedData: PropTypes.object
+      selectedData: PropTypes.object,
+      selectedService: PropTypes.object
     };
     static defaultProps = {
-      lang: 'en-AU',
+      events: PropTypes.array,
       members: [],
-      selectedData: {}
+      selectedData: {},
+      selectedService: {}
     };
-    handleDayClick = (e, day, serviceInfo) => {
+    handleDayClick = (e, dateString, serviceInfo) => {
       const isAddCalendar =
         e.target.className.indexOf('react-add-to-calendar') !== -1;
       if (isAddCalendar) {
         e.stopPropagation();
         return;
       }
-      this.props.onDayClick(moment(day).format('YYYY-MM-DD'), serviceInfo);
+      this.props.onDayClick(dateString, serviceInfo);
     };
     getTrans(key) {
       return i18n.t(`${this.displayName}.${key}`);
     }
-    renderNameCells(day, event) {
+    renderNameCells(date, members, serviceInfo) {
       const { roles, onRoleClick, selectedData } = this.props;
-      const members = event ? event.members : [];
-      const serviceInfo = _.get(event, 'serviceInfo', {});
-      const names = roles.map(role => {
-        const member = _.find(members, { role }) || {};
-        return member.name || '';
-      });
-
+      const names = members.map(member => member.name);
       const isSkipService = serviceInfo.skipService || false;
       if (isSkipService) {
         const skipReason = serviceInfo.skipReason || '';
         return (
           <NameCell
             colSpan={names.length}
-            onClick={e =>
-              this.handleDayClick(
-                e,
-                moment(day).format('YYYY-MM-DD'),
-                event.serviceInfo
-              )
-            }>
+            onClick={e => this.handleDayClick(e, date, serviceInfo)}>
             {skipReason}
           </NameCell>
         );
       }
 
-      const dateString = moment(day).format('YYYY-MM-DD');
       const selectedDateString = selectedData
         ? moment(selectedData.day).format('YYYY-MM-DD')
         : '';
       const selectedRole = _.get(selectedData, 'role', null);
-      const isSelectedDay = dateString === selectedDateString;
+      const isSelectedDay = date === selectedDateString;
       return roles.map((role, i) => {
         const member = _.find(members, { role }) || {};
         const name = _.get(member, 'name', '');
@@ -90,7 +83,7 @@ export default connect(mapStateToProps)(
           <NameCell
             isSelected={isSelected}
             key={i}
-            onClick={() => onRoleClick(day, roles[i], name)}>
+            onClick={() => onRoleClick(date, roles[i], name)}>
             <Text>{name}</Text>
             {isSelected && (
               <InlineSelect
@@ -104,8 +97,8 @@ export default connect(mapStateToProps)(
         );
       });
     }
-    renderCalendar(day, roles, members) {
-      const event = getCalData(day, roles, members);
+    renderCalendar(day, members) {
+      const event = getCalData(day, members);
 
       return (
         <AddToCalendar
@@ -116,45 +109,39 @@ export default connect(mapStateToProps)(
         />
       );
     }
-    renderDayRow(day) {
-      const { events, roles } = this.props;
-      const event = findEvent(events, day);
-      const members = event ? event.members : [];
+    renderDayRow({ date, members, serviceInfo }) {
       const highlightDate = moment()
         .isoWeekday(7)
         .format('YYYY-MM-DD');
-      const formattedDay = day.format('YYYY-MM-DD');
-      const highlighted = formattedDay === highlightDate;
-      const serviceInfo = _.get(event, 'serviceInfo', {});
+      const isHighlighted = date === highlightDate;
 
       return (
-        <Row key={formattedDay} highlighted={highlighted}>
-          <DayCell
-            onClick={e => this.handleDayClick(e, formattedDay, serviceInfo)}>
-            {this.renderCalendar(day, roles, members)}
-            {day.format(this.getTrans('dateFormat'))}
+        <Row key={date} highlighted={isHighlighted}>
+          <DayCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
+            {moment(date).format(this.getTrans('dateFormat'))}
+            {this.renderCalendar(date, members)}
           </DayCell>
-          <NoteCell
-            onClick={e => this.handleDayClick(e, formattedDay, serviceInfo)}>
+          <NoteCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
             {_.get(serviceInfo, 'footnote', '')}
           </NoteCell>
-          {this.renderNameCells(day, event)}
+          {this.renderNameCells(date, members, serviceInfo)}
         </Row>
       );
     }
     render() {
-      const { roles, days } = this.props;
-      const cellWidth = `${100 / (roles.length + 1)}%`;
+      const { roles, events, selectedService } = this.props;
+      const footnoteLabel = _.get(selectedService, 'footnoteLabel', '');
+      const sortedEvents = _.sortBy(events, 'date');
 
       return (
         <Grid role="grid">
           <thead>
             <Row>
-              <Header width={cellWidth}>
+              <Header>
                 <Text>{this.getTrans('gridCanton')}</Text>
               </Header>
               <Header>
-                <Text>{this.getTrans('occassion')}</Text>
+                <Text>{footnoteLabel}</Text>
               </Header>
               {roles.map((role, i) => (
                 <Header key={i}>
@@ -163,7 +150,7 @@ export default connect(mapStateToProps)(
               ))}
             </Row>
           </thead>
-          <tbody>{days.map(day => this.renderDayRow(day))}</tbody>
+          <tbody>{sortedEvents.map(event => this.renderDayRow(event))}</tbody>
         </Grid>
       );
     }
