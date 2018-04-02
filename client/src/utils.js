@@ -23,7 +23,7 @@ export function findEvent(events, day) {
   );
 }
 
-export function getCalData(day, roles, members) {
+export function getCalData(dateString, roles, members) {
   const description = _.reduce(
     roles,
     (message, role) => {
@@ -41,13 +41,11 @@ export function getCalData(day, roles, members) {
     title: i18n.t('common.title'),
     description,
     location: '10 Carlotta St, Artarmon NSW 2064, Australia',
-    startTime: day
-      .clone()
+    startTime: moment(dateString)
       .hour(10)
       .minute(30)
       .toISOString(),
-    endTime: day
-      .clone()
+    endTime: moment(dateString)
       .hour(12)
       .toISOString()
   };

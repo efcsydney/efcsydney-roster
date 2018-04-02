@@ -158,7 +158,19 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       const { switchCategory } = this.props;
 
       pathname = pathname.replace('/', '');
-      if (_.includes(['english', 'chinese'], pathname)) {
+      if (
+        _.includes(
+          [
+            'english',
+            'chinese',
+            'preschool-junior',
+            'preschool-middle',
+            'preschool-senior',
+            'prayer'
+          ],
+          pathname
+        )
+      ) {
         this.loadData({ category: pathname });
         switchCategory(pathname);
       }

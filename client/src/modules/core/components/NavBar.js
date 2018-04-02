@@ -4,26 +4,33 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
-import { switchCategory } from '../redux';
+import { switchCategory, retrieveServices } from '../redux';
 import { media } from 'styled';
 import i18n from 'i18n';
 
-const mapStateToProps = state => ({ value: state.core.meta.category });
+const mapStateToProps = state => ({
+  services: state.core.data.services,
+  value: state.core.meta.category
+});
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ switchCategory }, dispatch);
+  bindActionCreators({ switchCategory, retrieveServices }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   class NavBar extends Component {
     displayName = 'NavBar';
     static propTypes = {
       hasSwitcher: PropTypes.bool,
+      services: PropTypes.array,
       title: PropTypes.string,
-      onCategoryChange: PropTypes.func
+      onCategoryChange: PropTypes.func,
+      value: PropTypes.string
     };
     static defaultProps = {
       hasSwitcher: true,
+      services: [],
       title: '',
-      onCategoryChange: () => {}
+      onCategoryChange: () => {},
+      value: ''
     };
     getTrans(key) {
       return i18n.t(`${this.displayName}.${key}`);
@@ -33,8 +40,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       switchCategory(value);
       onCategoryChange(value);
     };
+    componentWillMount() {
+      const { hasSwitcher, retrieveServices } = this.props;
+
+      if (hasSwitcher) {
+        retrieveServices();
+      }
+    }
     render() {
-      const { hasSwitcher, title, value } = this.props;
+      const { hasSwitcher, services, title, value } = this.props;
 
       return (
         <Wrapper>
@@ -47,10 +61,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               <Select
                 className="ServiceSelect"
                 clearable={false}
-                options={[
-                  { value: 'english', label: '英文堂 English Service' },
-                  { value: 'chinese', label: '中文堂 Mandarin Service' }
-                ]}
+                options={services.map(({ name, label }) => ({
+                  value: name,
+                  label
+                }))}
                 onChange={this.handleCategoryChange}
                 searchable={false}
                 value={value}
