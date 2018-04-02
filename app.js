@@ -5,9 +5,11 @@ const bodyParser = require('body-parser');
 const eventsController = require('./api/controllers/events-controller');
 const servicesController = require('./api/controllers/services-controller');
 const exception = require('./api/middleware/exception-handler');
+const httpRedirect = require('./api/middleware/http-redirect');
 const serviceInfoController = require('./api/controllers/service-info-controller');
 const Raven = require('raven');
 const env = process.env.NODE_ENV;
+const config = require('config');
 
 if (isServerEnvironment()) {
   Raven.config(
@@ -21,6 +23,11 @@ if (isServerEnvironment()) {
 app.use(bodyParser.json());
 
 app.set('port', process.env.PORT || 3001);
+app.set('secure-port', config.get('port.secure'));
+
+if (['production', 'qa'].includes(process.env.NODE_ENV)) {
+  app.use(httpRedirect);
+}
 
 // Express only serves static assets in production
 if (['production', 'qa'].includes(process.env.NODE_ENV)) {
