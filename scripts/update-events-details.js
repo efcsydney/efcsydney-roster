@@ -21,11 +21,19 @@ async function buildPositionMapper(service) {
   }, {});
 }
 
+function getPrayerServiceDetailsFromCsvFile() {
+  const serviceDetails = {
+    "prayer": readAndParseFile('./db/data/prayer.csv'),
+  };
+
+  return serviceDetails;
+}
+
 function getSundayClassDetailsFromCsvFile() {
   const serviceDetails = {
     "preschool-junior": readAndParseFile('./db/data/preschool-junior.csv'),
-    //"preschool-middle": readAndParseFile('./db/data/chinese-events.csv'),
-    //"preschool-senior": readAndParseFile('./db/data/chinese-events.csv'),
+    "preschool-middle": readAndParseFile('./db/data/preschool-middle.csv'),
+    "preschool-senior": readAndParseFile('./db/data/preschool-senior.csv'),
   };
 
   return serviceDetails;
@@ -45,12 +53,7 @@ async function buildDateMapper() {
   const calendarDatesData = (await sequelizeClient.query(
     'SELECT id, date from calendar_dates d inner join calendar_dates_frequencies f on d.id = f.calendarDateId WHERE f.frequencyId = 1'
   ))[0];
-  const dateMapper = calendarDatesData.reduce((result, calendarDate) => {
-    result[calendarDate.date] = calendarDate.id;
-    return result;
-  }, {});
-
-  return dateMapper;
+  return toDateMapper(calendarDatesData);
 }
 
 async function getSundayClassDateMapper() {
@@ -58,11 +61,22 @@ async function getSundayClassDateMapper() {
   const calendarDatesData = (await sequelizeClient.query(
     'SELECT id, date from calendar_dates d inner join calendar_dates_frequencies f on d.id = f.calendarDateId WHERE f.frequencyId = 3'
   ))[0];
+  return toDateMapper(calendarDatesData);
+}
+
+async function getPrayerServiceDateMapper() {
+  // Build calendar dates mapper, which looks like: { '2017-01-01': 1 }
+  const calendarDatesData = (await sequelizeClient.query(
+    'SELECT id, date from calendar_dates d inner join calendar_dates_frequencies f on d.id = f.calendarDateId WHERE f.frequencyId = 2'
+  ))[0];
+  return toDateMapper(calendarDatesData);
+}
+
+function toDateMapper(calendarDatesData){
   const dateMapper = calendarDatesData.reduce((result, calendarDate) => {
     result[calendarDate.date] = calendarDate.id;
     return result;
   }, {});
-
   return dateMapper;
 }
 
@@ -76,7 +90,15 @@ async function getServices(serviceNames) {
 
 async function getSundayClassServices(serviceNames) {
   const services = (await sequelizeClient.query(
-    'SELECT id, name from services WHERE name IN (\'preschool-junior\')'
+    'SELECT id, name from services WHERE name IN (\'preschool-junior\', \'preschool-middle\', \'preschool-senior\')'
+  ))[0];
+
+  return services;
+}
+
+async function getPrayerServices(serviceNames) {
+  const services = (await sequelizeClient.query(
+    'SELECT id, name from services WHERE name IN (\'prayer\')'
   ))[0];
 
   return services;
@@ -91,6 +113,26 @@ async function updateSundayServiceEvents(){
   await updateEvents(dateMapper, services, serviceDetails);
   await updateServiceInfo(dateMapper, services, serviceDetails, 'english');
   await updateServiceInfo(dateMapper, services, serviceDetails, 'chinese');
+}
+
+async function updateSundayClassEvents() {
+  const serviceDetails = getSundayClassDetailsFromCsvFile();
+  const dateMapper = await getSundayClassDateMapper();
+  const services = await getSundayClassServices();
+
+  await updateEvents(dateMapper, services, serviceDetails);
+  await updateServiceInfo(dateMapper, services, serviceDetails, 'preschool-junior');
+  await updateServiceInfo(dateMapper, services, serviceDetails, 'preschool-middle');
+  await updateServiceInfo(dateMapper, services, serviceDetails, 'preschool-senior');
+}
+
+async function updatePrayerServiceEvents() {
+  const serviceDetails = getPrayerServiceDetailsFromCsvFile();
+  const dateMapper = await getPrayerServiceDateMapper();
+  const services = await getPrayerServices();
+
+  await updateEvents(dateMapper, services, serviceDetails);
+  await updateServiceInfo(dateMapper, services, serviceDetails, 'prayer');
 }
 
 async function updateEvents(dateMapper, services, serviceDetails) {
@@ -153,20 +195,12 @@ function updateServiceInfoItem(service, serviceId, dateMapper) {
     });
 }
 
-async function updateSundayClassEvents() {
-  const serviceDetails = getSundayClassDetailsFromCsvFile();
-  const dateMapper = await getSundayClassDateMapper();
-  const services = await getSundayClassServices();
 
-  await updateEvents(dateMapper, services, serviceDetails);
-  await updateServiceInfo(dateMapper, services, serviceDetails, 'preschool-junior');
-  //await updateServiceInfo(dateMapper, services, serviceDetails, 'preschool-middle');
-  //await updateServiceInfo(dateMapper, services, serviceDetails, 'preschool-senior');
-}
 
 async function syncDbFromServiceCsvFile() {
   await updateSundayServiceEvents();
   await updateSundayClassEvents();
+  await updatePrayerServiceEvents();
   sequelizeClient.close();
 }
 
