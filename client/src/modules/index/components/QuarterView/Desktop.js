@@ -8,6 +8,7 @@ import AddToCalendar from 'react-add-to-calendar';
 import './icalstyle.css';
 import moment from 'moment';
 import { getCalData } from 'utils';
+import { isHighlighted } from './utils';
 import i18n from 'i18n';
 import InlineSelect from './InlineSelect';
 
@@ -110,13 +111,10 @@ export default connect(mapStateToProps)(
       );
     }
     renderDayRow({ date, members, serviceInfo }) {
-      const highlightDate = moment()
-        .isoWeekday(7)
-        .format('YYYY-MM-DD');
-      const isHighlighted = date === highlightDate;
+      const { selectedService: { frequency } } = this.props;
 
       return (
-        <Row key={date} highlighted={isHighlighted}>
+        <Row key={date} highlighted={isHighlighted(date, frequency)}>
           <DayCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
             {moment(date).format(this.getTrans('dateFormat'))}
             {this.renderCalendar(date, members)}
