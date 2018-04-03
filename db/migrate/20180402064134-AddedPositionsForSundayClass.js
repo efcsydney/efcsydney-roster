@@ -98,7 +98,6 @@ async function createCalendarDateForMonthlyEvent() {
   for (let i = 0; i < 500; i++) {
     // Get date string and add to calendarDates
     let dateString = getDateString(dateTime);
-    logger.debug(dateString);
     calendarDates.push({ date: dateString, day: 1 });
     // Jump to next Saturday
     dateTime.add(1, 'month');
