@@ -3,7 +3,6 @@ const sequelizeClient = require('../api/infrastructure/sequelize-client')
 const Event = require('../api/models/event').Event;
 const ServiceCalendarDate = require('../api/models/service-calendar-date').ServiceCalendarDate;
 const { readAndParseFile } = require('../api/utilities/csv-helper');
-const logger = require('../api/utilities/logger');
 
 /**
  * Find positions for service and build  mapper
