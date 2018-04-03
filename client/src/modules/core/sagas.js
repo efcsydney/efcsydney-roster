@@ -13,6 +13,12 @@ import 'moment/locale/en-au';
 import 'moment/locale/zh-tw';
 import i18n from 'i18n';
 
+function* setLocale(locale) {
+  moment.locale(locale);
+  i18n.changeLanguage(locale);
+  yield put(setMeta({ lang: locale }));
+}
+
 export default function* coreSagas() {
   yield takeEvery(retrieveServices.toString(), function*() {
     try {
@@ -26,9 +32,7 @@ export default function* coreSagas() {
 
       if (selectedService) {
         const { locale } = selectedService;
-        moment.locale(locale);
-        i18n.changeLanguage(locale);
-        yield put(setMeta({ lang: locale }));
+        yield setLocale(locale);
       }
     } catch (error) {
       yield put(retrieveServicesComplete(error));
@@ -42,10 +46,7 @@ export default function* coreSagas() {
 
     if (selectedService) {
       const { locale } = selectedService;
-      moment.locale(locale);
-      i18n.changeLanguage(locale);
-
-      yield put(setMeta({ lang: locale }));
+      yield setLocale(locale);
     }
 
     Cookies.set('selectedService', payload);
