@@ -1,22 +1,20 @@
 import { combineReducers } from 'redux';
 import { createAction, handleAction } from 'redux-actions';
 import Cookies from 'js-cookie';
-import moment from 'moment';
-import 'moment/locale/en-au';
-import 'moment/locale/zh-tw';
-import i18n from 'i18n';
 
 const PREFIX = 'core';
 
-export const switchCategory = createAction(
-  `${PREFIX}/SWITCH_CATEGORY`,
-  payload => {
-    return payload;
-  }
+export const retrieveServices = createAction(`${PREFIX}/RETRIEVE_SERVICES`);
+export const retrieveServicesComplete = createAction(
+  `${PREFIX}/RETRIEVE_SERVICES_COMPLETE`
 );
+export const setMeta = createAction(`${PREFIX}/SET_META`);
+export const switchCategory = createAction(`${PREFIX}/SWITCH_CATEGORY`);
 
 function getCategory() {
-  let category = document.URL.match(/(chinese|english)/g);
+  let category = document.URL.match(
+    /(chinese|english|preschool-junior|preschool-middle|preschool-senior|prayer)/g
+  );
   if (category) {
     Cookies.set('selectedService', category[0]);
     return category[0];
@@ -27,7 +25,9 @@ function getCategory() {
 }
 
 function getLang() {
-  let category = document.URL.match(/(chinese|english)/g);
+  let category = document.URL.match(
+    /(chinese|english|preschool-junior|preschool-midddle|preschool-senior|prayer)/g
+  );
   category = category ? category[0] : Cookies.get('selectedService');
 
   switch (category) {
@@ -36,12 +36,14 @@ function getLang() {
     case 'english':
       return 'en-AU';
     default:
-      return 'en-US';
+      return 'en-AU';
   }
 }
 
 const defaultState = {
-  data: [],
+  data: {
+    services: []
+  },
   meta: {
     lang: getLang(),
     category: getCategory()
@@ -49,36 +51,22 @@ const defaultState = {
 };
 
 export default combineReducers({
+  data: combineReducers({
+    services: handleAction(
+      retrieveServicesComplete,
+      (state, { payload }) => payload,
+      defaultState.data.services
+    )
+  }),
   meta: combineReducers({
     lang: handleAction(
-      switchCategory,
-      (state, { payload }) => {
-        let lang;
-        switch (payload) {
-          case 'english':
-            lang = 'en-AU';
-            break;
-          case 'chinese':
-            lang = 'zh-TW';
-            break;
-          default:
-            lang = 'en-US';
-        }
-
-        // FIXME - Side effects
-        moment.locale(lang);
-        i18n.changeLanguage(lang);
-
-        return lang;
-      },
+      setMeta,
+      (state, { payload }) => payload.lang || state,
       defaultState.meta.lang
     ),
     category: handleAction(
       switchCategory,
-      (state, { payload }) => {
-        Cookies.set('selectedService', payload);
-        return payload;
-      },
+      (state, { payload }) => payload,
       defaultState.meta.category
     )
   })

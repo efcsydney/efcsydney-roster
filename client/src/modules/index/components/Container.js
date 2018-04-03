@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import QuarterView from './QuarterView';
-import { LoadingIndicator, DateBar, TagManager } from 'components';
+import { LoadingIndicator, DateBar } from 'components';
 import { NavBar } from 'modules/core';
 import moment from 'moment';
 import pusher from 'utils/pusher';
@@ -158,19 +158,25 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       const { switchCategory } = this.props;
 
       pathname = pathname.replace('/', '');
-      if (_.includes(['english', 'chinese'], pathname)) {
+      if (
+        _.includes(
+          [
+            'english',
+            'chinese',
+            'preschool-junior',
+            'preschool-middle',
+            'preschool-senior',
+            'prayer'
+          ],
+          pathname
+        )
+      ) {
         this.loadData({ category: pathname });
         switchCategory(pathname);
       }
     };
-    constructor(props) {
-      super(props);
-
-      this.env = process.env.REACT_APP_ENV || process.env.NODE_ENV;
-    }
     componentWillMount() {
       const { category, switchCategory } = this.props;
-      this.appendSentry();
 
       this.channel = pusher.subscribe('index');
       this.channel.bind('event-modified', this.handleEventModified);
@@ -185,30 +191,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       history.listen(this.handleHistoryChange);
     }
 
-    appendSentry() {
-      const env = this.env;
-      if (env === 'qa' || env === 'production') {
-        const sentryInit = document.createElement('script');
-        const sentryInitHTML = document.createTextNode(
-          `Raven.config('https://6d4d9e488cda4ef59dddc1e282a24a7b@sentry.io/263713', {
-            environment: '${env}'
-          }).install();`
-        );
-        sentryInit.appendChild(sentryInitHTML);
-        document.body.insertBefore(sentryInit, document.body.childNodes[0]);
-      }
-    }
-    renderTagManager() {
-      const env = this.env;
-
-      if (env === 'qa') {
-        return <TagManager gtmId="GTM-W8CJV63" />;
-      } else if (env === 'production') {
-        return <TagManager gtmId="GTM-KS4KKTW" />;
-      } else {
-        return <div />;
-      }
-    }
     getAllNames() {
       const { data } = this.props;
       const { preQuarterMembers } = this.state;
@@ -233,7 +215,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
       return (
         <Wrapper>
-          {this.renderTagManager()}
           <NavBar onCategoryChange={this.handleCategoryChange} />
           <Content>
             <DateBar {...barProps} />

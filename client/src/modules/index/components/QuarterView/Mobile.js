@@ -6,15 +6,22 @@ import styled from 'styled-components';
 import AddToCalendar from 'react-add-to-calendar';
 import './icalstyle.css';
 import moment from 'moment';
-import { findEvent, getCalData } from 'utils';
+import { getCalData } from 'utils';
 import IconEdit from 'react-icons/lib/fa/pencil';
 import i18n from 'i18n';
 import EditRole from '../EditRole';
+import { isHighlighted } from './utils';
 
 const mapStateToProps = state => {
   const { meta: { isEditingRole } } = state.index;
+  const services = _.get(state.core, 'data.services', []);
+  const selectedServiceName = _.get(state.core, 'meta.category', 'english');
+
   return {
-    isEditingRole
+    events: _.get(state.index, 'data', []),
+    isEditingRole,
+    selectedData: _.get(state.index, 'meta.selectedData', null),
+    selectedService: _.find(services, { name: selectedServiceName })
   };
 };
 export default connect(mapStateToProps)(
@@ -22,18 +29,19 @@ export default connect(mapStateToProps)(
     displayName = 'Mobile';
     static propTypes = {
       events: PropTypes.array,
-      days: PropTypes.array,
       members: PropTypes.array,
-      roles: PropTypes.array,
       onDayClick: PropTypes.func,
-      onRoleClick: PropTypes.func
+      onRoleClick: PropTypes.func,
+      selectedData: PropTypes.object,
+      selectedService: PropTypes.object
     };
     static defaultProps = {
       events: [],
-      days: [],
-      roles: [],
+      members: [],
       onDayClick: () => {},
-      onRoleClick: () => {}
+      onRoleClick: () => {},
+      selectedData: {},
+      selectedService: {}
     };
     getTrans(key) {
       return i18n.t(`${this.displayName}.${key}`);
@@ -57,7 +65,7 @@ export default connect(mapStateToProps)(
 
     renderRolesList(day, roles, members, serviceInfo) {
       const { onDayClick, onRoleClick } = this.props;
-      const formattedDate = day.format('YYYY-MM-DD');
+      const formattedDate = moment(day).format('YYYY-MM-DD');
 
       if (serviceInfo.skipService) {
         return (
@@ -88,24 +96,25 @@ export default connect(mapStateToProps)(
         { apple: this.getTrans('addCalByDownloadCsv') },
         { google: this.getTrans('addCalByGoogle') }
       ];
-      const { events, days, isEditingRole, roles, onDayClick } = this.props;
+      const {
+        events,
+        selectedService: { frequency },
+        isEditingRole,
+        onDayClick
+      } = this.props;
+      const sortedEvents = _.sortBy(events, 'date');
 
       return (
         <Grid>
-          {days.map((day, i) => {
-            const event = findEvent(events, day);
-            const members = event ? event.members : [];
-            const serviceInfo = _.get(event, 'serviceInfo', {});
-            const icalEvent = getCalData(day, roles, members);
-            const highlightDate = moment()
-              .isoWeekday(7)
-              .format('YYYY-MM-DD');
-            const formattedDate = day.format('YYYY-MM-DD');
-            const highlighted = day.format('YYYY-MM-DD') === highlightDate;
+          {sortedEvents.map(({ date, members, serviceInfo }) => {
+            const roles = members.map(member => member.role);
+            const icalEvent = getCalData(date, roles, members);
+            const formattedDate = date;
+            const highlighted = isHighlighted(date, frequency);
 
             return (
               <Day
-                key={i}
+                key={date}
                 highlighted={highlighted}
                 id={highlighted ? 'highlighted' : undefined}>
                 <Header>
@@ -113,7 +122,7 @@ export default connect(mapStateToProps)(
                     onClick={() => {
                       onDayClick(formattedDate, serviceInfo);
                     }}>
-                    {day.format(this.getTrans('dateFormat'))}
+                    {moment(date).format(this.getTrans('dateFormat'))}
                   </Label>
                   <SettingLink
                     onClick={() => {
@@ -138,7 +147,7 @@ export default connect(mapStateToProps)(
                     />
                   </Action>
                 </Header>
-                {this.renderRolesList(day, roles, members, serviceInfo)}
+                {this.renderRolesList(date, roles, members, serviceInfo)}
               </Day>
             );
           })}

@@ -85,6 +85,7 @@ export default class Edit extends Component {
             <span>
               <StyleSelect
                 value={frequency}
+                disabled={true}
                 clearable={false}
                 options={[
                   { value: 'Sunday', label: 'Sunday' },
