@@ -80,7 +80,7 @@ function toDateMapper(calendarDatesData){
   return dateMapper;
 }
 
-async function getServices(serviceNames) {
+async function getServices() {
   const services = (await sequelizeClient.query(
     'SELECT id, name from services WHERE name IN (\'chinese\', \'english\')'
   ))[0];
@@ -88,7 +88,7 @@ async function getServices(serviceNames) {
   return services;
 }
 
-async function getSundayClassServices(serviceNames) {
+async function getSundayClassServices() {
   const services = (await sequelizeClient.query(
     'SELECT id, name from services WHERE name IN (\'preschool-junior\', \'preschool-middle\', \'preschool-senior\')'
   ))[0];
@@ -96,7 +96,7 @@ async function getSundayClassServices(serviceNames) {
   return services;
 }
 
-async function getPrayerServices(serviceNames) {
+async function getPrayerServices() {
   const services = (await sequelizeClient.query(
     'SELECT id, name from services WHERE name IN (\'prayer\')'
   ))[0];
