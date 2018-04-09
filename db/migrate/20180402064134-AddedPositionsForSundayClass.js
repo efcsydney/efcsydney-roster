@@ -9,14 +9,14 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await alterPositionUniqueConstraint(queryInterface);
     await createCalendarDateForMonthlyEvent();
-    await seedMonthlyEventServiceInfo(queryInterface, Sequelize);
-    await seedSaturdayEventServiceInfo(queryInterface, Sequelize);
+    await seedMonthlyEventServiceInfo(queryInterface);
+    await seedSaturdayEventServiceInfo(queryInterface);
     await seedPositions(queryInterface);
     await createMonthlyEvents(queryInterface);
     await createSaturdayEvents(queryInterface);
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     const servicesData = (await sequelizeClient.query(
       `SELECT id, name, createdAt from services WHERE name IN ('preschool-junior')`
     ))[0];
