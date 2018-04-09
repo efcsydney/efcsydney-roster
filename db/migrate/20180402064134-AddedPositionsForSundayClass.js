@@ -3,45 +3,79 @@ const sequelizeClient = require('../../api/infrastructure/sequelize-client')
 const getDateString = require('../../api/utilities/datetime-util')
   .getDateString;
 const moment = require('moment');
-const CalendarDate = require('../../api/models/calendar-date').CalendarDate;
-const logger = require('../../api/utilities/logger');
+const _ = require('lodash');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await alterPositionUniqueConstraint(queryInterface);
-
     await createCalendarDateForMonthlyEvent();
-
     await seedMonthlyEventServiceInfo(queryInterface, Sequelize);
     await seedSaturdayEventServiceInfo(queryInterface, Sequelize);
-
-    await queryInterface.bulkInsert('positions', [
-      { id: 28, name: '老師', order: 1, serviceId: 3 },
-      { id: 29, name: '助教', order: 2, serviceId: 3 },
-      { id: 30, name: '老師', order: 1, serviceId: 4 },
-      { id: 31, name: '助教', order: 2, serviceId: 4 },
-      { id: 32, name: '老師', order: 1, serviceId: 5 },
-      { id: 33, name: '助教', order: 2, serviceId: 5 },
-      { id: 34, name: 'Leader', order: 1, serviceId: 6 },
-      { id: 35, name: 'Topic', order: 2, serviceId: 6 },
-      { id: 36, name: 'Content', order: 3, serviceId: 6 },
-    ]);
-
+    await seedPositions(queryInterface);
     await createMonthlyEvents(queryInterface);
     await createSaturdayEvents(queryInterface);
   },
 
   down: async (queryInterface, Sequelize) => {
-    // await sequelizeClient.query(
-    //   'DELETE FROM positions WHERE id BETWEEN 28 AND 30'
-    // );
-    // await sequelizeClient.query(
-    //   'DELETE FROM positions WHERE id BETWEEN 28 AND 30'
-    // );
+    const servicesData = (await sequelizeClient.query(
+      `SELECT id, name, createdAt from services WHERE name IN ('preschool-junior')`
+    ))[0];
+
+    const juniorClassService = _.find(servicesData, { name: 'preschool-junior' });
+    const timestamp = moment(juniorClassService.createdAt).subtract(1, 'minute').format('YYYY-MM-DD hh:mm:ss');
+
+    await sequelizeClient.query(
+      `DELETE FROM events WHERE createdAt >= '${timestamp}'`
+    );
+
+    await sequelizeClient.query(
+      `DELETE FROM calendar_dates_frequencies WHERE createdAt > '${timestamp}'`
+    );
+
+    await sequelizeClient.query(
+      `DELETE FROM service_calendar_dates WHERE createdAt > '${timestamp}'`
+    );
+
+    await sequelizeClient.query(
+      `DELETE FROM calendar_dates WHERE createdAt > '${timestamp}'`
+    );
+
+    await sequelizeClient.query(
+      `DELETE FROM positions WHERE createdAt > '${timestamp}'`
+    );
+
+    await queryInterface.removeConstraint('positions',
+      'name_serviceId');
+
+    await queryInterface.addConstraint('positions', ['name'], {
+      type: 'unique',
+      name: 'name'
+    });
   },
-
-
 };
+
+async function seedPositions(queryInterface) {
+  const servicesData = (await sequelizeClient.query(
+    `SELECT id, name from services WHERE name IN ('preschool-junior','preschool-middle','preschool-senior', 'prayer')`
+  ))[0];
+
+  const juniorClassService = _.find(servicesData, { name: 'preschool-junior' });
+  const middleClassService = _.find(servicesData, { name: 'preschool-middle' });
+  const seniorClassService = _.find(servicesData, { name: 'preschool-senior' });
+  const prayerService = _.find(servicesData, { name: 'prayer' });
+
+  await queryInterface.bulkInsert('positions', [
+    { name: '老師', order: 1, serviceId: juniorClassService.id },
+    { name: '助教', order: 2, serviceId: juniorClassService.id },
+    { name: '老師', order: 1, serviceId: middleClassService.id },
+    { name: '助教', order: 2, serviceId: middleClassService.id },
+    { name: '老師', order: 1, serviceId: seniorClassService.id },
+    { name: '助教', order: 2, serviceId: seniorClassService.id },
+    { name: 'Leader', order: 1, serviceId: prayerService.id },
+    { name: 'Topic', order: 2, serviceId: prayerService.id },
+    { name: 'Content', order: 3, serviceId: prayerService.id },
+  ]);
+}
 
 async function alterPositionUniqueConstraint(queryInterface) {
   await queryInterface.removeConstraint('positions',
@@ -53,33 +87,41 @@ async function alterPositionUniqueConstraint(queryInterface) {
   });
 }
 
-async function createMonthlyEvents(queryInterface){
+async function createMonthlyEvents(queryInterface) {
+  const monthlyService = (await sequelizeClient.query(
+    `SELECT id FROM frequencies WHERE name = 'Month'`
+  ))[0];
   const calendarDatesData = (await sequelizeClient.query(
-    'SELECT id, date from calendar_dates d inner join calendar_dates_frequencies f on d.id = f.calendarDateId WHERE f.frequencyId = 3'
+    `SELECT id, date from calendar_dates d inner join calendar_dates_frequencies f on d.id = f.calendarDateId WHERE f.frequencyId =
+    ${monthlyService[0].id}`
   ))[0];
 
-  // Build positions mapper, which looks like: { 'Speaker': 1 }
+
   const positionsData = (await sequelizeClient.query(
-    'SELECT id from positions WHERE id >= 28 AND id <= 33'
+    `SELECT id from positions WHERE name IN ('老師','助教')`
   ))[0];
 
   await seedEvents(queryInterface, calendarDatesData, positionsData);
 }
 
-async function createSaturdayEvents(queryInterface){
+async function createSaturdayEvents(queryInterface) {
+  const saturdayFrequency = (await sequelizeClient.query(
+    `SELECT id FROM frequencies WHERE name = 'Saturday'`
+  ))[0];
   const calendarDatesData = (await sequelizeClient.query(
-    'SELECT id, date from calendar_dates d inner join calendar_dates_frequencies f on d.id = f.calendarDateId WHERE f.frequencyId = 2'
+    `SELECT id, date from calendar_dates d inner join calendar_dates_frequencies f on d.id = f.calendarDateId WHERE f.frequencyId =
+    ${saturdayFrequency[0].id}`
   ))[0];
 
   // Build positions mapper, which looks like: { 'Speaker': 1 }
   const positionsData = (await sequelizeClient.query(
-    'SELECT id from positions WHERE id > 33'
+    `SELECT id from positions WHERE name IN ('Leader','Topic','Content')`
   ))[0];
 
   await seedEvents(queryInterface, calendarDatesData, positionsData);
 }
 
-async function seedEvents(queryInterface, calendarDatesData, positionsData){
+async function seedEvents(queryInterface, calendarDatesData, positionsData) {
   const events = [];
   calendarDatesData.forEach(calendarDate => {
     positionsData.forEach(position => {
@@ -107,39 +149,52 @@ async function createCalendarDateForMonthlyEvent() {
         VALUES     ('${dateString}', 1)`
     );
   }
+  const monthlyFrequency = (await sequelizeClient.query(
+    `SELECT id FROM frequencies WHERE name = 'Month'`
+  ))[0];
+
+  const monthlyFrequencyId = monthlyFrequency[0].id;
   //update frequency
   await sequelizeClient.query(
-    'INSERT INTO calendar_dates_frequencies (calendarDateId, frequencyId) SELECT id, 3 FROM calendar_dates d LEFT JOIN calendar_dates_frequencies f ON d.id = f.calendarDateId WHERE f.frequencyId IS NULL and d.day = 1'
+    `INSERT INTO calendar_dates_frequencies (calendarDateId, frequencyId) SELECT id, ${monthlyFrequencyId} FROM calendar_dates d LEFT JOIN calendar_dates_frequencies f ON d.id = f.calendarDateId WHERE f.frequencyId IS NULL and d.day = 1`
   );
 }
 
 async function seedMonthlyEventServiceInfo(queryInterface, Sequelize) {
+  const monthlyFrequency = (await sequelizeClient.query(
+    `SELECT id FROM frequencies WHERE name = 'Month'`
+  ))[0];
   const calendarDatesData = (await sequelizeClient.query(
-    'SELECT calendarDateId FROM calendar_dates_frequencies WHERE frequencyId = 3'
+    `SELECT calendarDateId FROM calendar_dates_frequencies WHERE frequencyId = ${monthlyFrequency[0].id}`
   ))[0];
 
-  // Build positions mapper, which looks like: { 'Speaker': 1 }
   const servicesData = (await sequelizeClient.query(
-    'SELECT id from services WHERE id IN (3, 4, 5)'
+    `SELECT id from services WHERE name IN ('preschool-junior','preschool-middle','preschool-senior')`
   ))[0];
 
   return await seedServiceCalendarDates(queryInterface, calendarDatesData, servicesData);
 }
 
 async function seedSaturdayEventServiceInfo(queryInterface, Sequelize) {
+  const saturdayFrequency = (await sequelizeClient.query(
+    `SELECT id FROM frequencies WHERE name = 'Saturday'`
+  ))[0];
+  const saturdayService = (await sequelizeClient.query(
+    `SELECT id FROM services WHERE name = 'prayer'`
+  ))[0];
   const calendarDatesData = (await sequelizeClient.query(
-    'SELECT calendarDateId FROM calendar_dates_frequencies WHERE frequencyId = 2'
+    `SELECT calendarDateId FROM calendar_dates_frequencies WHERE frequencyId = ${saturdayFrequency[0].id}`
   ))[0];
 
   // Build positions mapper, which looks like: { 'Speaker': 1 }
   const servicesData = (await sequelizeClient.query(
-    'SELECT id from services WHERE id IN (6)'
+    `SELECT id from services WHERE id IN (${saturdayService[0].id})`
   ))[0];
 
   return await seedServiceCalendarDates(queryInterface, calendarDatesData, servicesData);
 }
 
-async function seedServiceCalendarDates(queryInterface, calendarDatesData, servicesData){
+async function seedServiceCalendarDates(queryInterface, calendarDatesData, servicesData) {
   const serviceCalendarDates = [];
   calendarDatesData.forEach(calendarDate => {
     servicesData.forEach(service => {
