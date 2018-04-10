@@ -18,27 +18,33 @@ const config = require('config');
 const CronJob = require('cron').CronJob;
 const reminderEmail = require('./api/service/send-email-service').reminderEmail;
 
-new CronJob(config.get('reminderEmail.schedule'), async function () {
-  try {
-    if (config.get('reminderEmail.enabled')) {
-      logger.debug('try to send scheduled email');
-      await reminderEmail();
+new CronJob(
+  config.get('reminderEmail.schedule'),
+  async function() {
+    try {
+      if (config.get('reminderEmail.enabled')) {
+        logger.debug('try to send scheduled email');
+        await reminderEmail();
+      }
+    } catch (error) {
+      logger.error(error);
     }
-  } catch (error) {
-    logger.error(error);
-  }
-}, function () {
-  logger.debug('scheduler stop');
-},
-  true, /* Start the job right now */
+  },
+  function() {
+    logger.debug('scheduler stop');
+  },
+  true /* Start the job right now */,
   'Australia/Sydney'
 );
 
-new CronJob(config.get('databaseBackup.schedule'), async function () {
-  databaseUtil.backupDatabase();
-}, function () {
-  logger.debug('database backup stopped');
-},
+new CronJob(
+  config.get('databaseBackup.schedule'),
+  async function() {
+    databaseUtil.backupDatabase();
+  },
+  function() {
+    logger.debug('database backup stopped');
+  },
   true,
   'Australia/Sydney'
 );
