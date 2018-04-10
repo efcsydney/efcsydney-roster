@@ -108,7 +108,7 @@ async function seedSaturdayFrequency(queryInterface) {
   );
 }
 
-async function updateCalendarDayField(){
+async function updateCalendarDayField() {
   await sequelizeClient.query(
     `UPDATE calendar_dates c
     INNER JOIN
