@@ -35,5 +35,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    environment:
+        - node_env="local"
     ports:
       - "3000:3000"

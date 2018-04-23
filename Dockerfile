@@ -1,6 +1,6 @@
 FROM amazonlinux
 
-RUN yum update && yum install -y python36 python36-pip jq
+RUN yum update -y && yum install -y python36 python36-pip jq
 
 # install node
 RUN curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
