@@ -4,8 +4,8 @@ I would like to **goal**
 so that **benefit**.
 
 #### Acceptance Criteria
-- [] Ensure something
+- [ ] Ensure
 
 #### References
 
-*
+Wireframe? Mockup?
