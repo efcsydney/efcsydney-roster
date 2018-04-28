@@ -105,34 +105,40 @@ async function buildEventsForMultipleServices(from, to) {
   return events;
 }
 
-// reminderEmail will send email for the next 2 weeks
-async function reminderEmail() {
-  const from = getDateString(new Date());
-  const to = getDateByWeeks(from, 2);
-  const events = await buildEventsForMultipleServices(from, to);
+async function getCurrentEmailHTML() {
+  const fromDate = getDateString(new Date());
+  const toDate = getDateByWeeks(fromDate, 2);
+  const events = await buildEventsForMultipleServices(fromDate, toDate);
   const nameList = getNameList(events);
   const emailList = getEmailList();
-  // Get the email list that need to be included in reminder email
-  const reminderEmailList = emailList.filter(e => {
-    return nameList.includes(e.englishName) || nameList.includes(e.chineseName);
-  });
-  // Find the names of people that is included in the reminder
-  let nameListWithEmail = reminderEmailList.map(e => e.englishName);
-  nameListWithEmail = nameListWithEmail
+
+  const reminderEmailList = emailList.filter(
+    e => nameList.includes(e.englishName) || nameList.includes(e.chineseName)
+  );
+
+  const nameListWithEmail = reminderEmailList
+    .map(e => e.englishName)
     .concat(reminderEmailList.map(e => e.chineseName))
     .filter(e => e != '');
-  // Find the names of people that need to be reminded but is not in the reminder list
+
   const nameListWithoutEmail = nameList
     .filter(n => !nameListWithEmail.includes(n))
     .filter(n => n !== 'Combined Service' && n !== '暫停' && n !== '一家一菜')
     .join(',');
+
+  return getEmailHTML(events, reminderEmailList, nameListWithoutEmail);
+}
+
+// reminderEmail will send email for the next 2 weeks
+async function reminderEmail() {
+  const currentEmailHTML = await getCurrentEmailHTML();
 
   return sendEmail({
     from: config.get('reminderEmail.content.from'),
     to: config.get('reminderEmail.content.to'),
     cc: config.get('reminderEmail.content.cc'),
     subject: `[自動提醒] 這週與下週的主日服事`,
-    html: getEmailHTML(events, reminderEmailList, nameListWithoutEmail)
+    html: currentEmailHTML
   });
 }
 
@@ -153,8 +159,11 @@ function getNameList(events) {
 }
 
 module.exports = {
+  buildEventsForMultipleServices,
   reminderEmail,
   filterPositions,
+  getCurrentEmailHTML,
+  getNameList,
   getEmailList,
   getEmailListString,
   getEmptyEmailListString,

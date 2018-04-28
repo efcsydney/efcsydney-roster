@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 module.exports.app = app;
 const bodyParser = require('body-parser');
+const emailController = require('./api/controllers/email-controller');
 const eventsController = require('./api/controllers/events-controller');
 const servicesController = require('./api/controllers/services-controller');
 const exception = require('./api/middleware/exception-handler');
@@ -26,9 +27,9 @@ app.set('port', process.env.PORT || 3001);
 app.set('secure-port', config.get('port.secure'));
 
 //Comment out the Http Redirect middlware to prevent the redirection
- if (['production', 'qa'].includes(process.env.NODE_ENV)) {
-   app.use(httpRedirect);
- }
+if (['production', 'qa'].includes(process.env.NODE_ENV)) {
+  app.use(httpRedirect);
+}
 
 // Express only serves static assets in production
 if (['production', 'qa'].includes(process.env.NODE_ENV)) {
@@ -38,6 +39,10 @@ if (['production', 'qa'].includes(process.env.NODE_ENV)) {
 app.get('/', (req, res) => {
   res.json({ message: 'Hello Guys! Welcome to roster!' });
 });
+
+if (['development', 'qa'].includes(process.env.NODE_ENV)) {
+  app.get('/email', emailController.getEmail);
+}
 
 app.get('/api/services', servicesController.getServices);
 
