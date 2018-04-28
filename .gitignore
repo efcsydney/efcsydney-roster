@@ -8,3 +8,4 @@ config/local.yaml
 .rev
 .vscode/*
 backup/*
+sample.html
