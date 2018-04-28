@@ -10,6 +10,15 @@ require('moment/locale/zh-tw');
 
 const cellStyle = `
   border: 1px solid #000;
+  border-width: 0 1px 1px 0;
+  font-size: 12px;
+  line-height: 1.3;
+  padding: 6px 4px;
+  text-align: center;
+  white-space: nowrap;
+`;
+const firstCellStyle = `
+  border: 1px solid #000;
   font-size: 12px;
   line-height: 1.3;
   padding: 6px 4px;
@@ -108,7 +117,7 @@ const renderMemberRow = ({ date, serviceInfo, positions, lang }) => {
 
   return `
     <tr>
-      <td style="${cellStyle}">${date}</td>
+      <td style="${firstCellStyle}">${date}</td>
       <td style="${cellStyle}">${footnote}</td>
       ${contentCells}
     </tr>
