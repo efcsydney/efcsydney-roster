@@ -109,7 +109,8 @@ async function buildEventsForMultipleServices(from, to) {
 async function reminderEmail() {
   const from = getDateString(new Date());
   const to = getDateByWeeks(from, 2);
-  const events = await buildEventsForMultipleServices(from, to);
+  let events = await buildEventsForMultipleServices(from, to);
+  events = _.pick(events, ['english', 'chinese']); // Only show these 2 services for now #215
   const nameList = getNameList(events);
   const emailList = getEmailList();
   // Get the email list that need to be included in reminder email
