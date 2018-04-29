@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const express = require('express');
 const app = express();
 module.exports.app = app;
@@ -9,7 +10,7 @@ const exception = require('./api/middleware/exception-handler');
 const httpRedirect = require('./api/middleware/http-redirect');
 const serviceInfoController = require('./api/controllers/service-info-controller');
 const Raven = require('raven');
-const env = process.env.NODE_ENV;
+const env = _.get(process, 'env.NODE_ENV', 'development');
 const config = require('config');
 
 if (isServerEnvironment()) {
@@ -27,12 +28,12 @@ app.set('port', process.env.PORT || 3001);
 app.set('secure-port', config.get('port.secure'));
 
 //Comment out the Http Redirect middlware to prevent the redirection
-if (['production', 'qa'].includes(process.env.NODE_ENV)) {
+if (['production', 'qa'].includes(env)) {
   app.use(httpRedirect);
 }
 
 // Express only serves static assets in production
-if (['production', 'qa'].includes(process.env.NODE_ENV)) {
+if (['production', 'qa'].includes(env)) {
   app.use(express.static('client/build'));
 }
 
@@ -40,7 +41,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello Guys! Welcome to roster!' });
 });
 
-if (['development', 'qa'].includes(process.env.NODE_ENV)) {
+if (['development', 'qa'].includes(env)) {
   app.get('/email', emailController.getEmail);
 }
 
