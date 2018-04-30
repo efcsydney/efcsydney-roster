@@ -9,19 +9,20 @@ export default class StateButton extends Component {
   static propTypes = {
     kind: PropTypes.oneOf(['loading', 'success', 'failed', 'default'])
   };
-
   static defaultProps = {
     kind: 'default'
   };
-
   render() {
     const { children, kind, ...otherProps } = this.props;
     return (
       <Button {...otherProps}>
-        {kind === 'loading' && <SpinIcon animate="spin" />}
-        {kind === 'success' && <CheckIcon />}
-        {kind === 'failed' && <CloseIcon />}
-        &nbsp;
+        {kind !== 'default' && (
+          <IconWrapper>
+            {kind === 'loading' && <SpinIcon animate="spin" />}
+            {kind === 'success' && <CheckIcon />}
+            {kind === 'failed' && <CloseIcon />}
+          </IconWrapper>
+        )}
         {children}
       </Button>
     );
@@ -39,6 +40,14 @@ const spin = keyframes`
 const SpinIcon = styled(SpinnerIcon)`
   animation: ${spin} infinite 2s linear;
 `;
+SpinIcon.displayName = 'SpinIcon';
+
+const IconWrapper = styled.span`
+  display: inline-block;
+  margin-right: 4px;
+`;
+IconWrapper.displayName = 'IconWrapper';
+
 const Button = styled.button.attrs({ type: 'button' })`
   background-color: #588c25;
   border-radius: 3px;
@@ -48,4 +57,9 @@ const Button = styled.button.attrs({ type: 'button' })`
   font-size: inherit;
   min-width: 110px;
   padding: 12px;
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 `;
+Button.displayName = 'Button';
