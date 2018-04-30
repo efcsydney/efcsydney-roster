@@ -123,6 +123,7 @@ const renderTable = days => {
 
   const lang = _.get(days, '0.lang', 'zh-TW');
   const roles = _.get(days, '0.positions', []);
+  const title = _.get(days, '0.serviceInfo.service.label', '');
 
   if (!days.length) {
     return '';
@@ -130,6 +131,9 @@ const renderTable = days => {
 
   return `
     <mj-section padding="5px 0 10px">
+      <mj-text font-size="16" font-weight="bold" line-height="30px">
+        ${title}
+      </mj-text>
       <mj-table padding="0">
         ${renderHeaderRow(lang, roles)}
         ${days.map(day => renderMemberRow(day)).join('')}
