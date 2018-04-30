@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Index from './modules/index';
 import Login from './modules/login';
-import Admin from './modules/admin';
+import AdminServices from './modules/admin/services';
 import { TagManager } from 'components';
 
 export default class App extends Component {
@@ -51,8 +51,14 @@ export default class App extends Component {
           <Route exact path="/preschool-senior" component={Index} />
           <Route exact path="/prayer" component={Index} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/admin" component={Admin} />
-          <Route path="/admin/edit/:id" component={Admin} />
+          <Route exact path="/admin/services" component={AdminServices} />
+          <Route
+            exact
+            path="/admin/services/edit/:id"
+            component={AdminServices}
+          />
+          <Route exact path="/admin/services/new" component={AdminServices} />
+          <Redirect from="/admin" to="/admin/services" />
           <Redirect to="/" />
         </Switch>
       </div>
