@@ -7,12 +7,20 @@ import styled from 'styled-components';
 import { Button, Cell, Grid, HeaderCell, Row } from 'components';
 import { Link } from 'react-router-dom';
 import IconPencil from 'react-icons/lib/fa/pencil';
-import Edit from './Edit';
+import Popup from './Popup';
 
 const mapStateToProps = (state, ownProps) => {
-  const selectedId = _.get(ownProps, 'match.params.id', null);
+  const path = _.get(ownProps, 'match.path');
+  const mode =
+    (path.indexOf('/new') !== -1 && 'new') ||
+    (path.indexOf('/edit') !== -1 && 'edit') ||
+    'index';
+  const paramId = _.get(ownProps, 'match.params.id', null);
+  const selectedId = !_.isEmpty(paramId) ? parseInt(paramId, 10) : null;
+
   return {
-    selectedId: parseInt(selectedId, 10)
+    mode,
+    selectedId
   };
 };
 export default connect(mapStateToProps)(
@@ -20,22 +28,27 @@ export default connect(mapStateToProps)(
     state = {
       data: []
     };
+    constructor(props) {
+      super(props);
+
+      this.rootPath = '/admin/services';
+    }
     handleAuthFail = () => {
       const { history } = this.props;
 
-      history.replace('login');
+      history.replace('/login');
     };
     handleAuthSuccess = () => {
       ServicesAPI.retrieve().then(({ data }) => {
         this.setState({ data });
       });
     };
-    handleEditClose = () => {
+    handlePopupClose = () => {
       const { history } = this.props;
 
-      history.push('/admin');
+      history.push(this.rootPath);
     };
-    handleEditSave = data => {
+    handlePopupSave = data => {
       const { history } = this.props;
       const { data: prevData } = this.state;
       const nextData = _.clone(prevData);
@@ -49,14 +62,14 @@ export default connect(mapStateToProps)(
           this.setState({ data: nextData });
         })
         .catch(e => alert(e.message))
-        .finally(() => history.push('/admin'));
+        .finally(() => history.push(this.rootPath));
     };
     render() {
       const { data } = this.state;
-      const { selectedId } = this.props;
-      const isEditing = !!(selectedId && _.isNumber(selectedId));
-      const selectedData = isEditing ? _.find(data, { id: selectedId }) : null;
-      const isLoaded = isEditing && !!selectedData;
+      const { mode, selectedId } = this.props;
+      const hasPopup = _.includes(['new', 'edit'], mode);
+      const selectedData = _.find(data, { id: selectedId }) || {};
+      const isLoading = mode === 'edit' && _.isEmpty(selectedData);
 
       return (
         <Wrapper>
@@ -80,13 +93,15 @@ export default connect(mapStateToProps)(
                     ({ footnoteLabel, frequency, label, id, positions }) => (
                       <Row key={id}>
                         <Cell>
-                          <Link to={`/admin/edit/${id}`}>{label}</Link>
+                          <Link to={`${this.rootPath}/edit/${id}`}>
+                            {label}
+                          </Link>
                         </Cell>
                         <Cell>{positions.length}</Cell>
                         <Cell>{footnoteLabel}</Cell>
                         <Cell>{_.capitalize(frequency)}</Cell>
                         <Cell>
-                          <Link to={`/admin/edit/${id}`}>
+                          <Link to={`${this.rootPath}/edit/${id}`}>
                             <Button kind="blue">
                               <IconEdit />
                               Edit
@@ -98,13 +113,18 @@ export default connect(mapStateToProps)(
                   )}
                 </tbody>
               </Grid>
+              <Footer>
+                <Link to={`${this.rootPath}/new`}>Create New Service</Link>
+              </Footer>
             </Auth>
           </Body>
-          {isLoaded && (
-            <Edit
+          {hasPopup && (
+            <Popup
+              mode={mode}
               data={selectedData}
-              onSave={this.handleEditSave}
-              onClose={this.handleEditClose}
+              isLoading={isLoading}
+              onSave={this.handlePopupSave}
+              onClose={this.handlePopupClose}
             />
           )}
         </Wrapper>
@@ -116,6 +136,10 @@ export default connect(mapStateToProps)(
 const Wrapper = styled.div``;
 const Body = styled.div`
   margin: 10px;
+`;
+const Footer = styled.div`
+  padding: 10px;
+  text-align: center;
 `;
 const IconEdit = styled(IconPencil)`
   margin-right: 4px;
