@@ -83,7 +83,7 @@ export default connect(mapStateToProps)(
                   <Row>
                     <HeaderCell>Service Title</HeaderCell>
                     <HeaderCell>Positions</HeaderCell>
-                    <HeaderCell>Footnote Label</HeaderCell>
+                    <HeaderCell>Description Label</HeaderCell>
                     <HeaderCell>Frequency</HeaderCell>
                     <HeaderCell>Actions</HeaderCell>
                   </Row>
