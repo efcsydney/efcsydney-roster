@@ -52,13 +52,13 @@ export default class App extends Component {
           <Route exact path="/prayer" component={Index} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/admin/services" component={AdminServices} />
+          <Route exact path="/admin/services/new" component={AdminServices} />
           <Route
             exact
             path="/admin/services/edit/:id"
             component={AdminServices}
           />
-          <Route exact path="/admin/services/new" component={AdminServices} />
-          <Redirect from="/admin" to="/admin/services" />
+          <Redirect path="/admin" to="/admin/services" />
           <Redirect to="/" />
         </Switch>
       </div>
