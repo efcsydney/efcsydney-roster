@@ -36,7 +36,7 @@ export default connect(mapStateToProps)(
     handleAuthFail = () => {
       const { history } = this.props;
 
-      history.replace('login');
+      history.replace('/login');
     };
     handleAuthSuccess = () => {
       ServicesAPI.retrieve().then(({ data }) => {
