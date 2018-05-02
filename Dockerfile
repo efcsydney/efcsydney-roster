@@ -8,6 +8,7 @@ RUN yarn --version
 
 # install dependency packages
 ADD ./efcsydney-roster.tar.gz /opt/
+
 WORKDIR /opt/efcsydney-roster/
 RUN yarn
 
@@ -15,7 +16,6 @@ WORKDIR /opt/efcsydney-roster/client/
 RUN yarn
 
 # install as-cli
-WORKDIR /opt/efcsydney-roster/
 
 RUN pip install awscli --upgrade --user && \
     echo "export PATH=$PATH:~/.local/bin/" >> ~/.bashrc
