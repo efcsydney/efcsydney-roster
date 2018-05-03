@@ -108,7 +108,7 @@ async function buildEventsForMultipleServices(from, to) {
 async function getCurrentEmailHTML() {
   const fromDate = getDateString(new Date());
   const toDate = getDateByWeeks(fromDate, 2);
-  const events = await buildEventsForMultipleServices(fromDate, toDate);
+  let events = await buildEventsForMultipleServices(fromDate, toDate);
   events = _.pick(events, ['english', 'chinese']); // Only show these 2 services for now #215
   const nameList = getNameList(events);
   const emailList = getEmailList();
