@@ -80,6 +80,18 @@ NODE_ENV=test yarn db-create  // create database
 NODE_ENV=test yarn db-migrate // migrate database
 ```
 
+In Windows, use the code below:
+```
+SET NODE_ENV=test
+yarn db-create  // create database
+yarn db-migrate // migrate database
+```
+
+In Windows, check curret ENV:
+```
+echo %NODE_ENV%
+```
+
 ```
 yarn test // will run unit test and integration test
 ```
