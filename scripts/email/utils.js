@@ -19,6 +19,7 @@ const cellStyle = `
 `;
 const firstCellStyle = `
   border: 1px solid #000;
+  border-width: 0 1px 1px 1px;
   font-size: 12px;
   line-height: 1.3;
   padding: 6px 4px;
@@ -28,6 +29,18 @@ const firstCellStyle = `
 const cellHeaderStyle = `
   background: #f0f0f0;
   border: 1px solid #000;
+  border-width: 1px 1px 1px 0;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1.3;
+  padding: 6px 4px;
+  text-align: center;
+  white-space: nowrap;
+`;
+const firstHeaderCellStyle = `
+  background: #f0f0f0;
+  border: 1px solid #000;
+  border-width: 1px;
   font-size: 12px;
   font-weight: normal;
   line-height: 1.3;
@@ -69,7 +82,7 @@ const renderHeaderRow = (lang, roles) => {
 
   return `
     <tr>
-      <th style="${cellHeaderStyle}">${dateLabel}</th>
+      <th style="${firstHeaderCellStyle}">${dateLabel}</th>
       <th style="${cellHeaderStyle}">${footnoteLabel}</th>
       ${_.uniq(positions)
         .map(cell => {
@@ -230,8 +243,14 @@ const renderDraftTable = (title, emailList, emptyEmailList) => {
  * @return {String}
  */
 exports.getEmailHTML = (events, emailList, emptyEmailList) => {
-  const date = _.values(events.chinese)[0].date;
-  const title = `[EFCOS] ${moment(date).format('MMMDo')} 主日服事`;
+  const dates = _.values(events.chinese)
+    .map(event => event.date)
+    .sort();
+  const thisWeek = moment(dates[0]).format('M/D');
+  const nextWeek = moment(dates[0])
+    .add('w', 1)
+    .format('M/D');
+  const title = `這週(${thisWeek})與下週(${nextWeek})的主日服事`;
   const mjml = `
     <mjml>
       <mj-head>
