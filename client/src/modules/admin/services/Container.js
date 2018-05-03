@@ -36,7 +36,7 @@ export default connect(mapStateToProps)(
     handleAuthFail = () => {
       const { history } = this.props;
 
-      history.replace('login');
+      history.replace('/login');
     };
     handleAuthSuccess = () => {
       ServicesAPI.retrieve().then(({ data }) => {
@@ -83,7 +83,7 @@ export default connect(mapStateToProps)(
                   <Row>
                     <HeaderCell>Service Title</HeaderCell>
                     <HeaderCell>Positions</HeaderCell>
-                    <HeaderCell>Footnote Label</HeaderCell>
+                    <HeaderCell>Description Label</HeaderCell>
                     <HeaderCell>Frequency</HeaderCell>
                     <HeaderCell>Actions</HeaderCell>
                   </Row>

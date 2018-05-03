@@ -17,7 +17,7 @@ export default class Login extends Component {
   };
   handleAuthSuccess = () => {
     this.setState({ loginError: false });
-    this.redirectTo('/admin');
+    this.redirectTo('/admin/services');
   };
   handleAuthFail = reason => {
     if (reason === 'no-permission') {
