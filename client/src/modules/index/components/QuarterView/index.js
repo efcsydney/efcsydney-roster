@@ -101,7 +101,7 @@ const Wrapper = styled.div`
   box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
   font-size: 13px;
   position: absolute;
-  overflow: ${props => (props.isMobile ? 'inherit' : 'scroll')};
+  overflow: ${props => (props.isMobile ? 'inherit' : 'auto')};
   width: 100%;
   max-height: ${props => (props.isMobile ? 'none' : props.calendarHeight)};
   ${media.print`
