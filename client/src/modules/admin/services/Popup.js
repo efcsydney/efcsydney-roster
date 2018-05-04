@@ -132,7 +132,7 @@ export default class Popup extends Component {
           </span>
         </Row>
         <Row>
-          <Label required>Footnote</Label>
+          <Label required>Description Label</Label>
           <span>
             <Input
               data-hj-whitelist
