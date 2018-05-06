@@ -1,30 +1,22 @@
 #!/bin/bash -x
 
+release() {
+  ENV=development docker-compose exec efc /bin/bash -x ./release.sh
+}
+
 build(){
-  echo "Clean up"
-  rm -rf efcsydney-roster.tar.gz
-  rm -rf client/node_modules
-  find log/* ! -name '.gitignore' -exec rm -rf {} +
-
-  echo "Tar"
-  pushd ../
-  tar -czf efcsydney-roster.tar.gz efcsydney-roster
-  mv efcsydney-roster.tar.gz efcsydney-roster/
-  popd
-
   echo "Build Docker Image"
-  docker-compose build
+  ENV=development docker-compose build
   docker rmi -f $(docker images | grep "<none>" | awk "{print \$3}")
-
 }
 
 up(){
-  docker rm -f $(docker ps -a | grep "Exited" | awk "{print \$1}")
-  docker-compose up
+  #docker rm -f $(docker ps -a | grep "Exited" | awk "{print \$1}")
+  docker-compose rm -f efc
+  ENV=development docker-compose up -d
 }
 
 push() {
-
   read -p "Version: " version
   version=${version:-latest}
 

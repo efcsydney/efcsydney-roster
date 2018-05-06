@@ -1,26 +1,19 @@
 FROM mhart/alpine-node:8.10.0
+ARG target="dev"
 
-RUN apk update && apk add --no-cache python py-pip jq bash
+RUN echo "$target"
+RUN apk update && apk add --no-cache bash
+RUN npm install -g pm2@latest
 
-# install node
-RUN node -v ; npm -v
-RUN yarn --version
 
-# install dependency packages
+
 ADD ./efcsydney-roster.tar.gz /opt/
+WORKDIR /opt/efcsydney-roster
 
-WORKDIR /opt/efcsydney-roster/
-RUN yarn
-
-WORKDIR /opt/efcsydney-roster/client/
-RUN yarn
-
-# install as-cli
-
-RUN pip install awscli --upgrade --user && \
-    echo "export PATH=$PATH:~/.local/bin/" >> ~/.bashrc
-
+#RUN pip install awscli --upgrade --user && \
+#    echo "export PATH=$PATH:~/.local/bin/" >> ~/.bashrc
+RUN if [ "$target" = "prod" ] ; then pip install awscli --upgrade --user && echo "export PATH=$PATH:~/.local/bin/" >> ~/.bashrc ; fi
 
 ADD Entrypoint.sh /opt/
-EXPOSE 3000
+EXPOSE 3000 3001 3002
 ENTRYPOINT ["/bin/bash", "-ex", "/opt/Entrypoint.sh"]

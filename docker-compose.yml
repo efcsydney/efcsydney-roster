@@ -1,6 +1,4 @@
 version: '2.3'
-
-
 services:
   db:
     image: mysql:5.7.21
@@ -29,13 +27,18 @@ services:
 
   efc:
     image: efc-roster:latest
-    build: .
+    build:
+      context: .
+      args:
+        target: ${ENV}
     links:
         - db:db
     depends_on:
       db:
         condition: service_healthy
     environment:
-        - node_env="local"
+        - node_env="development"
     ports:
       - "3000:3000"
+    volumes:
+      - $PWD:/opt/efcsydney-roster/
