@@ -37,9 +37,12 @@
     "query-string": "^5.0.1",
     "raven": "^2.3.0",
     "react-add-to-calendar": "^0.1.4",
+<<<<<<< HEAD
+=======
     "react-dnd": "^2.6.0",
     "react-dnd-html5-backend": "^2.6.0",
     "react-dom": "^16.2.0",
+>>>>>>> 914ec98... let roles can drag and drop
     "react-google-tag-manager": "^2.2.1",
     "reduce-reducers": "^0.1.2",
     "sequelize": "^4.22.5",

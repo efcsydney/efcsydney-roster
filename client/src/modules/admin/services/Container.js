@@ -8,6 +8,8 @@ import { Button, Cell, Grid, HeaderCell, Row } from 'components';
 import { Link } from 'react-router-dom';
 import IconPencil from 'react-icons/lib/fa/pencil';
 import Popup from './Popup';
+import { DragDropContext } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
 
 const mapStateToProps = (state, ownProps) => {
   const path = _.get(ownProps, 'match.path');
@@ -23,7 +25,8 @@ const mapStateToProps = (state, ownProps) => {
     selectedId
   };
 };
-export default connect(mapStateToProps)(
+export default DragDropContext(HTML5Backend)(
+  connect(mapStateToProps)(
   class AdminIndex extends Component {
     state = {
       data: []
@@ -131,6 +134,7 @@ export default connect(mapStateToProps)(
       );
     }
   }
+)
 );
 
 const Wrapper = styled.div``;
