@@ -16,6 +16,9 @@ import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
+import { DragSource } from "react-dnd";
+import {ItemTypes} from "../../../constants/ReactDndItemTypes";
+
 
 export default class Popup extends Component {
   static propTypes = {
@@ -151,7 +154,7 @@ export default class Popup extends Component {
             <PositionList>
               {positions.map(({ id, name, order }, i) => {
                 return (
-                  <PositionItem key={i} value={order}>
+                  <DraggablePositionItem key={i} value={order}>
                     <NumberInput
                       data-hj-whitelist
                       type="number"
@@ -177,7 +180,7 @@ export default class Popup extends Component {
                         onClick={this.handlePositionDelete.bind(this, i)}
                       />
                     )}
-                  </PositionItem>
+                  </DraggablePositionItem>
                 );
               })}
               <PositionItem>
@@ -293,3 +296,31 @@ const StyleSelect = styled(Select)`
   width: 165px;
 `;
 StyleSelect.displayName = 'StyleSelect';
+
+const positionSource = {
+  beginDrag(props) {
+      return {
+          no: props.no
+      };
+  },
+};
+
+function collectSource(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+  };
+}
+
+const DraggablePositionItem = DragSource(ItemTypes.POSITION, positionSource, collectSource)(
+  class DraggablePositionItem extends Component {
+  render() {
+    const {key, value, connectDragSource} = this.props;
+    return connectDragSource(
+      <div>
+        <PositionItem key={key} value={value}>
+          {this.props.children}
+        </PositionItem>
+      </div>
+    )
+  }
+})
