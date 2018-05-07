@@ -60,15 +60,13 @@ export default class Popup extends Component {
     });
   };
   handleSwitch = (sourceId, targetId) => {
-    // const {data: {positions}} = this.state;
-    // const target = positions[targetId-1];
-    // const source = positions[sourceId-1];
-    // this.handleChange({
-    //   // [`positions.${sourceId-1}.order`]: parseInt(target.order, 10),
-    //   // [`positions.${targetId-1}.order`]: parseInt(source.order, 10),
-    //   [`positions.${sourceId-1}.name`]: target.name,
-    //   [`positions.${targetId-1}.name`]: source.name,
-    // });
+    const {data: {positions}} = this.state;
+    const target = positions[targetId];
+    const source = positions[sourceId];
+    this.handleChange({
+      [`positions.${sourceId}.name`]: target.name,
+      [`positions.${targetId}.name`]: source.name,
+    });
   }
   handlePositionAdd = () => {
     let { data, data: { positions } } = this.state;
@@ -279,7 +277,9 @@ const PositionItem = styled.li`
 `;
 PositionItem.displayName = 'PositionItem';
 
-const NumberInput = Input.extend`
+const NumberInput = Input.extend.attrs({
+  readonly: "true"
+})`
   min-width: 50px;
   margin-right: 4px;
   text-align: center;
@@ -327,8 +327,6 @@ const positionTarget = {
       // dispatch action here
       const sourceId = monitor.getItem() ? monitor.getItem().id : null;
       const targetId = props.id;
-      console.log(`sourceId: ${sourceId}`);
-      console.log(`targetId: ${targetId}`);
       props.switchPosition(sourceId, targetId);
   }
 };
