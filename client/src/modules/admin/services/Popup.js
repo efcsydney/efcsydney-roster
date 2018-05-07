@@ -63,7 +63,7 @@ export default class Popup extends Component {
     const {data: {positions}} = this.state;
     const target = positions[targetNo];
     const source = positions[sourceNo];
-    
+
     this.handleChange({
       [`positions.${sourceNo}.name`]: target.name,
       [`positions.${targetNo}.name`]: source.name,
@@ -320,10 +320,14 @@ const positionSource = {
 function collectSource(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging(),
   };
 }
 
 const positionTarget = {
+  canDrop(props) {
+    return true;
+  },
   drop(props, monitor) {
       // dispatch action here
       const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
@@ -335,6 +339,8 @@ const positionTarget = {
 function collectTarget(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop()
   };
 }
 
@@ -344,14 +350,29 @@ _.flow([
   DropTarget(ItemTypes.ROLE, positionTarget, collectTarget)
 ])(  class DraggableInput extends Component {
   render() {
-    const {name, connectDragSource, connectDropTarget, handleChange} = this.props;
+    const {name, handleChange, connectDragSource, connectDropTarget, isDragging, isOver, canDrop} = this.props;
+    const opacity = isDragging ? .5 : 1;
+
+    let bgColor;
+    if (isOver && canDrop) {
+      bgColor = "greenyellow";
+    }
+    else if (!isOver && canDrop) {
+      bgColor = "#FFFF99";
+    }
+    else if (isOver && !canDrop) {
+      bgColor = "red";
+    }
+    
     return connectDropTarget(connectDragSource(
       <div>
         <Input 
           data-hj-whitelist
           type="text"
           value={name}
-          onChange={handleChange}>
+          onChange={handleChange}
+          opacity={opacity}
+          bgColor={bgColor}>
           {this.props.children}
         </Input>
       </div>
