@@ -1,19 +1,29 @@
 #!/bin/bash -x
 
 release() {
-  ENV=development docker-compose exec efc /bin/bash -x ./release.sh
+  docker-compose exec efc-dev /bin/bash -x /opt/efcsydney-roster/release.sh
 }
 
 build(){
+  local TARGET=$1
+  if [ "$TARGET" != "dev" && "$TARGET" != "prod" ]; then
+    echo "Wrong argument: must be 'dev' or 'prod'. "
+    exit 1
+  fi
   echo "Build Docker Image"
-  ENV=development docker-compose build
+  docker-compose build efc-$TARGET
   docker rmi -f $(docker images | grep "<none>" | awk "{print \$3}")
 }
 
 up(){
   #docker rm -f $(docker ps -a | grep "Exited" | awk "{print \$1}")
-  docker-compose rm -f efc
-  ENV=development docker-compose up -d
+  local TARGET=$1
+  if [ "$TARGET" != "dev" && "$TARGET" != "prod" ]; then
+    echo "Wrong argument: must be 'dev' or 'prod'. "
+    exit 1
+  fi
+  docker-compose rm -f efc-$TARGET
+  docker-compose up db efc-$TARGET
 }
 
 push() {
@@ -24,4 +34,4 @@ push() {
   docker push 149778305054.dkr.ecr.ap-southeast-2.amazonaws.com/efc-roster:$version
 }
 
-$1
+$1 ${2:-dev}

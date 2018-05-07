@@ -25,20 +25,34 @@ services:
     ports:
       - 8080:8080
 
-  efc:
-    image: efc-roster:latest
+  efc-dev:
+    image: efc-roster:develop
     build:
       context: .
-      args:
-        target: ${ENV}
+      dockerfile: Dockerfile-dev
     links:
         - db:db
     depends_on:
       db:
         condition: service_healthy
     environment:
-        - node_env="development"
+        - node_env=development
     ports:
       - "3000:3000"
     volumes:
       - $PWD:/opt/efcsydney-roster/
+
+  efc-prod:
+    image: efc-roster:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-prod
+    links:
+        - db:db
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+        - node_env=local
+    ports:
+      - "3000:3000"
