@@ -59,13 +59,14 @@ export default class Popup extends Component {
       data
     });
   };
-  handleSwitch = (sourceId, targetId) => {
+  handleSwitch = (sourceNo, targetNo) => {
     const {data: {positions}} = this.state;
-    const target = positions[targetId];
-    const source = positions[sourceId];
+    const target = positions[targetNo];
+    const source = positions[sourceNo];
+    
     this.handleChange({
-      [`positions.${sourceId}.name`]: target.name,
-      [`positions.${targetId}.name`]: source.name,
+      [`positions.${sourceNo}.name`]: target.name,
+      [`positions.${targetNo}.name`]: source.name,
     });
   }
   handlePositionAdd = () => {
@@ -163,7 +164,7 @@ export default class Popup extends Component {
             <PositionList>
               {positions.map(({ id, name, order }, i) => {
                 return (
-                  <DraggablePositionItem key={i} value={order} id={i} switchPosition={(sourceId, targetId) => this.handleSwitch(sourceId, targetId)}>
+                  <PositionItem key={i} value={order}>
                     <NumberInput
                       data-hj-whitelist
                       type="number"
@@ -174,22 +175,22 @@ export default class Popup extends Component {
                         })
                       }
                     />
-                    <Input
-                      data-hj-whitelist
-                      type="text"
-                      value={name}
-                      onChange={e =>
+                    <DraggableInput
+                      no={i} 
+                      name={name}
+                      handleChange={e =>
                         this.handleChange({
                           [`positions.${i}.name`]: e.target.value
                         })
                       }
+                      switchPosition={(sourceNo, targetNo) => this.handleSwitch(sourceNo, targetNo)}
                     />
                     {!id && (
                       <IconDelete
                         onClick={this.handlePositionDelete.bind(this, i)}
                       />
                     )}
-                  </DraggablePositionItem>
+                  </PositionItem>
                 );
               })}
               <PositionItem>
@@ -278,7 +279,7 @@ const PositionItem = styled.li`
 PositionItem.displayName = 'PositionItem';
 
 const NumberInput = Input.extend.attrs({
-  readonly: "true"
+  readOnly: "true"
 })`
   min-width: 50px;
   margin-right: 4px;
@@ -311,7 +312,7 @@ StyleSelect.displayName = 'StyleSelect';
 const positionSource = {
   beginDrag(props) {
       return {
-          id: props.id
+          no: props.no
       };
   },
 };
@@ -325,9 +326,9 @@ function collectSource(connect, monitor) {
 const positionTarget = {
   drop(props, monitor) {
       // dispatch action here
-      const sourceId = monitor.getItem() ? monitor.getItem().id : null;
-      const targetId = props.id;
-      props.switchPosition(sourceId, targetId);
+      const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
+      const targetNo = props.no;
+      props.switchPosition(sourceNo, targetNo);
   }
 };
 
@@ -337,18 +338,22 @@ function collectTarget(connect, monitor) {
   };
 }
 
-const DraggablePositionItem = 
+const DraggableInput = 
 _.flow([
-  DragSource(ItemTypes.POSITION, positionSource, collectSource),
-  DropTarget(ItemTypes.POSITION, positionTarget, collectTarget)
-])(  class DraggablePositionItem extends Component {
+  DragSource(ItemTypes.ROLE, positionSource, collectSource),
+  DropTarget(ItemTypes.ROLE, positionTarget, collectTarget)
+])(  class DraggableInput extends Component {
   render() {
-    const {key, value, connectDragSource, connectDropTarget} = this.props;
+    const {name, connectDragSource, connectDropTarget, handleChange} = this.props;
     return connectDropTarget(connectDragSource(
       <div>
-        <PositionItem key={key} value={value}>
+        <Input 
+          data-hj-whitelist
+          type="text"
+          value={name}
+          onChange={handleChange}>
           {this.props.children}
-        </PositionItem>
+        </Input>
       </div>
     ))
   }
