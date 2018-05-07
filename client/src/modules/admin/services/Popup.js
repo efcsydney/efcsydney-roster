@@ -60,16 +60,15 @@ export default class Popup extends Component {
     });
   };
   handleSwitch = (sourceId, targetId) => {
-    const {data: {positions}} = this.state;
-    const target = positions[targetId-1];
-    const source = positions[sourceId-1];
-    this.handleChange({
-      // [`positions.${sourceId-1}.order`]: parseInt(target.order, 10),
-      // [`positions.${targetId-1}.order`]: parseInt(source.order, 10),
-      [`positions.${sourceId-1}.name`]: target.name,
-      [`positions.${targetId-1}.name`]: source.name,
-    });
-    
+    // const {data: {positions}} = this.state;
+    // const target = positions[targetId-1];
+    // const source = positions[sourceId-1];
+    // this.handleChange({
+    //   // [`positions.${sourceId-1}.order`]: parseInt(target.order, 10),
+    //   // [`positions.${targetId-1}.order`]: parseInt(source.order, 10),
+    //   [`positions.${sourceId-1}.name`]: target.name,
+    //   [`positions.${targetId-1}.name`]: source.name,
+    // });
   }
   handlePositionAdd = () => {
     let { data, data: { positions } } = this.state;
@@ -166,7 +165,7 @@ export default class Popup extends Component {
             <PositionList>
               {positions.map(({ id, name, order }, i) => {
                 return (
-                  <DraggablePositionItem key={i} value={order} id={id} switchPosition={(sourceId, targetId) => this.handleSwitch(sourceId, targetId)}>
+                  <DraggablePositionItem key={i} value={order} id={i} switchPosition={(sourceId, targetId) => this.handleSwitch(sourceId, targetId)}>
                     <NumberInput
                       data-hj-whitelist
                       type="number"
@@ -325,16 +324,11 @@ function collectSource(connect, monitor) {
 
 const positionTarget = {
   drop(props, monitor) {
-      // const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
-      // const targetNo = props.no;
-      // moveInputBox(sourceNo, targetNo);
-
       // dispatch action here
       const sourceId = monitor.getItem() ? monitor.getItem().id : null;
       const targetId = props.id;
-      console.log(`sourceNo: ${sourceId}`);
-      console.log(`targetNo: ${targetId}`);
-      // console.log(props);
+      console.log(`sourceId: ${sourceId}`);
+      console.log(`targetId: ${targetId}`);
       props.switchPosition(sourceId, targetId);
   }
 };
