@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
-import { DragSource } from "react-dnd";
+import { DragSource, DropTarget } from "react-dnd";
 import {ItemTypes} from "../../../constants/ReactDndItemTypes";
 
 
@@ -59,6 +59,18 @@ export default class Popup extends Component {
       data
     });
   };
+  handleSwitch = (sourceId, targetId) => {
+    const {data: {positions}} = this.state;
+    const target = positions[targetId-1];
+    const source = positions[sourceId-1];
+    this.handleChange({
+      // [`positions.${sourceId-1}.order`]: parseInt(target.order, 10),
+      // [`positions.${targetId-1}.order`]: parseInt(source.order, 10),
+      [`positions.${sourceId-1}.name`]: target.name,
+      [`positions.${targetId-1}.name`]: source.name,
+    });
+    
+  }
   handlePositionAdd = () => {
     let { data, data: { positions } } = this.state;
 
@@ -154,7 +166,7 @@ export default class Popup extends Component {
             <PositionList>
               {positions.map(({ id, name, order }, i) => {
                 return (
-                  <DraggablePositionItem key={i} value={order}>
+                  <DraggablePositionItem key={i} value={order} id={id} switchPosition={(sourceId, targetId) => this.handleSwitch(sourceId, targetId)}>
                     <NumberInput
                       data-hj-whitelist
                       type="number"
@@ -300,7 +312,7 @@ StyleSelect.displayName = 'StyleSelect';
 const positionSource = {
   beginDrag(props) {
       return {
-          no: props.no
+          id: props.id
       };
   },
 };
@@ -311,16 +323,41 @@ function collectSource(connect, monitor) {
   };
 }
 
-const DraggablePositionItem = DragSource(ItemTypes.POSITION, positionSource, collectSource)(
-  class DraggablePositionItem extends Component {
+const positionTarget = {
+  drop(props, monitor) {
+      // const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
+      // const targetNo = props.no;
+      // moveInputBox(sourceNo, targetNo);
+
+      // dispatch action here
+      const sourceId = monitor.getItem() ? monitor.getItem().id : null;
+      const targetId = props.id;
+      console.log(`sourceNo: ${sourceId}`);
+      console.log(`targetNo: ${targetId}`);
+      // console.log(props);
+      props.switchPosition(sourceId, targetId);
+  }
+};
+
+function collectTarget(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+  };
+}
+
+const DraggablePositionItem = 
+_.flow([
+  DragSource(ItemTypes.POSITION, positionSource, collectSource),
+  DropTarget(ItemTypes.POSITION, positionTarget, collectTarget)
+])(  class DraggablePositionItem extends Component {
   render() {
-    const {key, value, connectDragSource} = this.props;
-    return connectDragSource(
+    const {key, value, connectDragSource, connectDropTarget} = this.props;
+    return connectDropTarget(connectDragSource(
       <div>
         <PositionItem key={key} value={value}>
           {this.props.children}
         </PositionItem>
       </div>
-    )
+    ))
   }
 })
