@@ -1,12 +1,12 @@
-  #!/bin/bash -x
-  
+  #!/bin/bash
+
   cd /opt/efcsydney-roster/
   yarn
 
   pushd /opt/efcsydney-roster/client/
   yarn
   popd
-  
+
   echo "Clean up"
   rm -rf efcsydney-roster.tar.gz
   rm -rf client/node_modules
