@@ -67,7 +67,6 @@ export default class QuarterView extends Component {
   componentDidMount() {
     this.handleWindowResize();
   }
-
   render() {
     const { date, data, members } = this.props;
     const { isMobile, calendarHeight } = this.state;
@@ -81,7 +80,6 @@ export default class QuarterView extends Component {
       onDayClick: this.handleDayClick,
       onRoleClick: this.handleRoleClick
     };
-
     return (
       <Wrapper
         ref={input => {

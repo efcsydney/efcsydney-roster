@@ -37,6 +37,7 @@
     "query-string": "^5.0.1",
     "raven": "^2.3.0",
     "react-add-to-calendar": "^0.1.4",
+    "react-dom": "^16.2.0",
     "react-google-tag-manager": "^2.2.1",
     "reduce-reducers": "^0.1.2",
     "sequelize": "^4.22.5",
@@ -45,6 +46,7 @@
     "sql.js": "0.3.2",
     "supertest": "^3.0.0",
     "tinycolor2": "^1.4.1",
+    "url": "^0.11.0",
     "winston": "^2.4.0",
     "winston-daily-rotate-file": "^1.7.2"
   },

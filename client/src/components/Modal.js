@@ -88,6 +88,10 @@ const Popup = styled.div`
     .Select-menu {
       height: 120px;
     }
+    // The last option could be blocked by the keyboard window
+    .Select-option:last-of-type {
+      margin-bottom: 40px;
+    }
   `};
 `;
 const Header = styled.div`

@@ -238,7 +238,6 @@ const Row = styled.div`
   }
 `;
 const Day = styled.div`
-  background: #fff;
   cursor: pointer;
   color: ${props => (props.highlighted ? '#333' : '#666')};
   display: flex;

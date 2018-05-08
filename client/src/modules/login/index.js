@@ -24,6 +24,11 @@ export default class Login extends Component {
       this.setState({ loginError: true });
     }
   };
+  handleAuthFail = reason => {
+    if (reason === 'no-permission') {
+      this.setState({ loginError: true });
+    }
+  };
   handleLogin = () => {
     const provider = new firebase.auth.FacebookAuthProvider();
     firebase.auth().signInWithPopup(provider);

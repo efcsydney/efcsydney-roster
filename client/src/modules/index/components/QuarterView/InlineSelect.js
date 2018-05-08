@@ -111,7 +111,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 );
 
 const Wrapper = styled.div`
-  background: red;
   position: absolute;
   left: -1px;
   right: -1px;

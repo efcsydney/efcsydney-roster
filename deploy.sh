@@ -11,24 +11,24 @@ else
   export node_env=qa
 fi
 
-echo "Clean up"
+echo "Clean up Useless files"
 rm -rf client/node_modules
 rm -rf log
 
-echo "Tar"
+echo "Compress all the code into tarball"
 cd ../
 tar -czf efcsydney-roster.tar.gz efcsydney-roster
 
-echo "Upload"
+echo "Upload Tarball files to server under /opt"
 scp -i ~/.ssh/key/efcsydney.pem ./efcsydney-roster.tar.gz ec2-user@${ip}:/opt/
 
-echo "Replace"
+echo "Replace existed code to /opt/pre-efcsydney-roster and untar current code into /opt/efcsydney-roster"
 ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd /opt; rm -rf pre-efcsydney-roster; mv efcsydney-roster pre-efcsydney-roster; tar -xf efcsydney-roster.tar.gz'
 
 echo "Create database config"
 ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} "export NODE_ENV=${node_env}; cd /opt/efcsydney-roster; aws ssm get-parameters --region ap-southeast-2 --names username password database host dialect --with-decryption --query 'Parameters[*].{key:Name,value:Value}' | jq from_entries | jq '{${node_env}: .}' > ./config/database.json"
 
-echo "After deploy"
+echo "Run DB migrate"
 ssh -i ~/.ssh/key/efcsydney.pem ec2-user@${ip} 'export NODE_ENV=${node_env}; cd /opt/efcsydney-roster; . ~/.bash_profile; nvm use 8; yarn; yarn db-migrate'
 
 echo "Do links"

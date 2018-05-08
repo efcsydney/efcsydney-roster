@@ -80,6 +80,18 @@ NODE_ENV=test yarn db-create  // create database
 NODE_ENV=test yarn db-migrate // migrate database
 ```
 
+In Windows, use the code below:
+```
+SET NODE_ENV=test
+yarn db-create  // create database
+yarn db-migrate // migrate database
+```
+
+In Windows, check curret ENV:
+```
+echo %NODE_ENV%
+```
+
 ```
 yarn test // will run unit test and integration test
 ```
@@ -136,6 +148,10 @@ const apiBaseUrl = process.env.NODE_ENV === 'development' ? 'localhost:3001' : '
 This setup uses [concurrently](https://github.com/kimmobrunfeldt/concurrently) for process management. Executing `npm start` instructs `concurrently` to boot both the Webpack dev server and the API server.
 
 ## Deploy
+
+Code with comments as Document
+* .travis.yml (travis setting)
+* deploy.sh   (server side setting)
 
 Deploy to QA server hostname: http://demo-roster.efcsydney.org
 

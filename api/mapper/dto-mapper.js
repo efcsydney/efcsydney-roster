@@ -78,7 +78,7 @@ class DtoMapper {
       locale: service.locale,
       label: service.label,
       footnoteLabel: service.footnoteLabel,
-      frequency:  _.get(service.frequency, 'name', ''),
+      frequency:  service.frequency,
       positions: _.get(service, 'positions', []),
     }
   }
@@ -89,7 +89,8 @@ class DtoMapper {
 
   static async mapServiceDtoToModel(dto) {
     const { id, data } = dto;
-    const frequency = await FrequencyRepository.getFrequencyByName(data.frequency);
+    const frequency = (!data.frequency.id) ? await FrequencyRepository.getFrequencyByName(data.frequency) :
+      data.frequency;
 
     return {
       id,
