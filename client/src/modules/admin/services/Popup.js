@@ -38,7 +38,7 @@ export default class Popup extends Component {
     super(props);
 
     const { data } = props;
-    this.state = { data };
+    this.state = { data, enableSaveButton: false };
   }
   componentWillReceiveProps(nextProps) {
     const { data: prevData } = this.props;
@@ -55,8 +55,13 @@ export default class Popup extends Component {
       data = set(data, key, change);
     });
 
+    const label = _.get(data, 'label', '');
+    const footnoteLabel = _.get(data, 'footnoteLabel', '');
+    const enable = label && footnoteLabel;
+
     this.setState({
-      data
+      data,
+      enableSaveButton: enable
     });
   };
   handleSwitch = (sourceNo, targetNo) => {
@@ -202,7 +207,9 @@ export default class Popup extends Component {
           </span>
         </Row>
         <Row align="center">
-          <StateButton type="submit">Save</StateButton>
+          <StateButton type="submit" disabled={!this.state.enableSaveButton}>
+            Save
+          </StateButton>
         </Row>
       </Form>
     );
