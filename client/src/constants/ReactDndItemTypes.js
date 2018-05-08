@@ -1,3 +1,3 @@
 export const ItemTypes = {
-    ROLE: "role",
+  ROLE: 'role'
 };

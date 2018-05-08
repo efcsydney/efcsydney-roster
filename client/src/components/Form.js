@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Input = styled.input`
   opacity: ${props => props.opacity};
-  background-color: ${props => props.bgColor ? props.bgColor : "#fff"};
+  background-color: ${props => (props.bgColor ? props.bgColor : '#fff')};
   border: solid 1px #c1c1c1;
   border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);

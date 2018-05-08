@@ -16,9 +16,8 @@ import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
-import { DragSource, DropTarget } from "react-dnd";
-import {ItemTypes} from "../../../constants/ReactDndItemTypes";
-
+import { DragSource, DropTarget } from 'react-dnd';
+import { ItemTypes } from '../../../constants/ReactDndItemTypes';
 
 export default class Popup extends Component {
   static propTypes = {
@@ -60,15 +59,15 @@ export default class Popup extends Component {
     });
   };
   handleSwitch = (sourceNo, targetNo) => {
-    const {data: {positions}} = this.state;
+    const { data: { positions } } = this.state;
     const target = positions[targetNo];
     const source = positions[sourceNo];
 
     this.handleChange({
       [`positions.${sourceNo}.name`]: target.name,
-      [`positions.${targetNo}.name`]: source.name,
+      [`positions.${targetNo}.name`]: source.name
     });
-  }
+  };
   handlePositionAdd = () => {
     let { data, data: { positions } } = this.state;
 
@@ -176,14 +175,16 @@ export default class Popup extends Component {
                       }
                     />
                     <DraggableInput
-                      no={i} 
+                      no={i}
                       name={name}
                       handleChange={e =>
                         this.handleChange({
                           [`positions.${i}.name`]: e.target.value
                         })
                       }
-                      switchPosition={(sourceNo, targetNo) => this.handleSwitch(sourceNo, targetNo)}
+                      switchPosition={(sourceNo, targetNo) =>
+                        this.handleSwitch(sourceNo, targetNo)
+                      }
                     />
                     {!id && (
                       <IconDelete
@@ -279,7 +280,7 @@ const PositionItem = styled.li`
 PositionItem.displayName = 'PositionItem';
 
 const NumberInput = Input.extend.attrs({
-  readOnly: "true"
+  readOnly: 'true'
 })`
   min-width: 50px;
   margin-right: 4px;
@@ -311,16 +312,16 @@ StyleSelect.displayName = 'StyleSelect';
 
 const positionSource = {
   beginDrag(props) {
-      return {
-          no: props.no
-      };
-  },
+    return {
+      no: props.no
+    };
+  }
 };
 
 function collectSource(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging(),
+    isDragging: monitor.isDragging()
   };
 }
 
@@ -329,10 +330,10 @@ const positionTarget = {
     return true;
   },
   drop(props, monitor) {
-      // dispatch action here
-      const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
-      const targetNo = props.no;
-      props.switchPosition(sourceNo, targetNo);
+    // dispatch action here
+    const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
+    const targetNo = props.no;
+    props.switchPosition(sourceNo, targetNo);
   }
 };
 
@@ -344,38 +345,47 @@ function collectTarget(connect, monitor) {
   };
 }
 
-const DraggableInput = 
-_.flow([
+const DraggableInput = _.flow([
   DragSource(ItemTypes.ROLE, positionSource, collectSource),
   DropTarget(ItemTypes.ROLE, positionTarget, collectTarget)
-])(  class DraggableInput extends Component {
-  render() {
-    const {name, handleChange, connectDragSource, connectDropTarget, isDragging, isOver, canDrop} = this.props;
-    const opacity = isDragging ? .5 : 1;
+])(
+  class DraggableInput extends Component {
+    render() {
+      const {
+        name,
+        handleChange,
+        connectDragSource,
+        connectDropTarget,
+        isDragging,
+        isOver,
+        canDrop
+      } = this.props;
+      const opacity = isDragging ? 0.5 : 1;
 
-    let bgColor;
-    if (isOver && canDrop) {
-      bgColor = "greenyellow";
+      let bgColor;
+      if (isOver && canDrop) {
+        bgColor = 'greenyellow';
+      } else if (!isOver && canDrop) {
+        bgColor = '#FFFF99';
+      } else if (isOver && !canDrop) {
+        bgColor = 'red';
+      }
+
+      return connectDropTarget(
+        connectDragSource(
+          <div>
+            <Input
+              data-hj-whitelist
+              type="text"
+              value={name}
+              onChange={handleChange}
+              opacity={opacity}
+              bgColor={bgColor}>
+              {this.props.children}
+            </Input>
+          </div>
+        )
+      );
     }
-    else if (!isOver && canDrop) {
-      bgColor = "#FFFF99";
-    }
-    else if (isOver && !canDrop) {
-      bgColor = "red";
-    }
-    
-    return connectDropTarget(connectDragSource(
-      <div>
-        <Input 
-          data-hj-whitelist
-          type="text"
-          value={name}
-          onChange={handleChange}
-          opacity={opacity}
-          bgColor={bgColor}>
-          {this.props.children}
-        </Input>
-      </div>
-    ))
   }
-})
+);
