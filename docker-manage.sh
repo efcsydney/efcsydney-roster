@@ -1,24 +1,25 @@
 #!/bin/bash -x
 
 release() {
-  docker-compose exec efc-dev /bin/bash -x /opt/efcsydney-roster/release.sh
+  docker-compose run  --entrypoint='/bin/bash -x /opt/efcsydney-roster/release.sh' efc-dev
 }
 
 build(){
   local TARGET=$1
-  if [ "$TARGET" != "dev" && "$TARGET" != "prod" ]; then
+  if [ "$TARGET" != "dev" ] && [ "$TARGET" != "prod" ]; then
     echo "Wrong argument: must be 'dev' or 'prod'. "
     exit 1
   fi
   echo "Build Docker Image"
   docker-compose build efc-$TARGET
   docker rmi -f $(docker images | grep "<none>" | awk "{print \$3}")
+
 }
 
 up(){
   #docker rm -f $(docker ps -a | grep "Exited" | awk "{print \$1}")
   local TARGET=$1
-  if [ "$TARGET" != "dev" && "$TARGET" != "prod" ]; then
+  if [ "$TARGET" != "dev" ] && [ "$TARGET" != "prod" ]; then
     echo "Wrong argument: must be 'dev' or 'prod'. "
     exit 1
   fi

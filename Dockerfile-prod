@@ -9,4 +9,4 @@ RUN pip install awscli --upgrade --user && \
     echo "export PATH=$PATH:~/.local/bin/" >> ~/.bashrc
 
 EXPOSE 3000 3001 3002
-ENTRYPOINT ["/bin/bash", "-ex", "/opt/efcsydney-roster/Entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "-ex", "/opt/efcsydney-roster/Entrypoint.sh", "prod"]

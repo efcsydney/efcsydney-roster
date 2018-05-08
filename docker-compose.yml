@@ -1,4 +1,4 @@
-version: '2.3'
+version: "3"
 services:
   db:
     image: mysql:5.7.21
@@ -10,20 +10,6 @@ services:
         MYSQL_USER: "user"
         MYSQL_PASSWORD: "password"
         MYSQL_DATABASE: "efcRoster"
-    healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-        timeout: 20s
-        retries: 10
-
-  adminer:
-    image: adminer
-    links:
-        - db:db
-    depends_on:
-      db:
-        condition: service_healthy
-    ports:
-      - 8080:8080
 
   efc-dev:
     image: efc-roster:develop
@@ -32,13 +18,13 @@ services:
       dockerfile: Dockerfile-dev
     links:
         - db:db
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
-        - node_env=development
+        - NODE_ENV=development
     ports:
+      - "80:80"
       - "3000:3000"
+      - "3001:3001"
+      - "3002:3002"
     volumes:
       - $PWD:/opt/efcsydney-roster/
 
@@ -49,10 +35,14 @@ services:
       dockerfile: Dockerfile-prod
     links:
         - db:db
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
-        - node_env=local
+        - NODE_ENV=qa
     ports:
-      - "3000:3000"
+      - "80:80"
+      - "3001:3001"
+      - "3002:3002"
+    entrypoint:
+      - /bin/bash
+      - -x
+      - /opt/efcsydney-roster/Entrypoint.sh
+      - prod-local
