@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import ServicesAPI from 'apis/services';
 import { Auth, NavBar } from 'modules/core';
 import styled from 'styled-components';
-import { Button, Cell, Grid, HeaderCell, Row } from 'components';
+import { Button, StateButton, Cell, Grid, HeaderCell, Row } from 'components';
 import { Link } from 'react-router-dom';
 import IconPencil from 'react-icons/lib/fa/pencil';
 import Popup from './Popup';
@@ -81,6 +81,11 @@ export default DragDropContext(HTML5Backend)(
             <Auth
               onFail={this.handleAuthFail}
               onSuccess={this.handleAuthSuccess}>
+              <HeadRow>
+                <LinkBtn to={`${this.rootPath}/new`}>
+                  <ServiceButton>Create New Service</ServiceButton>
+                </LinkBtn>
+              </HeadRow>
               <Grid>
                 <thead>
                   <Row>
@@ -116,9 +121,7 @@ export default DragDropContext(HTML5Backend)(
                   )}
                 </tbody>
               </Grid>
-              <Footer>
-                <Link to={`${this.rootPath}/new`}>Create New Service</Link>
-              </Footer>
+              <Footer />
             </Auth>
           </Body>
           {hasPopup && (
@@ -144,6 +147,16 @@ const Body = styled.div`
 const Footer = styled.div`
   padding: 10px;
   text-align: center;
+`;
+const HeadRow = styled.div`
+  display: flex;
+  margin: 10px 0;
+`;
+const LinkBtn = styled(Link)`
+  margin-left: auto;
+`;
+const ServiceButton = styled(StateButton)`
+  cursor: pointer;
 `;
 const IconEdit = styled(IconPencil)`
   margin-right: 4px;
