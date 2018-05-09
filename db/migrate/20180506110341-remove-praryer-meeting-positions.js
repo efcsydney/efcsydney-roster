@@ -4,7 +4,6 @@ const _ = require('lodash');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-
     const servicesData = (await sequelizeClient.query(
       `SELECT id, name from services WHERE name IN ('prayer')`
     ))[0];
@@ -12,7 +11,9 @@ module.exports = {
     const prayerService = _.find(servicesData, { name: 'prayer' });
     //Remove Topic and Content positions.
     await sequelizeClient.query(
-      `DELETE FROM positions WHERE serviceId = ${prayerService.id} AND name IN ('Topic','Content')`
+      `DELETE FROM positions WHERE serviceId = ${
+        prayerService.id
+      } AND name IN ('Topic','Content')`
     );
   },
 
