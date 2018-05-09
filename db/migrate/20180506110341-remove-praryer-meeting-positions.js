@@ -3,7 +3,7 @@ const sequelizeClient = require('../../api/infrastructure/sequelize-client')
 const _ = require('lodash');
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async () => {
     const servicesData = (await sequelizeClient.query(
       `SELECT id, name from services WHERE name IN ('prayer')`
     ))[0];
@@ -17,7 +17,7 @@ module.exports = {
     );
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: () => {
     /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.
