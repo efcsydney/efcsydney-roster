@@ -308,6 +308,7 @@ const StyleInput = styled(Input)`
 StyleInput.displayName = 'StyleInput';
 
 const StyleIconBar = styled(IconBar)`
+  cursor: move;
   width: calc(10% - 5px);
   margin-right: 5px;
 `;
