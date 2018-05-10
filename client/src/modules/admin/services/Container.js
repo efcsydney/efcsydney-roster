@@ -74,70 +74,72 @@ export default DragDropContext(HTML5Backend)(
         const selectedData = _.find(data, { id: selectedId }) || {};
         const isLoading = mode === 'edit' && _.isEmpty(selectedData);
 
-      return (
-        <Wrapper>
-          <NavBar hasSwitcher={false} title="Roster System" />
-          <Body>
-            <Auth
-              onFail={this.handleAuthFail}
-              onSuccess={this.handleAuthSuccess}>
-              <HeadRow>
-                <LinkBtn to={`${this.rootPath}/new`}>
-                  <ServiceButton>Create New Service</ServiceButton>
-                </LinkBtn>
-              </HeadRow>
-              <Grid>
-                <thead>
-                  <Row>
-                    <HeaderCell>Service Title</HeaderCell>
-                    <HeaderCell>Positions</HeaderCell>
-                    <HeaderCell>Description Label</HeaderCell>
-                    <HeaderCell>Frequency</HeaderCell>
-                    <HeaderCell>Actions</HeaderCell>
-                  </Row>
-                </thead>
-                <tbody>
-                  {data.map(
-                    ({ footnoteLabel, frequency, label, id, positions }) => (
-                      <Row key={id}>
-                        <Cell>
-                          <Link to={`${this.rootPath}/edit/${id}`}>
-                            {label}
-                          </Link>
-                        </Cell>
-                        <Cell>{positions.length}</Cell>
-                        <Cell>{footnoteLabel}</Cell>
-                        <Cell>{_.capitalize(frequency)}</Cell>
-                        <Cell>
-                          <Link to={`${this.rootPath}/edit/${id}`}>
-                            <Button kind="blue">
-                              <IconEdit />
-                              Edit
-                            </Button>
-                          </Link>
-                        </Cell>
-                      </Row>
-                    )
-                  )}
-                </tbody>
-              </Grid>
-              <Footer />
-            </Auth>
-          </Body>
-          {hasPopup && (
-            <Popup
-              mode={mode}
-              data={selectedData}
-              isLoading={isLoading}
-              onSave={this.handlePopupSave}
-              onClose={this.handlePopupClose}
-            />
-          )}
-        </Wrapper>
-      );
+        return (
+          <Wrapper>
+            <NavBar hasSwitcher={false} title="Roster System" />
+            <Body>
+              <Auth
+                onFail={this.handleAuthFail}
+                onSuccess={this.handleAuthSuccess}>
+                <HeadRow>
+                  <LinkBtn to={`${this.rootPath}/new`}>
+                    <ServiceButton>Create New Service</ServiceButton>
+                  </LinkBtn>
+                </HeadRow>
+                <Grid>
+                  <thead>
+                    <Row>
+                      <HeaderCell>Service Title</HeaderCell>
+                      <HeaderCell>Positions</HeaderCell>
+                      <HeaderCell>Description Label</HeaderCell>
+                      <HeaderCell>Frequency</HeaderCell>
+                      <HeaderCell>Actions</HeaderCell>
+                    </Row>
+                  </thead>
+                  <tbody>
+                    {data.map(
+                      ({ footnoteLabel, frequency, label, id, positions }) => (
+                        <Row key={id}>
+                          <Cell>
+                            <Link to={`${this.rootPath}/edit/${id}`}>
+                              {label}
+                            </Link>
+                          </Cell>
+                          <Cell>{positions.length}</Cell>
+                          <Cell>{footnoteLabel}</Cell>
+                          <Cell>{_.capitalize(frequency)}</Cell>
+                          <Cell>
+                            <Link to={`${this.rootPath}/edit/${id}`}>
+                              <Button kind="blue">
+                                <IconEdit />
+                                Edit
+                              </Button>
+                            </Link>
+                          </Cell>
+                        </Row>
+                      )
+                    )}
+                  </tbody>
+                </Grid>
+                <Footer>
+                  <Link to={`${this.rootPath}/new`}>Create New Service</Link>
+                </Footer>
+              </Auth>
+            </Body>
+            {hasPopup && (
+              <Popup
+                mode={mode}
+                data={selectedData}
+                isLoading={isLoading}
+                onSave={this.handlePopupSave}
+                onClose={this.handlePopupClose}
+              />
+            )}
+          </Wrapper>
+        );
+      }
     }
   )
-)
 );
 
 const Wrapper = styled.div``;
