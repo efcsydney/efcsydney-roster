@@ -8,8 +8,8 @@ import { Button, StateButton, Cell, Grid, HeaderCell, Row } from 'components';
 import { Link } from 'react-router-dom';
 import IconPencil from 'react-icons/lib/fa/pencil';
 import Popup from './Popup';
-import { DragDropContext } from "react-dnd";
-import HTML5Backend from "react-dnd-html5-backend";
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 const mapStateToProps = (state, ownProps) => {
   const path = _.get(ownProps, 'match.path');
@@ -27,52 +27,52 @@ const mapStateToProps = (state, ownProps) => {
 };
 export default DragDropContext(HTML5Backend)(
   connect(mapStateToProps)(
-  class AdminIndex extends Component {
-    state = {
-      data: []
-    };
-    constructor(props) {
-      super(props);
+    class AdminIndex extends Component {
+      state = {
+        data: []
+      };
+      constructor(props) {
+        super(props);
 
-      this.rootPath = '/admin/services';
-    }
-    handleAuthFail = () => {
-      const { history } = this.props;
+        this.rootPath = '/admin/services';
+      }
+      handleAuthFail = () => {
+        const { history } = this.props;
 
-      history.replace('/login');
-    };
-    handleAuthSuccess = () => {
-      ServicesAPI.retrieve().then(({ data }) => {
-        this.setState({ data });
-      });
-    };
-    handlePopupClose = () => {
-      const { history } = this.props;
+        history.replace('/login');
+      };
+      handleAuthSuccess = () => {
+        ServicesAPI.retrieve().then(({ data }) => {
+          this.setState({ data });
+        });
+      };
+      handlePopupClose = () => {
+        const { history } = this.props;
 
-      history.push(this.rootPath);
-    };
-    handlePopupSave = data => {
-      const { history } = this.props;
-      const { data: prevData } = this.state;
-      const nextData = _.clone(prevData);
+        history.push(this.rootPath);
+      };
+      handlePopupSave = data => {
+        const { history } = this.props;
+        const { data: prevData } = this.state;
+        const nextData = _.clone(prevData);
 
-      const { id, ...body } = data;
-      const offset = _.findIndex(prevData, { id: id });
+        const { id, ...body } = data;
+        const offset = _.findIndex(prevData, { id: id });
 
-      ServicesAPI.modify(id, body)
-        .then(({ data }) => {
-          nextData[offset] = data;
-          this.setState({ data: nextData });
-        })
-        .catch(e => alert(e.message))
-        .finally(() => history.push(this.rootPath));
-    };
-    render() {
-      const { data } = this.state;
-      const { mode, selectedId } = this.props;
-      const hasPopup = _.includes(['new', 'edit'], mode);
-      const selectedData = _.find(data, { id: selectedId }) || {};
-      const isLoading = mode === 'edit' && _.isEmpty(selectedData);
+        ServicesAPI.modify(id, body)
+          .then(({ data }) => {
+            nextData[offset] = data;
+            this.setState({ data: nextData });
+          })
+          .catch(e => alert(e.message))
+          .finally(() => history.push(this.rootPath));
+      };
+      render() {
+        const { data } = this.state;
+        const { mode, selectedId } = this.props;
+        const hasPopup = _.includes(['new', 'edit'], mode);
+        const selectedData = _.find(data, { id: selectedId }) || {};
+        const isLoading = mode === 'edit' && _.isEmpty(selectedData);
 
       return (
         <Wrapper>
@@ -136,7 +136,7 @@ export default DragDropContext(HTML5Backend)(
         </Wrapper>
       );
     }
-  }
+  )
 )
 );
 

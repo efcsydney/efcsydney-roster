@@ -16,8 +16,9 @@ import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
-import { DragSource, DropTarget } from "react-dnd";
-import {ItemTypes} from "../../../constants/ReactDndItemTypes";
+import { DragSource, DropTarget } from 'react-dnd';
+import { ItemTypes } from '../../../constants/ReactDndItemTypes';
+import IconBar from 'react-icons/lib/fa/bars';
 
 
 export default class Popup extends Component {
@@ -65,15 +66,15 @@ export default class Popup extends Component {
     });
   };
   handleSwitch = (sourceNo, targetNo) => {
-    const {data: {positions}} = this.state;
+    const { data: { positions } } = this.state;
     const target = positions[targetNo];
     const source = positions[sourceNo];
 
     this.handleChange({
       [`positions.${sourceNo}.name`]: target.name,
-      [`positions.${targetNo}.name`]: source.name,
+      [`positions.${targetNo}.name`]: source.name
     });
-  }
+  };
   handlePositionAdd = () => {
     let { data, data: { positions } } = this.state;
 
@@ -169,33 +170,25 @@ export default class Popup extends Component {
             <PositionList>
               {positions.map(({ id, name, order }, i) => {
                 return (
-                  <PositionItem key={i} value={order}>
-                    <NumberInput
-                      data-hj-whitelist
-                      type="number"
-                      value={order}
-                      onChange={e =>
-                        this.handleChange({
-                          [`positions.${i}.order`]: parseInt(e.target.value, 10)
-                        })
-                      }
-                    />
-                    <DraggableInput
-                      no={i} 
-                      name={name}
-                      handleChange={e =>
-                        this.handleChange({
-                          [`positions.${i}.name`]: e.target.value
-                        })
-                      }
-                      switchPosition={(sourceNo, targetNo) => this.handleSwitch(sourceNo, targetNo)}
-                    />
+                  <DraggablePositionItem
+                    key={i}
+                    value={order}
+                    no={i}
+                    name={name}
+                    handleChange={e =>
+                      this.handleChange({
+                        [`positions.${i}.name`]: e.target.value
+                      })
+                    }
+                    switchPosition={(sourceNo, targetNo) =>
+                      this.handleSwitch(sourceNo, targetNo)
+                    }>
                     {!id && (
                       <IconDelete
                         onClick={this.handlePositionDelete.bind(this, i)}
                       />
                     )}
-                  </PositionItem>
+                  </DraggablePositionItem>
                 );
               })}
               <PositionItem>
@@ -286,7 +279,7 @@ const PositionItem = styled.li`
 PositionItem.displayName = 'PositionItem';
 
 const NumberInput = Input.extend.attrs({
-  readOnly: "true"
+  readOnly: 'true'
 })`
   min-width: 50px;
   margin-right: 4px;
@@ -316,18 +309,30 @@ const StyleSelect = styled(Select)`
 `;
 StyleSelect.displayName = 'StyleSelect';
 
+const StyleInput = styled(Input)`
+  width: 90%;
+  display: inline-block;
+`;
+StyleInput.displayName = 'StyleInput';
+
+const StyleIconBar = styled(IconBar)`
+  width: calc(10% - 5px);
+  margin-right: 5px;
+`;
+StyleIconBar.displayName = 'StyleIconBar';
+
 const positionSource = {
   beginDrag(props) {
-      return {
-          no: props.no
-      };
-  },
+    return {
+      no: props.no
+    };
+  }
 };
 
 function collectSource(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging(),
+    isDragging: monitor.isDragging()
   };
 }
 
@@ -336,10 +341,10 @@ const positionTarget = {
     return true;
   },
   drop(props, monitor) {
-      // dispatch action here
-      const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
-      const targetNo = props.no;
-      props.switchPosition(sourceNo, targetNo);
+    // dispatch action here
+    const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
+    const targetNo = props.no;
+    props.switchPosition(sourceNo, targetNo);
   }
 };
 
@@ -351,38 +356,47 @@ function collectTarget(connect, monitor) {
   };
 }
 
-const DraggableInput = 
-_.flow([
+const DraggablePositionItem = _.flow([
   DragSource(ItemTypes.ROLE, positionSource, collectSource),
   DropTarget(ItemTypes.ROLE, positionTarget, collectTarget)
-])(  class DraggableInput extends Component {
-  render() {
-    const {name, handleChange, connectDragSource, connectDropTarget, isDragging, isOver, canDrop} = this.props;
-    const opacity = isDragging ? .5 : 1;
+])(
+  class DraggablePositionItem extends Component {
+    render() {
+      const {
+        name,
+        handleChange,
+        connectDragSource,
+        connectDropTarget,
+        isDragging,
+        isOver,
+        canDrop
+      } = this.props;
+      const opacity = isDragging ? 0.5 : 1;
 
-    let bgColor;
-    if (isOver && canDrop) {
-      bgColor = "greenyellow";
+      let bgColor;
+      if (isOver && canDrop) {
+        bgColor = 'greenyellow';
+      } else if (!isOver && canDrop) {
+        bgColor = '#FFFF99';
+      } else if (isOver && !canDrop) {
+        bgColor = 'red';
+      }
+
+      return connectDropTarget(
+        connectDragSource(
+          <div>
+            <StyleIconBar />
+            <StyleInput
+              data-hj-whitelist
+              type="text"
+              value={name}
+              onChange={handleChange}
+              opacity={opacity}
+              bgColor={bgColor}
+            />
+          </div>
+        )
+      );
     }
-    else if (!isOver && canDrop) {
-      bgColor = "#FFFF99";
-    }
-    else if (isOver && !canDrop) {
-      bgColor = "red";
-    }
-    
-    return connectDropTarget(connectDragSource(
-      <div>
-        <Input 
-          data-hj-whitelist
-          type="text"
-          value={name}
-          onChange={handleChange}
-          opacity={opacity}
-          bgColor={bgColor}>
-          {this.props.children}
-        </Input>
-      </div>
-    ))
   }
-})
+);
