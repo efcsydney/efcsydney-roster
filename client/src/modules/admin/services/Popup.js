@@ -18,6 +18,7 @@ import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
 import { DragSource, DropTarget } from 'react-dnd';
 import { ItemTypes } from '../../../constants/ReactDndItemTypes';
+import IconBar from 'react-icons/lib/fa/bars';
 
 export default class Popup extends Component {
   static propTypes = {
@@ -163,35 +164,25 @@ export default class Popup extends Component {
             <PositionList>
               {positions.map(({ id, name, order }, i) => {
                 return (
-                  <PositionItem key={i} value={order}>
-                    <NumberInput
-                      data-hj-whitelist
-                      type="number"
-                      value={order}
-                      onChange={e =>
-                        this.handleChange({
-                          [`positions.${i}.order`]: parseInt(e.target.value, 10)
-                        })
-                      }
-                    />
-                    <DraggableInput
-                      no={i}
-                      name={name}
-                      handleChange={e =>
-                        this.handleChange({
-                          [`positions.${i}.name`]: e.target.value
-                        })
-                      }
-                      switchPosition={(sourceNo, targetNo) =>
-                        this.handleSwitch(sourceNo, targetNo)
-                      }
-                    />
+                  <DraggablePositionItem
+                    key={i}
+                    value={order}
+                    no={i}
+                    name={name}
+                    handleChange={e =>
+                      this.handleChange({
+                        [`positions.${i}.name`]: e.target.value
+                      })
+                    }
+                    switchPosition={(sourceNo, targetNo) =>
+                      this.handleSwitch(sourceNo, targetNo)
+                    }>
                     {!id && (
                       <IconDelete
                         onClick={this.handlePositionDelete.bind(this, i)}
                       />
                     )}
-                  </PositionItem>
+                  </DraggablePositionItem>
                 );
               })}
               <PositionItem>
@@ -310,6 +301,18 @@ const StyleSelect = styled(Select)`
 `;
 StyleSelect.displayName = 'StyleSelect';
 
+const StyleInput = styled(Input)`
+  width: 85%;
+  display: inline-block;
+`;
+StyleInput.displayName = 'StyleInput';
+
+const StyleIconBar = styled(IconBar)`
+  width: 10%;
+  margin-right: 5px;
+`;
+StyleIconBar.displayName = 'StyleIconBar';
+
 const positionSource = {
   beginDrag(props) {
     return {
@@ -345,11 +348,11 @@ function collectTarget(connect, monitor) {
   };
 }
 
-const DraggableInput = _.flow([
+const DraggablePositionItem = _.flow([
   DragSource(ItemTypes.ROLE, positionSource, collectSource),
   DropTarget(ItemTypes.ROLE, positionTarget, collectTarget)
 ])(
-  class DraggableInput extends Component {
+  class DraggablePositionItem extends Component {
     render() {
       const {
         name,
@@ -374,15 +377,15 @@ const DraggableInput = _.flow([
       return connectDropTarget(
         connectDragSource(
           <div>
-            <Input
+            <StyleIconBar />
+            <StyleInput
               data-hj-whitelist
               type="text"
               value={name}
               onChange={handleChange}
               opacity={opacity}
-              bgColor={bgColor}>
-              {this.props.children}
-            </Input>
+              bgColor={bgColor}
+            />
           </div>
         )
       );
