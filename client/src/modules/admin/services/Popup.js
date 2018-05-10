@@ -302,13 +302,13 @@ const StyleSelect = styled(Select)`
 StyleSelect.displayName = 'StyleSelect';
 
 const StyleInput = styled(Input)`
-  width: 85%;
+  width: 90%;
   display: inline-block;
 `;
 StyleInput.displayName = 'StyleInput';
 
 const StyleIconBar = styled(IconBar)`
-  width: 10%;
+  width: calc(10% - 5px);
   margin-right: 5px;
 `;
 StyleIconBar.displayName = 'StyleIconBar';
