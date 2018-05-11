@@ -89,9 +89,7 @@ class DtoMapper {
 
   static async mapServiceDtoToModel(dto) {
     const { id, data } = dto;
-    const frequency = (!data.frequency.id) ? await FrequencyRepository.getFrequencyByName(data.frequency) :
-      data.frequency;
-
+    const frequency = await FrequencyRepository.getFrequencyByName(data.frequency.name);
     return {
       id,
       ...data,
