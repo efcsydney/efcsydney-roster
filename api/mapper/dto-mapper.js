@@ -1,5 +1,6 @@
 const getDateString = require('../utilities/datetime-util').getDateString;
-const FrequencyRepository = require('../data/frequency-repository').FrequencyRepository;
+const FrequencyRepository = require('../data/frequency-repository')
+  .FrequencyRepository;
 const _ = require('lodash');
 
 class DtoMapper {
@@ -21,7 +22,7 @@ class DtoMapper {
     return {
       role: event.position,
       name: event.volunteerName
-    }
+    };
   }
 
   static mapEventToDto(event) {
@@ -29,8 +30,8 @@ class DtoMapper {
       role: event.position.name,
       name: event.volunteerName,
       id: event.id,
-      date: event.calendarDate.date,
-    }
+      date: event.calendarDate.date
+    };
   }
 
   static mapServiceInfoToDto(serviceInfo) {
@@ -38,7 +39,7 @@ class DtoMapper {
       id: serviceInfo.id,
       footnote: serviceInfo.footnote,
       skipService: serviceInfo.skipService,
-      skipReason: serviceInfo.skipReason,
+      skipReason: serviceInfo.skipReason
     };
   }
 
@@ -78,9 +79,9 @@ class DtoMapper {
       locale: service.locale,
       label: service.label,
       footnoteLabel: service.footnoteLabel,
-      frequency:  _.get(service.frequency, 'name', ''),
-      positions: _.get(service, 'positions', []),
-    }
+      frequency: _.get(service.frequency, 'name', ''),
+      positions: _.get(service, 'positions', [])
+    };
   }
 
   static mapServicesToDto(services) {
@@ -89,11 +90,13 @@ class DtoMapper {
 
   static async mapServiceDtoToModel(dto) {
     const { id, data } = dto;
-    const frequency = await FrequencyRepository.getFrequencyByName(data.frequency.name);
+    const frequency = await FrequencyRepository.getFrequencyByName(
+      data.frequency.name
+    );
     return {
       id,
       ...data,
-      frequencyId: frequency.id,
+      frequencyId: frequency.id
     };
   }
 }
