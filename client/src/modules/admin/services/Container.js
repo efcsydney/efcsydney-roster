@@ -120,7 +120,6 @@ export default connect(mapStateToProps)(
                   )}
                 </tbody>
               </Grid>
-              <Footer />
             </Auth>
           </Body>
           {hasPopup && (
