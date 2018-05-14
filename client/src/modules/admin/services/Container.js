@@ -145,10 +145,6 @@ const Wrapper = styled.div``;
 const Body = styled.div`
   margin: 10px;
 `;
-const Footer = styled.div`
-  padding: 10px;
-  text-align: center;
-`;
 const HeadRow = styled.div`
   display: flex;
   margin: 10px 0;
