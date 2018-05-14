@@ -94,33 +94,29 @@ export default DragDropContext(HTML5Backend)(
                       <HeaderCell>Service Title</HeaderCell>
                       <HeaderCell>Positions</HeaderCell>
                       <HeaderCell>Description Label</HeaderCell>
-                      <HeaderCell>Frequency</HeaderCell>
                       <HeaderCell>Actions</HeaderCell>
                     </Row>
                   </thead>
                   <tbody>
-                    {data.map(
-                      ({ footnoteLabel, frequency, label, id, positions }) => (
-                        <Row key={id}>
-                          <Cell>
-                            <Link to={`${this.rootPath}/edit/${id}`}>
-                              {label}
-                            </Link>
-                          </Cell>
-                          <Cell>{positions.length}</Cell>
-                          <Cell>{footnoteLabel}</Cell>
-                          <Cell>{_.capitalize(frequency)}</Cell>
-                          <Cell>
-                            <Link to={`${this.rootPath}/edit/${id}`}>
-                              <Button kind="blue">
-                                <IconEdit />
-                                Edit
-                              </Button>
-                            </Link>
-                          </Cell>
-                        </Row>
-                      )
-                    )}
+                    {data.map(({ frequency, label, id, positions }) => (
+                      <Row key={id}>
+                        <Cell>
+                          <Link to={`${this.rootPath}/edit/${id}`}>
+                            {label}
+                          </Link>
+                        </Cell>
+                        <Cell>{positions.length}</Cell>
+                        <Cell>{_.capitalize(frequency)}</Cell>
+                        <Cell>
+                          <Link to={`${this.rootPath}/edit/${id}`}>
+                            <Button kind="blue">
+                              <IconEdit />
+                              Edit
+                            </Button>
+                          </Link>
+                        </Cell>
+                      </Row>
+                    ))}
                   </tbody>
                 </Grid>
               </Auth>
