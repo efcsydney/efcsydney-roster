@@ -78,6 +78,13 @@ export default connect(mapStateToProps)(
             <Auth
               onFail={this.handleAuthFail}
               onSuccess={this.handleAuthSuccess}>
+              <HeadRow>
+                <Link to={`${this.rootPath}/new`}>
+                  <Button kind="green" theme="solid">
+                    Create New Service
+                  </Button>
+                </Link>
+              </HeadRow>
               <Grid>
                 <thead>
                   <Row>
@@ -113,9 +120,6 @@ export default connect(mapStateToProps)(
                   )}
                 </tbody>
               </Grid>
-              <Footer>
-                <Link to={`${this.rootPath}/new`}>Create New Service</Link>
-              </Footer>
             </Auth>
           </Body>
           {hasPopup && (
@@ -137,9 +141,10 @@ const Wrapper = styled.div``;
 const Body = styled.div`
   margin: 10px;
 `;
-const Footer = styled.div`
-  padding: 10px;
-  text-align: center;
+const HeadRow = styled.div`
+  display: flex;
+  margin: 10px 0;
+  justify-content: flex-end;
 `;
 const IconEdit = styled(IconPencil)`
   margin-right: 4px;
