@@ -54,7 +54,7 @@ const mapDispatchToProps = dispatch =>
   );
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  class App extends Component {
+  class Container extends Component {
     state = {
       date: new Date(),
       selectedData: {},
@@ -176,21 +176,24 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       }
     };
     componentWillMount() {
-      const { category, switchCategory } = this.props;
+      const { category, switchCategory, match: { path } } = this.props;
 
       this.channel = pusher.subscribe('index');
       this.channel.bind('event-modified', this.handleEventModified);
       this.channel.bind('serviceInfo-modified', this.handleServiceInfoModified);
 
-      switchCategory(category);
-      this.loadData({ category });
+      const nextCategory = path.replace(/\//g, '') || category;
+      switchCategory(nextCategory);
+      this.loadData({ category: nextCategory });
     }
     componentDidMount() {
       const { history } = this.props;
 
-      history.listen(this.handleHistoryChange);
+      this.unlisten = history.listen(this.handleHistoryChange);
     }
-
+    componentWillUnmount() {
+      this.unlisten();
+    }
     getAllNames() {
       const { data } = this.props;
       const { preQuarterMembers } = this.state;
