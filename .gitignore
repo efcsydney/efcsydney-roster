@@ -9,3 +9,5 @@ config/local.yaml
 .vscode/*
 backup/*
 sample.html
+efcsydney-roster.tar.gz
+log/*
