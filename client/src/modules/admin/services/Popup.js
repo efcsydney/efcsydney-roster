@@ -16,6 +16,8 @@ import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import { DraggablePositionItem } from '../../../components/DraggablePositionItem';
 
 export default class Popup extends Component {
@@ -251,11 +253,11 @@ const Label = styled.label`
 `;
 Label.displayName = 'Label';
 
-const PositionList = styled.ol`
+const PositionList = DragDropContext(HTML5Backend)(styled.ol`
   background: #eee;
   border-radius: 4px;
   padding: 5px;
-`;
+`);
 PositionList.displayName = 'PositionList';
 
 const PositionItem = styled.li`
