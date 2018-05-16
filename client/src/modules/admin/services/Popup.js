@@ -16,8 +16,7 @@ import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
-import { DragSource, DropTarget } from 'react-dnd';
-import IconBar from 'react-icons/lib/fa/bars';
+import { DraggablePositionItem } from '../../../components/DraggablePositionItem';
 
 export default class Popup extends Component {
   static propTypes = {
@@ -289,97 +288,3 @@ const StyleSelect = styled(Select)`
   width: 165px;
 `;
 StyleSelect.displayName = 'StyleSelect';
-
-const StyleInput = styled(Input)`
-  width: 90%;
-  display: inline-block;
-`;
-StyleInput.displayName = 'StyleInput';
-
-const StyleIconBar = styled(IconBar)`
-  cursor: move;
-  width: calc(10% - 5px);
-  margin-right: 5px;
-`;
-StyleIconBar.displayName = 'StyleIconBar';
-
-const ItemTypes = {
-  ROLE: 'role'
-};
-
-const positionSource = {
-  beginDrag(props) {
-    return {
-      no: props.no
-    };
-  }
-};
-
-function collectSource(connect, monitor) {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  };
-}
-
-const positionTarget = {
-  drop(props, monitor) {
-    // dispatch action here
-    const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
-    const targetNo = props.no;
-    props.switchPosition(sourceNo, targetNo);
-  }
-};
-
-function collectTarget(connect, monitor) {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
-  };
-}
-
-const DraggablePositionItem = _.flow([
-  DragSource(ItemTypes.ROLE, positionSource, collectSource),
-  DropTarget(ItemTypes.ROLE, positionTarget, collectTarget)
-])(
-  class DraggablePositionItem extends Component {
-    render() {
-      const {
-        name,
-        onChange,
-        connectDragSource,
-        connectDropTarget,
-        isDragging,
-        isOver,
-        canDrop
-      } = this.props;
-      const opacity = isDragging ? 0.5 : 1;
-
-      let bgColor;
-      if (isOver && canDrop) {
-        bgColor = 'greenyellow';
-      } else if (!isOver && canDrop) {
-        bgColor = '#FFFF99';
-      } else if (isOver && !canDrop) {
-        bgColor = 'red';
-      }
-
-      return connectDropTarget(
-        connectDragSource(
-          <div>
-            <StyleIconBar />
-            <StyleInput
-              data-hj-whitelist
-              type="text"
-              value={name}
-              onChange={onChange}
-              opacity={opacity}
-              bgColor={bgColor}
-            />
-          </div>
-        )
-      );
-    }
-  }
-);
