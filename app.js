@@ -59,6 +59,8 @@ app.get('/api/services/:id', servicesController.getServiceById);
 
 app.put('/api/services/:id', servicesController.saveService);
 
+app.post('/api/services/', servicesController.saveService);
+
 if (isServerEnvironment()) {
   // The error handler must be before any other error middleware
   app.use(Raven.errorHandler());

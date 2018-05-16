@@ -9,6 +9,8 @@ addons:
   ssh_known_hosts:
   - 54.206.106.116
   - 13.210.76.160
+  hosts:
+  - db
 services:
 - mysql
 before_script:
