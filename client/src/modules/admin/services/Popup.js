@@ -17,7 +17,6 @@ import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
 import { DragSource, DropTarget } from 'react-dnd';
-import { ItemTypes } from '../../../constants/ReactDndItemTypes';
 import IconBar from 'react-icons/lib/fa/bars';
 
 export default class Popup extends Component {
@@ -314,6 +313,10 @@ const StyleIconBar = styled(IconBar)`
 `;
 StyleIconBar.displayName = 'StyleIconBar';
 
+const ItemTypes = {
+  ROLE: 'role'
+};
+
 const positionSource = {
   beginDrag(props) {
     return {
@@ -330,9 +333,6 @@ function collectSource(connect, monitor) {
 }
 
 const positionTarget = {
-  canDrop(props) {
-    return true;
-  },
   drop(props, monitor) {
     // dispatch action here
     const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
