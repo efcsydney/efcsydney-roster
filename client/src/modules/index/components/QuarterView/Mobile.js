@@ -64,7 +64,8 @@ export default connect(mapStateToProps)(
     }
 
     renderRolesList(day, roles, members, serviceInfo) {
-      const { onDayClick, onRoleClick } = this.props;
+      const { onDayClick, onRoleClick, selectedService } = this.props;
+      const positions = _.get(selectedService, 'positions', []);
       const formattedDate = moment(day).format('YYYY-MM-DD');
 
       if (serviceInfo.skipService) {
@@ -78,7 +79,8 @@ export default connect(mapStateToProps)(
         );
       }
 
-      return roles.map((role, i) => {
+      return positions.map((position, i) => {
+        const role = position.name;
         const member = _.find(members, { role }) || {};
         const name = member.name || '';
         return (
