@@ -127,8 +127,9 @@ export default connect(mapStateToProps)(
       );
     }
     render() {
-      const { roles, events, selectedService } = this.props;
+      const { events, selectedService } = this.props;
       const footnoteLabel = _.get(selectedService, 'footnoteLabel', '');
+      const positions = _.get(selectedService, 'positions', []);
       const sortedEvents = _.sortBy(events, 'date');
 
       return (
@@ -141,9 +142,9 @@ export default connect(mapStateToProps)(
               <Header>
                 <Text>{footnoteLabel}</Text>
               </Header>
-              {roles.map((role, i) => (
+              {positions.map((position, i) => (
                 <Header key={i}>
-                  <Text>{role}</Text>
+                  <Text>{position.name}</Text>
                 </Header>
               ))}
             </Row>
