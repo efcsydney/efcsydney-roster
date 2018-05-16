@@ -168,7 +168,7 @@ export default class Popup extends Component {
                     value={order}
                     no={i}
                     name={name}
-                    handleChange={e =>
+                    onChange={e =>
                       this.handleChange({
                         [`positions.${i}.name`]: e.target.value
                       })
@@ -347,7 +347,7 @@ const DraggablePositionItem = _.flow([
     render() {
       const {
         name,
-        handleChange,
+        onChange,
         connectDragSource,
         connectDropTarget,
         isDragging,
@@ -373,7 +373,7 @@ const DraggablePositionItem = _.flow([
               data-hj-whitelist
               type="text"
               value={name}
-              onChange={handleChange}
+              onChange={onChange}
               opacity={opacity}
               bgColor={bgColor}
             />
