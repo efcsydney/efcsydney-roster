@@ -269,16 +269,6 @@ const PositionItem = styled.li`
 `;
 PositionItem.displayName = 'PositionItem';
 
-const NumberInput = Input.extend.attrs({
-  readOnly: 'true'
-})`
-  min-width: 50px;
-  margin-right: 4px;
-  text-align: center;
-  width: 50px;
-`;
-NumberInput.displayName = 'NumberInput';
-
 const AddPositionLink = styled.a`
   cursor: pointer;
   display: block;
