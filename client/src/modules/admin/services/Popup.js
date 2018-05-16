@@ -20,7 +20,6 @@ import { DragSource, DropTarget } from 'react-dnd';
 import { ItemTypes } from '../../../constants/ReactDndItemTypes';
 import IconBar from 'react-icons/lib/fa/bars';
 
-
 export default class Popup extends Component {
   static propTypes = {
     data: PropTypes.object,
@@ -110,7 +109,7 @@ export default class Popup extends Component {
     const label = _.get(data, 'label', '');
     const footnoteLabel = _.get(data, 'footnoteLabel', '');
     const positions = _.get(data, 'positions', []);
-    const disableButton = !label || !footnoteLabel
+    const enableButton = label && footnoteLabel;
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -196,7 +195,7 @@ export default class Popup extends Component {
           </span>
         </Row>
         <Row align="center">
-          <StateButton type="submit" disabled={disableButton}>
+          <StateButton type="submit" disabled={!enableButton}>
             Save
           </StateButton>
         </Row>
