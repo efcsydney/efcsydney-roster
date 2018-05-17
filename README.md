@@ -7,6 +7,7 @@ Status](https://travis-ci.org/efcsydney/efcsydney-roster.svg?branch=master)](htt
 
 ## Reference
 
+* [Documentation](https://paper.dropbox.com/folder/show/EFC-Sydney-IT-e.iX7ZavGxujPFwhjOZcQrk6VfUP2CUBkVISfFwtlzEHnunGgdNM)
 * [Using create-react-app with a server](https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/)
 
 ## Installation
