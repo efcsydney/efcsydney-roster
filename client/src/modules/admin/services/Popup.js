@@ -11,14 +11,19 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { LoadingIndicator, Modal, StateButton, Input } from 'components';
+import {
+  LoadingIndicator,
+  Modal,
+  StateButton,
+  Input,
+  DraggableItem
+} from 'components';
 import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { DraggableItem } from '../../../components/DraggableItem';
 
 export default class Popup extends Component {
   static propTypes = {

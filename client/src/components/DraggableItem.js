@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { Input } from 'components';
 import { DragSource, DropTarget } from 'react-dnd';
 import IconBar from 'react-icons/lib/fa/bars';
 import styled from 'styled-components';
@@ -88,10 +87,47 @@ const StyleIconBar = styled(IconBar)`
 `;
 StyleIconBar.displayName = 'StyleIconBar';
 
-const StyleInput = styled(Input)`
+const StyleInput = styled.input`
   opacity: ${props => (props.isDragging ? 0.5 : 1)};
   background-color: ${props => (props.isDragEntering ? '#c1c1c1' : '#fff')};
   width: 90%;
   display: inline-block;
+  background-color: '#fff';
+  border: solid 1px #c1c1c1;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  color: #333;
+  padding: 9px;
+  &.extra-space-for-addon {
+    padding-left: 48px;
+  }
+  &:hover {
+    border-color: #8b8b8b;
+  }
+  &:focus {
+    border-color: #64b8dc;
+    box-shadow: none;
+    outline: 0;
+  }
+  &[disabled] {
+    background: #e5e5e5;
+    border-color: #c1c1c1;
+    box-shadow: none;
+  }
+  &::-webkit-input-placeholder {
+    color: #999;
+  }
+  &:-moz-placeholder {
+    color: #999;
+  }
+  &::-moz-placeholder {
+    color: #999;
+  }
+  &:-ms-input-placeholder {
+    color: #999;
+  }
 `;
 StyleInput.displayName = 'StyleInput';
+
+export default DraggableItem;

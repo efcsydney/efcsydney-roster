@@ -7,6 +7,7 @@ import Modal from './Modal';
 import StateButton from './StateButton';
 import SwitchButton from './SwitchButton';
 import TagManager from './TagManager';
+import DraggableItem from './DraggableItem';
 
 export {
   Button,
@@ -20,5 +21,6 @@ export {
   Row,
   StateButton,
   SwitchButton,
-  TagManager
+  TagManager,
+  DraggableItem
 };
