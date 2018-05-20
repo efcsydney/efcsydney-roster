@@ -74,6 +74,7 @@ export const DraggableItem = _.flow([
                 isDragging={isDragging}
                 isDragEntering={isDragEntering}
               />
+              {this.props.children}
             </Wrapper>
           </div>
         )
