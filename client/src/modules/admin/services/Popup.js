@@ -166,34 +166,36 @@ export default class Popup extends Component {
           <Label style={{ paddingTop: '10px' }}>Positions</Label>
           <span>
             <DragDropZone>
-              {positions.map(({ id, name, order }, i) => {
-                return (
-                  <DraggableItem
-                    key={i}
-                    value={order}
-                    no={i}
-                    name={name}
-                    onChange={e =>
-                      this.handleChange({
-                        [`positions.${i}.name`]: e.target.value
-                      })
-                    }
-                    onSwitchPosition={(sourceNo, targetNo) =>
-                      this.handleSwitch(sourceNo, targetNo)
-                    }>
-                    {!id && (
-                      <IconDelete
-                        onClick={this.handlePositionDelete.bind(this, i)}
-                      />
-                    )}
-                  </DraggableItem>
-                );
-              })}
-              <PositionItem>
-                <AddPositionLink onClick={this.handlePositionAdd}>
-                  Add New Position
-                </AddPositionLink>
-              </PositionItem>
+              <PositionList>
+                {positions.map(({ id, name, order }, i) => {
+                  return (
+                    <DraggableItem
+                      key={i}
+                      value={order}
+                      no={i}
+                      name={name}
+                      onChange={e =>
+                        this.handleChange({
+                          [`positions.${i}.name`]: e.target.value
+                        })
+                      }
+                      onSwitchPosition={(sourceNo, targetNo) =>
+                        this.handleSwitch(sourceNo, targetNo)
+                      }>
+                      {!id && (
+                        <IconDelete
+                          onClick={this.handlePositionDelete.bind(this, i)}
+                        />
+                      )}
+                    </DraggableItem>
+                  );
+                })}
+                <PositionItem>
+                  <AddPositionLink onClick={this.handlePositionAdd}>
+                    Add New Position
+                  </AddPositionLink>
+                </PositionItem>
+              </PositionList>
             </DragDropZone>
           </span>
         </Row>
@@ -266,6 +268,9 @@ const PositionItem = styled.li`
   }
 `;
 PositionItem.displayName = 'PositionItem';
+
+const PositionList = styled.ol``;
+PositionList.displayName = 'PositionList';
 
 const AddPositionLink = styled.a`
   cursor: pointer;
