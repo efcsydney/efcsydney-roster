@@ -56,15 +56,10 @@ export const DraggablePositionItem = _.flow([
         isOver,
         canDrop
       } = this.props;
-      const opacity = isDragging ? 0.5 : 1;
 
-      let bgColor;
+      let isDragEntering;
       if (isOver && canDrop) {
-        bgColor = 'greenyellow';
-      } else if (!isOver && canDrop) {
-        bgColor = '#FFFF99';
-      } else if (isOver && !canDrop) {
-        bgColor = 'red';
+        isDragEntering = true;
       }
 
       return connectDropTarget(
@@ -76,8 +71,8 @@ export const DraggablePositionItem = _.flow([
               type="text"
               value={name}
               onChange={onChange}
-              opacity={opacity}
-              bgColor={bgColor}
+              isDragging={isDragging}
+              isDragEntering={isDragEntering}
             />
           </div>
         )
@@ -94,6 +89,8 @@ const StyleIconBar = styled(IconBar)`
 StyleIconBar.displayName = 'StyleIconBar';
 
 const StyleInput = styled(Input)`
+  opacity: ${props => (props.isDragging ? 0.5 : 1)};
+  background-color: ${props => (props.isDragEntering ? '#c1c1c1' : '#fff')};
   width: 90%;
   display: inline-block;
 `;
