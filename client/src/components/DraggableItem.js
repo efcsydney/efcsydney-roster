@@ -9,7 +9,7 @@ const ItemTypes = {
   ROLE: 'role'
 };
 
-const positionSource = {
+const sourceSpec = {
   beginDrag(props) {
     return {
       no: props.no
@@ -24,7 +24,7 @@ function collectSource(connect, monitor) {
   };
 }
 
-const positionTarget = {
+const targetSpec = {
   drop(props, monitor) {
     // dispatch action here
     const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
@@ -42,8 +42,8 @@ function collectTarget(connect, monitor) {
 }
 
 export const DraggableItem = _.flow([
-  DragSource(ItemTypes.ROLE, positionSource, collectSource),
-  DropTarget(ItemTypes.ROLE, positionTarget, collectTarget)
+  DragSource(ItemTypes.ROLE, sourceSpec, collectSource),
+  DropTarget(ItemTypes.ROLE, targetSpec, collectTarget)
 ])(
   class DraggableItem extends Component {
     render() {
