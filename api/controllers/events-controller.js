@@ -12,6 +12,7 @@ const pusher = require('../utilities/pusher');
  */
 async function getEvents(req, res, next) {
   try {
+    log.info('getEvent', req.query);
     const dateRange = EventService.computeDateRange(req.query);
     const { category: service } = req.query;
     const eventsByDateRange = await EventService.getEventsByDateRange(
@@ -32,11 +33,9 @@ async function getEvents(req, res, next) {
 
 async function saveEvent(req, res, next) {
   try {
-    log.info('saveEvent: ', req.body);
+    log.info('saveEvent', req.body);
     const event = DtoMapper.convertDtoToEventModel(req.body);
-    log.info('event model: ', event);
     await EventService.saveEvent(event);
-
     const updateEvent = await EventService.getEventByDatePosition(event);
     const data = DtoMapper.mapEventToDto(updateEvent);
 
@@ -47,9 +46,9 @@ async function saveEvent(req, res, next) {
     };
 
     pusher.trigger('index', 'event-modified', data);
-
-    return res.status(201).json(response);
+    res.status(201).json(response);
   } catch (err) {
+    log.error(err);
     next(err);
   }
 }
