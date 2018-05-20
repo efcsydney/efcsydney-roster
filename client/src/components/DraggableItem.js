@@ -64,25 +64,31 @@ export const DraggableItem = _.flow([
       return connectDropTarget(
         connectDragSource(
           <div>
-            <StyleIconBar />
-            <StyleInput
-              data-hj-whitelist
-              type="text"
-              value={name}
-              onChange={onChange}
-              isDragging={isDragging}
-              isDragEntering={isDragEntering}
-            />
+            <Wrapper>
+              <StyleIconBar />
+              <StyleInput
+                data-hj-whitelist
+                type="text"
+                value={name}
+                onChange={onChange}
+                isDragging={isDragging}
+                isDragEntering={isDragEntering}
+              />
+            </Wrapper>
           </div>
         )
       );
     }
   }
 );
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+Wrapper.displayName = 'Wrapper';
 
 const StyleIconBar = styled(IconBar)`
   cursor: move;
-  width: calc(10% - 5px);
   margin-right: 5px;
 `;
 StyleIconBar.displayName = 'StyleIconBar';
@@ -90,9 +96,6 @@ StyleIconBar.displayName = 'StyleIconBar';
 const StyleInput = styled.input`
   opacity: ${props => (props.isDragging ? 0.5 : 1)};
   background-color: ${props => (props.isDragEntering ? '#c1c1c1' : '#fff')};
-  width: 90%;
-  display: inline-block;
-  background-color: '#fff';
   border: solid 1px #c1c1c1;
   border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
