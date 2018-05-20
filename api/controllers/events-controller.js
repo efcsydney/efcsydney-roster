@@ -12,6 +12,7 @@ const pusher = require('../utilities/pusher');
  */
 async function getEvents(req, res, next) {
   try {
+    log.info('getEvent: ', req.body);
     const dateRange = EventService.computeDateRange(req.query);
     const { category: service } = req.query;
     const eventsByDateRange = await EventService.getEventsByDateRange(
