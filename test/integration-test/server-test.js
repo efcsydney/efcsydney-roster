@@ -32,7 +32,7 @@ describe('Server', function() {
                 id: 3,
                 footnote: 'english footnote 2',
                 skipService: false,
-                skipReason: '',
+                skipReason: ''
               },
               members: [
                 { role: 'Speaker', name: 'Rev. Kian Holik' },
@@ -51,7 +51,7 @@ describe('Server', function() {
                 id: 1,
                 footnote: 'english footnote 1',
                 skipService: false,
-                skipReason: '',
+                skipReason: ''
               },
               members: [
                 { role: 'Speaker', name: 'May Chien' },
@@ -81,7 +81,7 @@ describe('Server', function() {
                 id: 4,
                 footnote: 'chinese footnote 2',
                 skipService: false,
-                skipReason: '',
+                skipReason: ''
               },
               members: [
                 { role: '證道', name: 'Christine Yang' },
@@ -104,7 +104,7 @@ describe('Server', function() {
                 id: 2,
                 footnote: 'chinese footnote 1',
                 skipService: false,
-                skipReason: '',
+                skipReason: ''
               },
               members: [
                 { role: '證道', name: 'May Chien' },
@@ -177,7 +177,7 @@ describe('Server', function() {
         category: 'english',
         footnote: 'Meeting (Election)',
         skipService: true,
-        skipReason: 'Combined Service',
+        skipReason: 'Combined Service'
       };
       const footnoteId = 1;
       return request(app)
@@ -190,6 +190,61 @@ describe('Server', function() {
           expect(res.body.data.id).to.equal(1);
           expect(res.body.data.skipService).to.equal(footnote.skipService);
           expect(res.body.data.footnote).to.equal(footnote.footnote);
+        });
+    });
+  });
+
+  describe('Service API', function() {
+    it('creates a new service', function() {
+      const service = {
+        name: 'new-service',
+        locale: 'zh-TW',
+        label: 'New Service 1',
+        footnoteLabel: 'Service Footnote',
+        frequency: { id: 1, name: 'Sunday' },
+        positions: []
+      };
+
+      return request(app)
+        .post(`/api/services`)
+        .send(service)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(function(res) {
+          expect(res.body.result).to.equal('OK');
+          expect(res.body.data.id).to.greaterThan(0);
+          expect(res.body.data.name).to.equal(service.name);
+        });
+    });
+    it('creates a new service with new positions', function() {
+      const service = {
+        name: 'new-service-2',
+        locale: 'zh-TW',
+        label: 'New Service 2',
+        footnoteLabel: 'Service Footnote',
+        frequency: { id: 1, name: 'Sunday' },
+        positions: [
+          { name: 'Position 1', order: '1' },
+          { name: 'Position 2', order: '2' }
+        ]
+      };
+
+      return request(app)
+        .post(`/api/services`)
+        .send(service)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(function(res) {
+          expect(res.body.result).to.equal('OK');
+          expect(res.body.data.id).to.greaterThan(0);
+          expect(res.body.data.name).to.equal(service.name);
+          expect(res.body.data.positions.length).to.equal(2);
+          expect(res.body.data.positions[0].name).to.equal(
+            service.positions[0].name
+          );
+          expect(res.body.data.positions[1].name).to.equal(
+            service.positions[1].name
+          );
         });
     });
   });

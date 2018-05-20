@@ -30,6 +30,7 @@ const Event = require('../../api/models/event').Event;
 const CalendarDate = require('../../api/models/calendar-date').CalendarDate;
 const Position = require('../../api/models/position').Position;
 const Service = require('../../api/models/service').Service;
+const Frequency = require('../../api/models/frequency').Frequency;
 const ServiceCalendarDate = require('../../api/models/service-calendar-date')
   .ServiceCalendarDate;
 
@@ -37,6 +38,10 @@ async function createSeed() {
   await Service.bulkCreate([
     { id: 1, name: 'english' },
     { id: 2, name: 'chinese' }
+  ]);
+  await Frequency.bulkCreate([
+    { id: 1, name: 'Sunday' },
+    { id: 2, name: 'Saturday' }
   ]);
   await Position.bulkCreate([
     { id: 1, name: 'Speaker', order: 1, serviceId: 1 },
@@ -68,16 +73,86 @@ async function createSeed() {
     { id: 5, date: '2017-11-05' }
   ]);
   await ServiceCalendarDate.bulkCreate([
-    { id: 1, footnote: 'english footnote 1', skipService: false, skipReason: '', serviceId: 1, calendarDateId: 1 },
-    { id: 2, footnote: 'chinese footnote 1', skipService: false, skipReason: '', serviceId: 2, calendarDateId: 1 },
-    { id: 3, footnote: 'english footnote 2', skipService: false, skipReason: '', serviceId: 1, calendarDateId: 2 },
-    { id: 4, footnote: 'chinese footnote 2', skipService: false, skipReason: '', serviceId: 2, calendarDateId: 2 },
-    { id: 5, footnote: 'english footnote 3', skipService: false, skipReason: '', serviceId: 1, calendarDateId: 3 },
-    { id: 6, footnote: 'chinese footnote 3', skipService: false, skipReason: '', serviceId: 2, calendarDateId: 3 },
-    { id: 7, footnote: 'english footnote 4', skipService: false, skipReason: '', serviceId: 1, calendarDateId: 4 },
-    { id: 8, footnote: 'chinese footnote 4', skipService: false, skipReason: '', serviceId: 2, calendarDateId: 4 },
-    { id: 9, footnote: 'english footnote 5', skipService: false, skipReason: '', serviceId: 1, calendarDateId: 5 },
-    { id: 10, footnote: 'chinese footnote 4', skipService: false, skipReason: '', serviceId: 2, calendarDateId: 5 }
+    {
+      id: 1,
+      footnote: 'english footnote 1',
+      skipService: false,
+      skipReason: '',
+      serviceId: 1,
+      calendarDateId: 1
+    },
+    {
+      id: 2,
+      footnote: 'chinese footnote 1',
+      skipService: false,
+      skipReason: '',
+      serviceId: 2,
+      calendarDateId: 1
+    },
+    {
+      id: 3,
+      footnote: 'english footnote 2',
+      skipService: false,
+      skipReason: '',
+      serviceId: 1,
+      calendarDateId: 2
+    },
+    {
+      id: 4,
+      footnote: 'chinese footnote 2',
+      skipService: false,
+      skipReason: '',
+      serviceId: 2,
+      calendarDateId: 2
+    },
+    {
+      id: 5,
+      footnote: 'english footnote 3',
+      skipService: false,
+      skipReason: '',
+      serviceId: 1,
+      calendarDateId: 3
+    },
+    {
+      id: 6,
+      footnote: 'chinese footnote 3',
+      skipService: false,
+      skipReason: '',
+      serviceId: 2,
+      calendarDateId: 3
+    },
+    {
+      id: 7,
+      footnote: 'english footnote 4',
+      skipService: false,
+      skipReason: '',
+      serviceId: 1,
+      calendarDateId: 4
+    },
+    {
+      id: 8,
+      footnote: 'chinese footnote 4',
+      skipService: false,
+      skipReason: '',
+      serviceId: 2,
+      calendarDateId: 4
+    },
+    {
+      id: 9,
+      footnote: 'english footnote 5',
+      skipService: false,
+      skipReason: '',
+      serviceId: 1,
+      calendarDateId: 5
+    },
+    {
+      id: 10,
+      footnote: 'chinese footnote 4',
+      skipService: false,
+      skipReason: '',
+      serviceId: 2,
+      calendarDateId: 5
+    }
   ]);
   await Event.bulkCreate([
     {
