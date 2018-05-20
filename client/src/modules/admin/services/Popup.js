@@ -179,7 +179,7 @@ export default class Popup extends Component {
                         [`positions.${i}.name`]: e.target.value
                       })
                     }
-                    switchPosition={(sourceNo, targetNo) =>
+                    onSwitchPosition={(sourceNo, targetNo) =>
                       this.handleSwitch(sourceNo, targetNo)
                     }>
                     {!id && (

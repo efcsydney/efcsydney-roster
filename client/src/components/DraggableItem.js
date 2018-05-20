@@ -28,7 +28,7 @@ const targetSpec = {
     // dispatch action here
     const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
     const targetNo = props.no;
-    props.switchPosition(sourceNo, targetNo);
+    props.onSwitchPosition(sourceNo, targetNo);
   }
 };
 
