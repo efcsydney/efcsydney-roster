@@ -18,7 +18,7 @@ import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { DraggablePositionItem } from '../../../components/DraggablePositionItem';
+import { DraggableItem } from '../../../components/DraggableItem';
 
 export default class Popup extends Component {
   static propTypes = {
@@ -164,7 +164,7 @@ export default class Popup extends Component {
             <PositionList>
               {positions.map(({ id, name, order }, i) => {
                 return (
-                  <DraggablePositionItem
+                  <DraggableItem
                     key={i}
                     value={order}
                     no={i}
@@ -182,7 +182,7 @@ export default class Popup extends Component {
                         onClick={this.handlePositionDelete.bind(this, i)}
                       />
                     )}
-                  </DraggablePositionItem>
+                  </DraggableItem>
                 );
               })}
               <PositionItem>

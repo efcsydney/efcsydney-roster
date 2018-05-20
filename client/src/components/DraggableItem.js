@@ -41,11 +41,11 @@ function collectTarget(connect, monitor) {
   };
 }
 
-export const DraggablePositionItem = _.flow([
+export const DraggableItem = _.flow([
   DragSource(ItemTypes.ROLE, positionSource, collectSource),
   DropTarget(ItemTypes.ROLE, positionTarget, collectTarget)
 ])(
-  class DraggablePositionItem extends Component {
+  class DraggableItem extends Component {
     render() {
       const {
         name,
