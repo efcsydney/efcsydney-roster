@@ -50,6 +50,7 @@ async function saveEvent(req, res, next) {
 
     return res.status(201).json(response);
   } catch (err) {
+    log.error(err);
     next(err);
   }
 }
