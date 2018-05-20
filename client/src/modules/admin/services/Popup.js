@@ -16,14 +16,13 @@ import {
   Modal,
   StateButton,
   Input,
-  DraggableItem
+  DraggableItem,
+  DragDropZone
 } from 'components';
 import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 
 export default class Popup extends Component {
   static propTypes = {
@@ -166,7 +165,7 @@ export default class Popup extends Component {
         <Row style={{ alignItems: 'flex-start' }}>
           <Label style={{ paddingTop: '10px' }}>Positions</Label>
           <span>
-            <PositionList>
+            <DragDropZone>
               {positions.map(({ id, name, order }, i) => {
                 return (
                   <DraggableItem
@@ -195,7 +194,7 @@ export default class Popup extends Component {
                   Add New Position
                 </AddPositionLink>
               </PositionItem>
-            </PositionList>
+            </DragDropZone>
           </span>
         </Row>
         <Row align="center">
@@ -257,13 +256,6 @@ const Label = styled.label`
   `};
 `;
 Label.displayName = 'Label';
-
-const PositionList = DragDropContext(HTML5Backend)(styled.ol`
-  background: #eee;
-  border-radius: 4px;
-  padding: 5px;
-`);
-PositionList.displayName = 'PositionList';
 
 const PositionItem = styled.li`
   align-items: center;

@@ -8,6 +8,7 @@ import StateButton from './StateButton';
 import SwitchButton from './SwitchButton';
 import TagManager from './TagManager';
 import DraggableItem from './DraggableItem';
+import DragDropZone from './DragDropZone';
 
 export {
   Button,
@@ -22,5 +23,6 @@ export {
   StateButton,
   SwitchButton,
   TagManager,
-  DraggableItem
+  DraggableItem,
+  DragDropZone
 };
