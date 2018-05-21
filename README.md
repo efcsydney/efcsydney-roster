@@ -2,6 +2,8 @@
 
 [![Build
 Status](https://travis-ci.org/efcsydney/efcsydney-roster.svg?branch=master)](https://travis-ci.org/efcsydney/efcsydney-roster)
+[![Maintainability](https://api.codeclimate.com/v1/badges/964d040a050e8b05e2ea/maintainability)](https://codeclimate.com/github/efcsydney/efcsydney-roster/maintainability)
+![StatusCake](https://app.statuscake.com/button/index.php?Track=3PiaWdNSal&Days=30&Design=6)
 
 ## Reference
 

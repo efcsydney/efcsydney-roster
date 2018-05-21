@@ -5,6 +5,8 @@ cache:
   directories:
   - node_modules
   - client/node_modules
+hosts:
+  - db
 addons:
   ssh_known_hosts:
   - 54.206.106.116
