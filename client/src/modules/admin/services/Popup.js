@@ -171,7 +171,7 @@ export default class Popup extends Component {
                 {positions.map(({ id, name, order }, i) => {
                   return (
                     <DraggableItem
-                      key={i}
+                      key={id}
                       value={order}
                       no={i}
                       onSwitchPosition={(sourceNo, targetNo) =>
