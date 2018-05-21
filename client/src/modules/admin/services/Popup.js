@@ -23,6 +23,7 @@ import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
+import IconBar from 'react-icons/lib/fa/bars';
 
 export default class Popup extends Component {
   static propTypes = {
@@ -173,20 +174,27 @@ export default class Popup extends Component {
                       key={i}
                       value={order}
                       no={i}
-                      name={name}
-                      onChange={e =>
-                        this.handleChange({
-                          [`positions.${i}.name`]: e.target.value
-                        })
-                      }
                       onSwitchPosition={(sourceNo, targetNo) =>
                         this.handleSwitch(sourceNo, targetNo)
                       }>
-                      {!id && (
-                        <IconDelete
-                          onClick={this.handlePositionDelete.bind(this, i)}
+                      <Wrapper>
+                        <StyleIconBar />
+                        <Input
+                          data-hj-whitelist
+                          type="text"
+                          value={name}
+                          onChange={e =>
+                            this.handleChange({
+                              [`positions.${i}.name`]: e.target.value
+                            })
+                          }
                         />
-                      )}
+                        {!id && (
+                          <IconDelete
+                            onClick={this.handlePositionDelete.bind(this, i)}
+                          />
+                        )}
+                      </Wrapper>
                     </DraggableItem>
                   );
                 })}
@@ -292,3 +300,19 @@ const StyleSelect = styled(Select)`
   width: 165px;
 `;
 StyleSelect.displayName = 'StyleSelect';
+
+const StyleIconBar = styled(IconBar)`
+  cursor: move;
+  margin-right: 5px;
+`;
+StyleIconBar.displayName = 'StyleIconBar';
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  ${Input} {
+    opacity: ${props => (props.isDragging ? 0.5 : 1)};
+    background-color: ${props => (props.isDragEntering ? '#c1c1c1' : '#fff')};
+  }
+`;
+Wrapper.displayName = 'Wrapper';
