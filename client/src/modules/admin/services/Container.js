@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ServicesAPI from 'apis/services';
+import { ServicesAPI } from 'apis';
 import { Auth, NavBar } from 'modules/core';
 import styled from 'styled-components';
 import { Button, Cell, Grid, HeaderCell, Row } from 'components';

@@ -6,7 +6,7 @@ import {
   setMeta,
   switchCategory
 } from './redux';
-import ServicesAPI from 'apis/services';
+import { ServicesAPI } from 'apis';
 import Cookies from 'js-cookie';
 import moment from 'moment';
 import 'moment/locale/en-au';

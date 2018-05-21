@@ -7,8 +7,7 @@ import {
   handleAction,
   handleActions
 } from 'redux-actions';
-import ServiceInfoAPI from 'apis/serviceInfo';
-import EventsAPI from 'apis/events';
+import { EventsAPI, ServiceInfoAPI } from 'apis';
 import store from 'store';
 import moment from 'moment';
 import dotProp from 'dot-prop-immutable';
