@@ -277,7 +277,11 @@ const PositionItem = styled.li`
 `;
 PositionItem.displayName = 'PositionItem';
 
-const PositionList = styled.ol``;
+const PositionList = styled.ol`
+  background: #eee;
+  border-radius: 4px;
+  padding: 5px;
+`;
 PositionList.displayName = 'PositionList';
 
 const AddPositionLink = styled.a`
@@ -307,12 +311,10 @@ const StyleIconBar = styled(IconBar)`
 `;
 StyleIconBar.displayName = 'StyleIconBar';
 
-const Wrapper = styled.div`
+const Wrapper = styled.li`
   display: flex;
   align-items: center;
-  ${Input} {
-    opacity: ${props => (props.isDragging ? 0.5 : 1)};
-    background-color: ${props => (props.isDragEntering ? '#c1c1c1' : '#fff')};
-  }
+  opacity: ${props => (props.isDragging ? 0.5 : 1)};
+  background: ${props => (props.isDragEntering ? '#c1c1c1' : '')};
 `;
 Wrapper.displayName = 'Wrapper';
