@@ -3,7 +3,7 @@
     "username": "root",
     "password": null,
     "database": "efcRoster",
-    "host": "127.0.0.1",
+    "host": "db",
     "dialect": "mysql",
     "logging": false
   },
