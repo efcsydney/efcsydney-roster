@@ -201,7 +201,7 @@ describe('Server', function() {
         locale: 'zh-TW',
         label: 'New Service 1',
         footnoteLabel: 'Service Footnote',
-        frequency: { id: 1, name: 'Sunday' },
+        frequency: 'Sunday',
         positions: []
       };
 
@@ -222,7 +222,7 @@ describe('Server', function() {
         locale: 'zh-TW',
         label: 'New Service 2',
         footnoteLabel: 'Service Footnote',
-        frequency: { id: 1, name: 'Sunday' },
+        frequency: 'Sunday',
         positions: [
           { name: 'Position 1', order: '1' },
           { name: 'Position 2', order: '2' }
