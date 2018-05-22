@@ -1,8 +1,10 @@
 const ServicesService = require('../service/services-service');
 const DtoMapper = require('../mapper/dto-mapper');
+const log = require('../utilities/logger');
 
 async function getServices(req, res, next) {
   try {
+    log.info('getServices');
     const services = await ServicesService.getServices();
     const dto = DtoMapper.mapServicesToDto(services);
 
@@ -12,12 +14,14 @@ async function getServices(req, res, next) {
       data: dto
     });
   } catch (err) {
+    log.error(err);
     next(err);
   }
 }
 
 async function getServiceById(req, res, next) {
   try {
+    log.info('getServiceById  ', req.params.id);
     const id = req.params.id;
     const data = await ServicesService.getServiceById(id);
 

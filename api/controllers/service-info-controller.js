@@ -10,7 +10,7 @@ async function saveServiceInfo(req, res, next) {
       id: req.params.id,
       data: req.body
     });
-    log.info(serviceInfo);
+    log.info('saveServiceInfo', serviceInfo);
     await ServiceInfoService.saveServiceInfo(serviceInfo);
 
     const updatedServiceInfo = await ServiceInfoService.getServiceInfoById(
@@ -28,6 +28,7 @@ async function saveServiceInfo(req, res, next) {
 
     return res.status(201).json(response);
   } catch (err) {
+    log.error(err);
     next(err);
   }
 }
