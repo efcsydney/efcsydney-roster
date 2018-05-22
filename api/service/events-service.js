@@ -40,7 +40,6 @@ class EventService {
       position: event.position.name
     }).then(function (dbEvent) {
       if (dbEvent != null) {
-
         return Promise.resolve(dbEvent);
       } else {
         const msg = `Error: missing event in DB: ${JSON.stringify(event)}`;
