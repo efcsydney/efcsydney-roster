@@ -9,7 +9,7 @@ const tsFormat = () => new Date().toISOString();
 const errorLogTransport = new winstonDailyRotateFile({
   name: 'error',
   level: 'error',
-  filename: 'log/-error.log',
+  filename: 'log/.log',
   timestamp: tsFormat,
   datePattern: 'yyyy-MM-dd',
   maxFiles: '14d',
@@ -18,7 +18,7 @@ const errorLogTransport = new winstonDailyRotateFile({
 const debugLogTransport = new winstonDailyRotateFile({
   name: 'debug',
   level: 'debug',
-  filename: 'log/-debug.log',
+  filename: 'log/.log',
   timestamp: tsFormat,
   datePattern: 'yyyy-MM-dd',
   maxFiles: '14d',
@@ -27,7 +27,7 @@ const debugLogTransport = new winstonDailyRotateFile({
 const infoLogTransport = new winstonDailyRotateFile({
   name: 'info',
   level: 'info',
-  filename: 'log/-info.log',
+  filename: 'log/.log',
   timestamp: tsFormat,
   datePattern: 'yyyy-MM-dd',
   maxFiles: '14d',
