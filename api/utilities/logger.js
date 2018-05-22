@@ -1,7 +1,7 @@
 const winston = require('winston');
 const winstonDailyRotateFile = require('winston-daily-rotate-file');
 winston.emitErrs = true;
-winston.level = 'error';
+
 /*
 * The source code is copied from the posts : http://tostring.it/2014/06/23/advanced-logging-with-nodejs/ and
 * http://thisdavej.com/using-winston-a-versatile-logging-library-for-node-js/
