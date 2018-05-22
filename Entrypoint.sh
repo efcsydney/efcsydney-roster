@@ -11,7 +11,7 @@ prod() {
 }
 
 prod-local() {
-  sed -i -e "s/development/$NODE_ENV/g" ./config/database.json
+  sed -i -e "s/docker/$NODE_ENV/g" ./config/database.json
   yarn db-migrate
   yarn db-update-events
   cp db/data/email-list-example.csv db/data/email-list.csv
