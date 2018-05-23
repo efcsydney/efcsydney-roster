@@ -96,6 +96,9 @@ export default class Popup extends Component {
     const label = _.get(data, 'label', '');
     const footnoteLabel = _.get(data, 'footnoteLabel', '');
     const positions = _.get(data, 'positions', []);
+    const { mode } = this.props;
+    const isNew = mode === 'new';
+    const enableButton = frequency && label && footnoteLabel;
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -104,7 +107,7 @@ export default class Popup extends Component {
           <span>
             <StyleSelect
               value={frequency}
-              disabled={true}
+              disabled={!isNew}
               clearable={false}
               options={[
                 { value: 'Sunday', label: 'Sunday' },
@@ -189,7 +192,9 @@ export default class Popup extends Component {
           </span>
         </Row>
         <Row align="center">
-          <StateButton type="submit">Save</StateButton>
+          <StateButton type="submit" disabled={!enableButton}>
+            Save
+          </StateButton>
         </Row>
       </Form>
     );
