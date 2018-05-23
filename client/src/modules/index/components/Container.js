@@ -7,7 +7,7 @@ import { NavBar } from 'modules/core';
 import moment from 'moment';
 import pusher from 'utils/pusher';
 import EditDay from './EditDay';
-import EventsAPI from 'apis/events';
+import { EventsAPI } from 'apis';
 import { getMemberNames } from 'utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
