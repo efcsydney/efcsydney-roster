@@ -1,0 +1,17 @@
+FROM mhart/alpine-node:8.10.0
+RUN apk update && apk add --no-cache bash py-pip
+RUN npm install -g pm2@latest
+RUN pip install awscli --upgrade --user && \
+    echo "export PATH=$PATH:~/.local/bin/" >> ~/.bashrc
+
+
+COPY ./ /opt/efcsydney-roster/
+WORKDIR /opt/efcsydney-roster
+RUN yarn
+WORKDIR /opt/efcsydney-roster/client
+RUN yarn && yarn build && rm -rf ./node_modules
+
+WORKDIR /opt/efcsydney-roster
+
+EXPOSE 3000 3001 3002
+ENTRYPOINT ["/bin/bash", "-ex", "/opt/efcsydney-roster/Entrypoint.sh", "prod"]

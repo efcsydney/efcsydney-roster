@@ -7,6 +7,8 @@ prod() {
   export PATH=$PATH:~/.local/bin/
   aws ssm get-parameters --region ap-southeast-2 --names username password database host dialect --with-decryption --query 'Parameters[*].{key:Name,value:Value}' | jq from_entries | jq '{ $node_env : .}' > ./config/database.json
   yarn db-migrate
+
+  aws s3 cp s3://efc-roster/email-list.csv $EFC_FOLDER/db/data/email-list.csv
   pm2-runtime server.js
 }
 
