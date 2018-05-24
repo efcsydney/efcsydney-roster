@@ -315,6 +315,6 @@ const Wrapper = styled.li`
   display: flex;
   align-items: center;
   opacity: ${props => (props.isDragging ? 0.5 : 1)};
-  background: ${props => (props.isDragEntering ? '#c1c1c1' : '')};
+  background: ${props => (props.isDragEntering ? '#c1c1c1' : 'transparent')};
 `;
 Wrapper.displayName = 'Wrapper';
