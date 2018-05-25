@@ -29,7 +29,9 @@ const mapper = (API, other = {}) => {
 };
 
 export const mapping = {
-  events: mapper(EventsAPI, { idAttribute: 'serviceInfo.id' }),
+  events: mapper(EventsAPI, {
+    idAttribute: value => value.serviceInfo.id
+  }),
   services: mapper(ServicesAPI, { idAttribute: 'id' }),
   serviceInfo: mapper(ServiceInfoAPI, { idAttribute: 'id' })
 };

@@ -125,7 +125,7 @@ const asyncDataReducer = (state = defaultAsyncData, { resource, payload }) => {
 
       // not idAttribute means it's a single resource
       if (idAttribute) {
-        let normalizeSchema = new schema.Entity(resource.name, {
+        let normalizeSchema = new schema.Entity(resource.name, undefined, {
           idAttribute: apiMapping[resource.name].idAttribute
         });
         if (Array.isArray(payload.data)) {
@@ -164,7 +164,7 @@ const asyncCacheReducer = (state = {}, action) => {
 
       // not idAttribute means it's a single resource
       if (idAttribute) {
-        const docSchema = new schema.Entity(resource.name, {
+        const docSchema = new schema.Entity(resource.name, undefined, {
           idAttribute: apiMapping[resource.name].idAttribute
         });
         const normalizeSchema = {
