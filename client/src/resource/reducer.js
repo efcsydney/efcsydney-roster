@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import dotDrop, { set } from 'dot-prop-immutable';
-import { Schema, normalize, arrayOf } from 'normalizr';
+import { schema, normalize } from 'normalizr';
 import { mapping as apiMapping } from 'apis';
 import { getHashKey } from './utils';
 
@@ -110,7 +110,7 @@ const asyncStateReducer = (
   }
 };
 
-const defaultAsyncData = _.zipObject(
+const defaultAsyncData = _.fromPairs(
   _.map(Object.keys(apiMapping), resource => [resource, {}])
 );
 
@@ -121,25 +121,17 @@ const asyncDataReducer = (state = defaultAsyncData, { resource, payload }) => {
 
   switch (resource.method) {
     case 'retrieve': {
-      // special case for stack
-      if (resource.name === 'stack2' && Array.isArray(payload.response.data)) {
-        payload.response.data.forEach(item => {
-          if (payload.params && payload.params.account) {
-            item.account = payload.params.account;
-          }
-        });
-      }
       const idAttribute = apiMapping[resource.name].idAttribute;
 
       // not idAttribute means it's a single resource
       if (idAttribute) {
-        let normalizeSchema = new Schema(resource.name, {
+        let normalizeSchema = new schema.Entity(resource.name, {
           idAttribute: apiMapping[resource.name].idAttribute
         });
-        if (Array.isArray(payload.response.data)) {
-          normalizeSchema = arrayOf(normalizeSchema);
+        if (Array.isArray(payload.data)) {
+          normalizeSchema = new schema.Array(normalizeSchema);
         }
-        const normalized = normalize(payload.response.data, normalizeSchema);
+        const normalized = normalize(payload.data, normalizeSchema);
 
         return dotDrop.merge(
           state,
@@ -147,7 +139,7 @@ const asyncDataReducer = (state = defaultAsyncData, { resource, payload }) => {
           normalized.entities[resource.name]
         );
       } else {
-        return dotDrop.set(state, [resource.name], payload.response.data);
+        return dotDrop.set(state, [resource.name], payload.data);
       }
     }
     case 'delete': {
@@ -172,19 +164,19 @@ const asyncCacheReducer = (state = {}, action) => {
 
       // not idAttribute means it's a single resource
       if (idAttribute) {
-        const docSchema = new Schema(resource.name, {
+        const docSchema = new schema.Entity(resource.name, {
           idAttribute: apiMapping[resource.name].idAttribute
         });
         const normalizeSchema = {
-          data: Array.isArray(payload.response.data)
-            ? arrayOf(docSchema)
+          data: Array.isArray(payload.data)
+            ? new schema.Array(docSchema)
             : docSchema
         };
-        const normalized = normalize(payload.response, normalizeSchema);
+        const normalized = normalize(payload, normalizeSchema);
 
         return dotDrop.set(state, key, normalized.result);
       } else {
-        return dotDrop.set(state, key, payload.response);
+        return dotDrop.set(state, key, payload);
       }
     }
     default:
