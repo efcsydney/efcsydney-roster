@@ -35,7 +35,7 @@ export function createApi(path, overwrite) {
       }).then(onFulfilled);
     },
     modify: function(id, body) {
-      return fetch(path, {
+      return fetch(`${path}/${id}`, {
         ...defaultOptions,
         method: 'PUT',
         body: JSON.stringify(body)
