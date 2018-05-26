@@ -26,9 +26,46 @@ export const receiveRetrieveEvents = createAction(
 export const requestRetrieveEvents = createAction(
   `${PREFIX}/REQUEST_RETRIEVE_EVENTS`,
   payload => {
-    EventsAPI.retrieve(payload).then(({ data }) =>
-      store.dispatch(receiveRetrieveEvents(data))
-    );
+    EventsAPI.retrieve(payload).then(({ data }) => {
+      const storeServices = store.getState().core.data.services;
+      const { frequency, positions } = _.find(storeServices, {
+        name: payload.category
+      });
+      const startDate = moment(payload.from).startOf('quarter');
+      const endDate = moment(payload.from).endOf('quarter');
+      const weeks = endDate.diff(startDate, 'week');
+      const firstWeekDay = frequency && startDate.day(frequency);
+      const filteredEvents = [];
+
+      if (firstWeekDay && moment.isMoment(firstWeekDay)) {
+        for (let i = 0; i <= weeks; i++) {
+          const thisWeek = moment(startDate)
+            .add(i, 'week')
+            .format('YYYY-MM-DD');
+          const eventData = _.find(data, { date: thisWeek }) || {};
+
+          const newEvent = {
+            date: eventData.date || thisWeek,
+            members:
+              eventData.members ||
+              _.map(positions, position => ({
+                role: position.name,
+                name: ''
+              })),
+            serviceInfo: eventData.serviceInfo || {
+              id: null,
+              footnote: '',
+              skipReason: '',
+              skipService: false
+            }
+          };
+
+          filteredEvents.push(newEvent);
+        }
+      }
+
+      store.dispatch(receiveRetrieveEvents(filteredEvents));
+    });
     return payload;
   }
 );
