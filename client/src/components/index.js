@@ -1,5 +1,7 @@
 import Button from './Button';
 import DateBar from './DateBar';
+import DraggableItem from './DraggableItem';
+import DragDropZone from './DragDropZone';
 import { Grid, Row, Cell, HeaderCell } from './Grid';
 import { Input } from './Form';
 import LoadingIndicator from './LoadingIndicator';
@@ -12,6 +14,8 @@ export {
   Button,
   Cell,
   DateBar,
+  DraggableItem,
+  DragDropZone,
   Grid,
   HeaderCell,
   Input,
