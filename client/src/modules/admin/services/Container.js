@@ -95,10 +95,10 @@ export default connect(mapStateToProps)(
                   </Row>
                 </thead>
                 <tbody>
-                  {data.map(({ frequency, label, id, positions }) => (
+                  {data.map(({ frequency, label, id, positions, name }) => (
                     <Row key={id}>
                       <Cell>
-                        <Link to={`${this.rootPath}/edit/${id}`}>{label}</Link>
+                        <Link to={`/${name}`}>{label}</Link>
                       </Cell>
                       <Cell>{positions.length}</Cell>
                       <Cell>{_.capitalize(frequency)}</Cell>
