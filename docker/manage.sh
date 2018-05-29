@@ -1,7 +1,6 @@
-#!/bin/bash -x
+#!/bin/bash -ex
 
 BASE_DIR=$(dirname "$0")
-echo $BASE_DIR
 cd $BASE_DIR
 
 build(){
@@ -11,6 +10,9 @@ build(){
     exit 1
   fi
   echo "Build Docker Image"
+  # echo $PWD
+  # find ../log/* ! -name '.gitignore' -exec rm -rf {} + || true
+
   docker-compose build efc-$TARGET
   UNUSED_IMG=$(docker images | grep "<none>" | awk "{print \$3}")
   if [ ! -z "$UNUSED_IMG" ]; then

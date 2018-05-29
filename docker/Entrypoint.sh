@@ -13,6 +13,7 @@ prod() {
 }
 
 prod-local() {
+  bash -x $EFC_FOLDER/docker/wait-for-it.sh db:3306
   sed -i -e "s/docker/$NODE_ENV/g" ./config/database.json
   yarn db-migrate
   yarn db-update-events
