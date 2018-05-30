@@ -58,8 +58,8 @@ export const DraggableItem = _.flow([
         connectDragSource(
           <li
             className={this.props.className}
-            isDragEntering={isDragEntering}
-            isDragging={isDragging}>
+            data-isDragging={isDragging}
+            data-isDragEntering={isDragEntering}>
             {this.props.children}
           </li>
         )

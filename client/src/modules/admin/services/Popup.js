@@ -317,7 +317,11 @@ StyleIconBar.displayName = 'StyleIconBar';
 const StyleDraggableItem = styled(DraggableItem)`
   display: flex;
   align-items: center;
-  opacity: ${props => (props.isDragging ? 0.5 : 1)};
-  background: ${props => (props.isDragEntering ? '#c1c1c1' : 'transparent')};
+  &[data-isDragging='true'] {
+    opacity: 0.5;
+  }
+  &[data-isDragEntering='true'] {
+    background: #c1c1c1;
+  }
 `;
 StyleDraggableItem.displayName = 'StyleDraggableItem';
