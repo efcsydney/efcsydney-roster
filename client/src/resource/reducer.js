@@ -37,7 +37,7 @@ const defaultAsyncState = _.fromPairs(
   ])
 );
 
-const asyncStateReducer = (
+const asyncStatusReducer = (
   state = defaultAsyncState,
   { resource, payload }
 ) => {
@@ -188,7 +188,7 @@ const asyncCacheReducer = (state = {}, action) => {
 };
 
 export default combineReducers({
-  state: asyncStateReducer,
+  cache: asyncCacheReducer,
   data: asyncDataReducer,
-  cache: asyncCacheReducer
+  status: asyncStatusReducer
 });

@@ -14,7 +14,7 @@ export default function* requestSagas() {
     },
     function*({ payload: params, meta = {}, resource }) {
       const API = _.get(apiMapping, [resource.name, resource.method]);
-      const ajaxResponse = yield call(API, [params]);
+      const ajaxResponse = yield call(API, params);
       ajaxResponse.params = params;
       if (meta && meta.onComplete) {
         meta.onComplete();
