@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import dotDrop, { set } from 'dot-prop-immutable';
 import { schema, normalize } from 'normalizr';
+import { combineReducers } from 'redux';
 import { mapping as apiMapping } from 'apis';
 import { getHashKey } from './utils';
 
@@ -121,12 +122,14 @@ const asyncDataReducer = (state = defaultAsyncData, { resource, payload }) => {
 
   switch (resource.method) {
     case 'retrieve': {
-      const idAttribute = apiMapping[resource.name].idAttribute;
+      const idAttribute =
+        !_.isEmpty(apiMapping[resource.name]) &&
+        (value => _.get(value, apiMapping[resource.name].idAttribute));
 
       // not idAttribute means it's a single resource
       if (idAttribute) {
         let normalizeSchema = new schema.Entity(resource.name, undefined, {
-          idAttribute: apiMapping[resource.name].idAttribute
+          idAttribute
         });
         if (Array.isArray(payload.data)) {
           normalizeSchema = new schema.Array(normalizeSchema);
@@ -184,4 +187,8 @@ const asyncCacheReducer = (state = {}, action) => {
   }
 };
 
-export { asyncStateReducer, asyncDataReducer, asyncCacheReducer };
+export default combineReducers({
+  state: asyncStateReducer,
+  data: asyncDataReducer,
+  cache: asyncCacheReducer
+});
