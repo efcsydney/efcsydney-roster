@@ -11,13 +11,18 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { LoadingIndicator, Modal, StateButton, Input } from 'components';
+import {
+  LoadingIndicator,
+  Modal,
+  StateButton,
+  Input,
+  DraggableItem,
+  DragDropZone
+} from 'components';
 import styled from 'styled-components';
 import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
-import { DragSource, DropTarget } from 'react-dnd';
-import { ItemTypes } from '../../../constants/ReactDndItemTypes';
 import IconBar from 'react-icons/lib/fa/bars';
 
 export default class Popup extends Component {
@@ -164,36 +169,45 @@ export default class Popup extends Component {
         <Row style={{ alignItems: 'flex-start' }}>
           <Label style={{ paddingTop: '10px' }}>Positions</Label>
           <span>
-            <PositionList>
-              {positions.map(({ id, name, order }, i) => {
-                return (
-                  <DraggablePositionItem
-                    key={i}
-                    value={order}
-                    no={i}
-                    name={name}
-                    handleChange={e =>
-                      this.handleChange({
-                        [`positions.${i}.name`]: e.target.value
-                      })
-                    }
-                    switchPosition={(sourceNo, targetNo) =>
-                      this.handleSwitch(sourceNo, targetNo)
-                    }>
-                    {!id && (
-                      <IconDelete
-                        onClick={this.handlePositionDelete.bind(this, i)}
-                      />
-                    )}
-                  </DraggablePositionItem>
-                );
-              })}
-              <PositionItem>
-                <AddPositionLink onClick={this.handlePositionAdd}>
-                  Add New Position
-                </AddPositionLink>
-              </PositionItem>
-            </PositionList>
+            <DragDropZone>
+              <PositionList>
+                {positions.map(({ id, name, order }, i) => {
+                  return (
+                    <DraggableItem
+                      key={id}
+                      value={order}
+                      no={i}
+                      onSwitchPosition={(sourceNo, targetNo) =>
+                        this.handleSwitch(sourceNo, targetNo)
+                      }>
+                      <Wrapper>
+                        <StyleIconBar />
+                        <Input
+                          data-hj-whitelist
+                          type="text"
+                          value={name}
+                          onChange={e =>
+                            this.handleChange({
+                              [`positions.${i}.name`]: e.target.value
+                            })
+                          }
+                        />
+                        {!id && (
+                          <IconDelete
+                            onClick={this.handlePositionDelete.bind(this, i)}
+                          />
+                        )}
+                      </Wrapper>
+                    </DraggableItem>
+                  );
+                })}
+                <PositionItem>
+                  <AddPositionLink onClick={this.handlePositionAdd}>
+                    Add New Position
+                  </AddPositionLink>
+                </PositionItem>
+              </PositionList>
+            </DragDropZone>
           </span>
         </Row>
         <Row align="center">
@@ -258,13 +272,6 @@ const Label = styled.label`
 `;
 Label.displayName = 'Label';
 
-const PositionList = styled.ol`
-  background: #eee;
-  border-radius: 4px;
-  padding: 5px;
-`;
-PositionList.displayName = 'PositionList';
-
 const PositionItem = styled.li`
   align-items: center;
   display: flex;
@@ -275,15 +282,12 @@ const PositionItem = styled.li`
 `;
 PositionItem.displayName = 'PositionItem';
 
-const NumberInput = Input.extend.attrs({
-  readOnly: 'true'
-})`
-  min-width: 50px;
-  margin-right: 4px;
-  text-align: center;
-  width: 50px;
+const PositionList = styled.ol`
+  background: #eee;
+  border-radius: 4px;
+  padding: 5px;
 `;
-NumberInput.displayName = 'NumberInput';
+PositionList.displayName = 'PositionList';
 
 const AddPositionLink = styled.a`
   cursor: pointer;
@@ -306,95 +310,16 @@ const StyleSelect = styled(Select)`
 `;
 StyleSelect.displayName = 'StyleSelect';
 
-const StyleInput = styled(Input)`
-  width: 90%;
-  display: inline-block;
-`;
-StyleInput.displayName = 'StyleInput';
-
 const StyleIconBar = styled(IconBar)`
   cursor: move;
-  width: calc(10% - 5px);
   margin-right: 5px;
 `;
 StyleIconBar.displayName = 'StyleIconBar';
 
-const positionSource = {
-  beginDrag(props) {
-    return {
-      no: props.no
-    };
-  }
-};
-
-function collectSource(connect, monitor) {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  };
-}
-
-const positionTarget = {
-  canDrop(props) {
-    return true;
-  },
-  drop(props, monitor) {
-    // dispatch action here
-    const sourceNo = monitor.getItem() ? monitor.getItem().no : null;
-    const targetNo = props.no;
-    props.switchPosition(sourceNo, targetNo);
-  }
-};
-
-function collectTarget(connect, monitor) {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
-  };
-}
-
-const DraggablePositionItem = _.flow([
-  DragSource(ItemTypes.ROLE, positionSource, collectSource),
-  DropTarget(ItemTypes.ROLE, positionTarget, collectTarget)
-])(
-  class DraggablePositionItem extends Component {
-    render() {
-      const {
-        name,
-        handleChange,
-        connectDragSource,
-        connectDropTarget,
-        isDragging,
-        isOver,
-        canDrop
-      } = this.props;
-      const opacity = isDragging ? 0.5 : 1;
-
-      let bgColor;
-      if (isOver && canDrop) {
-        bgColor = 'greenyellow';
-      } else if (!isOver && canDrop) {
-        bgColor = '#FFFF99';
-      } else if (isOver && !canDrop) {
-        bgColor = 'red';
-      }
-
-      return connectDropTarget(
-        connectDragSource(
-          <div>
-            <StyleIconBar />
-            <StyleInput
-              data-hj-whitelist
-              type="text"
-              value={name}
-              onChange={handleChange}
-              opacity={opacity}
-              bgColor={bgColor}
-            />
-          </div>
-        )
-      );
-    }
-  }
-);
+const Wrapper = styled.li`
+  display: flex;
+  align-items: center;
+  opacity: ${props => (props.isDragging ? 0.5 : 1)};
+  background: ${props => (props.isDragEntering ? '#c1c1c1' : 'transparent')};
+`;
+Wrapper.displayName = 'Wrapper';
