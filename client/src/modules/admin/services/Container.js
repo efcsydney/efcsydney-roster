@@ -9,7 +9,7 @@ import IconPencil from 'react-icons/lib/fa/pencil';
 import Popup from './Popup';
 import { createApiActions, withResource } from 'resource';
 
-const { retrieveService } = createApiActions('services');
+const { modifyServices } = createApiActions('services');
 
 const mapResourceToProps = (resource, state, ownProps) => {
   const path = _.get(ownProps, 'match.path');
@@ -19,10 +19,9 @@ const mapResourceToProps = (resource, state, ownProps) => {
     'index';
   const paramId = _.get(ownProps, 'match.params.id', null);
   const selectedId = !_.isEmpty(paramId) ? parseInt(paramId, 10) : null;
-  const data = resource.data;
 
   return {
-    data,
+    data: resource.data,
     mode,
     selectedId,
     ...ownProps
@@ -34,6 +33,11 @@ export default withResource('services', mapResourceToProps)(
       data: PropTypes.object,
       mode: PropTypes.string,
       selectedId: PropTypes.number
+    };
+    static defaultProps = {
+      data: {},
+      mode: 'index',
+      selectedId: null
     };
     constructor(props) {
       super(props);
@@ -54,7 +58,7 @@ export default withResource('services', mapResourceToProps)(
       const { dispatch } = this.props;
       const { id, ...body } = data;
 
-      dispatch(retrieveService(id, body));
+      dispatch(modifyServices({ id, ...body }));
     };
     render() {
       const { data, mode, selectedId } = this.props;
