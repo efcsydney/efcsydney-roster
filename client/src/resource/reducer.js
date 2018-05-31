@@ -10,26 +10,26 @@ const defaultAsyncState = _.fromPairs(
     key,
     {
       retrieve: {
-        initIndex: false,
-        loadingIndex: false,
+        hasInitialized: false,
+        isLoading: false,
         loadingIds: {},
         completedIds: {}
       },
       create: {
-        initIndex: false,
-        loadingIndex: false,
+        hasInitialized: false,
+        isLoading: false,
         loadingIds: {},
         completedIds: {}
       },
       modify: {
-        initIndex: false,
-        loadingIndex: false,
+        hasInitialized: false,
+        isLoading: false,
         loadingIds: {},
         completedIds: {}
       },
       delete: {
-        initIndex: false,
-        loadingIndex: false,
+        hasInitialized: false,
+        isLoading: false,
         loadingIds: {},
         completedIds: {}
       }
@@ -53,7 +53,7 @@ const asyncStatusReducer = (
       if (!id) {
         state = set(
           state,
-          [resource.name, resource.method, 'loadingIndex'],
+          [resource.name, resource.method, 'isLoading'],
           true
         );
 
@@ -73,10 +73,10 @@ const asyncStatusReducer = (
       if (!id) {
         state = set(
           state,
-          [resource.name, resource.method, 'loadingIndex'],
+          [resource.name, resource.method, 'isLoading'],
           false
         );
-        state = set(state, [resource.name, resource.method, 'initIndex'], true);
+        state = set(state, [resource.name, resource.method, 'hasInitialized'], true);
       }
 
       state = dotDrop.delete(state, [
@@ -167,9 +167,7 @@ const asyncCacheReducer = (state = {}, action) => {
 
       // not idAttribute means it's a single resource
       if (idAttribute) {
-        const docSchema = new schema.Entity(resource.name, undefined, {
-          idAttribute: apiMapping[resource.name].idAttribute
-        });
+        const docSchema = new schema.Entity(resource.name, undefined, { idAttribute });
         const normalizeSchema = {
           data: Array.isArray(payload.data)
             ? new schema.Array(docSchema)
