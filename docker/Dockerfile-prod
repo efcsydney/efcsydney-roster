@@ -18,4 +18,4 @@ RUN yarn ; yarn build ; rm -rf ./node_modules
 WORKDIR /opt/efcsydney-roster
 
 EXPOSE 3000 3001 3002
-ENTRYPOINT ["/bin/bash", "-ex", "/opt/efcsydney-roster/Entrypoint.sh", "prod"]
+ENTRYPOINT ["/bin/bash", "-ex", "/opt/efcsydney-roster/docker/Entrypoint.sh", "prod"]
