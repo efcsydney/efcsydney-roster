@@ -1,0 +1,33 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "EFC sydney ELB",
+    "Parameters": {
+        "DBUser": {
+            "Type": "String",
+            "Description": "Database User",
+            "Default": "admin"
+        },
+        "DBPassword": {
+            "Type": "String",
+            "Description": "Database Password",
+            "Default": "admin123"
+        }
+    },
+    "Resources": {
+        "MyDB" : {
+          "Type" : "AWS::RDS::DBInstance",
+          "Properties" : {
+            "DBName" : "efcRoster",
+            "AllocatedStorage" : "20",
+            "DBInstanceClass" : "db.t2.micro",
+            "Engine" : "MySQL",
+            "EngineVersion" : "5.6.39",
+            "MasterUsername" : { "Ref" : "DBUser" },
+            "MasterUserPassword" : { "Ref" : "DBPassword" },
+            "MultiAZ" : false,
+            "Tags" : [ { "Key" : "Name", "Value" : "My SQL Database" } ]
+          },
+          "DeletionPolicy" : "Retain"
+      }
+    }
+}
