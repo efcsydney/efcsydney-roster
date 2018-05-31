@@ -5,7 +5,7 @@ cd $EFC_FOLDER
 
 prod() {
   export PATH=$PATH:~/.local/bin/
-  aws ssm get-parameters --region ap-southeast-2 --names username password database host dialect --with-decryption --query 'Parameters[*].{key:Name,value:Value}' | jq from_entries | jq '{ $node_env : .}' > ./config/database.json
+  aws ssm get-parameters --region ap-southeast-2 --names username password database host dialect --with-decryption --query 'Parameters[*].{key:Name,value:Value}' | jq from_entries | jq '{ "'$NODE_ENV'" : .}' > ./config/database.json
   yarn db-migrate
 
   aws s3 cp s3://efc-roster/email-list.csv $EFC_FOLDER/db/data/email-list.csv
@@ -18,6 +18,7 @@ prod-local() {
   yarn db-migrate
   yarn db-update-events
   cp db/data/email-list-example.csv db/data/email-list.csv
+  jq -h
   pm2-runtime server.js
 }
 
