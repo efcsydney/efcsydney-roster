@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 import { createAsyncAction } from './actions';
 import { mapping as apiMapping } from 'apis';
 
 export default function* requestSagas() {
-  yield takeEvery(
+  yield takeLatest(
     action => {
       return (
         action.resource &&

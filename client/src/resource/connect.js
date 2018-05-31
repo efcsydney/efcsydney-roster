@@ -72,16 +72,21 @@ export const withResource = (
       }
       render() {
         const {
-          resource,
-          resource: { data },
+          resource: { data, status, cache },
           otherState,
           ownProps
         } = this.props;
-        const props = mapResourceToProps
-          ? mapResourceToProps(resource, otherState, ownProps)
-          : { [resourceKey]: data };
 
-        return <WrappedComponent {...props} {...ownProps} />;
+        const filteredResource = {
+          data: data[resourceKey],
+          status: status[resourceKey],
+          cache
+        };
+        const props = mapResourceToProps
+          ? mapResourceToProps(filteredResource, otherState, ownProps)
+          : { [resourceKey]: data[resourceKey] };
+
+        return <WrappedComponent {...this.props} {...ownProps} {...props} />;
       }
     }
   );
