@@ -22,6 +22,7 @@ import {
   toggleEditRole,
   toggleEditDay
 } from 'modules/index/redux';
+import { createApiActions } from 'resource/actions';
 
 const mapStateToProps = state => {
   const { meta: { category } } = state.core;
@@ -37,12 +38,14 @@ const mapStateToProps = state => {
     isLoading
   };
 };
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
+const mapDispatchToProps = dispatch => {
+  const { retrieveEvents } = createApiActions('events');
+  return bindActionCreators(
     {
       requestModifyIdEvents,
       requestModifyServiceInfo,
       requestRetrieveEvents,
+      retrieveEvents,
       setEvent,
       setSelectedData,
       setServiceInfo,
@@ -52,6 +55,7 @@ const mapDispatchToProps = dispatch =>
     },
     dispatch
   );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   class Container extends Component {
@@ -74,7 +78,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       return EventsAPI.retrieve(query);
     }
     loadData({ from, to, category }) {
-      const { requestRetrieveEvents } = this.props;
+      const { requestRetrieveEvents, retrieveEvents } = this.props;
       const query = {
         from:
           from ||
@@ -100,6 +104,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         });
 
       requestRetrieveEvents(query);
+      retrieveEvents(query);
     }
     handleButtonClick = direction => {
       const { date } = this.state;
