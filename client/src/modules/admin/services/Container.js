@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import { ServicesAPI } from 'apis';
 import { Auth, NavBar } from 'modules/core';
 import styled from 'styled-components';
-import { Button, Cell, Grid, HeaderCell, Row } from 'components';
+import { Button, Cell, Grid, HeaderCell, Row, ExternalLink } from 'components';
 import { Link } from 'react-router-dom';
 import IconPencil from 'react-icons/lib/fa/pencil';
-import ExternalLink from 'react-icons/lib/fa/external-link';
 import Popup from './Popup';
 
 const mapStateToProps = (state, ownProps) => {
@@ -99,10 +98,7 @@ export default connect(mapStateToProps)(
                   {data.map(({ frequency, label, id, positions, name }) => (
                     <Row key={id}>
                       <Cell>
-                        <Link target="_blank" to={`/${name}`}>
-                          {label}
-                          <StyleExternalLink />
-                        </Link>
+                        <ExternalLink to={name}>{label}</ExternalLink>
                       </Cell>
                       <Cell>{positions.length}</Cell>
                       <Cell>{_.capitalize(frequency)}</Cell>
@@ -146,8 +142,4 @@ const HeadRow = styled.div`
 `;
 const IconEdit = styled(IconPencil)`
   margin-right: 4px;
-`;
-
-const StyleExternalLink = styled(ExternalLink)`
-  margin-left: 4px;
 `;
