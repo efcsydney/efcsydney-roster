@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import { switchCategory, retrieveServices } from '../redux';
+import { createApiActions } from 'resource/actions';
 import { media } from 'styled';
 import i18n from 'i18n';
 
@@ -12,8 +13,13 @@ const mapStateToProps = state => ({
   services: state.core.data.services,
   value: state.core.meta.category
 });
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ switchCategory, retrieveServices }, dispatch);
+const mapDispatchToProps = dispatch => {
+  const { retrieveServices: retrieveServices2 } = createApiActions('services');
+  return bindActionCreators(
+    { switchCategory, retrieveServices, retrieveServices2 },
+    dispatch
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   class NavBar extends Component {
@@ -41,10 +47,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       onCategoryChange(value);
     };
     componentWillMount() {
-      const { hasSwitcher, retrieveServices } = this.props;
+      const { hasSwitcher, retrieveServices, retrieveServices2 } = this.props;
 
       if (hasSwitcher) {
         retrieveServices();
+        retrieveServices2({});
       }
     }
     render() {
