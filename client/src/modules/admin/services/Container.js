@@ -98,7 +98,7 @@ export default connect(mapStateToProps)(
                   {data.map(({ frequency, label, id, positions, name }) => (
                     <Row key={id}>
                       <Cell>
-                        <Link to={`/${name}`}>{label}</Link>
+                        <Link target="_blank" to={`/${name}`}>
                       </Cell>
                       <Cell>{positions.length}</Cell>
                       <Cell>{_.capitalize(frequency)}</Cell>
