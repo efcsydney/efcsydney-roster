@@ -59,7 +59,7 @@ class Popup extends Component {
     if (isPrevSaving && hasNextCompleted) {
       setTimeout(() => {
         onClose();
-      }, 1000);
+      }, 500);
     }
   }
   handleChange = change => {
