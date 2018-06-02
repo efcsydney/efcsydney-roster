@@ -13,6 +13,7 @@ class EventMapper {
     events.forEach(e => {
       // Build the event
       const event = {
+        id: e.id,
         position: e.position.name,
         volunteerName: e.volunteerName
       };
