@@ -3,7 +3,7 @@ const EventRepository = require('../data/event-repository').EventRepository;
 const ServiceCalendarDateRepository = require('../data/service-calendar-date-repository')
   .ServiceCalendarDateRepository;
 const EventMapper = require('../mapper/event-mapper').EventMapper;
-const log = require('winston');
+const log = require('../utilities/logger');
 const datetimeUtils = require('../utilities/datetime-util');
 const getDateString = datetimeUtils.getDateString;
 const getDateByWeeks = datetimeUtils.getDateByWeeks;
@@ -40,7 +40,6 @@ class EventService {
       position: event.position.name
     }).then(function (dbEvent) {
       if (dbEvent != null) {
-
         return Promise.resolve(dbEvent);
       } else {
         const msg = `Error: missing event in DB: ${JSON.stringify(event)}`;
