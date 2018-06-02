@@ -1,8 +1,11 @@
 const chai = require('chai');
+const chaiExclude = require('chai-exclude');
 const expect = chai.expect;
 const request = require('supertest');
 const app = require('../../app').app;
 const createSeed = require('../helpers/test-helper').createSeed;
+
+chai.use(chaiExclude);
 
 describe('Server', function() {
   this.timeout(5000);
@@ -25,7 +28,7 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
-          expect(res.body.data).to.eql([
+          const expected = [
             {
               date: '2017-10-15',
               serviceInfo: {
@@ -64,6 +67,11 @@ describe('Server', function() {
                 { role: 'Refreshments', name: 'Christine Yang' }
               ]
             }
+          ];
+
+          chai.assert.deepEqualExcluding(res.body.data, expected, [
+            'members',
+            'id'
           ]);
         });
     });
@@ -74,7 +82,7 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
-          expect(res.body.data).to.eql([
+          const expected = [
             {
               date: '2017-10-15',
               serviceInfo: {
@@ -121,6 +129,11 @@ describe('Server', function() {
                 { role: '愛餐', name: 'Yvonne Lu' }
               ]
             }
+          ];
+
+          chai.assert.deepEqualExcluding(res.body.data, expected, [
+            'members',
+            'id'
           ]);
         });
     });
@@ -132,6 +145,20 @@ describe('Server', function() {
         .expect(200)
         .then(function(res) {
           expect(res.body.data.length).to.eql(3); // because only the last 3 weeks have data in DB
+        });
+    });
+
+    it('returns events which contains ID of each event', function() {
+      return request(app)
+        .get('/api/events?from=2017-10-08&to=2017-10-15&category=english')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(function(res) {
+          res.body.data.forEach(weeklyEvents => {
+            weeklyEvents.members.forEach(event => {
+              expect(parseInt(event.id)).to.greaterThan(0);
+            });
+          });
         });
     });
   });
