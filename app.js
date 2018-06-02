@@ -53,6 +53,8 @@ app.put('/api/events', eventsController.saveEvent);
 
 app.put('/api/serviceInfo/:id', serviceInfoController.saveServiceInfo);
 
+app.put('/api/serviceInfo', serviceInfoController.saveServiceInfo);
+
 app.get('/api/services', servicesController.getServices);
 
 app.get('/api/services/:id', servicesController.getServiceById);

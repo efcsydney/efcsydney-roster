@@ -170,8 +170,8 @@ describe('Server', function() {
         });
     });
   });
-  describe('update serviceInfo', function() {
-    it('updates a serviceInfo', function() {
+  describe('update/create serviceInfo', function() {
+    it('updates a serviceInfo when serviceInfo Id is available', function() {
       const footnote = {
         date: '2017-10-08',
         category: 'english',
@@ -179,15 +179,58 @@ describe('Server', function() {
         skipService: true,
         skipReason: 'Combined Service'
       };
-      const footnoteId = 1;
+      const serviceInfoId = 1;
       return request(app)
-        .put(`/api/serviceInfo/${footnoteId}`)
+        .put(`/api/serviceInfo/${serviceInfoId}`)
         .send(footnote)
         .expect('Content-Type', /json/)
         .expect(201)
         .then(function(res) {
           expect(res.body.result).to.equal('OK');
-          expect(res.body.data.id).to.equal(1);
+          expect(res.body.data.id).to.equal('1');
+          expect(res.body.data.skipService).to.equal(footnote.skipService);
+          expect(res.body.data.footnote).to.equal(footnote.footnote);
+        });
+    });
+    it('creates a serviceInfo when serviceInfo Id is NOT included in the URL parth', function() {
+      const footnote = {
+        date: '2016-01-01',
+        category: 'english',
+        footnote: 'Meeting (Election)',
+        skipService: true,
+        skipReason: 'Combined Service'
+      };
+
+      return request(app)
+        .put(`/api/serviceInfo`)
+        .send(footnote)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .then(function(res) {
+          expect(res.body.result).to.equal('OK');
+          expect(res.body.data.id).to.greaterThan(0);
+          expect(res.body.data.skipService).to.equal(footnote.skipService);
+          expect(res.body.data.footnote).to.equal(footnote.footnote);
+        });
+    });
+    it('creates a serviceInfo when serviceInfo Id is NOT included in the URL parth but in the body', function() {
+      const footnote = {
+        date: '2016-02-01',
+        category: 'english',
+        footnote: 'Meeting (Election)',
+        skipService: true,
+        skipReason: 'Combined Service',
+        id: 2
+      };
+
+      return request(app)
+        .put(`/api/serviceInfo`)
+        .send(footnote)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .then(function(res) {
+          expect(res.body.result).to.equal('OK');
+          expect(res.body.data.id).to.greaterThan(0);
           expect(res.body.data.skipService).to.equal(footnote.skipService);
           expect(res.body.data.footnote).to.equal(footnote.footnote);
         });

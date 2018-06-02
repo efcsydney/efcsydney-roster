@@ -11,11 +11,10 @@ async function saveServiceInfo(req, res, next) {
       data: req.body
     });
     log.info('saveServiceInfo', serviceInfo);
-    await ServiceInfoService.saveServiceInfo(serviceInfo);
-
-    const updatedServiceInfo = await ServiceInfoService.getServiceInfoById(
-      serviceInfo.id
+    const updatedServiceInfo = await ServiceInfoService.saveServiceInfo(
+      serviceInfo
     );
+
     const data = DtoMapper.mapServiceInfoToDto(updatedServiceInfo);
 
     const response = {
