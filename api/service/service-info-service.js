@@ -6,7 +6,8 @@ class ServiceInfoService {
     if (!serviceInfo.id) {
       return ServiceCalendarDateRepository.createServiceInfo(serviceInfo);
     } else {
-      return ServiceCalendarDateRepository.updateServiceInfo(serviceInfo);
+      await ServiceCalendarDateRepository.updateServiceInfo(serviceInfo);
+      return serviceInfo;
     }
   }
   static async getServiceInfoById(serviceInfoId) {
