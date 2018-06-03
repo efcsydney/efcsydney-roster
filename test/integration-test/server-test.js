@@ -171,7 +171,7 @@ describe('Server', function() {
     });
   });
   describe('update/create serviceInfo', function() {
-    it('updates a serviceInfo when serviceInfo Id is available', function() {
+    it('updates a serviceInfo', function() {
       const footnote = {
         date: '2017-10-08',
         category: 'english',
@@ -192,7 +192,7 @@ describe('Server', function() {
           expect(res.body.data.footnote).to.equal(footnote.footnote);
         });
     });
-    it('creates a serviceInfo when serviceInfo Id is NOT included in the URL parth', function() {
+    it('creates a serviceInfo', function() {
       const footnote = {
         date: '2016-01-01',
         category: 'english',
@@ -202,7 +202,7 @@ describe('Server', function() {
       };
 
       return request(app)
-        .put(`/api/serviceInfo`)
+        .post(`/api/serviceInfo`)
         .send(footnote)
         .expect('Content-Type', /json/)
         .expect(201)
@@ -213,7 +213,7 @@ describe('Server', function() {
           expect(res.body.data.footnote).to.equal(footnote.footnote);
         });
     });
-    it('creates a serviceInfo when serviceInfo Id is NOT included in the URL parth but in the body', function() {
+    it('creates a serviceInfo', function() {
       const footnote = {
         date: '2016-02-01',
         category: 'english',
@@ -224,7 +224,7 @@ describe('Server', function() {
       };
 
       return request(app)
-        .put(`/api/serviceInfo`)
+        .post(`/api/serviceInfo`)
         .send(footnote)
         .expect('Content-Type', /json/)
         .expect(201)
