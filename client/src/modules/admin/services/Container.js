@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { ServicesAPI } from 'apis';
 import { Auth, NavBar } from 'modules/core';
 import styled from 'styled-components';
-import { Button, Cell, Grid, HeaderCell, Row } from 'components';
+import { Button, Cell, Grid, HeaderCell, Row, ExternalLink } from 'components';
 import { Link } from 'react-router-dom';
 import IconPencil from 'react-icons/lib/fa/pencil';
 import Popup from './Popup';
@@ -95,10 +95,10 @@ export default connect(mapStateToProps)(
                   </Row>
                 </thead>
                 <tbody>
-                  {data.map(({ frequency, label, id, positions }) => (
+                  {data.map(({ frequency, label, id, positions, name }) => (
                     <Row key={id}>
                       <Cell>
-                        <Link to={`${this.rootPath}/edit/${id}`}>{label}</Link>
+                        <ExternalLink to={name}>{label}</ExternalLink>
                       </Cell>
                       <Cell>{positions.length}</Cell>
                       <Cell>{_.capitalize(frequency)}</Cell>
