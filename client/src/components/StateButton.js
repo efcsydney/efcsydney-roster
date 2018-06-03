@@ -45,6 +45,10 @@ SpinIcon.displayName = 'SpinIcon';
 const IconWrapper = styled.span`
   display: inline-block;
   margin-right: 4px;
+  line-height: 1;
+  i {
+    vertical-align: baseline;
+  }
 `;
 IconWrapper.displayName = 'IconWrapper';
 

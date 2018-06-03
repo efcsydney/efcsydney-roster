@@ -34,16 +34,22 @@ export function createApi(path, overwrite) {
         method: 'DELETE'
       }).then(onFulfilled);
     },
-    modify: function(id, body) {
-      return fetch(`${path}/${id}`, {
+    modify: function(params) {
+      const { id, ...body } = params;
+      const url = id ? `${path}/${id}` : path;
+
+      return fetch(url, {
         ...defaultOptions,
         method: 'PUT',
         body: JSON.stringify(body)
       }).then(onFulfilled);
     },
-    retrieve: function(query) {
-      query = buildQuery(query);
-      return fetch(`${path}?${query}`).then(onFulfilled);
+    retrieve: function(params) {
+      const { id, ...otherParams } = params;
+      const query = buildQuery(otherParams);
+      const url = id ? `${path}/${id}?${query}` : `${path}?${query}`;
+
+      return fetch(url).then(onFulfilled);
     },
     ...overwrite
   };
