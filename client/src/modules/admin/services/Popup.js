@@ -345,10 +345,10 @@ StyleIconBar.displayName = 'StyleIconBar';
 const StyleDraggableItem = styled(DraggableItem)`
   display: flex;
   align-items: center;
-  &[data-isDragging='true'] {
+  &[aria-grabbed='true'] {
     opacity: 0.5;
   }
-  &[data-isDragEntering='true'] {
+  &[aria-dropeffect='move'] {
     background: #c1c1c1;
   }
 `;
