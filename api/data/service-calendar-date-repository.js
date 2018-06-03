@@ -39,7 +39,7 @@ class ServiceCalendarDateRepository {
     });
 
     if (!dateInDb) {
-      dateInDb = await CalendarDate.create(date);
+      dateInDb = await CalendarDate.create({ date: date });
     }
 
     //get service
