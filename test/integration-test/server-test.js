@@ -213,28 +213,6 @@ describe('Server', function() {
           expect(res.body.data.footnote).to.equal(footnote.footnote);
         });
     });
-    it('creates a serviceInfo', function() {
-      const footnote = {
-        date: '2016-02-01',
-        category: 'english',
-        footnote: 'Meeting (Election)',
-        skipService: true,
-        skipReason: 'Combined Service',
-        id: 2
-      };
-
-      return request(app)
-        .post(`/api/serviceInfo`)
-        .send(footnote)
-        .expect('Content-Type', /json/)
-        .expect(201)
-        .then(function(res) {
-          expect(res.body.result).to.equal('OK');
-          expect(res.body.data.id).to.greaterThan(0);
-          expect(res.body.data.skipService).to.equal(footnote.skipService);
-          expect(res.body.data.footnote).to.equal(footnote.footnote);
-        });
-    });
   });
 
   describe('Service API', function() {
