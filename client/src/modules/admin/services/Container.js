@@ -88,7 +88,7 @@ export default withResource('services', mapResourceToProps)(
                   </Row>
                 </thead>
                 <tbody>
-                  {_.map(data, ({ frequency, label, id, positions }) => (
+                  {_.map(data, ({ frequency, label, id, positions, name }) => (
                     <Row key={id}>
                       <Cell>
                         <ExternalLink to={name}>{label}</ExternalLink>

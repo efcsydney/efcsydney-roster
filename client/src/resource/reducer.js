@@ -51,11 +51,7 @@ const asyncStatusReducer = (
       const id = _.get(payload, [idAttribute], '');
 
       if (!id) {
-        state = set(
-          state,
-          [resource.name, resource.method, 'isLoading'],
-          true
-        );
+        state = set(state, [resource.name, resource.method, 'isLoading'], true);
 
         return state;
       }
@@ -76,7 +72,11 @@ const asyncStatusReducer = (
           [resource.name, resource.method, 'isLoading'],
           false
         );
-        state = set(state, [resource.name, resource.method, 'hasInitialized'], true);
+        state = set(
+          state,
+          [resource.name, resource.method, 'hasInitialized'],
+          true
+        );
       }
 
       state = dotDrop.delete(state, [
@@ -121,6 +121,7 @@ const asyncDataReducer = (state = defaultAsyncData, { resource, payload }) => {
   if (resource.stage !== 'complete') return state;
 
   switch (resource.method) {
+    case 'modify':
     case 'retrieve': {
       const idAttribute =
         !_.isEmpty(apiMapping[resource.name]) &&
@@ -167,7 +168,9 @@ const asyncCacheReducer = (state = {}, action) => {
 
       // not idAttribute means it's a single resource
       if (idAttribute) {
-        const docSchema = new schema.Entity(resource.name, undefined, { idAttribute });
+        const docSchema = new schema.Entity(resource.name, undefined, {
+          idAttribute
+        });
         const normalizeSchema = {
           data: Array.isArray(payload.data)
             ? new schema.Array(docSchema)
