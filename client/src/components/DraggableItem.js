@@ -53,13 +53,14 @@ export const DraggableItem = _.flow([
       } = this.props;
 
       const isDragEntering = isOver && canDrop;
+      const dropEffect = isDragEntering ? 'move' : 'none';
 
       return connectDropTarget(
         connectDragSource(
           <li
             className={this.props.className}
-            data-isDragging={isDragging}
-            data-isDragEntering={isDragEntering}>
+            aria-grabbed={isDragging}
+            aria-dropeffect={dropEffect}>
             {this.props.children}
           </li>
         )
