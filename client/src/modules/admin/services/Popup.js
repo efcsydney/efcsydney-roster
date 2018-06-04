@@ -173,32 +173,30 @@ export default class Popup extends Component {
               <PositionList>
                 {positions.map(({ id, name, order }, i) => {
                   return (
-                    <DraggableItem
+                    <StyleDraggableItem
                       key={id}
                       value={order}
                       no={i}
                       onSwitchPosition={(sourceNo, targetNo) =>
                         this.handleSwitch(sourceNo, targetNo)
                       }>
-                      <Wrapper>
-                        <StyleIconBar />
-                        <Input
-                          data-hj-whitelist
-                          type="text"
-                          value={name}
-                          onChange={e =>
-                            this.handleChange({
-                              [`positions.${i}.name`]: e.target.value
-                            })
-                          }
+                      <StyleIconBar />
+                      <Input
+                        data-hj-whitelist
+                        type="text"
+                        value={name}
+                        onChange={e =>
+                          this.handleChange({
+                            [`positions.${i}.name`]: e.target.value
+                          })
+                        }
+                      />
+                      {!id && (
+                        <IconDelete
+                          onClick={this.handlePositionDelete.bind(this, i)}
                         />
-                        {!id && (
-                          <IconDelete
-                            onClick={this.handlePositionDelete.bind(this, i)}
-                          />
-                        )}
-                      </Wrapper>
-                    </DraggableItem>
+                      )}
+                    </StyleDraggableItem>
                   );
                 })}
                 <PositionItem>
@@ -316,10 +314,14 @@ const StyleIconBar = styled(IconBar)`
 `;
 StyleIconBar.displayName = 'StyleIconBar';
 
-const Wrapper = styled.li`
+const StyleDraggableItem = styled(DraggableItem)`
   display: flex;
   align-items: center;
-  opacity: ${props => (props.isDragging ? 0.5 : 1)};
-  background: ${props => (props.isDragEntering ? '#c1c1c1' : 'transparent')};
+  &[aria-grabbed='true'] {
+    opacity: 0.5;
+  }
+  &[aria-dropeffect='move'] {
+    background: #c1c1c1;
+  }
 `;
-Wrapper.displayName = 'Wrapper';
+StyleDraggableItem.displayName = 'StyleDraggableItem';

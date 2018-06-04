@@ -52,19 +52,17 @@ export const DraggableItem = _.flow([
         canDrop
       } = this.props;
 
-      let isDragEntering = false;
-      if (isOver && canDrop) {
-        isDragEntering = true;
-      }
+      const isDragEntering = isOver && canDrop;
+      const dropEffect = isDragEntering ? 'move' : 'none';
 
       return connectDropTarget(
         connectDragSource(
-          <div>
-            {React.cloneElement(this.props.children, {
-              isDragging: isDragging,
-              isDragEntering: isDragEntering
-            })}
-          </div>
+          <li
+            className={this.props.className}
+            aria-grabbed={isDragging}
+            aria-dropeffect={dropEffect}>
+            {this.props.children}
+          </li>
         )
       );
     }
