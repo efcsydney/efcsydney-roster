@@ -1,4 +1,20 @@
+import React from 'react';
 import styled from 'styled-components';
+
+export const FormGroup = ({
+  children,
+  label,
+  labelStyle,
+  isRequired,
+  ...otherProps
+}) => (
+  <FormRow {...otherProps}>
+    <FormLabel style={labelStyle} required={isRequired}>
+      {label}
+    </FormLabel>
+    <span>{children}</span>
+  </FormRow>
+);
 
 export const Input = styled.input`
   background: #fff;
@@ -39,4 +55,39 @@ export const Input = styled.input`
     color: #999;
   }
 `;
-Input.displayName = 'Input';
+
+export const Form = styled.form`
+  display: table;
+  margin: 0 auto;
+  position: relative;
+`;
+
+export const FormRow = styled.div`
+  align-items: center;
+  display: flex;
+  min-height: 50px;
+  &:last-child {
+    text-align: center;
+    padding: 20px 0;
+  }
+  justify-content: ${props => props.align || 'flex-start'};
+`;
+
+export const FormLabel = styled.label`
+  display: inline-block;
+  font-weight: bold;
+  padding-right: 15px;
+  position: relative;
+  text-align: right;
+  width: 125px;
+  ${props =>
+    props.required &&
+    `
+    &:after {
+      content: '*';
+      color: #c00;
+      position: absolute;
+      right: 7px;
+    }
+  `};
+`;
