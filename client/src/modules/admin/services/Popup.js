@@ -130,6 +130,7 @@ class Popup extends Component {
   renderForm() {
     const { data } = this.state;
     const { isSaving, hasCompleted } = this.props;
+    const name = _.get(data, 'name', '');
     const frequency = _.get(data, 'frequency', '');
     const label = _.get(data, 'label', '');
     const footnoteLabel = _.get(data, 'footnoteLabel', '');
@@ -144,19 +145,6 @@ class Popup extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <FormGroup label="Frequency" isRequired={true}>
-          <StyleSelect
-            value={frequency}
-            disabled={!isNew}
-            clearable={false}
-            options={FREQUENCY_OPTIONS}
-            onChange={e =>
-              this.handleChange({
-                frequency: e.value
-              })
-            }
-          />
-        </FormGroup>
         <FormGroup label="Service Title" isRequired={true}>
           <Input
             data-hj-whitelist
@@ -165,6 +153,36 @@ class Popup extends Component {
             maxLength={30}
             onChange={e => this.handleChange({ label: e.target.value })}
           />
+        </FormGroup>
+        <FormGroup label="URL Identifier" isRequired={isNew}>
+          {isNew ? (
+            <Input
+              value={name}
+              onChange={e =>
+                this.handleChange({
+                  name: e.value
+                })
+              }
+            />
+          ) : (
+            name
+          )}
+        </FormGroup>
+        <FormGroup label="Frequency" isRequired={isNew}>
+          {isNew ? (
+            <StyleSelect
+              value={frequency}
+              clearable={false}
+              options={FREQUENCY_OPTIONS}
+              onChange={e =>
+                this.handleChange({
+                  frequency: e.value
+                })
+              }
+            />
+          ) : (
+            frequency
+          )}
         </FormGroup>
         <FormGroup label="Descripiton Label" isRequired={true}>
           <Input
