@@ -12,6 +12,9 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import {
+  Form,
+  FormGroup,
+  FormRow,
   LoadingIndicator,
   Modal,
   StateButton,
@@ -25,6 +28,18 @@ import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
 import IconBar from 'react-icons/lib/fa/bars';
 import { withResource } from 'resource';
+
+const FREQUENCY_OPTIONS = [
+  { value: 'Sunday', label: 'Sunday' },
+  { value: 'Saturday', label: 'Saturday' },
+  { value: 'Month', label: 'Month' },
+  { value: 'Friday', label: 'Friday' },
+  { value: 'Thursday', label: 'Thursday' },
+  { value: 'Wednesday', label: 'Wednesday' },
+  { value: 'Tuesday', label: 'Tuesday' },
+  { value: 'Monday', label: 'Monday' },
+  { value: 'Everyday', label: 'Everyday' }
+];
 
 class Popup extends Component {
   static propTypes = {
@@ -70,9 +85,7 @@ class Popup extends Component {
       data = set(data, key, change);
     });
 
-    this.setState({
-      data
-    });
+    this.setState({ data });
   };
   handleSwitch = (sourceNo, targetNo) => {
     const { data: { positions } } = this.state;
@@ -92,17 +105,13 @@ class Popup extends Component {
       order: positions.length + 1
     });
 
-    this.setState({
-      data
-    });
+    this.setState({ data });
   };
   handlePositionDelete = offset => {
     let { data } = this.state;
     data = dotProp.delete(data, `positions.${offset}`);
 
-    this.setState({
-      data
-    });
+    this.setState({ data });
   };
   handleSubmit = e => {
     const { onSave } = this.props;
@@ -135,102 +144,85 @@ class Popup extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <Row>
-          <Label required>Frequency</Label>
-          <span>
-            <StyleSelect
-              value={frequency}
-              disabled={!isNew}
-              clearable={false}
-              options={[
-                { value: 'Sunday', label: 'Sunday' },
-                { value: 'Saturday', label: 'Saturday' },
-                { value: 'Month', label: 'Month' }
-              ]}
-              onChange={e =>
-                this.handleChange({
-                  frequency: e.value
-                })
-              }
-            />
-          </span>
-        </Row>
-        <Row>
-          <Label required>Service Title</Label>
-          <span>
-            <Input
-              data-hj-whitelist
-              type="text"
-              value={label}
-              maxLength={30}
-              onChange={e => this.handleChange({ label: e.target.value })}
-            />
-          </span>
-        </Row>
-        <Row>
-          <Label required>Description Label</Label>
-          <span>
-            <Input
-              data-hj-whitelist
-              type="text"
-              value={footnoteLabel}
-              maxLength={30}
-              onChange={e =>
-                this.handleChange({ footnoteLabel: e.target.value })
-              }
-            />
-          </span>
-        </Row>
-        <Row style={{ alignItems: 'flex-start' }}>
-          <Label style={{ paddingTop: '10px' }}>Positions</Label>
-          <span>
-            <DragDropZone>
-              <PositionList>
-                {positions.map(({ id, name, order }, i) => {
-                  return (
-                    <StyleDraggableItem
-                      key={id}
-                      value={order}
-                      no={i}
-                      onSwitchPosition={(sourceNo, targetNo) =>
-                        this.handleSwitch(sourceNo, targetNo)
-                      }>
-                      <StyleIconBar />
-                      <Input
-                        data-hj-whitelist
-                        type="text"
-                        value={name}
-                        onChange={e =>
-                          this.handleChange({
-                            [`positions.${i}.name`]: e.target.value
-                          })
-                        }
-                      />
-                      {!id && (
-                        <IconDelete
-                          onClick={this.handlePositionDelete.bind(this, i)}
-                        />
-                      )}
-                    </StyleDraggableItem>
-                  );
-                })}
-                <PositionItem>
-                  <AddPositionLink onClick={this.handlePositionAdd}>
-                    Add New Position
-                  </AddPositionLink>
-                </PositionItem>
-              </PositionList>
-            </DragDropZone>
-          </span>
-        </Row>
-        <Row align="center">
+        <FormGroup label="Frequency" isRequired={true}>
+          <StyleSelect
+            value={frequency}
+            disabled={!isNew}
+            clearable={false}
+            options={FREQUENCY_OPTIONS}
+            onChange={e =>
+              this.handleChange({
+                frequency: e.value
+              })
+            }
+          />
+        </FormGroup>
+        <FormGroup label="Service Title" isRequired={true}>
+          <Input
+            data-hj-whitelist
+            type="text"
+            value={label}
+            maxLength={30}
+            onChange={e => this.handleChange({ label: e.target.value })}
+          />
+        </FormGroup>
+        <FormGroup label="Descripiton Label" isRequired={true}>
+          <Input
+            data-hj-whitelist
+            type="text"
+            value={footnoteLabel}
+            maxLength={30}
+            onChange={e => this.handleChange({ footnoteLabel: e.target.value })}
+          />
+        </FormGroup>
+        <FormGroup
+          label="Positions"
+          labelStyle={{ paddingTop: '10px' }}
+          style={{ alignItems: 'flex-start' }}>
+          <DragDropZone>
+            <PositionList>
+              {positions.map(({ id, name, order }, i) => (
+                <StyleDraggableItem
+                  key={id}
+                  value={order}
+                  no={i}
+                  onSwitchPosition={(sourceNo, targetNo) =>
+                    this.handleSwitch(sourceNo, targetNo)
+                  }>
+                  <StyleIconBar />
+                  <Input
+                    data-hj-whitelist
+                    type="text"
+                    value={name}
+                    onChange={e =>
+                      this.handleChange({
+                        [`positions.${i}.name`]: e.target.value
+                      })
+                    }
+                  />
+                  {!id && (
+                    <IconDelete
+                      onClick={this.handlePositionDelete.bind(this, i)}
+                    />
+                  )}
+                </StyleDraggableItem>
+              ))}
+              <PositionItem>
+                <AddPositionLink onClick={this.handlePositionAdd}>
+                  Add New Position
+                </AddPositionLink>
+              </PositionItem>
+            </PositionList>
+          </DragDropZone>
+        </FormGroup>
+        <FormRow align="center">
           <StateButton
             kind={buttonKind}
             type="submit"
             disabled={!isButtonEnabled}>
             Save
           </StateButton>
-        </Row>
+        </FormRow>
       </Form>
     );
   }
@@ -268,45 +260,6 @@ export default withResource('services', (resource, state, ownProps) => {
   };
 })(Popup);
 
-const Form = styled.form`
-  display: table;
-  margin: 0 auto;
-  position: relative;
-`;
-Form.displayName = 'Form';
-
-const Row = styled.div`
-  align-items: center;
-  display: flex;
-  min-height: 50px;
-  &:last-child {
-    text-align: center;
-    padding: 20px 0;
-  }
-  justify-content: ${props => props.align || 'flex-start'};
-`;
-Row.displayName = 'Row';
-
-const Label = styled.label`
-  display: inline-block;
-  font-weight: bold;
-  padding-right: 15px;
-  position: relative;
-  text-align: right;
-  width: 125px;
-  ${props =>
-    props.required &&
-    `
-    &:after {
-      content: '*';
-      color: #c00;
-      position: absolute;
-      right: 7px;
-    }
-  `};
-`;
-Label.displayName = 'Label';
-
 const PositionItem = styled.li`
   align-items: center;
   display: flex;
@@ -315,15 +268,11 @@ const PositionItem = styled.li`
     margin-bottom: 0;
   }
 `;
-PositionItem.displayName = 'PositionItem';
-
 const PositionList = styled.ol`
   background: #eee;
   border-radius: 4px;
   padding: 5px;
 `;
-PositionList.displayName = 'PositionList';
-
 const AddPositionLink = styled.a`
   cursor: pointer;
   display: block;
@@ -331,29 +280,22 @@ const AddPositionLink = styled.a`
   text-align: right;
   width: 100%;
 `;
-AddPositionLink.displayName = 'AddPositionLink';
-
 const IconDelete = styled(IconMinusCircle)`
   color: #a00;
   font-size: 20px;
   margin-left: 4px;
 `;
-IconDelete.displayName = 'IconDelete';
-
 const StyleSelect = styled(Select)`
   width: 165px;
 `;
-StyleSelect.displayName = 'StyleSelect';
-
 const StyleIconBar = styled(IconBar)`
   cursor: move;
   margin-right: 5px;
 `;
-StyleIconBar.displayName = 'StyleIconBar';
-
 const StyleDraggableItem = styled(DraggableItem)`
   display: flex;
   align-items: center;
+  margin-bottom: 2px;
   &[aria-grabbed='true'] {
     opacity: 0.5;
   }
@@ -361,4 +303,3 @@ const StyleDraggableItem = styled(DraggableItem)`
     background: #c1c1c1;
   }
 `;
-StyleDraggableItem.displayName = 'StyleDraggableItem';
