@@ -88,26 +88,23 @@ export default withResource('services', mapResourceToProps)(
                   </Row>
                 </thead>
                 <tbody>
-                  {_.map(
-                    data,
-                    ({ frequency, label, id, positions, name }, key) => (
-                      <Row key={id}>
-                        <Cell>
-                          <ExternalLink to={name}>{label}</ExternalLink>
-                        </Cell>
-                        <Cell>{positions.length}</Cell>
-                        <Cell>{_.capitalize(frequency)}</Cell>
-                        <Cell>
-                          <Link to={`${this.rootPath}/edit/${id}`}>
-                            <Button kind="blue">
-                              <IconEdit />
-                              Edit
-                            </Button>
-                          </Link>
-                        </Cell>
-                      </Row>
-                    )
-                  )}
+                  {_.map(data, ({ frequency, label, id, positions, name }) => (
+                    <Row key={id}>
+                      <Cell>
+                        <ExternalLink to={name}>{label}</ExternalLink>
+                      </Cell>
+                      <Cell>{positions.length}</Cell>
+                      <Cell>{_.capitalize(frequency)}</Cell>
+                      <Cell>
+                        <Link to={`${this.rootPath}/edit/${id}`}>
+                          <Button kind="blue">
+                            <IconEdit />
+                            Edit
+                          </Button>
+                        </Link>
+                      </Cell>
+                    </Row>
+                  ))}
                 </tbody>
               </Grid>
             </Auth>
