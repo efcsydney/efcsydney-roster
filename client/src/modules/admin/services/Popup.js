@@ -32,6 +32,7 @@ class Popup extends Component {
     mode: PropTypes.oneOf(['new', 'edit']).isRequired,
     isLoading: PropTypes.bool,
     hasCompleted: PropTypes.bool,
+    hasInitialized: PropTypes.bool,
     onClose: PropTypes.func,
     onSave: PropTypes.func
   };
@@ -39,6 +40,7 @@ class Popup extends Component {
     data: {},
     isLoading: false,
     hasCompleted: false,
+    hasInitialized: false,
     onClose: () => {},
     onSave: () => {}
   };
@@ -48,18 +50,17 @@ class Popup extends Component {
     const { data } = props;
     this.state = { data };
   }
-  componentWillReceiveProps(nextProps) {
-    const { data: prevData, isSaving: isPrevSaving, onClose } = this.props;
-    const { data: nextData, hasCompleted: hasNextCompleted } = nextProps;
+  componentDidUpdate(prevProps, prevState) {
+    const { data: prevData } = prevState;
+    const { data, hasInitialized, hasCompleted, onClose } = this.props;
+    const isReceivingInitData = hasInitialized && _.isEmpty(prevData);
 
-    if (_.isEmpty(prevData) && !_.isEmpty(nextData)) {
-      this.setState({ data: nextData });
+    if (isReceivingInitData) {
+      this.setState({ data });
     }
 
-    if (isPrevSaving && hasNextCompleted) {
-      setTimeout(() => {
-        onClose();
-      }, 500);
+    if (hasCompleted) {
+      setTimeout(onClose, 500);
     }
   }
   handleChange = change => {
@@ -248,14 +249,20 @@ class Popup extends Component {
 
 export default withResource('services', (resource, state, ownProps) => {
   const selectedId = _.get(ownProps, 'data.id');
-  const status = _.get(resource, 'status.modify', {});
-  const isSaving = status.loadingIds[selectedId];
-  const hasCompleted = status.completedIds[selectedId];
+  const data = _.get(resource, ['data', selectedId], {});
+
+  const modifyStatus = _.get(resource, 'status.modify', {});
+  const isSaving = modifyStatus.loadingIds[selectedId];
+  const hasCompleted = modifyStatus.completedIds[selectedId];
+
+  const retrieveStatus = _.get(resource, 'status.retrieve', {});
+  const hasInitialized = retrieveStatus.hasInitialized && !_.isEmpty(data);
 
   return {
-    data: _.get(resource, ['data', selectedId], {}),
+    data,
     isSaving,
-    hasCompleted
+    hasCompleted,
+    hasInitialized
   };
 })(Popup);
 

@@ -16,14 +16,16 @@
  *     ...state['index'].query
  *   };
  * });
- * const mapResourceToProps = (resource, otherState, ownProps) => {
- *   data: resource.data,
- *   ...state['index']
+ * const mapResourceToProps = (filteredResource, state, ownProps) => {
+ *   return {
+ *     data: filteredResource.data,
+ *     query: state['index'].query
+ *   };
  * };
  * withResource('events', mapResourceToProps, mapStateToQuery)(
  *   class Container extends Component {
  *     render() {
- *       const { data } = this.props;
+ *       const { data, query: { page, limit } } = this.props;
  *     }
  *   }
  * );
@@ -40,13 +42,13 @@ export const withResource = (
   mapStateToQuery
 ) => WrappedComponent => {
   return connect((state, ownProps) => {
-    const { resource, ...otherState } = state;
+    const { resource } = state;
     const query = _.isFunction(mapStateToQuery) ? mapStateToQuery(state) : {};
 
     return {
       resource,
       query,
-      otherState,
+      state: _.clone(state),
       ownProps
     };
   })(
@@ -54,13 +56,13 @@ export const withResource = (
       static propTypes = {
         resource: PropTypes.object,
         query: PropTypes.object,
-        otherState: PropTypes.object,
+        state: PropTypes.object,
         ownProps: PropTypes.object
       };
       static defaultProps = {
         resource: {},
         query: PropTypes.object,
-        otherState: {},
+        state: {},
         ownProps: {}
       };
       componentDidMount() {
@@ -73,7 +75,7 @@ export const withResource = (
       render() {
         const {
           resource: { data, status, cache },
-          otherState,
+          state,
           ownProps
         } = this.props;
 
@@ -83,7 +85,7 @@ export const withResource = (
           cache
         };
         const props = mapResourceToProps
-          ? mapResourceToProps(filteredResource, otherState, ownProps)
+          ? mapResourceToProps(filteredResource, state, ownProps)
           : { [resourceKey]: data[resourceKey] };
 
         return <WrappedComponent {...this.props} {...ownProps} {...props} />;
