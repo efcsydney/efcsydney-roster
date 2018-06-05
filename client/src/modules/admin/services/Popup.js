@@ -29,6 +29,10 @@ import Select from 'react-select';
 import IconBar from 'react-icons/lib/fa/bars';
 import { withResource } from 'resource';
 
+const LANGUAGE_OPTIONS = [
+  { value: 'en-AU', label: 'English (Australia)' },
+  { value: 'zh-TW', label: '繁體中文' }
+];
 const FREQUENCY_OPTIONS = [
   { value: 'Sunday', label: 'Sunday' },
   { value: 'Saturday', label: 'Saturday' },
@@ -63,15 +67,23 @@ class Popup extends Component {
     super(props);
 
     const { data } = props;
-    this.state = { data };
+
+    if (props.mode === 'new') {
+      this.state = { data: { positions: [{ name: '' }] } };
+    } else {
+      this.state = { data };
+    }
   }
   componentDidUpdate(prevProps, prevState) {
     const { data: prevData } = prevState;
-    const { data, hasInitialized, hasCompleted, onClose } = this.props;
-    const isReceivingInitData = hasInitialized && _.isEmpty(prevData);
+    const { data, hasInitialized, hasCompleted, mode, onClose } = this.props;
+    const isNew = mode === 'new';
 
-    if (isReceivingInitData) {
-      this.setState({ data });
+    if (!isNew) {
+      const isReceivingInitData = hasInitialized && _.isEmpty(prevData);
+      if (isReceivingInitData) {
+        this.setState({ data });
+      }
     }
 
     if (hasCompleted) {
@@ -131,81 +143,98 @@ class Popup extends Component {
     const { data } = this.state;
     const { isSaving, hasCompleted } = this.props;
     const name = _.get(data, 'name', '');
+    const locale = _.get(data, 'locale', '');
+    const localeOption = _.find(LANGUAGE_OPTIONS, { value: locale }) || {};
+    const localeLabel = localeOption.label || '';
     const frequency = _.get(data, 'frequency', '');
     const label = _.get(data, 'label', '');
     const footnoteLabel = _.get(data, 'footnoteLabel', '');
     const positions = _.get(data, 'positions', []);
     const { mode } = this.props;
     const isNew = mode === 'new';
-    const isButtonEnabled = frequency && label && footnoteLabel;
+    const isButtonEnabled =
+      name && frequency && locale && label && footnoteLabel;
     const buttonKind =
       (isSaving && 'loading') || (hasCompleted && 'success') || 'default';
 
     return (
       <Form onSubmit={this.handleSubmit}>
         <FormGroup label="Service Title" isRequired={true}>
-          <Input
+          <StyledInput
             data-hj-whitelist
             type="text"
             value={label}
             maxLength={30}
+            placeholder="e.g. English Service 中文堂"
             onChange={e => this.handleChange({ label: e.target.value })}
           />
         </FormGroup>
-        <FormGroup label="URL Identifier" isRequired={isNew}>
-          {isNew ? (
-            <Input
+        <FormGroup label="URL Path" isRequired={isNew}>
+          {isNew && (
+            <StyledInput
+              data-hj-whitelist
               value={name}
-              onChange={e =>
-                this.handleChange({
-                  name: e.value
-                })
-              }
+              maxLength={10}
+              placeholder="e.g. english"
+              onChange={e => this.handleChange({ name: e.target.value })}
             />
-          ) : (
-            name
           )}
+          {!isNew && name}
         </FormGroup>
         <FormGroup label="Frequency" isRequired={isNew}>
-          {isNew ? (
-            <StyleSelect
+          {isNew && (
+            <StyledSelect
               value={frequency}
               clearable={false}
               options={FREQUENCY_OPTIONS}
+              placeholder="e.g. Sunday"
               onChange={e =>
                 this.handleChange({
                   frequency: e.value
                 })
               }
             />
-          ) : (
-            frequency
           )}
+          {!isNew && frequency}
+        </FormGroup>
+        <FormGroup label="Language" isRequired={true}>
+          {isNew && (
+            <StyledSelect
+              value={locale}
+              clearable={false}
+              options={LANGUAGE_OPTIONS}
+              placeholder="e.g. English (Australia)"
+              onChange={e =>
+                this.handleChange({
+                  locale: e.value
+                })
+              }
+            />
+          )}
+          {!isNew && localeLabel}
         </FormGroup>
         <FormGroup label="Descripiton Label" isRequired={true}>
-          <Input
+          <StyledInput
             data-hj-whitelist
             type="text"
             value={footnoteLabel}
             maxLength={30}
+            placeholder="e.g. Occassion"
             onChange={e => this.handleChange({ footnoteLabel: e.target.value })}
           />
         </FormGroup>
-        <FormGroup
-          label="Positions"
-          labelStyle={{ paddingTop: '10px' }}
-          style={{ alignItems: 'flex-start' }}>
+        <FormGroup label="Positions" align="top" isRequired={true}>
           <DragDropZone>
             <PositionList>
               {positions.map(({ id, name, order }, i) => (
-                <StyleDraggableItem
-                  key={id}
+                <StyledDraggableItem
+                  key={id || i}
                   value={order}
                   no={i}
                   onSwitchPosition={(sourceNo, targetNo) =>
                     this.handleSwitch(sourceNo, targetNo)
                   }>
-                  <StyleIconBar />
+                  <IconDrag />
                   <Input
                     data-hj-whitelist
                     type="text"
@@ -221,7 +250,7 @@ class Popup extends Component {
                       onClick={this.handlePositionDelete.bind(this, i)}
                     />
                   )}
-                </StyleDraggableItem>
+                </StyledDraggableItem>
               ))}
               <PositionItem>
                 <AddPositionLink onClick={this.handlePositionAdd}>
@@ -301,14 +330,19 @@ const IconDelete = styled(IconMinusCircle)`
   font-size: 20px;
   margin-left: 4px;
 `;
-const StyleSelect = styled(Select)`
-  width: 165px;
+const StyledInput = styled(Input)`
+  width: 195px;
 `;
-const StyleIconBar = styled(IconBar)`
+const StyledSelect = styled(Select)`
+  font-size: 13px;
+  font-family: system-ui;
+  width: 195px;
+`;
+const IconDrag = styled(IconBar)`
   cursor: move;
   margin-right: 5px;
 `;
-const StyleDraggableItem = styled(DraggableItem)`
+const StyledDraggableItem = styled(DraggableItem)`
   display: flex;
   align-items: center;
   margin-bottom: 2px;
