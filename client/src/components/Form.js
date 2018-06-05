@@ -1,15 +1,17 @@
+import _ from 'lodash';
 import React from 'react';
 import styled from 'styled-components';
 
 export const FormGroup = ({
+  align,
   children,
   label,
   labelStyle,
   isRequired,
   ...otherProps
 }) => (
-  <FormRow {...otherProps}>
-    <FormLabel style={labelStyle} required={isRequired}>
+  <FormRow align={align} {...otherProps}>
+    <FormLabel align={align} style={labelStyle} required={isRequired}>
       {label}
     </FormLabel>
     <span>{children}</span>
@@ -63,7 +65,8 @@ export const Form = styled.form`
 `;
 
 export const FormRow = styled.div`
-  align-items: center;
+  align-items: ${props =>
+    _.includes(['top', 'flex-start'], props.align) ? 'flex-start' : 'center'};
   display: flex;
   min-height: 50px;
   &:last-child {
@@ -76,6 +79,8 @@ export const FormRow = styled.div`
 export const FormLabel = styled.label`
   display: inline-block;
   font-weight: bold;
+  padding-top: ${props =>
+    _.includes(['top', 'flex-start'], props.align) ? '10px' : '0'};
   padding-right: 15px;
   position: relative;
   text-align: right;
