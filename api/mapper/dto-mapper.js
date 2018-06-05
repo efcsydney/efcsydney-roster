@@ -30,7 +30,8 @@ class DtoMapper {
       role: event.position.name,
       name: event.volunteerName,
       id: event.id,
-      date: event.calendarDate.date
+      date: event.calendarDate.date,
+      serviceInfo: DtoMapper.mapServiceInfoToDto(event.serviceInfo)
     };
   }
 
@@ -54,7 +55,11 @@ class DtoMapper {
       calendarDate: {
         date: getDateString(data.date)
       },
-      position: { name: data.role }
+      position: { name: data.role },
+      serviceInfo: DtoMapper.convertDtoToServiceInfoModel({
+        data: data.serviceInfo,
+        id: data.serviceInfo.id
+      })
     };
   }
 
