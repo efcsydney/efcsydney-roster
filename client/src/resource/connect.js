@@ -16,26 +16,16 @@
  *     ...state['index'].query
  *   };
  * });
-<<<<<<< HEAD
- * const mapResourceToProps = (resource, otherState, ownProps) => {
- *   data: resource.data,
- *   ...state['index']
-=======
  * const mapResourceToProps = (filteredResource, state, ownProps) => {
  *   return {
  *     data: filteredResource.data,
  *     query: state['index'].query
  *   };
->>>>>>> #297
  * };
  * withResource('events', mapResourceToProps, mapStateToQuery)(
  *   class Container extends Component {
  *     render() {
-<<<<<<< HEAD
- *       const { data } = this.props;
-=======
  *       const { data, query: { page, limit } } = this.props;
->>>>>>> #297
  *     }
  *   }
  * );
