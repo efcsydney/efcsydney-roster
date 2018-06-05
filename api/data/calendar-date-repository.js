@@ -13,6 +13,11 @@ class CalendarDateRepository {
       where: { date: { [Op.gte]: from, [Op.lte]: to } }
     });
   }
+  static async getByDate(date) {
+    return await CalendarDate.findOne({
+      where: { date: { [Op.eq]: date } }
+    });
+  }
 }
 
 module.exports = {
