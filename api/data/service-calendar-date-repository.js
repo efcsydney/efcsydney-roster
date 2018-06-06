@@ -50,9 +50,6 @@ class ServiceCalendarDateRepository {
     serviceInfo.calendarDateId = dateInDb.id;
     serviceInfo.serviceId = serviceInDb.id;
 
-    logger.info(`Date ID: ${dateInDb.id}`);
-    logger.info(`Service ID: ${serviceInDb.id}`);
-
     return ServiceCalendarDate.create({
       footnote: serviceInfo.footnote,
       skipService: serviceInfo.skipService,
