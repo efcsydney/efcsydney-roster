@@ -27,6 +27,16 @@ const mapResourceToProps = (resource, state, ownProps) => {
     ...ownProps
   };
 };
+
+const defaultData = {
+  name: '',
+  locale: 'en-AU',
+  label: '',
+  footnoteLabel: '',
+  frequency: '',
+  positions: []
+};
+
 export default withResource('services', mapResourceToProps)(
   class AdminIndex extends Component {
     static propTypes = {
@@ -55,9 +65,28 @@ export default withResource('services', mapResourceToProps)(
       history.push(this.rootPath);
     };
     handlePopupSave = data => {
-      const { dispatch } = this.props;
-      const { id, ...body } = data;
+      const { history, mode, dispatch } = this.props;
+      const { data: prevData } = this.state;
+      const nextData = _.clone(prevData);
 
+      const { id, ...body } = data;
+      const offset = _.findIndex(prevData, { id: id });
+      if (mode === 'new') {
+        ServicesAPI.create(body)
+          .then(({ data }) => {
+            this.setState({ data: [...prevData, data] });
+          })
+          .catch(e => alert(e.message))
+          .finally(() => history.push(this.rootPath));
+      } else {
+        ServicesAPI.modify(id, body)
+          .then(({ data }) => {
+            nextData[offset] = data;
+            this.setState({ data: nextData });
+          })
+          .catch(e => alert(e.message))
+          .finally(() => history.push(this.rootPath));
+      }
       dispatch(modifyServices({ id, ...body }));
     };
     render() {

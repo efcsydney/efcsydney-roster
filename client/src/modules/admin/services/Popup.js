@@ -94,6 +94,9 @@ class Popup extends Component {
 
     _.forOwn(change, (change, key) => {
       data = set(data, key, change);
+      if (key === 'label') {
+        data = set(data, 'name', change);
+      }
     });
 
     this.setState({ data });
