@@ -140,7 +140,15 @@ describe('Server', function() {
       const event = {
         date: '2017-10-21T13:00:00.000Z',
         role: 'Usher/Offering',
-        name: 'Kai Chang'
+        name: 'Kai Chang',
+        serviceInfo: {
+          category: 'english',
+          date: '2017-10-21T13:00:00.000Z',
+          footnote: '',
+          skipService: false,
+          skipReason: '',
+          id: 5
+        }
       };
       return request(app)
         .put('/api/events')
@@ -156,7 +164,15 @@ describe('Server', function() {
       const event = {
         date: '2017-10-22',
         role: 'Usher/Offering',
-        name: 'Kai Chang'
+        name: 'Kai Chang',
+        serviceInfo: {
+          category: 'english',
+          date: '2017-10-22',
+          footnote: '',
+          skipService: false,
+          skipReason: '',
+          id: 5
+        }
       };
       return request(app)
         .put('/api/events')
@@ -187,7 +203,7 @@ describe('Server', function() {
         .expect(201)
         .then(function(res) {
           expect(res.body.result).to.equal('OK');
-          expect(res.body.data.id).to.equal('1');
+          expect(res.body.data.id).to.equal(1);
           expect(res.body.data.skipService).to.equal(footnote.skipService);
           expect(res.body.data.footnote).to.equal(footnote.footnote);
         });

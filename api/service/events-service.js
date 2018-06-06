@@ -61,10 +61,6 @@ class EventService {
         positionId: position.id
       });
     } else {
-      dbEvent = await EventRepository.getEventByDatePosition({
-        date: event.calendarDate.date,
-        position: event.position.name
-      });
       dbEvent.volunteerName = event.volunteerName;
       await EventRepository.updateEvent(dbEvent);
     }
