@@ -54,7 +54,7 @@ export const requestModifyServiceInfo = createAction(
     body = dotProp.set(body, 'footnote', body.footnote.trim());
     body = dotProp.set(body, 'skipReason', body.skipReason.trim());
     body = dotProp.set(body, 'skipService', !!body.skipReason);
-    ServiceInfoAPI.modify(id, body).then(() =>
+    ServiceInfoAPI.modify({ id, ...body }).then(() =>
       store.dispatch(
         receiveModifyServiceInfo({ id, serviceInfo: { id, ...body } })
       )

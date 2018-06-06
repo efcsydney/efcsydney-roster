@@ -1,15 +1,17 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { ServicesAPI } from 'apis';
+import { PropTypes } from 'prop-types';
 import { Auth, NavBar } from 'modules/core';
 import styled from 'styled-components';
 import { Button, Cell, Grid, HeaderCell, Row, ExternalLink } from 'components';
 import { Link } from 'react-router-dom';
 import IconPencil from 'react-icons/lib/fa/pencil';
 import Popup from './Popup';
+import { createApiActions, withResource } from 'resource';
 
-const mapStateToProps = (state, ownProps) => {
+const { modifyServices } = createApiActions('services');
+
+const mapResourceToProps = (resource, state, ownProps) => {
   const path = _.get(ownProps, 'match.path');
   const mode =
     (path.indexOf('/new') !== -1 && 'new') ||
@@ -19,14 +21,23 @@ const mapStateToProps = (state, ownProps) => {
   const selectedId = !_.isEmpty(paramId) ? parseInt(paramId, 10) : null;
 
   return {
+    data: resource.data,
     mode,
-    selectedId
+    selectedId,
+    ...ownProps
   };
 };
-export default connect(mapStateToProps)(
+export default withResource('services', mapResourceToProps)(
   class AdminIndex extends Component {
-    state = {
-      data: []
+    static propTypes = {
+      data: PropTypes.object,
+      mode: PropTypes.string,
+      selectedId: PropTypes.number
+    };
+    static defaultProps = {
+      data: {},
+      mode: 'index',
+      selectedId: null
     };
     constructor(props) {
       super(props);
@@ -38,46 +49,28 @@ export default connect(mapStateToProps)(
 
       history.replace('/login');
     };
-    handleAuthSuccess = () => {
-      ServicesAPI.retrieve().then(({ data }) => {
-        this.setState({ data });
-      });
-    };
     handlePopupClose = () => {
       const { history } = this.props;
 
       history.push(this.rootPath);
     };
     handlePopupSave = data => {
-      const { history } = this.props;
-      const { data: prevData } = this.state;
-      const nextData = _.clone(prevData);
-
+      const { dispatch } = this.props;
       const { id, ...body } = data;
-      const offset = _.findIndex(prevData, { id: id });
 
-      ServicesAPI.modify(id, body)
-        .then(({ data }) => {
-          nextData[offset] = data;
-          this.setState({ data: nextData });
-        })
-        .catch(e => alert(e.message))
-        .finally(() => history.push(this.rootPath));
+      dispatch(modifyServices({ id, ...body }));
     };
     render() {
-      const { data } = this.state;
-      const { mode, selectedId } = this.props;
+      const { data, mode, selectedId } = this.props;
       const hasPopup = _.includes(['new', 'edit'], mode);
-      const selectedData = _.find(data, { id: selectedId }) || {};
+      const selectedData = data[selectedId] || {};
       const isLoading = mode === 'edit' && _.isEmpty(selectedData);
 
       return (
         <Wrapper>
           <NavBar hasSwitcher={false} title="Roster System" />
           <Body>
-            <Auth
-              onFail={this.handleAuthFail}
-              onSuccess={this.handleAuthSuccess}>
+            <Auth onFail={this.handleAuthFail}>
               <HeadRow>
                 <Link to={`${this.rootPath}/new`}>
                   <Button kind="green" theme="solid">
@@ -95,7 +88,7 @@ export default connect(mapStateToProps)(
                   </Row>
                 </thead>
                 <tbody>
-                  {data.map(({ frequency, label, id, positions, name }) => (
+                  {_.map(data, ({ frequency, label, id, positions, name }) => (
                     <Row key={id}>
                       <Cell>
                         <ExternalLink to={name}>{label}</ExternalLink>

@@ -1,10 +1,12 @@
 import _ from 'lodash';
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 import { createAsyncAction } from './actions';
 import { mapping as apiMapping } from 'apis';
 
-export default function* requestSagas() {
-  yield takeEvery(
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+export default function* resourceSagas() {
+  yield takeLatest(
     action => {
       return (
         action.resource &&
@@ -16,9 +18,6 @@ export default function* requestSagas() {
       const API = _.get(apiMapping, [resource.name, resource.method]);
       const ajaxResponse = yield call(API, params);
       ajaxResponse.params = params;
-      if (meta && meta.onComplete) {
-        meta.onComplete();
-      }
 
       const completeAction = createAsyncAction(
         resource.name,
@@ -26,6 +25,25 @@ export default function* requestSagas() {
         'complete'
       );
       yield put(completeAction(ajaxResponse, meta));
+    }
+  );
+
+  yield takeLatest(
+    action => {
+      return (
+        action.resource &&
+        action.resource.stage === 'complete' &&
+        apiMapping[action.resource.name]
+      );
+    },
+    function*({ payload, meta = {}, resource }) {
+      const resetAction = createAsyncAction(
+        resource.name,
+        resource.method,
+        'reset'
+      );
+      yield delay(500);
+      yield put(resetAction(payload, meta));
     }
   );
 }
