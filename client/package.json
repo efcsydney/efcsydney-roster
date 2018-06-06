@@ -20,6 +20,8 @@
     "pusher-js": "^4.2.2",
     "react": "^16.0.0",
     "react-add-to-calendar": "^0.1.4",
+    "react-app-rewire-styled-components": "^3.0.2",
+    "react-app-rewired": "^1.5.2",
     "react-dnd": "^2.6.0",
     "react-dnd-html5-backend": "^2.6.0",
     "react-dom": "^16.0.0",
@@ -40,8 +42,8 @@
     "styled-components": "^2.2.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
     "test": "react-scripts test --env=jsdom",
     "test:ci": "CI=true npm test -- --coverage; ./scripts/codebeat-upload-coverage.sh",
     "eject": "react-scripts eject"
