@@ -1,88 +1,77 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
-import { switchCategory, retrieveServices } from '../redux';
-import { createApiActions } from 'resource/actions';
+import { switchCategory } from '../redux';
 import { media } from 'styled';
 import i18n from 'i18n';
+import { withResource } from 'resource';
 
 const mapStateToProps = state => ({
-  services: state.core.data.services,
   value: state.core.meta.category
 });
 const mapDispatchToProps = dispatch => {
-  const { retrieveServices: retrieveServices2 } = createApiActions('services');
-  return bindActionCreators(
-    { switchCategory, retrieveServices, retrieveServices2 },
-    dispatch
-  );
+  return bindActionCreators({ switchCategory }, dispatch);
 };
+export default withResource('services')(
+  connect(mapStateToProps, mapDispatchToProps)(
+    class NavBar extends Component {
+      displayName = 'NavBar';
+      static propTypes = {
+        hasSwitcher: PropTypes.bool,
+        services: PropTypes.object,
+        title: PropTypes.string,
+        onCategoryChange: PropTypes.func,
+        value: PropTypes.string
+      };
+      static defaultProps = {
+        hasSwitcher: true,
+        services: {},
+        title: '',
+        onCategoryChange: () => {},
+        value: ''
+      };
+      getTrans(key) {
+        return i18n.t(`${this.displayName}.${key}`);
+      }
+      handleCategoryChange = ({ value }) => {
+        const { switchCategory, onCategoryChange } = this.props;
+        switchCategory(value);
+        onCategoryChange(value);
+      };
+      render() {
+        const { hasSwitcher, services, title, value } = this.props;
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  class NavBar extends Component {
-    displayName = 'NavBar';
-    static propTypes = {
-      hasSwitcher: PropTypes.bool,
-      services: PropTypes.array,
-      title: PropTypes.string,
-      onCategoryChange: PropTypes.func,
-      value: PropTypes.string
-    };
-    static defaultProps = {
-      hasSwitcher: true,
-      services: [],
-      title: '',
-      onCategoryChange: () => {},
-      value: ''
-    };
-    getTrans(key) {
-      return i18n.t(`${this.displayName}.${key}`);
-    }
-    handleCategoryChange = ({ value }) => {
-      const { switchCategory, onCategoryChange } = this.props;
-      switchCategory(value);
-      onCategoryChange(value);
-    };
-    componentWillMount() {
-      const { hasSwitcher, retrieveServices, retrieveServices2 } = this.props;
-
-      if (hasSwitcher) {
-        retrieveServices();
-        retrieveServices2({});
+        return (
+          <Wrapper>
+            <a href="/">
+              <Logo />
+            </a>
+            <Title>
+              {title}
+              {hasSwitcher && (
+                <Select
+                  className="ServiceSelect"
+                  clearable={false}
+                  options={_.map(services, ({ name, label }) => ({
+                    value: name,
+                    label
+                  }))}
+                  onChange={this.handleCategoryChange}
+                  searchable={false}
+                  value={value}
+                />
+              )}
+            </Title>
+            <Org>{this.getTrans('orgTitle')}</Org>
+          </Wrapper>
+        );
       }
     }
-    render() {
-      const { hasSwitcher, services, title, value } = this.props;
-
-      return (
-        <Wrapper>
-          <a href="/">
-            <Logo />
-          </a>
-          <Title>
-            {title}
-            {hasSwitcher && (
-              <Select
-                className="ServiceSelect"
-                clearable={false}
-                options={services.map(({ name, label }) => ({
-                  value: name,
-                  label
-                }))}
-                onChange={this.handleCategoryChange}
-                searchable={false}
-                value={value}
-              />
-            )}
-          </Title>
-          <Org>{this.getTrans('orgTitle')}</Org>
-        </Wrapper>
-      );
-    }
-  }
+  )
 );
 
 const Wrapper = styled.div`

@@ -24,18 +24,23 @@ import dotProp, { set } from 'dot-prop-immutable';
 import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
 import IconBar from 'react-icons/lib/fa/bars';
+import { withResource } from 'resource';
 
-export default class Popup extends Component {
+class Popup extends Component {
   static propTypes = {
     data: PropTypes.object,
     mode: PropTypes.oneOf(['new', 'edit']).isRequired,
     isLoading: PropTypes.bool,
+    hasCompleted: PropTypes.bool,
+    hasInitialized: PropTypes.bool,
     onClose: PropTypes.func,
     onSave: PropTypes.func
   };
   static defaultProps = {
     data: {},
     isLoading: false,
+    hasCompleted: false,
+    hasInitialized: false,
     onClose: () => {},
     onSave: () => {}
   };
@@ -45,12 +50,17 @@ export default class Popup extends Component {
     const { data } = props;
     this.state = { data };
   }
-  componentWillReceiveProps(nextProps) {
-    const { data: prevData } = this.props;
-    const { data: nextData } = nextProps;
+  componentDidUpdate(prevProps, prevState) {
+    const { data: prevData } = prevState;
+    const { data, hasInitialized, hasCompleted, onClose } = this.props;
+    const isReceivingInitData = hasInitialized && _.isEmpty(prevData);
 
-    if (_.isEmpty(prevData) && !_.isEmpty(nextData)) {
-      this.setState({ data: nextData });
+    if (isReceivingInitData) {
+      this.setState({ data });
+    }
+
+    if (hasCompleted) {
+      setTimeout(onClose, 500);
     }
   }
   handleChange = change => {
@@ -110,13 +120,16 @@ export default class Popup extends Component {
   };
   renderForm() {
     const { data } = this.state;
+    const { isSaving, hasCompleted } = this.props;
     const frequency = _.get(data, 'frequency', '');
     const label = _.get(data, 'label', '');
     const footnoteLabel = _.get(data, 'footnoteLabel', '');
     const positions = _.get(data, 'positions', []);
     const { mode } = this.props;
     const isNew = mode === 'new';
-    const enableButton = frequency && label && footnoteLabel;
+    const isButtonEnabled = frequency && label && footnoteLabel;
+    const buttonKind =
+      (isSaving && 'loading') || (hasCompleted && 'success') || 'default';
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -209,7 +222,10 @@ export default class Popup extends Component {
           </span>
         </Row>
         <Row align="center">
-          <StateButton type="submit" disabled={!enableButton}>
+          <StateButton
+            kind={buttonKind}
+            type="submit"
+            disabled={!isButtonEnabled}>
             Save
           </StateButton>
         </Row>
@@ -230,6 +246,25 @@ export default class Popup extends Component {
     );
   }
 }
+
+export default withResource('services', (resource, state, ownProps) => {
+  const selectedId = _.get(ownProps, 'data.id');
+  const data = _.get(resource, ['data', selectedId], {});
+
+  const modifyStatus = _.get(resource, 'status.modify', {});
+  const isSaving = modifyStatus.loadingIds[selectedId];
+  const hasCompleted = modifyStatus.completedIds[selectedId];
+
+  const retrieveStatus = _.get(resource, 'status.retrieve', {});
+  const hasInitialized = retrieveStatus.hasInitialized && !_.isEmpty(data);
+
+  return {
+    data,
+    isSaving,
+    hasCompleted,
+    hasInitialized
+  };
+})(Popup);
 
 const Form = styled.form`
   display: table;
