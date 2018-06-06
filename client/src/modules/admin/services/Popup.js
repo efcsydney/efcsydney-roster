@@ -116,7 +116,9 @@ export default class Popup extends Component {
     const positions = _.get(data, 'positions', []);
     const { mode } = this.props;
     const isNew = mode === 'new';
-    const enableButton = frequency && label && footnoteLabel;
+    const hasLeastOnePosition = positions.find(p => p.name.length > 0);
+    const enableButton =
+      frequency && label && footnoteLabel && hasLeastOnePosition;
 
     return (
       <Form onSubmit={this.handleSubmit}>
