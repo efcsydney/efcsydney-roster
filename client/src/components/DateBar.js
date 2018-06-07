@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import styled from 'styled-components';
 import leftArrowIcon from 'assets/arrow_left.svg';
@@ -20,7 +21,7 @@ export default ({
   const days = getQuarterDays(date, 7);
   const startMonth = getQuarterFirstMonth(date).format('MMM');
   const endMonth = getQuarterLastMonth(date).format('MMM');
-  const year = days[0].format('YYYY');
+  const year = moment(days[0]).format('YYYY');
   const dateString = i18n.t('DateBar.dateString', {
     year,
     startMonth,

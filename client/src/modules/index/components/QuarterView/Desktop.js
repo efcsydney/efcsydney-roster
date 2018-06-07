@@ -20,12 +20,13 @@ const CAL_ENABLED_TYPES = [
 
 const mapStateToProps = state => {
   const services = _.get(state, 'resource.data.services', {});
-  const selectedServiceName = _.get(state.core, 'meta.category', 'english');
+  const selectedServiceName = _.get(state, 'core.meta.category', 'english');
+  const selectedService = _.find(services, { name: selectedServiceName }) || {};
 
   return {
     events: _.get(state.index, 'data', []),
-    selectedService: _.find(services, { name: selectedServiceName }) || {},
-    selectedData: _.get(state.index, 'meta.selectedData', null)
+    selectedData: _.get(state.index, 'meta.selectedData', null),
+    selectedService
   };
 };
 export default connect(mapStateToProps)(
@@ -33,6 +34,7 @@ export default connect(mapStateToProps)(
     displayName = 'Desktop';
     static propTypes = {
       events: PropTypes.array,
+      frequency: PropTypes.string,
       members: PropTypes.array,
       selectedData: PropTypes.object,
       selectedService: PropTypes.object
@@ -110,8 +112,19 @@ export default connect(mapStateToProps)(
         />
       );
     }
-    renderDayRow({ date, members, serviceInfo }) {
+    renderDayRow(date, positions, matchedEvent) {
       const { selectedService: { frequency } } = this.props;
+      const serviceInfo = _.get(matchedEvent, 'serviceInfo', {});
+      const members = _.get(matchedEvent, 'members', []);
+
+      positions = positions.map(({ id, name }) => {
+        const member = _.find(members, { role: name }) || {};
+        return {
+          id: id,
+          role: name,
+          name: member.name || ''
+        };
+      });
 
       return (
         <Row key={date} highlighted={isHighlighted(date, frequency)}>
@@ -122,15 +135,14 @@ export default connect(mapStateToProps)(
           <NoteCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
             {_.get(serviceInfo, 'footnote', '')}
           </NoteCell>
-          {this.renderNameCells(date, members, serviceInfo)}
+          {this.renderNameCells(date, positions, serviceInfo)}
         </Row>
       );
     }
     render() {
-      const { events, selectedService } = this.props;
+      const { days, events, selectedService } = this.props;
       const footnoteLabel = _.get(selectedService, 'footnoteLabel', '');
       const positions = _.get(selectedService, 'positions', []);
-      const sortedEvents = _.sortBy(events, 'date');
 
       return (
         <Grid role="grid">
@@ -149,7 +161,12 @@ export default connect(mapStateToProps)(
               ))}
             </Row>
           </thead>
-          <tbody>{sortedEvents.map(event => this.renderDayRow(event))}</tbody>
+          <tbody>
+            {days.map(day => {
+              const matchedEvent = _.find(events, { date: day });
+              return this.renderDayRow(day, positions, matchedEvent);
+            })}
+          </tbody>
         </Grid>
       );
     }
