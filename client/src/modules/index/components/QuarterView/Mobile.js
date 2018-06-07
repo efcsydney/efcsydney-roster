@@ -14,7 +14,7 @@ import { isHighlighted } from './utils';
 
 const mapStateToProps = state => {
   const { meta: { isEditingRole } } = state.index;
-  const services = _.get(state.core, 'data.services', []);
+  const services = _.get(state, 'resource.data.services', {});
   const selectedServiceName = _.get(state.core, 'meta.category', 'english');
 
   return {
@@ -67,6 +67,8 @@ export default connect(mapStateToProps)(
       const { onDayClick, onRoleClick, selectedService } = this.props;
       const positions = _.get(selectedService, 'positions', []);
       const formattedDate = moment(day).format('YYYY-MM-DD');
+
+      console.log(selectedService);
 
       if (serviceInfo.skipService) {
         return (
