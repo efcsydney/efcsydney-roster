@@ -30,7 +30,7 @@ import IconBar from 'react-icons/lib/fa/bars';
 import { withResource } from 'resource';
 
 const LANGUAGE_OPTIONS = [
-  { value: 'en-AU', label: 'English (Australia)' },
+  { value: 'en-AU', label: 'English' },
   { value: 'zh-TW', label: '繁體中文' }
 ];
 const FREQUENCY_OPTIONS = [
@@ -206,7 +206,7 @@ class Popup extends Component {
           )}
           {!isNew && frequency}
         </FormGroup>
-        <FormGroup label="Language" isRequired={true}>
+        <FormGroup label="Language" isRequired={isNew}>
           {isNew && (
             <StyledSelect
               value={locale}
