@@ -1,8 +1,11 @@
 const chai = require('chai');
+const chaiExclude = require('chai-exclude');
 const expect = chai.expect;
 const request = require('supertest');
 const app = require('../../app').app;
 const createSeed = require('../helpers/test-helper').createSeed;
+
+chai.use(chaiExclude);
 
 describe('Server', function() {
   this.timeout(5000);
@@ -25,7 +28,7 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
-          expect(res.body.data).to.eql([
+          const expected = [
             {
               date: '2017-10-15',
               serviceInfo: {
@@ -64,7 +67,9 @@ describe('Server', function() {
                 { role: 'Refreshments', name: 'Christine Yang' }
               ]
             }
-          ]);
+          ];
+
+          chai.assert.deepEqualExcluding(res.body.data, expected, ['id']);
         });
     });
 
@@ -74,7 +79,7 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
-          expect(res.body.data).to.eql([
+          const expected = [
             {
               date: '2017-10-15',
               serviceInfo: {
@@ -121,7 +126,9 @@ describe('Server', function() {
                 { role: '愛餐', name: 'Yvonne Lu' }
               ]
             }
-          ]);
+          ];
+
+          chai.assert.deepEqualExcluding(res.body.data, expected, ['id']);
         });
     });
 
