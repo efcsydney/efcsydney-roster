@@ -3,7 +3,6 @@ const ServiceCalendarDate = require('../models/service-calendar-date')
   .ServiceCalendarDate;
 const CalendarDate = require('../models/calendar-date').CalendarDate;
 const Service = require('../models/service').Service;
-const logger = require('../utilities/logger');
 
 const Op = Sequelize.Op;
 

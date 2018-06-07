@@ -32,49 +32,54 @@ class EventService {
       event.serviceInfo
     );
 
-    let dbEvent = await EventRepository.getEventByDatePositionServiceName({
-      date: event.calendarDate.date,
-      position: event.position.name,
-      serviceName: event.serviceInfo.service.name
-    });
+    const dbEvent = await EventService.getEvent(event);
 
     if (!dbEvent) {
-      const service = await ServiceRepository.getServiceByName(
-        event.serviceInfo.service.name
-      );
-      const position = await PositionRepository.getByNameAndServiceId({
-        positionName: event.position.name,
-        serviceId: service.id
-      });
-      let calendarDate = await CalendarDateRepository.getByDate(
-        event.calendarDate.date
-      );
-      if (!calendarDate) {
-        calendarDate = await CalendarDateRepository.create(
-          event.calendateDate.date
-        );
-      }
-
-      dbEvent = await EventRepository.createEvent({
-        volunteerName: event.volunteerName,
-        calendarDateId: calendarDate.id,
-        positionId: position.id
-      });
+      await EventService.createNewEvent(event);
     } else {
       dbEvent.volunteerName = event.volunteerName;
       await EventRepository.updateEvent(dbEvent);
     }
 
-    dbEvent = await EventRepository.getEventByDatePositionServiceName({
+    //re
+    const refreshedDbEvent = await EventService.getEvent(event);
+
+    return {
+      ...refreshedDbEvent.dataValues,
+      serviceInfo: { ...serviceInfo.dataValues }
+    };
+  }
+  static async getEvent(event) {
+    return await EventRepository.getEventByDatePositionServiceName({
       date: event.calendarDate.date,
       position: event.position.name,
       serviceName: event.serviceInfo.service.name
     });
+  }
+  static async createNewEvent(event) {
+    const service = await ServiceRepository.getServiceByName(
+      event.serviceInfo.service.name
+    );
+    const position = await PositionRepository.getByNameAndServiceId({
+      positionName: event.position.name,
+      serviceId: service.id
+    });
+    let calendarDate = await CalendarDateRepository.getByDate(
+      event.calendarDate.date
+    );
+    if (!calendarDate) {
+      calendarDate = await CalendarDateRepository.create(
+        event.calendateDate.date
+      );
+    }
 
-    return {
-      ...dbEvent.dataValues,
-      serviceInfo: { ...serviceInfo.dataValues }
-    };
+    const dbEvent = await EventRepository.createEvent({
+      volunteerName: event.volunteerName,
+      calendarDateId: calendarDate.id,
+      positionId: position.id
+    });
+
+    return dbEvent;
   }
   static getEventByDatePosition(event) {
     return EventRepository.getEventByDatePosition({

@@ -7,6 +7,7 @@ class DtoMapper {
   static mapGroupEventsToDto(events) {
     return events.map(e => {
       return {
+        id: e.serviceInfo.id,
         date: e.date,
         serviceInfo: DtoMapper.mapServiceInfoToDto(e.serviceInfo),
         members: DtoMapper.mapEventPositionsToDto(e.positions)
@@ -29,7 +30,6 @@ class DtoMapper {
     return {
       role: event.position.name,
       name: event.volunteerName,
-      id: event.id,
       date: event.calendarDate.date,
       serviceInfo: DtoMapper.mapServiceInfoToDto(event.serviceInfo)
     };
