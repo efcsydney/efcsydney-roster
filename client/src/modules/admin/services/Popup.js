@@ -102,7 +102,7 @@ class Popup extends Component {
   handleNameChange = e => {
     const value = _.get(e, 'target.value', '').trim();
     const regExp = /^[a-z-]+$/gm;
-    if (_.isNull(value.match(regExp))) {
+    if (!_.isEmpty(value) && _.isNull(value.match(regExp))) {
       return;
     }
 
