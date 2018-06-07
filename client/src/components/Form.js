@@ -1,4 +1,22 @@
+import _ from 'lodash';
+import React from 'react';
 import styled from 'styled-components';
+
+export const FormGroup = ({
+  align,
+  children,
+  label,
+  labelStyle,
+  isRequired,
+  ...otherProps
+}) => (
+  <FormRow align={align} {...otherProps}>
+    <FormLabel align={align} style={labelStyle} required={isRequired}>
+      {label}
+    </FormLabel>
+    <span>{children}</span>
+  </FormRow>
+);
 
 export const Input = styled.input`
   background: #fff;
@@ -39,4 +57,42 @@ export const Input = styled.input`
     color: #999;
   }
 `;
-Input.displayName = 'Input';
+
+export const Form = styled.form`
+  display: table;
+  margin: 0 auto;
+  position: relative;
+`;
+
+export const FormRow = styled.div`
+  align-items: ${props =>
+    _.includes(['top', 'flex-start'], props.align) ? 'flex-start' : 'center'};
+  display: flex;
+  min-height: 50px;
+  &:last-child {
+    text-align: center;
+    padding: 20px 0;
+  }
+  justify-content: ${props => props.align || 'flex-start'};
+`;
+
+export const FormLabel = styled.label`
+  display: inline-block;
+  font-weight: bold;
+  padding-top: ${props =>
+    _.includes(['top', 'flex-start'], props.align) ? '10px' : '0'};
+  padding-right: 15px;
+  position: relative;
+  text-align: right;
+  width: 125px;
+  ${props =>
+    props.required &&
+    `
+    &:after {
+      content: '*';
+      color: #c00;
+      position: absolute;
+      right: 7px;
+    }
+  `};
+`;

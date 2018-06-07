@@ -4,7 +4,7 @@ import DraggableItem from './DraggableItem';
 import DragDropZone from './DragDropZone';
 import ExternalLink from './ExternalLink';
 import { Grid, Row, Cell, HeaderCell } from './Grid';
-import { Input } from './Form';
+import { Form, FormGroup, FormRow, Input, FormLabel } from './Form';
 import LoadingIndicator from './LoadingIndicator';
 import Modal from './Modal';
 import StateButton from './StateButton';
@@ -18,6 +18,10 @@ export {
   DraggableItem,
   DragDropZone,
   ExternalLink,
+  Form,
+  FormGroup,
+  FormLabel,
+  FormRow,
   Grid,
   HeaderCell,
   Input,
