@@ -99,6 +99,15 @@ class Popup extends Component {
 
     this.setState({ data });
   };
+  handleNameChange = e => {
+    const value = _.get(e, 'target.value', '').trim();
+    const regExp = /^[a-z-]+$/gm;
+    if (_.isNull(value.match(regExp))) {
+      return;
+    }
+
+    this.handleChange({ name: value });
+  };
   handleSwitch = (sourceNo, targetNo) => {
     const { data: { positions } } = this.state;
     const target = positions[targetNo];
@@ -182,7 +191,7 @@ class Popup extends Component {
               value={name}
               maxLength={10}
               placeholder="e.g. english"
-              onChange={e => this.handleChange({ name: e.target.value })}
+              onChange={this.handleNameChange}
             />
           )}
           {!isNew && name}
