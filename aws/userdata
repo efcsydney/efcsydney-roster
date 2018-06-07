@@ -14,3 +14,6 @@ yum install -y nodejs
 yum install -y wget 
 wget http://download.redis.io/redis-stable.tar.gz && tar xvzf redis-stable.tar.gz && cd redis-stable && make
 npm install redis-dump -g
+
+yum install -y nginx
+service nginx start
