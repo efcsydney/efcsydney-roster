@@ -10,6 +10,7 @@ import Popup from './Popup';
 import { createApiActions, withResource } from 'resource';
 
 const { modifyServices } = createApiActions('services');
+const { createServices } = createApiActions('services');
 
 const mapResourceToProps = (resource, state, ownProps) => {
   const path = _.get(ownProps, 'match.path');
@@ -26,15 +27,6 @@ const mapResourceToProps = (resource, state, ownProps) => {
     selectedId,
     ...ownProps
   };
-};
-
-const defaultData = {
-  name: '',
-  locale: 'en-AU',
-  label: '',
-  footnoteLabel: '',
-  frequency: '',
-  positions: []
 };
 
 export default withResource('services', mapResourceToProps)(
@@ -65,29 +57,13 @@ export default withResource('services', mapResourceToProps)(
       history.push(this.rootPath);
     };
     handlePopupSave = data => {
-      const { history, mode, dispatch } = this.props;
-      const { data: prevData } = this.state;
-      const nextData = _.clone(prevData);
-
+      const { dispatch, mode } = this.props;
       const { id, ...body } = data;
-      const offset = _.findIndex(prevData, { id: id });
       if (mode === 'new') {
-        ServicesAPI.create(body)
-          .then(({ data }) => {
-            this.setState({ data: [...prevData, data] });
-          })
-          .catch(e => alert(e.message))
-          .finally(() => history.push(this.rootPath));
+        dispatch(createServices({ ...body }));
       } else {
-        ServicesAPI.modify(id, body)
-          .then(({ data }) => {
-            nextData[offset] = data;
-            this.setState({ data: nextData });
-          })
-          .catch(e => alert(e.message))
-          .finally(() => history.push(this.rootPath));
+        dispatch(modifyServices({ id, ...body }));
       }
-      dispatch(modifyServices({ id, ...body }));
     };
     render() {
       const { data, mode, selectedId } = this.props;
