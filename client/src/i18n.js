@@ -29,6 +29,7 @@ i18next.init({
           footnoteTitle: 'Occassion',
           saveLabel: 'Save',
           skipReason: 'Combined Service',
+          skipReasonPlaceholder: 'e.g. Group Meeting',
           title: 'Edit Day'
         },
         EditRole: {
@@ -75,6 +76,7 @@ i18next.init({
           dateFormat: 'YYYY年MMMDo',
           dateTitle: '日期',
           footnotePlaceholder: '範例：聯合崇拜',
+          skipReasonPlaceholder: '範例：團體會議',
           footnoteTitle: '型式',
           saveLabel: '儲存',
           skipReason: '聯合崇拜',

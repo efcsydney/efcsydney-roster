@@ -110,7 +110,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                   data-hj-whitelist
                   type="text"
                   value={skipReason}
-                  placeholder={this.getTrans('skipReason')}
+                  placeholder={this.getTrans('skipReasonPlaceholder')}
                   onChange={this.handleSkipReasonChange}
                 />
               </span>
