@@ -48,7 +48,7 @@ const asyncStatusReducer = (
 
   switch (resource.stage) {
     case 'start': {
-      const id = _.get(payload, [idAttribute], '');
+      const id = _.get(payload, [idAttribute], '') || 'creating';
 
       if (!id) {
         state = set(state, [resource.name, resource.method, 'isLoading'], true);
@@ -64,7 +64,7 @@ const asyncStatusReducer = (
       return state;
     }
     case 'complete': {
-      const id = _.get(payload, ['params', idAttribute]);
+      const id = _.get(payload, [idAttribute], '') || 'creating';
 
       if (!id) {
         state = set(
@@ -93,7 +93,7 @@ const asyncStatusReducer = (
       return state;
     }
     case 'reset': {
-      const id = _.get(payload, ['params', idAttribute]);
+      const id = _.get(payload, [idAttribute], '') || 'creating';
 
       if (!id) {
         return state;
@@ -122,6 +122,7 @@ const asyncDataReducer = (state = defaultAsyncData, { resource, payload }) => {
 
   switch (resource.method) {
     case 'modify':
+    case 'create':
     case 'retrieve': {
       const idAttribute =
         !_.isEmpty(apiMapping[resource.name]) &&

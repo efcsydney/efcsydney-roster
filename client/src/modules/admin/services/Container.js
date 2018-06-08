@@ -10,6 +10,7 @@ import Popup from './Popup';
 import { createApiActions, withResource } from 'resource';
 
 const { modifyServices } = createApiActions('services');
+const { createServices } = createApiActions('services');
 
 const mapResourceToProps = (resource, state, ownProps) => {
   const path = _.get(ownProps, 'match.path');
@@ -27,6 +28,7 @@ const mapResourceToProps = (resource, state, ownProps) => {
     ...ownProps
   };
 };
+
 export default withResource('services', mapResourceToProps)(
   class AdminIndex extends Component {
     static propTypes = {
@@ -55,10 +57,13 @@ export default withResource('services', mapResourceToProps)(
       history.push(this.rootPath);
     };
     handlePopupSave = data => {
-      const { dispatch } = this.props;
+      const { dispatch, mode } = this.props;
       const { id, ...body } = data;
-
-      dispatch(modifyServices({ id, ...body }));
+      if (mode === 'new') {
+        dispatch(createServices({ ...body }));
+      } else {
+        dispatch(modifyServices({ id, ...body }));
+      }
     };
     render() {
       const { data, mode, selectedId } = this.props;

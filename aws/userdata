@@ -16,4 +16,5 @@ wget http://download.redis.io/redis-stable.tar.gz && tar xvzf redis-stable.tar.g
 npm install redis-dump -g
 
 yum install -y nginx
+# vim /etc/nginx/nginx.conf from aws/host_config/nginx.conf
 service nginx start

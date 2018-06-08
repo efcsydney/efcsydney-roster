@@ -35,13 +35,12 @@ const LANGUAGE_OPTIONS = [
 ];
 const FREQUENCY_OPTIONS = [
   { value: 'Sunday', label: 'Sunday' },
-  { value: 'Saturday', label: 'Saturday' },
-  { value: 'Month', label: 'Month' },
-  { value: 'Friday', label: 'Friday' },
-  { value: 'Thursday', label: 'Thursday' },
-  { value: 'Wednesday', label: 'Wednesday' },
-  { value: 'Tuesday', label: 'Tuesday' },
   { value: 'Monday', label: 'Monday' },
+  { value: 'Tuesday', label: 'Tuesday' },
+  { value: 'Wednesday', label: 'Wednesday' },
+  { value: 'Thursday', label: 'Thursday' },
+  { value: 'Friday', label: 'Friday' },
+  { value: 'Saturday', label: 'Saturday' },
   { value: 'Everyday', label: 'Everyday' }
 ];
 
@@ -302,12 +301,16 @@ class Popup extends Component {
 }
 
 export default withResource('services', (resource, state, ownProps) => {
-  const selectedId = _.get(ownProps, 'data.id');
+  const selectedId = _.get(ownProps, 'data.id', 'creating');
   const data = _.get(resource, ['data', selectedId], {});
 
   const modifyStatus = _.get(resource, 'status.modify', {});
-  const isSaving = modifyStatus.loadingIds[selectedId];
-  const hasCompleted = modifyStatus.completedIds[selectedId];
+  const createStatus = _.get(resource, 'status.create', {});
+  const isSaving =
+    modifyStatus.loadingIds[selectedId] || createStatus.loadingIds[selectedId];
+  const hasCompleted =
+    modifyStatus.completedIds[selectedId] ||
+    createStatus.completedIds[selectedId];
 
   const retrieveStatus = _.get(resource, 'status.retrieve', {});
   const hasInitialized = retrieveStatus.hasInitialized && !_.isEmpty(data);
