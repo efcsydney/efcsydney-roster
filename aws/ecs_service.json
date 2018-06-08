@@ -4,7 +4,7 @@
     "DockerImgSrc":{
       "Type":"String",
       "Description":"Docker image source",
-      "Default": "149778305054.dkr.ecr.ap-southeast-2.amazonaws.com/efc-roster"
+      "Default": "651220962436.dkr.ecr.ap-southeast-2.amazonaws.com/efc-roster"
     }
   },
   "Resources":{

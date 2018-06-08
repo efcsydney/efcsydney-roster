@@ -237,12 +237,10 @@
         },
         "Path":"/",
         "ManagedPolicyArns": [
-          "arn:aws:iam::149778305054:policy/SSM-GetParameter",
-          "arn:aws:iam::149778305054:policy/KMS-GetParameterKey",
+          "arn:aws:iam::651220962436:policy/SMParameterStore",
           "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role",
           "arn:aws:iam::aws:policy/AmazonRDSFullAccess",
-          "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
-          "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+          "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
         ],
         "Policies":[
           {
