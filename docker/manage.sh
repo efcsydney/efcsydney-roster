@@ -50,8 +50,8 @@ push() {
   read -p "Version: " version
   version=${version:-latest}
 
-  docker tag efc-roster:latest 149778305054.dkr.ecr.ap-southeast-2.amazonaws.com/efc-roster:$version
-  docker push 149778305054.dkr.ecr.ap-southeast-2.amazonaws.com/efc-roster:$version
+  docker tag efc-roster:latest 651220962436.dkr.ecr.ap-southeast-2.amazonaws.com/efc-roster:$version
+  docker push 651220962436.dkr.ecr.ap-southeast-2.amazonaws.com/efc-roster:$version
 }
 
 $1 ${2:-dev}
