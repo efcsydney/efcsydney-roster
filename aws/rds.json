@@ -48,7 +48,6 @@
       "DBSubnetGroup" : {
         "Type" : "AWS::RDS::DBSubnetGroup",
         "Properties" : {
-           "DBSubnetGroupDescription": "Fuck",
            "SubnetIds" : {"Ref":"SubnetId"}
         }
       },

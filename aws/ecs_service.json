@@ -50,8 +50,7 @@
           "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
           "arn:aws:iam::aws:policy/CloudWatchActionsEC2Access",
           "arn:aws:iam::aws:policy/AmazonEC2ContainerServiceFullAccess",
-          "arn:aws:iam::149778305054:policy/SSM-GetParameter",
-          "arn:aws:iam::149778305054:policy/KMS-GetParameterKey",
+          "arn:aws:iam::651220962436:policy/SMParameterStore",
           "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
           "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
         ],
@@ -120,7 +119,7 @@
             },
             "PortMappings":[
               {
-                "ContainerPort":80
+                "ContainerPort":3001
               }
             ]
           }
