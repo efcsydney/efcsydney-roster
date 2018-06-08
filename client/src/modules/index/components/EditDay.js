@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Input } from 'components';
 import styled from 'styled-components';
-import { Modal, StateButton, SwitchButton } from 'components';
+import { Modal, StateButton } from 'components';
 import { requestModifyServiceInfo, toggleEditDay } from 'modules/index/redux';
 import { media } from 'styled';
 import i18n from 'i18n';
@@ -55,8 +55,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       this.setState(state);
     };
     handleSkipReasonChange = e => {
-      const skipService = !!e.target.checked;
-      const skipReason = skipService ? this.getTrans('skipReason') : '';
+      const skipReason = _.trim(e.target.value);
+      const skipService = !!skipReason;
       let state = _.clone(this.state);
       state = dotProp.set(state, 'serviceInfo.skipReason', skipReason);
       state = dotProp.set(state, 'serviceInfo.skipService', skipService);
@@ -106,8 +106,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
             <Row>
               <Label>{this.getTrans('skipReason')}</Label>
               <span>
-                <SwitchButton
-                  checked={!_.isEmpty(skipReason)}
+                <Input
+                  data-hj-whitelist
+                  type="text"
+                  value={skipReason}
+                  placeholder={this.getTrans('skipReason')}
                   onChange={this.handleSkipReasonChange}
                 />
               </span>

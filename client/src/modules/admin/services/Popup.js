@@ -35,13 +35,12 @@ const LANGUAGE_OPTIONS = [
 ];
 const FREQUENCY_OPTIONS = [
   { value: 'Sunday', label: 'Sunday' },
-  { value: 'Saturday', label: 'Saturday' },
-  { value: 'Month', label: 'Month' },
-  { value: 'Friday', label: 'Friday' },
-  { value: 'Thursday', label: 'Thursday' },
-  { value: 'Wednesday', label: 'Wednesday' },
-  { value: 'Tuesday', label: 'Tuesday' },
   { value: 'Monday', label: 'Monday' },
+  { value: 'Tuesday', label: 'Tuesday' },
+  { value: 'Wednesday', label: 'Wednesday' },
+  { value: 'Thursday', label: 'Thursday' },
+  { value: 'Friday', label: 'Friday' },
+  { value: 'Saturday', label: 'Saturday' },
   { value: 'Everyday', label: 'Everyday' }
 ];
 

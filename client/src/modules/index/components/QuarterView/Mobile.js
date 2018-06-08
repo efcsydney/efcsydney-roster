@@ -68,8 +68,6 @@ export default connect(mapStateToProps)(
       const positions = _.get(selectedService, 'positions', []);
       const formattedDate = moment(day).format('YYYY-MM-DD');
 
-      console.log(selectedService);
-
       if (serviceInfo.skipService) {
         return (
           <Row>
