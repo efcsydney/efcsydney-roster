@@ -142,7 +142,7 @@
         "LoadBalancers":[
           {
             "ContainerName":"efcRosterContainer",
-            "ContainerPort":"80",
+            "ContainerPort":"3001",
             "TargetGroupArn":{
               "Fn::ImportValue": {
                 "Fn::Sub": "ECSTG"

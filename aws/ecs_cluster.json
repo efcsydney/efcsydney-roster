@@ -34,7 +34,7 @@
     },
     "EcsSecurityGroupID":{
       "Type":"AWS::EC2::SecurityGroup::Id",
-      "Description":"EC2 instance type"
+      "Description":"ECS Security Group"
     }
   },
   "Mappings":{

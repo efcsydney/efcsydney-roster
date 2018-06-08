@@ -11,6 +11,18 @@
             "Type": "String",
             "Description": "Database Password",
             "Default": "admin123"
+        },
+        "VPCSecurityGroupID":{
+          "Type":"AWS::EC2::SecurityGroup::Id",
+          "Description":"VPC Security Group ID"
+        },
+        "VpcId":{
+          "Type":"AWS::EC2::VPC::Id",
+          "Description":"Select a VPC that allows instances to access the Internet."
+        },
+        "SubnetId":{
+          "Type":"List<AWS::EC2::Subnet::Id>",
+          "Description":"Select at two subnets in your selected VPC."
         }
     },
     "Resources": {
@@ -25,9 +37,32 @@
             "MasterUsername" : { "Ref" : "DBUser" },
             "MasterUserPassword" : { "Ref" : "DBPassword" },
             "MultiAZ" : false,
+            "DBSecurityGroups" : [ { "Ref" : "DbSecurityByEC2SecurityGroup" } ],
+            "DBSubnetGroupName" : {
+              "Ref":"DBSubnetGroup"
+            },
             "Tags" : [ { "Key" : "Name", "Value" : "My SQL Database" } ]
           },
           "DeletionPolicy" : "Retain"
+      },
+      "DBSubnetGroup" : {
+        "Type" : "AWS::RDS::DBSubnetGroup",
+        "Properties" : {
+           "DBSubnetGroupDescription": "Fuck",
+           "SubnetIds" : {"Ref":"SubnetId"}
+        }
+      },
+      "DbSecurityByEC2SecurityGroup" : {
+         "Type" : "AWS::RDS::DBSecurityGroup",
+         "Properties" : {
+            "GroupDescription" : "Ingress for Amazon EC2 security group",
+           "EC2VpcId" : { "Ref" : "VpcId" },
+            "DBSecurityGroupIngress" : [
+              {
+                "EC2SecurityGroupId" : {"Ref": "VPCSecurityGroupID"}
+              }
+              ]
+         }
       }
     }
 }
