@@ -9,8 +9,7 @@ import IconPencil from 'react-icons/lib/fa/pencil';
 import Popup from './Popup';
 import { createApiActions, withResource } from 'resource';
 
-const { modifyServices } = createApiActions('services');
-const { createServices } = createApiActions('services');
+const { modifyServices, createServices } = createApiActions('services');
 
 const mapResourceToProps = (resource, state, ownProps) => {
   const path = _.get(ownProps, 'match.path');
