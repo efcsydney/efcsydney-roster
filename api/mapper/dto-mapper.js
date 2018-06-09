@@ -20,6 +20,7 @@ class DtoMapper {
 
   static mapEventPositionToDto(event) {
     return {
+      id: event.id,
       role: event.position,
       name: event.volunteerName
     };
