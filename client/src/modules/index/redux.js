@@ -27,31 +27,19 @@ export const requestRetrieveEvents = createAction(
   `${PREFIX}/REQUEST_RETRIEVE_EVENTS`,
   payload => {
     EventsAPI.retrieve(payload).then(({ data }) => {
-      const storeServices = store.getState().core.data.services || [];
-      const selectedServices =
-        _.find(storeServices, {
-          name: payload.category
-        }) || {};
-      const frequency = selectedServices.frequency;
-      const positions = selectedServices.positions;
-      const dayOfWeek = [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
-      ];
+      const storeServices = store.getState().core.data.services;
+      const { frequency, positions } = _.find(storeServices, {
+        name: payload.category
+      });
       const startDate = moment(payload.from).startOf('quarter');
       const endDate = moment(payload.from).endOf('quarter');
       const weeks = endDate.diff(startDate, 'week');
-      const firstWeekDay = startDate.day(_.indexOf(dayOfWeek, frequency));
+      const firstWeekDay = frequency && startDate.day(frequency);
       const filteredEvents = [];
 
-      if (moment.isMoment(firstWeekDay)) {
+      if (firstWeekDay && moment.isMoment(firstWeekDay)) {
         for (let i = 0; i <= weeks; i++) {
-          const thisWeek = moment(firstWeekDay)
+          const thisWeek = moment(startDate)
             .add(i, 'week')
             .format('YYYY-MM-DD');
           const eventData = _.find(data, { date: thisWeek }) || {};
