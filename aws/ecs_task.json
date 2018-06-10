@@ -10,6 +10,11 @@
       "Type":"String",
       "Description":"NODE_ENV=?",
       "Default": "qa"
+    },
+    "S3ConfBucketName":{
+      "Type":"String",
+      "Description":"The S3 Bucket Name which store configure files. ",
+      "Default": "efc-roster-conf"
     }
   },
   "Resources":{
@@ -55,7 +60,6 @@
           "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
           "arn:aws:iam::aws:policy/CloudWatchActionsEC2Access",
           "arn:aws:iam::aws:policy/AmazonEC2ContainerServiceFullAccess",
-          "arn:aws:iam::651220962436:policy/SMParameterStore",
           "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
           "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
         ],
@@ -74,6 +78,25 @@
                     "elasticloadbalancing:RegisterTargets",
                     "ec2:Describe*",
                     "ec2:AuthorizeSecurityGroupIngress"
+                  ],
+                  "Resource":"*"
+                }
+              ]
+            }
+          },
+          {
+            "PolicyName":"get-parameter",
+            "PolicyDocument":{
+              "Statement":[
+                {
+                  "Effect":"Allow",
+                  "Action":[
+                    "ssm:DescribeParameters",
+                    "ssm:GetParameterHistory",
+                    "ssm:DescribeDocumentParameters",
+                    "ssm:GetParametersByPath",
+                    "ssm:GetParameters",
+                    "ssm:GetParameter"
                   ],
                   "Resource":"*"
                 }
@@ -107,12 +130,20 @@
               "Ref":"DockerImgSrc"
             },
             "Memory":"128",
-            "Environment": [{
-              "Name" : "NODE_ENV",
-              "Value" : {
-                "Ref":"NodeEnv"
+            "Environment": [
+              {
+                "Name" : "NODE_ENV",
+                "Value" : {
+                  "Ref":"NodeEnv"
+                }
+              },
+              {
+                "Name" : "S3_BUCKET",
+                "Value" : {
+                  "Ref": "S3ConfBucketName"
+                }
               }
-            }],
+            ],
             "LogConfiguration":{
               "LogDriver":"awslogs",
               "Options":{

@@ -48,7 +48,9 @@
       "DBSubnetGroup" : {
         "Type" : "AWS::RDS::DBSubnetGroup",
         "Properties" : {
-           "SubnetIds" : {"Ref":"SubnetId"}
+          "DBSubnetGroupDescription" : "RDS SubnetGroup",
+          "DBSubnetGroupName": "DBSubnetGroup",
+          "SubnetIds" : { "Ref":"SubnetId" }
         }
       },
       "DbSecurityByEC2SecurityGroup" : {

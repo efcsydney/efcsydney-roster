@@ -173,7 +173,6 @@
         },
         "Path":"/",
         "ManagedPolicyArns": [
-          "arn:aws:iam::651220962436:policy/SMParameterStore",
           "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role",
           "arn:aws:iam::aws:policy/AmazonRDSFullAccess",
           "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
@@ -195,6 +194,25 @@
                     "ecs:Submit*",
                     "logs:CreateLogStream",
                     "logs:PutLogEvents"
+                  ],
+                  "Resource":"*"
+                }
+              ]
+            }
+          },
+          {
+            "PolicyName":"get-parameter",
+            "PolicyDocument":{
+              "Statement":[
+                {
+                  "Effect":"Allow",
+                  "Action":[
+                    "ssm:DescribeParameters",
+                    "ssm:GetParameterHistory",
+                    "ssm:DescribeDocumentParameters",
+                    "ssm:GetParametersByPath",
+                    "ssm:GetParameters",
+                    "ssm:GetParameter"
                   ],
                   "Resource":"*"
                 }
