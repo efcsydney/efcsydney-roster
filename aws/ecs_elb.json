@@ -1,0 +1,129 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "EFC sydney ELB",
+    "Parameters": {
+        "CertificatesArn": {
+            "Type": "String",
+            "Description": "SSL certificate ARN in AWS Certificate Manager"
+        }
+    },
+    "Resources": {
+        "ECSELBSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "EC2 security group for Push service",
+                "VpcId": {
+                    "Fn::ImportValue": {
+                        "Fn::Sub": "VPC-VPCID"
+                    }
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 443,
+                        "ToPort": 443,
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 80,
+                        "ToPort": 80,
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "ECS-ELB-SG"
+                    }
+                ]
+            }
+        },
+        "ECSElasticLoadBalancer": {
+            "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+            "Properties": {
+                "LoadBalancerName": "ecs-elb",
+                "SecurityGroups": [
+                    {
+                        "Ref": "ECSELBSecurityGroup"
+                    }
+                ],
+                "Subnets": [
+                    {
+                        "Fn::ImportValue": {
+                            "Fn::Sub": "VPC-PublicSubnet-A"
+                        }
+                    },
+                    {
+                        "Fn::ImportValue": {
+                            "Fn::Sub": "VPC-PublicSubnet-B"
+                        }
+                    },
+                    {
+                        "Fn::ImportValue": {
+                            "Fn::Sub": "VPC-PublicSubnet-C"
+                        }
+                    }
+                ],
+                "Scheme": "internet-facing",
+                "CrossZone": true,
+                "Listeners": [
+                    {
+                        "LoadBalancerPort": 80,
+                        "InstancePort": 3001,
+                        "Protocol": "HTTP",
+                        "InstanceProtocol": "HTTP"
+                    },
+                    {
+                        "LoadBalancerPort": 443,
+                        "InstancePort": 3002,
+                        "Protocol": "HTTPS",
+                        "InstanceProtocol": "HTTP",
+                        "SSLCertificateId": {
+                            "Ref": "CertificatesArn"
+                        }
+                    }
+                ],
+                "HealthCheck": {
+                    "Target": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "TCP:",
+                                "3002"
+                            ]
+                        ]
+                    },
+                    "HealthyThreshold": 3,
+                    "UnhealthyThreshold": 5,
+                    "Interval": 10,
+                    "Timeout": 5
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "ecs-elb"
+                    }
+                ]
+            }
+        }
+    },
+    "Outputs": {
+        "ECSElasticLoadBalancer": {
+            "Description": "The Amazon Resource Name (ARN) of the ELB",
+            "Value": {
+                "Ref": "ECSElasticLoadBalancer"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            "efc-ecs-elb"
+                        ]
+                    ]
+                }
+            }
+        }
+    }
+}

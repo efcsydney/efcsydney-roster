@@ -31,10 +31,6 @@
         "t2.micro"
       ],
       "ConstraintDescription":"Please choose a valid instance type."
-    },
-    "EcsSecurityGroupID":{
-      "Type":"AWS::EC2::SecurityGroup::Id",
-      "Description":"ECS Security Group"
     }
   },
   "Mappings":{
@@ -72,89 +68,29 @@
     "ECSCluster":{
       "Type":"AWS::ECS::Cluster"
     },
-    "ECSALB":{
-      "Type":"AWS::ElasticLoadBalancingV2::LoadBalancer",
-      "Properties":{
-        "Name":"ECSALB",
-        "Scheme":"internet-facing",
-        "LoadBalancerAttributes":[
-          {
-            "Key":"idle_timeout.timeout_seconds",
-            "Value":"60"
-          }
-        ],
-        "Subnets":{
-          "Ref":"SubnetId"
-        },
-        "SecurityGroups":[
-          {
-            "Ref":"EcsSecurityGroupID"
-          }
-        ]
+    "ECSInstanceSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+          "GroupDescription": "EC2 security group for ECS Instance",
+          "VpcId": {
+              "Ref": "VpcId"
+          },
+          "SecurityGroupIngress": [
+              {
+                  "IpProtocol": "tcp",
+                  "FromPort": 0,
+                  "ToPort": 65535,
+                  "CidrIp": "0.0.0.0/0"
+              }
+          ],
+          "Tags": [
+              {
+                  "Key": "Name",
+                  "Value": "ecsInstanceSG"
+              }
+          ]
       }
-    },
-    "ALBListener":{
-      "Type":"AWS::ElasticLoadBalancingV2::Listener",
-      "Properties":{
-        "DefaultActions":[
-          {
-            "Type":"forward",
-            "TargetGroupArn":{
-              "Ref":"ECSTG"
-            }
-          }
-        ],
-        "LoadBalancerArn":{
-          "Ref":"ECSALB"
-        },
-        "Port":"80",
-        "Protocol":"HTTP"
-      }
-    },
-    "ECSALBListenerRule":{
-      "Type":"AWS::ElasticLoadBalancingV2::ListenerRule",
-      "DependsOn":"ALBListener",
-      "Properties":{
-        "Actions":[
-          {
-            "Type":"forward",
-            "TargetGroupArn":{
-              "Ref":"ECSTG"
-            }
-          }
-        ],
-        "Conditions":[
-          {
-            "Field":"path-pattern",
-            "Values":[
-              "/"
-            ]
-          }
-        ],
-        "ListenerArn":{
-          "Ref":"ALBListener"
-        },
-        "Priority":1
-      }
-    },
-    "ECSTG":{
-      "Type":"AWS::ElasticLoadBalancingV2::TargetGroup",
-      "DependsOn":"ECSALB",
-      "Properties":{
-        "HealthCheckIntervalSeconds":10,
-        "HealthCheckPath":"/",
-        "HealthCheckProtocol":"HTTP",
-        "HealthCheckTimeoutSeconds":5,
-        "HealthyThresholdCount":2,
-        "Name":"ECSTG",
-        "Port":80,
-        "Protocol":"HTTP",
-        "UnhealthyThresholdCount":2,
-        "VpcId":{
-          "Ref":"VpcId"
-        }
-      }
-    },
+  },
     "ECSAutoScalingGroup":{
       "Type":"AWS::AutoScaling::AutoScalingGroup",
       "Properties":{
@@ -187,7 +123,7 @@
         },
         "SecurityGroups":[
           {
-            "Ref":"EcsSecurityGroupID"
+            "Ref":"ECSInstanceSecurityGroup"
           }
         ],
         "InstanceType":{
@@ -322,15 +258,6 @@
     }
   },
   "Outputs" : {
-    "ECSTG" : {
-      "Description" : "ELB Target Group",
-      "Value" : {
-        "Ref": "ECSTG"
-      },
-      "Export" : {
-        "Name" : "ECSTG"
-      }
-    },
     "ECSCluster" : {
       "Description" : "ECS Cluster",
       "Value" : {
