@@ -42,12 +42,12 @@ before_deploy:
   -in deploy_rsa.enc -out ~/.ssh/key/efcsydney.pem -d
 - eval "$(ssh-agent -s)"
 - chmod 400 ~/.ssh/key/efcsydney.pem
-- docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+#- docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
 
 deploy:
 - provider: script
   skip_cleanup: true
-  script: sh -x deploy.sh qa | docker push kleinchang/efcsydney-roster
+  script: sh -x deploy.sh qa #| docker push kleinchang/efcsydney-roster
   on:
     branch: qa
 - provider: script
