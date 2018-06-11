@@ -34,8 +34,10 @@ script:
   else
     cd client && yarn build && cd ..;
   fi
-- docker-compose build efc-dev
-- docker-compose up db efc-dev
+# - docker-compose build efc-dev
+# - docker-compose up db efc-dev
+- docker-compose build efc-test
+- docker-compose up efc-test
 before_deploy:
 - mkdir -p ~/.ssh/key
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv

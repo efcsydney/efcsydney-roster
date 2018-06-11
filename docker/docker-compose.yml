@@ -47,3 +47,8 @@ services:
       - -x
       - /opt/efcsydney-roster/docker/Entrypoint.sh
       - prod-local
+
+  efc-test:
+    image: kleinchang/cowascii
+    ports:
+      - "80:80"
