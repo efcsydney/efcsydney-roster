@@ -124,7 +124,7 @@
         "ContainerDefinitions":[
           {
             "Name":"efcRosterContainer",
-            "Cpu":"1",
+            "Cpu":"128",
             "Essential":"true",
             "Image":{
               "Ref":"DockerImgSrc"
