@@ -1,4 +1,4 @@
-# sudo: required
+sudo: required
 language: node_js
 node_js:
 - 8.9
@@ -12,12 +12,12 @@ addons:
   ssh_known_hosts:
   - 54.206.106.116
   - 13.210.76.160
-  # apt:
-  #   packages:
-  #     - docker-ce
+  apt:
+    packages:
+      - docker-ce
 services:
 - mysql
-# - docker
+- docker
 # env:
 #   global:
 #     - REGISTRY_USER=kleinchang
