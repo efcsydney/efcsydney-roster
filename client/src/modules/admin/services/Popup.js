@@ -307,10 +307,10 @@ export default withResource('services', (resource, state, ownProps) => {
   const modifyStatus = _.get(resource, 'status.modify', {});
   const createStatus = _.get(resource, 'status.create', {});
   const isSaving =
-    modifyStatus.loadingIds[selectedId] || createStatus.loadingIds[selectedId];
+    modifyStatus.loadingIds[selectedId] || createStatus.isLoading;
   const hasCompleted =
     modifyStatus.completedIds[selectedId] ||
-    createStatus.completedIds[selectedId];
+    !_.isEmpty(createStatus.completedIds);
 
   const retrieveStatus = _.get(resource, 'status.retrieve', {});
   const hasInitialized = retrieveStatus.hasInitialized && !_.isEmpty(data);

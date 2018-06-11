@@ -48,30 +48,22 @@ const asyncStatusReducer = (
 
   switch (resource.stage) {
     case 'start': {
-      const id = _.get(payload, [idAttribute], '') || 'creating';
-
-      if (!id) {
-        state = set(state, [resource.name, resource.method, 'isLoading'], true);
-
-        return state;
+      const id = _.get(payload, [idAttribute]);
+      state = set(state, [resource.name, resource.method, 'isLoading'], true);
+      if (id) {
+        state = set(
+          state,
+          [resource.name, resource.method, 'loadingIds', id],
+          true
+        );
       }
 
-      state = set(
-        state,
-        [resource.name, resource.method, 'loadingIds', id],
-        true
-      );
       return state;
     }
     case 'complete': {
-      const id = _.get(payload, [idAttribute], '') || 'creating';
+      state = set(state, [resource.name, resource.method, 'isLoading'], false);
 
-      if (!id) {
-        state = set(
-          state,
-          [resource.name, resource.method, 'isLoading'],
-          false
-        );
+      if (resource.method === 'retrieve') {
         state = set(
           state,
           [resource.name, resource.method, 'hasInitialized'],
@@ -79,21 +71,24 @@ const asyncStatusReducer = (
         );
       }
 
-      state = dotDrop.delete(state, [
-        resource.name,
-        resource.method,
-        'loadingIds',
-        id
-      ]);
-      state = set(
-        state,
-        [resource.name, resource.method, 'completedIds', id],
-        true
-      );
+      const id = _.get(payload, ['data', idAttribute]);
+      if (id) {
+        state = dotDrop.delete(state, [
+          resource.name,
+          resource.method,
+          'loadingIds',
+          id
+        ]);
+        state = set(
+          state,
+          [resource.name, resource.method, 'completedIds', id],
+          true
+        );
+      }
       return state;
     }
     case 'reset': {
-      const id = _.get(payload, [idAttribute], '') || 'creating';
+      const id = _.get(payload, ['data', idAttribute]);
 
       if (!id) {
         return state;
@@ -104,6 +99,7 @@ const asyncStatusReducer = (
         'completedIds',
         id
       ]);
+
       return state;
     }
     default:
