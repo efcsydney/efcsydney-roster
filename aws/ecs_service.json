@@ -1,0 +1,42 @@
+{
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Parameters":{
+    "ELBName":{
+      "Type":"String",
+      "Description":"The name of classic load balancer",
+      "Default": "ecs-elb"
+    }
+  },
+  "Resources":{
+    "ECSService":{
+      "Type":"AWS::ECS::Service",
+      "Properties":{
+        "Cluster":{
+          "Fn::ImportValue": {
+            "Fn::Sub": "ECSCluster"
+          }
+        },
+        "DesiredCount":"1",
+        "LoadBalancers":[
+          {
+            "ContainerName":"efcRosterContainer",
+            "ContainerPort":"3001",
+            "LoadBalancerName":{
+              "Ref": "ELBName"
+            }
+          }
+        ],
+        "Role":{
+          "Fn::ImportValue": {
+            "Fn::Sub": "ECSServiceRole"
+          }
+        },
+        "TaskDefinition":{
+          "Fn::ImportValue": {
+            "Fn::Sub": "ECSTaskDef"
+          }
+        }
+      }
+    }
+  }
+}

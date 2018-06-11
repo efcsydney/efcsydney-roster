@@ -1,0 +1,69 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "EFC sydney ELB",
+    "Parameters": {
+        "DBUser": {
+            "Type": "String",
+            "Description": "Database User",
+            "Default": "admin"
+        },
+        "DBPassword": {
+            "Type": "String",
+            "Description": "Database Password",
+            "Default": "admin123"
+        },
+        "VPCSecurityGroupID":{
+          "Type":"AWS::EC2::SecurityGroup::Id",
+          "Description":"VPC Security Group ID"
+        },
+        "VpcId":{
+          "Type":"AWS::EC2::VPC::Id",
+          "Description":"Select a VPC that allows instances to access the Internet."
+        },
+        "SubnetId":{
+          "Type":"List<AWS::EC2::Subnet::Id>",
+          "Description":"Select at two subnets in your selected VPC."
+        }
+    },
+    "Resources": {
+        "MyDB" : {
+          "Type" : "AWS::RDS::DBInstance",
+          "Properties" : {
+            "DBName" : "efcRoster",
+            "AllocatedStorage" : "20",
+            "DBInstanceClass" : "db.t2.micro",
+            "Engine" : "MySQL",
+            "EngineVersion" : "5.6.39",
+            "MasterUsername" : { "Ref" : "DBUser" },
+            "MasterUserPassword" : { "Ref" : "DBPassword" },
+            "MultiAZ" : false,
+            "DBSecurityGroups" : [ { "Ref" : "DbSecurityByEC2SecurityGroup" } ],
+            "DBSubnetGroupName" : {
+              "Ref":"DBSubnetGroup"
+            },
+            "Tags" : [ { "Key" : "Name", "Value" : "My SQL Database" } ]
+          },
+          "DeletionPolicy" : "Retain"
+      },
+      "DBSubnetGroup" : {
+        "Type" : "AWS::RDS::DBSubnetGroup",
+        "Properties" : {
+          "DBSubnetGroupDescription" : "RDS SubnetGroup",
+          "DBSubnetGroupName": "DBSubnetGroup",
+          "SubnetIds" : { "Ref":"SubnetId" }
+        }
+      },
+      "DbSecurityByEC2SecurityGroup" : {
+         "Type" : "AWS::RDS::DBSecurityGroup",
+         "Properties" : {
+            "GroupDescription" : "Ingress for Amazon EC2 security group",
+           "EC2VpcId" : { "Ref" : "VpcId" },
+            "DBSecurityGroupIngress" : [
+              {
+                "EC2SecurityGroupId" : {"Ref": "VPCSecurityGroupID"}
+              }
+              ]
+         }
+      }
+    }
+}
