@@ -26,16 +26,22 @@ import { createApiActions } from 'resource/actions';
 
 const mapStateToProps = state => {
   const { meta: { category } } = state.core;
+  const services = _.get(state, 'resource.data.services', {});
+  const serviceNames = _.map(services, service => service.name);
+  const selectedService = _.find(services, { name: category }) || {};
   const {
     meta: { isEditingDay, isEditingRole, isLoading },
     data
   } = state.index;
+
   return {
     category,
     data,
+    frequency: selectedService.frequency || 'Sunday',
     isEditingDay,
     isEditingRole,
-    isLoading
+    isLoading,
+    serviceNames
   };
 };
 const mapDispatchToProps = dispatch => {
@@ -160,22 +166,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       toggleEditRole(true);
     };
     handleHistoryChange = ({ pathname }) => {
-      const { switchCategory } = this.props;
+      const { serviceNames, switchCategory } = this.props;
 
       pathname = pathname.replace('/', '');
-      if (
-        _.includes(
-          [
-            'english',
-            'chinese',
-            'preschool-junior',
-            'preschool-middle',
-            'preschool-senior',
-            'prayer'
-          ],
-          pathname
-        )
-      ) {
+      if (_.includes([serviceNames], pathname)) {
         this.loadData({ category: pathname });
         switchCategory(pathname);
       }
@@ -214,7 +208,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     }
     render() {
       const { date } = this.state;
-      const { data, isEditingDay, isLoading } = this.props;
+      const { data, frequency, isEditingDay, isLoading } = this.props;
       const barProps = {
         date,
         onPrevClick: this.handleButtonClick.bind(this, 'prev'),
@@ -230,6 +224,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               className="quarter-view"
               date={date}
               data={data}
+              frequency={frequency}
               members={this.getAllNames()}
               onRoleClick={this.handleRoleClick}
               onDayClick={this.handleDayClick}

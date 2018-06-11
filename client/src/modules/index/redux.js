@@ -90,18 +90,36 @@ export const dataReducer = handleActions(
   {
     [receiveRetrieveEvents]: (state, { payload }) => payload,
     [receiveModifyIdEvents]: (state, { payload }) => {
-      const dayIndex = _.findIndex(state, {
-        date: moment(payload.date).format('YYYY-MM-DD')
+      const { date, role, name, serviceInfo } = payload;
+      let dayIndex = _.findIndex(state, {
+        date: moment(date).format('YYYY-MM-DD')
       });
+
+      if (dayIndex === -1) {
+        return dotProp.set(state, state.length, {
+          date,
+          serviceInfo,
+          members: [{ name, role }]
+        });
+      }
+
       const roleIndex = _.findIndex(state[dayIndex].members, {
         role: payload.role
       });
 
-      return dotProp.set(
-        state,
-        `${dayIndex}.members.${roleIndex}.name`,
-        payload.name
-      );
+      if (roleIndex === -1) {
+        const total = state[dayIndex].members.length;
+        return dotProp.set(state, `${dayIndex}.members.${total}`, {
+          name,
+          role
+        });
+      }
+
+      return dotProp.set(state, state.length, {
+        date,
+        serviceInfo,
+        members: [{ name, role }]
+      });
     },
     [receiveModifyServiceInfo]: (state, { payload }) => {
       const dayIndex = _.findIndex(state, day => {
