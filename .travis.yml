@@ -1,4 +1,4 @@
-sudo: required
+# sudo: required
 language: node_js
 node_js:
 - 8.9
@@ -18,10 +18,10 @@ addons:
 services:
 - mysql
 # - docker
-env:
-  global:
-    - REGISTRY_USER=kleinchang
-    - secure: HXJ5UCTNKGXYTk9uxIO/8ujcPXs7fzcd9QWyCoTDj4XXLq86zVjPM7PNLUbnbykP5VN3xTYry0ESx+t6nEdw8LGScMBpUkEwiElTj0CWabVZ1WT6jwLnCi0nci15JaBNUHmgHe0UQWnW16fD9jkDZRom1mTVpVpSuIkkMVV1vKj3T2t2UeJO/gS2ygdC0EqCpgl4wCcorVkRzqJX17uEG+WVUFEfCnXTXVk9kqrKaZTRtLazdcVpiUpZxBXusiNNY3SA56W9AHq4jXNjJvdYuqPdwWYKeKZuQcVsTrfQ90yY/P81PhwT3GL9LU6MIDTvVUp8pQub6Az4cHt1nMGRO/opsv2kWlqi8p5wBeUdJk/Y3liZcjSIoyDExNckoxg9po/fNwkCivZxCr2cJXBdFmCdi73sLwoNM6SZKFW/l6HxqsvwXhN+LqqDB4HachBuAI2pLBfnW9KKmKJun9mJQ+yd0kISuSoXfO7RkBPUAzAVkZExLFWx+MvOOpyDJXDG+73i97qImyTsvHAomMCojcyW+SNxyDzuOWbxf3aYUreXMV71uc/hjzUXEdxXV2MM27a8w0Z+JwgieFylbS5gXFInOZPocrBHYu6ebuTwrDPzA5rgje/dGWzQflENcha3P+Gb7mPx/cEFTPzkOKKJdr688JntqLznIeetHTLQDxQ=
+# env:
+#   global:
+#     - REGISTRY_USER=kleinchang
+#     - secure: HXJ5UCTNKGXYTk9uxIO/8ujcPXs7fzcd9QWyCoTDj4XXLq86zVjPM7PNLUbnbykP5VN3xTYry0ESx+t6nEdw8LGScMBpUkEwiElTj0CWabVZ1WT6jwLnCi0nci15JaBNUHmgHe0UQWnW16fD9jkDZRom1mTVpVpSuIkkMVV1vKj3T2t2UeJO/gS2ygdC0EqCpgl4wCcorVkRzqJX17uEG+WVUFEfCnXTXVk9kqrKaZTRtLazdcVpiUpZxBXusiNNY3SA56W9AHq4jXNjJvdYuqPdwWYKeKZuQcVsTrfQ90yY/P81PhwT3GL9LU6MIDTvVUp8pQub6Az4cHt1nMGRO/opsv2kWlqi8p5wBeUdJk/Y3liZcjSIoyDExNckoxg9po/fNwkCivZxCr2cJXBdFmCdi73sLwoNM6SZKFW/l6HxqsvwXhN+LqqDB4HachBuAI2pLBfnW9KKmKJun9mJQ+yd0kISuSoXfO7RkBPUAzAVkZExLFWx+MvOOpyDJXDG+73i97qImyTsvHAomMCojcyW+SNxyDzuOWbxf3aYUreXMV71uc/hjzUXEdxXV2MM27a8w0Z+JwgieFylbS5gXFInOZPocrBHYu6ebuTwrDPzA5rgje/dGWzQflENcha3P+Gb7mPx/cEFTPzkOKKJdr688JntqLznIeetHTLQDxQ=
 before_script:
 - yarn db-create
 - yarn db-migrate
