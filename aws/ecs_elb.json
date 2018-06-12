@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "EFC sydney ELB",
+    "Description": "EFC sydney ELB for ECS",
     "Parameters": {
         "CertificatesArn": {
             "Type": "String",
@@ -28,6 +28,12 @@
                         "IpProtocol": "tcp",
                         "FromPort": 80,
                         "ToPort": 80,
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 8080,
+                        "ToPort": 8080,
                         "CidrIp": "0.0.0.0/0"
                     }
                 ],
@@ -82,6 +88,12 @@
                         "SSLCertificateId": {
                             "Ref": "CertificatesArn"
                         }
+                    },
+                    {
+                      "LoadBalancerPort": 8080,
+                      "InstancePort": 8080,
+                      "Protocol": "HTTP",
+                      "InstanceProtocol": "HTTP"
                     }
                 ],
                 "HealthCheck": {

@@ -12,9 +12,9 @@ Cloud Formation:
 ## DB (optional)
 
 (1) CLoudFormation:
-- eds.json
+- rds.json
 
-(2) update password, user, databasem, host, ... in EC2 parameter store
+(2) update password, user, database, host, ... in EC2 parameter store
 
 ## Load Balancer
 

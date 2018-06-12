@@ -1,5 +1,6 @@
 {
   "AWSTemplateFormatVersion":"2010-09-09",
+  "Description": "EFC sydney ECS Cluster",
   "Parameters":{
     "KeyName":{
       "Type":"AWS::EC2::KeyPair::KeyName",
@@ -173,9 +174,7 @@
         },
         "Path":"/",
         "ManagedPolicyArns": [
-          "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role",
-          "arn:aws:iam::aws:policy/AmazonRDSFullAccess",
-          "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+          "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
         ],
         "Policies":[
           {
@@ -194,25 +193,6 @@
                     "ecs:Submit*",
                     "logs:CreateLogStream",
                     "logs:PutLogEvents"
-                  ],
-                  "Resource":"*"
-                }
-              ]
-            }
-          },
-          {
-            "PolicyName":"get-parameter",
-            "PolicyDocument":{
-              "Statement":[
-                {
-                  "Effect":"Allow",
-                  "Action":[
-                    "ssm:DescribeParameters",
-                    "ssm:GetParameterHistory",
-                    "ssm:DescribeDocumentParameters",
-                    "ssm:GetParametersByPath",
-                    "ssm:GetParameters",
-                    "ssm:GetParameter"
                   ],
                   "Resource":"*"
                 }
