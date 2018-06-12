@@ -32,6 +32,7 @@ const mapDispatchToProps = dispatch =>
 export default connect(mapStateToProps, mapDispatchToProps)(
   class InlineSelect extends Component {
     static propTypes = {
+      id: PropTypes.number,
       date: PropTypes.string,
       isSaving: PropTypes.bool,
       names: PropTypes.array,
@@ -53,7 +54,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       direction: 'down'
     };
     handleChange = (option = {}) => {
-      const { date, category, role, value, onClose, onSave } = this.props;
+      const { id, date, category, role, value, onClose, onSave } = this.props;
       const newValue =
         _.isObject(option) && _.isString(option.value)
           ? option.value.trim()
@@ -71,7 +72,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
           date,
           footnote: '',
           skipService: false,
-          skipReason: ''
+          skipReason: '',
+          id
         }
       });
     };

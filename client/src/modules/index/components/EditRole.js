@@ -39,6 +39,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     displayName = 'EditRole';
     static propTypes = {
       date: PropTypes.string,
+      id: PropTypes.number,
       member: PropTypes.string,
       names: PropTypes.array,
       onSave: PropTypes.func,
@@ -70,6 +71,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     }
     render() {
       const {
+        id,
         date,
         isSaving,
         members,
@@ -116,6 +118,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               <StateButton
                 kind={isSaving ? 'loading' : 'default'}
                 onClick={this.handleSave.bind(this, {
+                  id,
                   date,
                   role,
                   name: selectedName
