@@ -27,11 +27,10 @@ before_script:
 - yarn db-migrate
 - cd client && yarn && cd ..;
 script:
-- travis_wait 30 ./docker/manage.sh build prod
-- docker images
+#- travis_wait 30 ./docker/manage.sh build prod
+#- docker images
 - yarn test
 - yarn test:frontend
-- echo $CI && echo "??"
 - |
   if [ $TRAVIS_BRANCH == 'qa' ]; then
     cd client && REACT_APP_ENV=qa yarn build && cd ..;
