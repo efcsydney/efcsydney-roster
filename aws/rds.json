@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "EFC sydney ELB",
+    "Description": "EFC sydney RDS",
     "Parameters": {
         "DBUser": {
             "Type": "String",
@@ -26,7 +26,7 @@
         }
     },
     "Resources": {
-        "MyDB" : {
+        "EfcDB" : {
           "Type" : "AWS::RDS::DBInstance",
           "Properties" : {
             "DBName" : "efcRoster",
@@ -41,7 +41,7 @@
             "DBSubnetGroupName" : {
               "Ref":"DBSubnetGroup"
             },
-            "Tags" : [ { "Key" : "Name", "Value" : "My SQL Database" } ]
+            "Tags" : [ { "Key" : "Name", "Value" : "Efc SQL Database" } ]
           },
           "DeletionPolicy" : "Retain"
       },
