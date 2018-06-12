@@ -10,14 +10,9 @@ build(){
     exit 1
   fi
   echo "Build Docker Image"
-  # echo $PWD
-  # find ../log/* ! -name '.gitignore' -exec rm -rf {} + || true
 
   docker-compose build efc-$TARGET
-  UNUSED_IMG=$(docker images | grep "<none>" | awk "{print \$3}")
-  if [ ! -z "$UNUSED_IMG" ]; then
-    docker rmi -f $UNUSED_IMG
-  fi
+
 }
 
 up(){
@@ -27,16 +22,11 @@ up(){
     exit 1
   fi
 
-  #docker-compose rm -f efc-$TARGET
-  UNUSED_CONTAINER=$(docker ps -a | grep "Exited" | awk "{print \$1}")
-  if [ ! -z "$UNUSED_CONTAINER" ]; then
-    docker rm -f $(docker ps -a | grep "Exited" | awk "{print \$1}")
-  fi
-  docker-compose up db efc-$TARGET
+  docker-compose up -d db efc-$TARGET
+  docker-compose logs -f
 }
 
 stop(){
-  #docker rm -f $(docker ps -a | grep "Exited" | awk "{print \$1}")
   local TARGET=$1
   if [ "$TARGET" != "dev" ] && [ "$TARGET" != "prod" ]; then
     echo "Wrong argument: must be 'dev' or 'prod'. "

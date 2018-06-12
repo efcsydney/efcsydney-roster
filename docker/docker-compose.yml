@@ -20,6 +20,7 @@ services:
         - db:db
     environment:
         - NODE_ENV=docker
+        - REACT_APP_ENV=development
     ports:
       - "80:80"
       - "3000:3000"

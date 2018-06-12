@@ -18,7 +18,6 @@ prod-local() {
   yarn db-migrate
   yarn db-update-events
   cp db/data/email-list-example.csv db/data/email-list.csv
-  jq -h
   pm2-runtime server.js
 }
 
@@ -29,6 +28,7 @@ dev(){
   yarn
   popd
 
+  bash -x $EFC_FOLDER/docker/wait-for-it.sh db:3306
   yarn db-migrate
   yarn db-update-events
 
