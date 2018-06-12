@@ -44,7 +44,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "CI=true react-scripts test --env=jsdom",
+    "test": "CI=true react-scripts test --env=jsdom --forceExit",
     "test:ci": "CI=true npm test -- --coverage; ./scripts/codebeat-upload-coverage.sh",
     "eject": "react-scripts eject"
   }
