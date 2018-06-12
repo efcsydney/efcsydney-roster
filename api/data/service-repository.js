@@ -5,37 +5,56 @@ const Position = require('../models/position').Position;
 class ServiceRepository {
   static getServices() {
     return Service.findAll({
-      include:[{
-        model: Frequency,
-        as: 'frequency'
-      },{
-        model: Position
-      }]
+      include: [
+        {
+          model: Frequency,
+          as: 'frequency'
+        },
+        {
+          model: Position
+        }
+      ]
     });
   }
 
-  static getServiceById(id){
+  static getServiceById(id) {
     return Service.findOne({
-      where: {id: id},
-      include:[{
-        model: Frequency,
-        as: 'frequency'
-      },{
-        model: Position
-      }]
-    })
+      where: { id: id },
+      include: [
+        {
+          model: Frequency,
+          as: 'frequency'
+        },
+        {
+          model: Position
+        }
+      ]
+    });
+  }
+
+  static async getServiceByName(name) {
+    return Service.findOne({
+      where: { name: name },
+      include: [
+        {
+          model: Frequency,
+          as: 'frequency'
+        },
+        {
+          model: Position
+        }
+      ]
+    });
   }
 
   static createService(service) {
     return Service.create(service).then(result => result);
   }
 
-  static updateService(service){
-    return Service.update(service,
-      {
-        where: { id: service.id }
-      }
-    ).then(() => service);
+  static updateService(service) {
+    return Service.update(service, {
+      where: { id: service.id }
+    }).then(() => service);
   }
 }
 

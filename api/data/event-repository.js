@@ -36,6 +36,30 @@ class EventRepository {
     });
   }
 
+  static async getEventByDatePositionServiceName(criteria) {
+    const { date, position, serviceName } = criteria;
+
+    const service = await Service.findOne({
+      where: { name: serviceName }
+    });
+
+    return await Event.findOne({
+      include: [
+        {
+          model: CalendarDate,
+          as: 'calendarDate',
+          where: { date: { [Op.eq]: date } }
+        },
+        {
+          model: Position,
+          as: 'position',
+          where: { name: position, serviceId: service.id },
+          required: true
+        }
+      ]
+    });
+  }
+
   static getEventByDatePosition(criteria) {
     const { date, position } = criteria;
     return Event.findOne({
@@ -53,6 +77,10 @@ class EventRepository {
         }
       ]
     });
+  }
+
+  static async createEvent(event) {
+    return await Event.create(event);
   }
 
   static updateEvent(event) {
