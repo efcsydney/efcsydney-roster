@@ -61,6 +61,7 @@ export default connect(mapStateToProps)(
       const { roles, onRoleClick, selectedData } = this.props;
       const names = members.map(member => member.name);
       const isSkipService = serviceInfo.skipService || false;
+      const id = serviceInfo.id || null;
       if (isSkipService) {
         const skipReason = serviceInfo.skipReason || '';
         return (
@@ -90,6 +91,7 @@ export default connect(mapStateToProps)(
             <Text>{name}</Text>
             {isSelected && (
               <InlineSelect
+                id={id}
                 date={selectedDateString}
                 role={selectedRole}
                 names={this.props.members}
