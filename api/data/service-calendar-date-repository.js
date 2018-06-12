@@ -28,12 +28,42 @@ class ServiceCalendarDateRepository {
     });
   }
 
+  static async createServiceInfo(serviceInfo) {
+    const { date } = serviceInfo.calendarDate;
+    const { name } = serviceInfo.service;
+
+    //get calendar date Id from calendarDate table
+    let dateInDb = await CalendarDate.findOne({
+      where: { date: { [Op.eq]: date } }
+    });
+
+    if (!dateInDb) {
+      dateInDb = await CalendarDate.create({ date: date });
+    }
+
+    //get service
+    let serviceInDb = await Service.findOne({
+      where: { name: { [Op.eq]: name } }
+    });
+
+    serviceInfo.calendarDateId = dateInDb.id;
+    serviceInfo.serviceId = serviceInDb.id;
+
+    return ServiceCalendarDate.create({
+      footnote: serviceInfo.footnote,
+      skipService: serviceInfo.skipService,
+      skipReason: serviceInfo.skipReason,
+      calendarDateId: serviceInfo.calendarDateId,
+      serviceId: serviceInfo.serviceId
+    });
+  }
+
   static updateServiceInfo(serviceInfo) {
     return ServiceCalendarDate.update(
       {
         footnote: serviceInfo.footnote,
         skipService: serviceInfo.skipService,
-        skipReason: serviceInfo.skipReason,
+        skipReason: serviceInfo.skipReason
       },
       {
         where: { id: serviceInfo.id }

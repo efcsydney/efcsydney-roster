@@ -700,6 +700,10 @@ caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
 
+chai-exclude@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/chai-exclude/-/chai-exclude-1.0.8.tgz#923acd0f0a687f2b4b88bebf0d28c0e8f79f8b70"
+
 chai@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chai/-/chai-4.1.2.tgz#0f64584ba642f0f2ace2806279f4f06ca23ad73c"
