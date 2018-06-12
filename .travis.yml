@@ -39,6 +39,8 @@ script:
 # - docker-compose up db efc-dev
 # - docker-compose build efc-test
 # - docker-compose up efc-test
+- ./docker/manage.sh build prod && docker images
+- ./docker/manage.sh push
 before_deploy:
 - mkdir -p ~/.ssh/key
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
