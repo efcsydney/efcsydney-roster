@@ -63,7 +63,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         onClose();
         return;
       }
-      onSave({
+
+      const form = {
         date,
         role,
         name: newValue,
@@ -72,10 +73,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
           date,
           footnote: '',
           skipService: false,
-          skipReason: '',
-          id
+          skipReason: ''
         }
-      });
+      };
+      if (id) {
+        form.serviceInfo.id = id;
+      }
+      onSave(form);
     };
     handleClose = () => {
       this.props.onClose();

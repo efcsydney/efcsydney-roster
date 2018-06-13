@@ -14,7 +14,6 @@ import { bindActionCreators } from 'redux';
 import { switchCategory } from 'modules/core/redux';
 import {
   requestModifyServiceInfo,
-  requestModifyIdEvents,
   requestRetrieveEvents,
   setEvent,
   setSelectedData,
@@ -48,7 +47,6 @@ const mapDispatchToProps = dispatch => {
   const { retrieveEvents } = createApiActions('events');
   return bindActionCreators(
     {
-      requestModifyIdEvents,
       requestModifyServiceInfo,
       requestRetrieveEvents,
       retrieveEvents,
