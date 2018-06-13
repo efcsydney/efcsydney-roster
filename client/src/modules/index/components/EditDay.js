@@ -67,7 +67,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       e.preventDefault();
 
       const { serviceInfo } = this.state;
-      const { onSave } = this.props;
+      const { day, onSave } = this.props;
+
+      serviceInfo.date = day;
 
       onSave(serviceInfo);
     };
