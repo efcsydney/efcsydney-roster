@@ -81,7 +81,7 @@ describe('index', () => {
       const result = dataReducer(initState, receiveRetrieveEvents(mockState));
       expect(result).toBe(mockState);
     });
-    xit('should be updated by #receiveModifyIdEvents', () => {
+    it('should be updated by #receiveModifyIdEvents', () => {
       // WIP
       const state = [
         {
