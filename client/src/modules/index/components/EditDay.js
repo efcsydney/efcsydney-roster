@@ -96,8 +96,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     }
     render() {
       const { day, isSaving, toggleEditDay, ...otherProps } = this.props;
-      const { serviceInfo: { footnote, skipReason, skipService } } = this.state;
+      const { serviceInfo: { footnote, skipService } } = this.state;
       const formattedDate = moment(day).format(this.getTrans('dateFormat'));
+
+      let skipReason = _.get(this.state.serviceInfo, 'skipReason', '');
+      skipReason = !_.isEmpty(skipReason)
+        ? skipReason
+        : this.getTrans('skipReason');
 
       return (
         <Modal {...otherProps} title={this.getTrans('title')}>
@@ -124,20 +129,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                 <StyleInput
                   data-hj-whitelist
                   type="text"
-                  value={
-                    !_.isEmpty(skipReason)
-                      ? skipReason
-                      : this.getTrans('skipReason')
-                  }
+                  value={skipReason}
                   placeholder={this.getTrans('skipReason')}
                   onChange={this.handleSkipReasonChange}
                 />
               ) : (
-                <Label>
-                  {!_.isEmpty(skipReason)
-                    ? skipReason
-                    : this.getTrans('skipReason')}
-                </Label>
+                <Label>{skipReason}</Label>
               )}
 
               <span>
