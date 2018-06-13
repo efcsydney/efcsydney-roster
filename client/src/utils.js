@@ -3,15 +3,16 @@ import _ from 'lodash';
 import moment from 'moment';
 import i18n from 'i18n';
 
-export const sanitize = obj => {
-  const query = _.clone(obj);
-  _.forOwnRight(query, (val, key) => {
-    if (_.isNull(val) || _.isUndefined(val) || val === '') {
-      delete query[key];
-    }
-  });
-  return query;
-};
+export const sanitize = obj =>
+  _.isObject(obj) && !_.isArray(obj)
+    ? _(obj)
+        .omitBy(_.isUndefined)
+        .omitBy(_.isNull)
+        .omitBy(v => v === '')
+        .map((v, k) => [k, sanitize(v)])
+        .fromPairs()
+        .value()
+    : obj;
 
 export const buildQuery = obj => queryString.stringify(sanitize(obj));
 
