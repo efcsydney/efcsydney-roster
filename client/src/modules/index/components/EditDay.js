@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Input } from 'components';
 import styled from 'styled-components';
-import { Modal, StateButton } from 'components';
+import { Modal, StateButton, SwitchButton } from 'components';
 import { requestModifyServiceInfo, toggleEditDay } from 'modules/index/redux';
 import { media } from 'styled';
 import i18n from 'i18n';
@@ -55,10 +55,17 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       this.setState(state);
     };
     handleSkipReasonChange = e => {
-      const skipReason = _.trim(e.target.value);
-      const skipService = !!skipReason;
+      const value = _.trim(e.target.value);
+      const skipReason = value ? value : this.getTrans('skipReason');
+
       let state = _.clone(this.state);
       state = dotProp.set(state, 'serviceInfo.skipReason', skipReason);
+
+      this.setState(state);
+    };
+    handleskipServicenChange = e => {
+      const skipService = !!e.target.checked;
+      let state = _.clone(this.state);
       state = dotProp.set(state, 'serviceInfo.skipService', skipService);
 
       this.setState(state);
@@ -68,6 +75,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
       const { serviceInfo } = this.state;
       const { onSave } = this.props;
+
+      if (serviceInfo.skipService) {
+        serviceInfo.skipReason = !_.isEmpty(serviceInfo.skipReason.trim())
+          ? serviceInfo.skipReason.trim()
+          : this.getTrans('skipReason');
+      }
 
       onSave(serviceInfo);
     };
@@ -80,7 +93,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     }
     render() {
       const { day, isSaving, toggleEditDay, ...otherProps } = this.props;
-      const { serviceInfo: { footnote, skipReason } } = this.state;
+      const { serviceInfo: { footnote, skipReason, skipService } } = this.state;
       const formattedDate = moment(day).format(this.getTrans('dateFormat'));
 
       return (
@@ -104,14 +117,17 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               </span>
             </Row>
             <Row>
-              <Label>{this.getTrans('skipReason')}</Label>
+              <StyleInput
+                data-hj-whitelist
+                type="text"
+                value={skipReason}
+                placeholder={this.getTrans('skipReason')}
+                onChange={this.handleSkipReasonChange}
+              />
               <span>
-                <Input
-                  data-hj-whitelist
-                  type="text"
-                  value={skipReason}
-                  placeholder={this.getTrans('skipReason')}
-                  onChange={this.handleSkipReasonChange}
+                <SwitchButton
+                  checked={skipService}
+                  onChange={this.handleskipServicenChange}
                 />
               </span>
             </Row>
@@ -162,6 +178,15 @@ const Label = styled.label`
   `};
 `;
 Label.displayName = 'Label';
+
+const StyleInput = styled(Input)`
+  margin-right: 15px;
+  width: 200px;
+  ${media.mobile`
+    width: 160px;
+  `};
+`;
+StyleInput.displayName = 'StyleInput';
 
 const CancelLink = styled.a`
   color: #369;
