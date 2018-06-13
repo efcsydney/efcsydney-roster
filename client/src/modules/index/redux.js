@@ -54,11 +54,20 @@ export const requestModifyServiceInfo = createAction(
     body = dotProp.set(body, 'footnote', body.footnote.trim());
     body = dotProp.set(body, 'skipReason', body.skipReason.trim());
     body = dotProp.set(body, 'skipService', body.skipService);
-    ServiceInfoAPI.modify({ id, ...body }).then(() =>
-      store.dispatch(
-        receiveModifyServiceInfo({ id, serviceInfo: { id, ...body } })
-      )
-    );
+    if (id) {
+      ServiceInfoAPI.modify({ id, ...body }).then(() =>
+        store.dispatch(
+          receiveModifyServiceInfo({ id, serviceInfo: { id, ...body } })
+        )
+      );
+    } else {
+      ServiceInfoAPI.create(body).then(({ data }) => {
+        const id = data.id;
+        store.dispatch(
+          receiveModifyServiceInfo({ id, serviceInfo: { id, ...body } })
+        );
+      });
+    }
     return payload;
   }
 );

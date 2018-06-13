@@ -80,13 +80,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       e.preventDefault();
 
       const { serviceInfo } = this.state;
-      const { onSave } = this.props;
+      const { day, onSave } = this.props;
 
       if (serviceInfo.skipService) {
         serviceInfo.skipReason = !_.isEmpty(serviceInfo.skipReason.trim())
           ? serviceInfo.skipReason.trim()
           : this.getTrans('skipReason');
       }
+
+      serviceInfo.date = day;
 
       onSave(serviceInfo);
     };
