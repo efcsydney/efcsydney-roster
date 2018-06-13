@@ -24,7 +24,6 @@ const mapStateToProps = state => {
   const selectedService = _.find(services, { name: selectedServiceName }) || {};
   const positions = selectedService.positions || [];
 
-  console.log(positions);
   return {
     events: _.get(state.index, 'data', []),
     positions,
