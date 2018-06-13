@@ -1,11 +1,10 @@
 #!/bin/bash
 BASE_DIR=$(dirname "$0")
-echo $BASE_DIR
-#cd /opt/efcsydney-roster/
-cd $BASE_DIR
+cd $BASE_DIR/../
+
 yarn
 
-pushd $BASE_DIR/client/
+pushd ./client/
 yarn
 yarn build
 popd
@@ -15,7 +14,7 @@ if [ -f ./efcsydney-roster.tar.gz ]; then
   rm -rf efcsydney-roster.tar.gz
 fi
 
-rm -rf client/node_modules
+mv ./client/node_modules ./../
 find log/* ! -name '.gitignore' -exec rm -rf {} +
 
 echo "Tar"
@@ -23,3 +22,6 @@ pushd ../
 tar -czf efcsydney-roster.tar.gz efcsydney-roster
 mv efcsydney-roster.tar.gz efcsydney-roster/
 popd
+
+echo "recover node_modules..."
+mv ./../node_modules ./client/node_modules

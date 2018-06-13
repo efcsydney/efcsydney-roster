@@ -69,10 +69,7 @@ describe('Server', function() {
             }
           ];
 
-          chai.assert.deepEqualExcluding(res.body.data, expected, [
-            'members',
-            'id'
-          ]);
+          chai.assert.deepEqualExcluding(res.body.data, expected, ['id']);
         });
     });
 
@@ -131,10 +128,7 @@ describe('Server', function() {
             }
           ];
 
-          chai.assert.deepEqualExcluding(res.body.data, expected, [
-            'members',
-            'id'
-          ]);
+          chai.assert.deepEqualExcluding(res.body.data, expected, ['id']);
         });
     });
 
@@ -147,27 +141,21 @@ describe('Server', function() {
           expect(res.body.data.length).to.eql(3); // because only the last 3 weeks have data in DB
         });
     });
-
-    it('returns events which contains ID of each event', function() {
-      return request(app)
-        .get('/api/events?from=2017-10-08&to=2017-10-15&category=english')
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .then(function(res) {
-          res.body.data.forEach(weeklyEvents => {
-            weeklyEvents.members.forEach(event => {
-              expect(parseInt(event.id)).to.greaterThan(0);
-            });
-          });
-        });
-    });
   });
   describe('update event', function() {
     it('updates an event where its time contains timezone info', function() {
       const event = {
         date: '2017-10-21T13:00:00.000Z',
         role: 'Usher/Offering',
-        name: 'Kai Chang'
+        name: 'Kai Chang',
+        serviceInfo: {
+          category: 'english',
+          date: '2017-10-21T13:00:00.000Z',
+          footnote: '',
+          skipService: false,
+          skipReason: '',
+          id: 5
+        }
       };
       return request(app)
         .put('/api/events')
@@ -183,7 +171,15 @@ describe('Server', function() {
       const event = {
         date: '2017-10-22',
         role: 'Usher/Offering',
-        name: 'Kai Chang'
+        name: 'Kai Chang',
+        serviceInfo: {
+          category: 'english',
+          date: '2017-10-22',
+          footnote: '',
+          skipService: false,
+          skipReason: '',
+          id: 5
+        }
       };
       return request(app)
         .put('/api/events')
@@ -198,7 +194,7 @@ describe('Server', function() {
     });
   });
   describe('update/create serviceInfo', function() {
-    it('updates a serviceInfo when serviceInfo Id is available', function() {
+    it('updates a serviceInfo', function() {
       const footnote = {
         date: '2017-10-08',
         category: 'english',
@@ -214,12 +210,12 @@ describe('Server', function() {
         .expect(201)
         .then(function(res) {
           expect(res.body.result).to.equal('OK');
-          expect(res.body.data.id).to.equal('1');
+          expect(res.body.data.id).to.equal(1);
           expect(res.body.data.skipService).to.equal(footnote.skipService);
           expect(res.body.data.footnote).to.equal(footnote.footnote);
         });
     });
-    it('creates a serviceInfo when serviceInfo Id is NOT included in the URL parth', function() {
+    it('creates a serviceInfo', function() {
       const footnote = {
         date: '2016-01-01',
         category: 'english',
@@ -229,29 +225,7 @@ describe('Server', function() {
       };
 
       return request(app)
-        .put(`/api/serviceInfo`)
-        .send(footnote)
-        .expect('Content-Type', /json/)
-        .expect(201)
-        .then(function(res) {
-          expect(res.body.result).to.equal('OK');
-          expect(res.body.data.id).to.greaterThan(0);
-          expect(res.body.data.skipService).to.equal(footnote.skipService);
-          expect(res.body.data.footnote).to.equal(footnote.footnote);
-        });
-    });
-    it('creates a serviceInfo when serviceInfo Id is NOT included in the URL parth but in the body', function() {
-      const footnote = {
-        date: '2016-02-01',
-        category: 'english',
-        footnote: 'Meeting (Election)',
-        skipService: true,
-        skipReason: 'Combined Service',
-        id: 2
-      };
-
-      return request(app)
-        .put(`/api/serviceInfo`)
+        .post(`/api/serviceInfo`)
         .send(footnote)
         .expect('Content-Type', /json/)
         .expect(201)

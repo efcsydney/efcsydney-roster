@@ -82,6 +82,7 @@ describe('index', () => {
       expect(result).toBe(mockState);
     });
     it('should be updated by #receiveModifyIdEvents', () => {
+      // WIP
       const state = [
         {
           date: '2018-02-25',

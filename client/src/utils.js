@@ -59,7 +59,7 @@ export function getQuarterDays(date, weekday = 7) {
   let result = [];
   const thisQuarter = currentDay.quarter();
   while (thisQuarter === currentDay.quarter()) {
-    result.push(currentDay.clone());
+    result.push(currentDay.clone().format('YYYY-MM-DD'));
     currentDay.add(7, 'd');
   }
   return result;

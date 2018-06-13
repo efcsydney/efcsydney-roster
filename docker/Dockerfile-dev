@@ -6,4 +6,4 @@ RUN npm install -g pm2@latest
 WORKDIR /opt/
 
 EXPOSE 3000 3001 3002
-ENTRYPOINT ["/bin/bash", "-ex", "/opt/efcsydney-roster/Entrypoint.sh", "dev"]
+ENTRYPOINT ["/bin/bash", "-ex", "/opt/efcsydney-roster/docker/Entrypoint.sh", "dev"]

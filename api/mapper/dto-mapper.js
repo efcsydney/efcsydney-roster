@@ -7,6 +7,7 @@ class DtoMapper {
   static mapGroupEventsToDto(events) {
     return events.map(e => {
       return {
+        id: e.serviceInfo.id,
         date: e.date,
         serviceInfo: DtoMapper.mapServiceInfoToDto(e.serviceInfo),
         members: DtoMapper.mapEventPositionsToDto(e.positions)
@@ -20,7 +21,6 @@ class DtoMapper {
 
   static mapEventPositionToDto(event) {
     return {
-      id: event.id,
       role: event.position,
       name: event.volunteerName
     };
@@ -30,12 +30,15 @@ class DtoMapper {
     return {
       role: event.position.name,
       name: event.volunteerName,
-      id: event.id,
-      date: event.calendarDate.date
+      date: event.calendarDate.date,
+      serviceInfo: DtoMapper.mapServiceInfoToDto(event.serviceInfo)
     };
   }
 
   static mapServiceInfoToDto(serviceInfo) {
+    if (!serviceInfo) {
+      return {};
+    }
     return {
       id: serviceInfo.id,
       footnote: serviceInfo.footnote,
@@ -55,7 +58,11 @@ class DtoMapper {
       calendarDate: {
         date: getDateString(data.date)
       },
-      position: { name: data.role }
+      position: { name: data.role },
+      serviceInfo: DtoMapper.convertDtoToServiceInfoModel({
+        data: data.serviceInfo,
+        id: data.serviceInfo.id
+      })
     };
   }
 

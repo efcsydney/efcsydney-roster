@@ -26,58 +26,9 @@ export const receiveRetrieveEvents = createAction(
 export const requestRetrieveEvents = createAction(
   `${PREFIX}/REQUEST_RETRIEVE_EVENTS`,
   payload => {
-    EventsAPI.retrieve(payload).then(({ data }) => {
-      const storeServices = store.getState().core.data.services || [];
-      const selectedServices =
-        _.find(storeServices, {
-          name: payload.category
-        }) || {};
-      const frequency = selectedServices.frequency;
-      const positions = selectedServices.positions;
-      const dayOfWeek = [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
-      ];
-      const startDate = moment(payload.from).startOf('quarter');
-      const endDate = moment(payload.from).endOf('quarter');
-      const weeks = endDate.diff(startDate, 'week');
-      const firstWeekDay = startDate.day(_.indexOf(dayOfWeek, frequency));
-      const filteredEvents = [];
-
-      if (moment.isMoment(firstWeekDay)) {
-        for (let i = 0; i <= weeks; i++) {
-          const thisWeek = moment(firstWeekDay)
-            .add(i, 'week')
-            .format('YYYY-MM-DD');
-          const eventData = _.find(data, { date: thisWeek }) || {};
-
-          const newEvent = {
-            date: eventData.date || thisWeek,
-            members:
-              eventData.members ||
-              _.map(positions, position => ({
-                role: position.name,
-                name: ''
-              })),
-            serviceInfo: eventData.serviceInfo || {
-              id: null,
-              footnote: '',
-              skipReason: '',
-              skipService: false
-            }
-          };
-
-          filteredEvents.push(newEvent);
-        }
-      }
-
-      store.dispatch(receiveRetrieveEvents(filteredEvents));
-    });
+    EventsAPI.retrieve(payload).then(({ data }) =>
+      store.dispatch(receiveRetrieveEvents(data))
+    );
     return payload;
   }
 );
@@ -139,12 +90,30 @@ export const dataReducer = handleActions(
   {
     [receiveRetrieveEvents]: (state, { payload }) => payload,
     [receiveModifyIdEvents]: (state, { payload }) => {
-      const dayIndex = _.findIndex(state, {
-        date: moment(payload.date).format('YYYY-MM-DD')
+      const { date, role, name, serviceInfo } = payload;
+      let dayIndex = _.findIndex(state, {
+        date: moment(date).format('YYYY-MM-DD')
       });
+
+      if (dayIndex === -1) {
+        return dotProp.set(state, state.length, {
+          date,
+          serviceInfo,
+          members: [{ name, role }]
+        });
+      }
+
       const roleIndex = _.findIndex(state[dayIndex].members, {
         role: payload.role
       });
+
+      if (roleIndex === -1) {
+        const total = state[dayIndex].members.length;
+        return dotProp.set(state, `${dayIndex}.members.${total}`, {
+          name,
+          role
+        });
+      }
 
       return dotProp.set(
         state,

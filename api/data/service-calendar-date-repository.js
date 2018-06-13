@@ -3,7 +3,6 @@ const ServiceCalendarDate = require('../models/service-calendar-date')
   .ServiceCalendarDate;
 const CalendarDate = require('../models/calendar-date').CalendarDate;
 const Service = require('../models/service').Service;
-const logger = require('../utilities/logger');
 
 const Op = Sequelize.Op;
 
@@ -39,7 +38,7 @@ class ServiceCalendarDateRepository {
     });
 
     if (!dateInDb) {
-      dateInDb = await CalendarDate.create(date);
+      dateInDb = await CalendarDate.create({ date: date });
     }
 
     //get service
@@ -49,9 +48,6 @@ class ServiceCalendarDateRepository {
 
     serviceInfo.calendarDateId = dateInDb.id;
     serviceInfo.serviceId = serviceInDb.id;
-
-    logger.info(`Date ID: ${dateInDb.id}`);
-    logger.info(`Service ID: ${serviceInDb.id}`);
 
     return ServiceCalendarDate.create({
       footnote: serviceInfo.footnote,

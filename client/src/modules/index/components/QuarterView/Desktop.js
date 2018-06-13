@@ -20,12 +20,15 @@ const CAL_ENABLED_TYPES = [
 
 const mapStateToProps = state => {
   const services = _.get(state, 'resource.data.services', {});
-  const selectedServiceName = _.get(state.core, 'meta.category', 'english');
+  const selectedServiceName = _.get(state, 'core.meta.category', 'english');
+  const selectedService = _.find(services, { name: selectedServiceName }) || {};
+  const positions = selectedService.positions || [];
 
   return {
     events: _.get(state.index, 'data', []),
-    selectedService: _.find(services, { name: selectedServiceName }) || {},
-    selectedData: _.get(state.index, 'meta.selectedData', null)
+    positions,
+    selectedData: _.get(state.index, 'meta.selectedData', null),
+    selectedService
   };
 };
 export default connect(mapStateToProps)(
@@ -33,6 +36,7 @@ export default connect(mapStateToProps)(
     displayName = 'Desktop';
     static propTypes = {
       events: PropTypes.array,
+      frequency: PropTypes.string,
       members: PropTypes.array,
       selectedData: PropTypes.object,
       selectedService: PropTypes.object
@@ -56,9 +60,10 @@ export default connect(mapStateToProps)(
       return i18n.t(`${this.displayName}.${key}`);
     }
     renderNameCells(date, members, serviceInfo) {
-      const { roles, onRoleClick, selectedData } = this.props;
+      const { positions, roles, onRoleClick, selectedData } = this.props;
       const names = members.map(member => member.name);
       const isSkipService = serviceInfo.skipService || false;
+      const id = serviceInfo.id || null;
       if (isSkipService) {
         const skipReason = serviceInfo.skipReason || '';
         return (
@@ -75,8 +80,8 @@ export default connect(mapStateToProps)(
         : '';
       const selectedRole = _.get(selectedData, 'role', null);
       const isSelectedDay = date === selectedDateString;
-      return roles.map((role, i) => {
-        const member = _.find(members, { role }) || {};
+      return _.orderBy(positions, 'order', 'asc').map((position, i) => {
+        const member = _.find(members, { role: position.name }) || {};
         const name = _.get(member, 'name', '');
         const roleName = _.get(member, 'role', '');
         const isSelected = isSelectedDay && selectedRole === roleName;
@@ -84,10 +89,11 @@ export default connect(mapStateToProps)(
           <NameCell
             isSelected={isSelected}
             key={i}
-            onClick={() => onRoleClick(date, roles[i], name)}>
+            onClick={() => onRoleClick(date, position.name, name)}>
             <Text>{name}</Text>
             {isSelected && (
               <InlineSelect
+                id={id}
                 date={selectedDateString}
                 role={selectedRole}
                 names={this.props.members}
@@ -110,8 +116,19 @@ export default connect(mapStateToProps)(
         />
       );
     }
-    renderDayRow({ date, members, serviceInfo }) {
+    renderDayRow(date, positions, matchedEvent) {
       const { selectedService: { frequency } } = this.props;
+      const serviceInfo = _.get(matchedEvent, 'serviceInfo', {});
+      const members = _.get(matchedEvent, 'members', []);
+
+      positions = _.orderBy(positions, 'order', 'asc').map(({ id, name }) => {
+        const member = _.find(members, { role: name }) || {};
+        return {
+          id: id,
+          role: name,
+          name: member.name || ''
+        };
+      });
 
       return (
         <Row key={date} highlighted={isHighlighted(date, frequency)}>
@@ -122,15 +139,14 @@ export default connect(mapStateToProps)(
           <NoteCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
             {_.get(serviceInfo, 'footnote', '')}
           </NoteCell>
-          {this.renderNameCells(date, members, serviceInfo)}
+          {this.renderNameCells(date, positions, serviceInfo)}
         </Row>
       );
     }
     render() {
-      const { events, selectedService } = this.props;
+      const { days, events, selectedService } = this.props;
       const footnoteLabel = _.get(selectedService, 'footnoteLabel', '');
       const positions = _.get(selectedService, 'positions', []);
-      const sortedEvents = _.sortBy(events, 'date');
 
       return (
         <Grid role="grid">
@@ -142,14 +158,19 @@ export default connect(mapStateToProps)(
               <Header>
                 <Text>{footnoteLabel}</Text>
               </Header>
-              {positions.map((position, i) => (
+              {_.orderBy(positions, 'order', 'asc').map((position, i) => (
                 <Header key={i}>
                   <Text>{position.name}</Text>
                 </Header>
               ))}
             </Row>
           </thead>
-          <tbody>{sortedEvents.map(event => this.renderDayRow(event))}</tbody>
+          <tbody>
+            {days.map(day => {
+              const matchedEvent = _.find(events, { date: day });
+              return this.renderDayRow(day, positions, matchedEvent);
+            })}
+          </tbody>
         </Grid>
       );
     }

@@ -7,7 +7,9 @@ class ServiceInfoService {
       return ServiceCalendarDateRepository.createServiceInfo(serviceInfo);
     } else {
       await ServiceCalendarDateRepository.updateServiceInfo(serviceInfo);
-      return serviceInfo;
+      return await ServiceCalendarDateRepository.getServiceInfoById(
+        serviceInfo.id
+      );
     }
   }
   static async getServiceInfoById(serviceInfoId) {
