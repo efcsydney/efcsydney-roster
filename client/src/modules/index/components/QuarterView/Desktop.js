@@ -90,7 +90,7 @@ export default connect(mapStateToProps)(
           <NameCell
             isSelected={isSelected}
             key={i}
-            onClick={() => onRoleClick(date, roles[i], name)}>
+            onClick={() => onRoleClick(date, position.name, name)}>
             <Text>{name}</Text>
             {isSelected && (
               <InlineSelect
