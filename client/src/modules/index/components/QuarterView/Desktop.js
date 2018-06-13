@@ -60,7 +60,7 @@ export default connect(mapStateToProps)(
       return i18n.t(`${this.displayName}.${key}`);
     }
     renderNameCells(date, members, serviceInfo) {
-      const { positions, roles, onRoleClick, selectedData } = this.props;
+      const { positions, onRoleClick, selectedData } = this.props;
       const names = members.map(member => member.name);
       const isSkipService = serviceInfo.skipService || false;
       const id = serviceInfo.id || null;
