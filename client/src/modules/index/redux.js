@@ -115,11 +115,11 @@ export const dataReducer = handleActions(
         });
       }
 
-      return dotProp.set(state, state.length, {
-        date,
-        serviceInfo,
-        members: [{ name, role }]
-      });
+      return dotProp.set(
+        state,
+        `${dayIndex}.members.${roleIndex}.name`,
+        payload.name
+      );
     },
     [receiveModifyServiceInfo]: (state, { payload }) => {
       const dayIndex = _.findIndex(state, day => {
