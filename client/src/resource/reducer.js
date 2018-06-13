@@ -118,6 +118,7 @@ const asyncDataReducer = (state = defaultAsyncData, { resource, payload }) => {
 
   switch (resource.method) {
     case 'modify':
+    case 'create':
     case 'retrieve': {
       const idAttribute =
         !_.isEmpty(apiMapping[resource.name]) &&
