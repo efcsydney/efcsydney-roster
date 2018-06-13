@@ -55,18 +55,20 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       this.setState(state);
     };
     handleSkipReasonChange = e => {
-      const value = _.trim(e.target.value);
+      const value = e.target.value;
       const skipReason = value ? value : this.getTrans('skipReason');
 
-      let state = _.clone(this.state);
-      state = dotProp.set(state, 'serviceInfo.skipReason', skipReason);
+      let state = dotProp.set(this.state, 'serviceInfo.skipReason', skipReason);
 
       this.setState(state);
     };
-    handleskipServicenChange = e => {
+    handleSkipServiceChange = e => {
       const skipService = !!e.target.checked;
-      let state = _.clone(this.state);
-      state = dotProp.set(state, 'serviceInfo.skipService', skipService);
+      let state = dotProp.set(
+        this.state,
+        'serviceInfo.skipService',
+        skipService
+      );
 
       this.setState(state);
     };
@@ -77,8 +79,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       const { onSave } = this.props;
 
       if (serviceInfo.skipService) {
-        serviceInfo.skipReason = !_.isEmpty(serviceInfo.skipReason.trim())
-          ? serviceInfo.skipReason.trim()
+        const skipReason = serviceInfo.skipReason.trim();
+        serviceInfo.skipReason = !_.isEmpty(skipReason)
+          ? skipReason
           : this.getTrans('skipReason');
       }
 
@@ -117,17 +120,30 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               </span>
             </Row>
             <Row>
-              <StyleInput
-                data-hj-whitelist
-                type="text"
-                value={skipReason}
-                placeholder={this.getTrans('skipReason')}
-                onChange={this.handleSkipReasonChange}
-              />
+              {skipService ? (
+                <StyleInput
+                  data-hj-whitelist
+                  type="text"
+                  value={
+                    !_.isEmpty(skipReason)
+                      ? skipReason
+                      : this.getTrans('skipReason')
+                  }
+                  placeholder={this.getTrans('skipReason')}
+                  onChange={this.handleSkipReasonChange}
+                />
+              ) : (
+                <Label>
+                  {!_.isEmpty(skipReason)
+                    ? skipReason
+                    : this.getTrans('skipReason')}
+                </Label>
+              )}
+
               <span>
                 <SwitchButton
                   checked={skipService}
-                  onChange={this.handleskipServicenChange}
+                  onChange={this.handleSkipServiceChange}
                 />
               </span>
             </Row>
@@ -181,9 +197,9 @@ Label.displayName = 'Label';
 
 const StyleInput = styled(Input)`
   margin-right: 15px;
-  width: 200px;
+  width: 160px;
   ${media.mobile`
-    width: 160px;
+    width: 140px;
   `};
 `;
 StyleInput.displayName = 'StyleInput';
