@@ -22,9 +22,12 @@ const mapStateToProps = state => {
   const services = _.get(state, 'resource.data.services', {});
   const selectedServiceName = _.get(state, 'core.meta.category', 'english');
   const selectedService = _.find(services, { name: selectedServiceName }) || {};
+  const positions = selectedService.positions || [];
 
+  console.log(positions);
   return {
     events: _.get(state.index, 'data', []),
+    positions,
     selectedData: _.get(state.index, 'meta.selectedData', null),
     selectedService
   };
@@ -58,7 +61,7 @@ export default connect(mapStateToProps)(
       return i18n.t(`${this.displayName}.${key}`);
     }
     renderNameCells(date, members, serviceInfo) {
-      const { roles, onRoleClick, selectedData } = this.props;
+      const { positions, roles, onRoleClick, selectedData } = this.props;
       const names = members.map(member => member.name);
       const isSkipService = serviceInfo.skipService || false;
       const id = serviceInfo.id || null;
@@ -78,8 +81,8 @@ export default connect(mapStateToProps)(
         : '';
       const selectedRole = _.get(selectedData, 'role', null);
       const isSelectedDay = date === selectedDateString;
-      return roles.map((role, i) => {
-        const member = _.find(members, { role }) || {};
+      return _.orderBy(positions, 'order', 'asc').map((position, i) => {
+        const member = _.find(members, { role: position.name }) || {};
         const name = _.get(member, 'name', '');
         const roleName = _.get(member, 'role', '');
         const isSelected = isSelectedDay && selectedRole === roleName;
@@ -119,7 +122,7 @@ export default connect(mapStateToProps)(
       const serviceInfo = _.get(matchedEvent, 'serviceInfo', {});
       const members = _.get(matchedEvent, 'members', []);
 
-      positions = positions.map(({ id, name }) => {
+      positions = _.orderBy(positions, 'order', 'asc').map(({ id, name }) => {
         const member = _.find(members, { role: name }) || {};
         return {
           id: id,
@@ -156,7 +159,7 @@ export default connect(mapStateToProps)(
               <Header>
                 <Text>{footnoteLabel}</Text>
               </Header>
-              {positions.map((position, i) => (
+              {_.orderBy(positions, 'order', 'asc').map((position, i) => (
                 <Header key={i}>
                   <Text>{position.name}</Text>
                 </Header>
