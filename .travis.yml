@@ -35,7 +35,7 @@ script:
   else
     cd client && yarn build && cd ..;
   fi
-- docker-compose build efc-prod
+- docker-compose -f docker/docker-compose.yml build efc-prod
 before_deploy:
 - mkdir -p ~/.ssh/key
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
