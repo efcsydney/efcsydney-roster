@@ -38,11 +38,27 @@ class EventMapper {
   }
 
   static mapServiceInfoToEvents(serviceInfos, events) {
-    return events.map(event => {
-      const eventServiceInfo = serviceInfos.find(
-        serviceInfo => serviceInfo.calendarDate.date === event.date
+    const serviceInfoDates = serviceInfos.map(
+      serviceInfo => serviceInfo.calendarDate.date
+    );
+    const eventDates = events.map(event => event.date);
+    const dates = [...serviceInfoDates, ...eventDates];
+    const distinctDates = dates.filter((date, pos, allDates) => {
+      return allDates.indexOf(date) == pos;
+    });
+
+    return distinctDates.map(date => {
+      const event = events.find(event => event.date == date);
+      const serviceInfo = serviceInfos.find(
+        serviceInfo => serviceInfo.calendarDate.date === date
       );
-      event.serviceInfo = eventServiceInfo;
+      if (!event) {
+        return {
+          date,
+          serviceInfo
+        };
+      }
+      event.serviceInfo = serviceInfo;
       return event;
     });
   }
