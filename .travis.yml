@@ -1,3 +1,4 @@
+sudo: required
 language: node_js
 node_js:
 - 8.9
@@ -11,8 +12,16 @@ addons:
   ssh_known_hosts:
   - 54.206.106.116
   - 13.210.76.160
+  apt:
+    packages:
+      - docker-ce
 services:
 - mysql
+- docker
+env:
+  global:
+    - REGISTRY_USER=kleinchang
+    - secure: Mu010l75I6ucSpaSbpE2cYZLanDAZR5WxdI/2TPLuquFmF8kl/ojBYw8xZIvJmdWFhb6mHTgzl7PpY4zd0mbmhpwzAbLmn+ZCBm1d5JLfN9KMeMk9HKR7r+qYiauFBEtiuwwbD5aanH1l03ZgaPVYuFWP0O0fzfNoN+356G2cgHtrKBKFEMEvyvDjsVr03tAQotnxHsrnf1afrzKIS0kFWSlP2GleZoGyT5BLbn8Y1VHgNPK7NTv3oToyyt60Ykfj4z4vPyHVtClNuVrAMBdyOd+NEsUs0FSEKHN/W+9zdYJBDO3JFCgzszMuniFwDHBpBYq25i9r3OhizjdGsNCzVe9Z7VNBzQACBu3Ni5IMc4+hGpZ2l+S31l+6DNaNv8AMDIJnRuUKhGtd4pF0j+4MFVABft7EUJgZI0FV84DEZVDBAMssDnPpADcxxGGLXVJtes9gPU4dU+nRrLd49NcgRGvK3hRhCRkmxKHGJgOFpt2ObCkeD6UfXXejA0fHCByNWRT63XKFHLESnVMRDiWNL08aUIW99MkLl43L0OzHYkhF9p0XwS7GD2/EwAyFwJVa+ctiPUN6JdROGBHhABMz+kZXpF7Cn134ei/lXkNq09eo3s4Pj63zNXvfV70ux8opeITN8XIdD+7vqsgyia1k5HJW5VupApyNGkx4jxPTtY=
 before_script:
 - yarn db-create
 - yarn db-migrate
@@ -26,21 +35,28 @@ script:
   else
     cd client && yarn build && cd ..;
   fi
+- docker-compose build efc-prod
 before_deploy:
 - mkdir -p ~/.ssh/key
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
   -in deploy_rsa.enc -out ~/.ssh/key/efcsydney.pem -d
 - eval "$(ssh-agent -s)"
 - chmod 400 ~/.ssh/key/efcsydney.pem
+- docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
 deploy:
 - provider: script
   skip_cleanup: true
-  script: sh -x deploy.sh qa
+  script: docker push kleinchang/efcsydney-roster
+  on:
+    branch: build_docker_image_via_travis#260
+- provider: script
+  skip_cleanup: true
+  script: sh -x deploy.sh qa | docker push kleinchang/efcsydney-roster:qa
   on:
     branch: qa
 - provider: script
   skip_cleanup: true
-  script: sh -x deploy.sh prod
+  script: sh -x deploy.sh prod | docker push kleinchang/efcsydney-roster
   on:
     branch: master
 notifications:
