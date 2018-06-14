@@ -55,9 +55,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       this.setState(state);
     };
     handleSkipReasonChange = e => {
-      const value = e.target.value;
-      const skipReason = value ? value : this.getTrans('skipReason');
-
+      const skipReason = e.target.value;
       let state = dotProp.set(this.state, 'serviceInfo.skipReason', skipReason);
 
       this.setState(state);
@@ -78,31 +76,25 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       const { serviceInfo } = this.state;
       const { onSave } = this.props;
 
-      if (serviceInfo.skipService) {
-        const skipReason = serviceInfo.skipReason.trim();
-        serviceInfo.skipReason = !_.isEmpty(skipReason)
-          ? skipReason
-          : this.getTrans('skipReason');
-      }
-
       onSave(serviceInfo);
     };
     constructor(props) {
       super(props);
 
+      let serviceInfo = _.get(props, 'serviceInfo', {});
+      const skipReason = !_.isEmpty(serviceInfo.skipReason)
+        ? serviceInfo.skipReason
+        : this.getTrans('skipReason');
+      serviceInfo.skipReason = skipReason;
+
       this.state = {
-        serviceInfo: _.get(props, 'serviceInfo', {})
+        serviceInfo: serviceInfo
       };
     }
     render() {
       const { day, isSaving, toggleEditDay, ...otherProps } = this.props;
-      const { serviceInfo: { footnote, skipService } } = this.state;
+      const { serviceInfo: { footnote, skipService, skipReason } } = this.state;
       const formattedDate = moment(day).format(this.getTrans('dateFormat'));
-
-      let skipReason = _.get(this.state.serviceInfo, 'skipReason', '');
-      skipReason = !_.isEmpty(skipReason)
-        ? skipReason
-        : this.getTrans('skipReason');
 
       return (
         <Modal {...otherProps} title={this.getTrans('title')}>
@@ -147,7 +139,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
             <Row align="center">
               <StateButton
                 kind={isSaving ? 'loading' : 'default'}
-                type="submit">
+                type="submit"
+                disabled={skipService && _.isEmpty(skipReason)}>
                 {this.getTrans('saveLabel')}
               </StateButton>
               <CancelLink onClick={() => toggleEditDay(false)}>
@@ -194,9 +187,9 @@ Label.displayName = 'Label';
 
 const StyleInput = styled(Input)`
   margin-right: 15px;
-  width: 160px;
+  width: 125px;
   ${media.mobile`
-    width: 140px;
+    width: 60px;
   `};
 `;
 StyleInput.displayName = 'StyleInput';
