@@ -35,7 +35,9 @@ describe('Server', function() {
                 id: 3,
                 footnote: 'english footnote 2',
                 skipService: false,
-                skipReason: ''
+                skipReason: '',
+                category: 'english',
+                date: '2017-10-15'
               },
               members: [
                 { role: 'Speaker', name: 'Rev. Kian Holik' },
@@ -54,7 +56,9 @@ describe('Server', function() {
                 id: 1,
                 footnote: 'english footnote 1',
                 skipService: false,
-                skipReason: ''
+                skipReason: '',
+                category: 'english',
+                date: '2017-10-08'
               },
               members: [
                 { role: 'Speaker', name: 'May Chien' },
@@ -86,7 +90,9 @@ describe('Server', function() {
                 id: 4,
                 footnote: 'chinese footnote 2',
                 skipService: false,
-                skipReason: ''
+                skipReason: '',
+                category: 'chinese',
+                date: '2017-10-15'
               },
               members: [
                 { role: '證道', name: 'Christine Yang' },
@@ -109,7 +115,9 @@ describe('Server', function() {
                 id: 2,
                 footnote: 'chinese footnote 1',
                 skipService: false,
-                skipReason: ''
+                skipReason: '',
+                category: 'chinese',
+                date: '2017-10-08'
               },
               members: [
                 { role: '證道', name: 'May Chien' },
