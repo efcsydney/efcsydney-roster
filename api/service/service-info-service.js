@@ -3,14 +3,19 @@ const ServiceCalendarDateRepository = require('../data/service-calendar-date-rep
 
 class ServiceInfoService {
   static async saveServiceInfo(serviceInfo) {
+    let newServiceInfo = null;
     if (!serviceInfo.id) {
-      return ServiceCalendarDateRepository.createServiceInfo(serviceInfo);
+      newServiceInfo = await ServiceCalendarDateRepository.createServiceInfo(
+        serviceInfo
+      );
     } else {
       await ServiceCalendarDateRepository.updateServiceInfo(serviceInfo);
-      return await ServiceCalendarDateRepository.getServiceInfoById(
-        serviceInfo.id
-      );
+      newServiceInfo = serviceInfo;
     }
+
+    return await ServiceCalendarDateRepository.getServiceInfoById(
+      newServiceInfo.id
+    );
   }
   static async getServiceInfoById(serviceInfoId) {
     return ServiceCalendarDateRepository.getServiceInfoById(serviceInfoId);

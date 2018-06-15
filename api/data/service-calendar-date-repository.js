@@ -72,7 +72,19 @@ class ServiceCalendarDateRepository {
   }
 
   static getServiceInfoById(serviceInfoId) {
-    return ServiceCalendarDate.findById(serviceInfoId);
+    return ServiceCalendarDate.findOne({
+      where: { id: serviceInfoId },
+      include: [
+        {
+          model: CalendarDate,
+          as: 'calendarDate'
+        },
+        {
+          model: Service,
+          as: 'service'
+        }
+      ]
+    });
   }
 }
 
