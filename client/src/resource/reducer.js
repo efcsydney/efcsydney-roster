@@ -5,39 +5,32 @@ import { combineReducers } from 'redux';
 import { mapping as apiMapping } from 'apis';
 import { getHashKey } from './utils';
 
+export const defaultSingleResourceState = {
+  retrieve: {
+    hasInitialized: false,
+    isLoading: false
+  },
+  create: {
+    completedIds: {},
+    isLoading: false
+  },
+  modify: {
+    completedIds: {},
+    isLoading: false,
+    loadingIds: {}
+  },
+  delete: {
+    completedIds: {},
+    isLoading: false,
+    loadingIds: {}
+  }
+};
+
 const defaultAsyncState = _.fromPairs(
-  Object.keys(apiMapping).map(key => [
-    key,
-    {
-      retrieve: {
-        hasInitialized: false,
-        isLoading: false,
-        loadingIds: {},
-        completedIds: {}
-      },
-      create: {
-        hasInitialized: false,
-        isLoading: false,
-        loadingIds: {},
-        completedIds: {}
-      },
-      modify: {
-        hasInitialized: false,
-        isLoading: false,
-        loadingIds: {},
-        completedIds: {}
-      },
-      delete: {
-        hasInitialized: false,
-        isLoading: false,
-        loadingIds: {},
-        completedIds: {}
-      }
-    }
-  ])
+  Object.keys(apiMapping).map(key => [key], defaultSingleResourceState)
 );
 
-const asyncStatusReducer = (
+export const asyncStatusReducer = (
   state = defaultAsyncState,
   { resource, payload }
 ) => {
@@ -45,7 +38,6 @@ const asyncStatusReducer = (
   if (!apiMapping[resource.name]) return state;
 
   const idAttribute = apiMapping[resource.name].idAttribute;
-
   switch (resource.stage) {
     case 'start': {
       const id = _.get(payload, [idAttribute]);
@@ -111,7 +103,10 @@ const defaultAsyncData = _.fromPairs(
   _.map(Object.keys(apiMapping), resource => [resource, {}])
 );
 
-const asyncDataReducer = (state = defaultAsyncData, { resource, payload }) => {
+export const asyncDataReducer = (
+  state = defaultAsyncData,
+  { resource, payload }
+) => {
   if (!resource) return state;
   if (!apiMapping[resource.name]) return state;
   if (resource.stage !== 'complete') return state;
