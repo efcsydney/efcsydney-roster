@@ -7,7 +7,7 @@ class DtoMapper {
   static mapGroupEventsToDto(events) {
     return events.map(e => {
       return {
-        id: e.serviceInfo.id,
+        id: !e.serviceInfo ? 0 : e.serviceInfo.id,
         date: e.date,
         serviceInfo: DtoMapper.mapServiceInfoToDto(e.serviceInfo),
         members: DtoMapper.mapEventPositionsToDto(e.positions)
@@ -16,6 +16,9 @@ class DtoMapper {
   }
 
   static mapEventPositionsToDto(events) {
+    if (!events) {
+      return [];
+    }
     return events.map(DtoMapper.mapEventPositionToDto);
   }
 

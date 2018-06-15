@@ -19,6 +19,7 @@ const mapStateToProps = state => {
   const selectedService = _.find(services, { name: category });
 
   return {
+    category,
     day: _.get(selectedData, 'day', null),
     serviceInfo: _.get(selectedData, 'serviceInfo', {}),
     footnoteLabel: selectedService.footnoteLabel || '',
@@ -80,7 +81,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       e.preventDefault();
 
       const { serviceInfo } = this.state;
-      const { day, onSave } = this.props;
+      const { category, day, onSave } = this.props;
 
       if (serviceInfo.skipService) {
         serviceInfo.skipReason = !_.isEmpty(serviceInfo.skipReason.trim())
@@ -88,9 +89,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
           : this.getTrans('skipReason');
       }
 
-      serviceInfo.date = day;
-
-      onSave(serviceInfo);
+      onSave({
+        category,
+        date: day,
+        ...serviceInfo
+      });
     };
     constructor(props) {
       super(props);
