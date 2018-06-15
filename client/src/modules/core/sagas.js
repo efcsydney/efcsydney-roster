@@ -7,7 +7,6 @@ import moment from 'moment';
 import 'moment/locale/en-au';
 import 'moment/locale/zh-tw';
 import i18n from 'i18n';
-
 const { retrieveServicesComplete } = createApiActions('services');
 
 function* setLocale(locale) {
@@ -17,21 +16,21 @@ function* setLocale(locale) {
 }
 
 export default function* coreSagas() {
-  yield takeEvery(retrieveServicesComplete.toString(), function*(action) {
-    const { payload: { data } } = action;
+  yield setLocale('en-AU');
+  yield takeEvery(retrieveServicesComplete.toString(), function*({ payload }) {
+    const services = payload.data;
     const state = yield select();
     const category = _.get(state, 'core.meta.category');
-    const selectedService = _.find(data, { name: category });
-
+    const selectedService = _.find(services, { name: category });
     if (selectedService) {
-      const { locale } = selectedService;
+      const locale = selectedService.locale;
       yield setLocale(locale);
     }
   });
 
   yield takeEvery(switchCategory.toString(), function*({ payload }) {
     const state = yield select();
-    const services = _.get(state, 'resources.data.services', {});
+    const services = _.get(state, 'resource.data.services', {});
     const selectedService = _.find(services, { name: payload });
 
     if (selectedService) {
