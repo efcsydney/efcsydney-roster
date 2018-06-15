@@ -35,6 +35,9 @@ class DtoMapper {
   }
 
   static mapServiceInfoToDto(serviceInfo) {
+    if (!serviceInfo) {
+      return {};
+    }
     return {
       id: serviceInfo.id,
       footnote: serviceInfo.footnote,
