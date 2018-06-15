@@ -62,18 +62,18 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       this.setState(state);
     };
     handleSkipReasonChange = e => {
-      const value = _.trim(e.target.value);
-      const skipReason = value ? value : this.getTrans('skipReason');
-
-      let state = _.clone(this.state);
-      state = dotProp.set(state, 'serviceInfo.skipReason', skipReason);
+      const skipReason = e.target.value;
+      let state = dotProp.set(this.state, 'serviceInfo.skipReason', skipReason);
 
       this.setState(state);
     };
-    handleskipServicenChange = e => {
+    handleSkipServiceChange = e => {
       const skipService = !!e.target.checked;
-      let state = _.clone(this.state);
-      state = dotProp.set(state, 'serviceInfo.skipService', skipService);
+      let state = dotProp.set(
+        this.state,
+        'serviceInfo.skipService',
+        skipService
+      );
 
       this.setState(state);
     };
@@ -98,8 +98,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     constructor(props) {
       super(props);
 
+      let serviceInfo = _.get(props, 'serviceInfo', {});
+      const skipReason = !_.isEmpty(serviceInfo.skipReason)
+        ? serviceInfo.skipReason
+        : this.getTrans('skipReason');
+      serviceInfo.skipReason = skipReason;
+
       this.state = {
-        serviceInfo: _.get(props, 'serviceInfo', {})
+        serviceInfo: serviceInfo
       };
     }
     render() {
@@ -110,7 +116,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         toggleEditDay,
         ...otherProps
       } = this.props;
-      const { serviceInfo: { footnote, skipReason, skipService } } = this.state;
+      const { serviceInfo: { footnote, skipService, skipReason } } = this.state;
       const formattedDate = moment(day).format(this.getTrans('dateFormat'));
 
       return (
@@ -134,24 +140,30 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               </span>
             </Row>
             <Row>
-              <StyleInput
-                data-hj-whitelist
-                type="text"
-                value={skipReason}
-                placeholder={this.getTrans('skipReason')}
-                onChange={this.handleSkipReasonChange}
-              />
+              {skipService ? (
+                <StyleInput
+                  data-hj-whitelist
+                  type="text"
+                  value={skipReason}
+                  placeholder={this.getTrans('skipReason')}
+                  onChange={this.handleSkipReasonChange}
+                />
+              ) : (
+                <Label>{skipReason}</Label>
+              )}
+
               <span>
                 <SwitchButton
                   checked={skipService}
-                  onChange={this.handleskipServicenChange}
+                  onChange={this.handleSkipServiceChange}
                 />
               </span>
             </Row>
             <Row align="center">
               <StateButton
                 kind={isSaving ? 'loading' : 'default'}
-                type="submit">
+                type="submit"
+                disabled={skipService && _.isEmpty(skipReason)}>
                 {this.getTrans('saveLabel')}
               </StateButton>
               <CancelLink onClick={() => toggleEditDay(false)}>
@@ -198,9 +210,9 @@ Label.displayName = 'Label';
 
 const StyleInput = styled(Input)`
   margin-right: 15px;
-  width: 200px;
+  width: 125px;
   ${media.mobile`
-    width: 160px;
+    width: 60px;
   `};
 `;
 StyleInput.displayName = 'StyleInput';

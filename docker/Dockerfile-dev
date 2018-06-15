@@ -1,8 +1,10 @@
 FROM mhart/alpine-node:8.10.0
 
 RUN apk update && apk add --no-cache bash python
-RUN npm install -g pm2@latest
-#ADD Entrypoint.sh /opt/
+
+# clean cache to fix "npm ERR! write after end" issue
+RUN npm cache clean -f && npm install -g pm2@latest
+
 WORKDIR /opt/
 
 EXPOSE 3000 3001 3002
