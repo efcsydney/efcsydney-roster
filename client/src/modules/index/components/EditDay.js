@@ -13,9 +13,11 @@ import { media } from 'styled';
 import i18n from 'i18n';
 
 const mapStateToProps = state => {
+  const { meta: { category } } = state.core;
   const { meta: { isSaving, selectedData } } = state.index;
 
   return {
+    category,
     day: _.get(selectedData, 'day', null),
     serviceInfo: _.get(selectedData, 'serviceInfo', {}),
     isSaving
@@ -67,11 +69,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       e.preventDefault();
 
       const { serviceInfo } = this.state;
-      const { day, onSave } = this.props;
+      const { category, day, onSave } = this.props;
 
-      serviceInfo.date = day;
-
-      onSave(serviceInfo);
+      onSave({
+        category,
+        date: day,
+        ...serviceInfo
+      });
     };
     constructor(props) {
       super(props);
