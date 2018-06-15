@@ -40,7 +40,7 @@ class DtoMapper {
 
   static mapServiceInfoToDto(serviceInfo) {
     if (!serviceInfo) {
-      return [];
+      return {};
     }
     return {
       id: serviceInfo.id,
