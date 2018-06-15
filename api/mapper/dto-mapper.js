@@ -17,7 +17,7 @@ class DtoMapper {
 
   static mapEventPositionsToDto(events) {
     if (!events) {
-      return {};
+      return [];
     }
     return events.map(DtoMapper.mapEventPositionToDto);
   }
@@ -40,7 +40,7 @@ class DtoMapper {
 
   static mapServiceInfoToDto(serviceInfo) {
     if (!serviceInfo) {
-      return {};
+      return [];
     }
     return {
       id: serviceInfo.id,
