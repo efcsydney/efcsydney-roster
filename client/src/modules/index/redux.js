@@ -51,6 +51,7 @@ export const requestModifyServiceInfo = createAction(
   `${PREFIX}/REQUEST_MODIFY_SERVICE_INFO`,
   payload => {
     let { id, ...body } = payload;
+
     body = dotProp.set(body, 'footnote', body.footnote.trim());
     body = dotProp.set(body, 'skipReason', body.skipReason.trim());
     body = dotProp.set(body, 'skipService', body.skipService);
@@ -131,10 +132,21 @@ export const dataReducer = handleActions(
       );
     },
     [receiveModifyServiceInfo]: (state, { payload }) => {
+      const { serviceInfo, serviceInfo: { date } } = payload;
+
       const dayIndex = _.findIndex(state, day => {
         const id = _.get(day, 'serviceInfo.id', null);
         return id === payload.id;
       });
+
+      if (dayIndex === -1) {
+        return dotProp.set(state, state.length, {
+          date,
+          serviceInfo,
+          members: []
+        });
+      }
+
       return dotProp.set(state, `${dayIndex}.serviceInfo`, payload.serviceInfo);
     },
     [setEvent]: (state, { payload }) => {
