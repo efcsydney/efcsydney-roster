@@ -46,7 +46,9 @@ class DtoMapper {
       id: serviceInfo.id,
       footnote: serviceInfo.footnote,
       skipService: serviceInfo.skipService,
-      skipReason: serviceInfo.skipReason
+      skipReason: serviceInfo.skipReason,
+      date: getDateString(serviceInfo.calendarDate.date),
+      category: serviceInfo.service.name
     };
   }
 
