@@ -63,10 +63,14 @@ export default class QuarterView extends Component {
     };
   }
   componentWillMount() {
-    window.addEventListener('resize', _.debounce(this.handleWindowResize, 200));
+    this.debounceResize = _.debounce(this.handleWindowResize, 200);
+    window.addEventListener('resize', this.debounceResize);
   }
   componentDidMount() {
     this.handleWindowResize();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.debounceResize);
   }
   render() {
     const { date, data, frequency, members } = this.props;
