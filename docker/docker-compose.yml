@@ -14,25 +14,26 @@ services:
   efc-dev:
     image: efc-roster:develop
     build:
-      context: .
-      dockerfile: Dockerfile-dev
+      context: ../
+      dockerfile: docker/Dockerfile-dev
     links:
         - db:db
     environment:
         - NODE_ENV=docker
+        - REACT_APP_ENV=development
     ports:
       - "80:80"
       - "3000:3000"
       - "3001:3001"
       - "3002:3002"
     volumes:
-      - $PWD:/opt/efcsydney-roster/
+      - $PWD/../:/opt/efcsydney-roster/
 
   efc-prod:
     image: efc-roster:latest
     build:
-      context: .
-      dockerfile: Dockerfile-prod
+      context: ../
+      dockerfile: docker/Dockerfile-prod
     links:
         - db:db
     environment:
@@ -44,5 +45,5 @@ services:
     entrypoint:
       - /bin/bash
       - -x
-      - /opt/efcsydney-roster/Entrypoint.sh
+      - /opt/efcsydney-roster/docker/Entrypoint.sh
       - prod-local

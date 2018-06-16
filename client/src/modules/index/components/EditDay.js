@@ -15,11 +15,14 @@ import i18n from 'i18n';
 const mapStateToProps = state => {
   const { meta: { category } } = state.core;
   const { meta: { isSaving, selectedData } } = state.index;
+  const services = _.get(state, 'resource.data.services', {});
+  const selectedService = _.find(services, { name: category });
 
   return {
     category,
     day: _.get(selectedData, 'day', null),
     serviceInfo: _.get(selectedData, 'serviceInfo', {}),
+    footnoteLabel: selectedService.footnoteLabel || '',
     isSaving
   };
 };
@@ -37,12 +40,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     displayName = 'EditDay';
     static propTypes = {
       day: PropTypes.string,
+      footnoteLabel: PropTypes.string,
       title: PropTypes.string,
       isSaving: PropTypes.bool,
       serviceInfo: PropTypes.object,
       onSave: PropTypes.func
     };
     static defaultProps = {
+      footnoteLabel: '',
       isSaving: false,
       serviceInfo: {},
       onSave: () => {}
@@ -85,7 +90,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       };
     }
     render() {
-      const { day, isSaving, toggleEditDay, ...otherProps } = this.props;
+      const {
+        day,
+        footnoteLabel,
+        isSaving,
+        toggleEditDay,
+        ...otherProps
+      } = this.props;
       const { serviceInfo: { footnote, skipReason } } = this.state;
       const formattedDate = moment(day).format(this.getTrans('dateFormat'));
 
@@ -97,7 +108,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               <span>{formattedDate}</span>
             </Row>
             <Row>
-              <Label>{this.getTrans('footnoteTitle')}</Label>
+              <Label>{footnoteLabel}</Label>
               <span>
                 <Input
                   data-hj-whitelist
