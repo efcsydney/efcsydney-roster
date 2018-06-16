@@ -1,12 +1,13 @@
 import _ from 'lodash';
 import { takeEvery, put, select } from 'redux-saga/effects';
 import { setMeta, switchCategory } from './redux';
-import { createApiActions } from 'resource';
 import Cookies from 'js-cookie';
 import moment from 'moment';
 import 'moment/locale/en-au';
 import 'moment/locale/zh-tw';
 import i18n from 'i18n';
+import { createApiActions } from 'resource';
+
 const { retrieveServicesComplete } = createApiActions('services');
 
 function* setLocale(locale) {
