@@ -73,6 +73,7 @@ export default class QuarterView extends Component {
     const { date, data, frequency, members } = this.props;
     const { isMobile, calendarHeight } = this.state;
     const mapping = {
+      Everyday: 0,
       Monday: 1,
       Tuesday: 2,
       Wednesday: 3,
