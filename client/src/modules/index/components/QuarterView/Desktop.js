@@ -95,6 +95,7 @@ export default connect(mapStateToProps)(
             {isSelected && (
               <InlineSelect
                 id={id}
+                serviceInfo={serviceInfo}
                 date={selectedDateString}
                 role={selectedRole}
                 names={this.props.members}

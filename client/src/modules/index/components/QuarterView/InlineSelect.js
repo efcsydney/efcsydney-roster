@@ -37,6 +37,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       isSaving: PropTypes.bool,
       names: PropTypes.array,
       role: PropTypes.string,
+      serviceInfo: PropTypes.object,
       value: PropTypes.string,
       onClose: PropTypes.func,
       onSave: PropTypes.func
@@ -46,6 +47,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       isSaving: false,
       names: [],
       role: null,
+      serviceInfo: {},
       value: null,
       onClose: () => {},
       onSave: () => {}
@@ -54,7 +56,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       direction: 'down'
     };
     handleChange = (option = {}) => {
-      const { id, date, category, role, value, onClose, onSave } = this.props;
+      const {
+        id,
+        date,
+        category,
+        role,
+        serviceInfo,
+        value,
+        onClose,
+        onSave
+      } = this.props;
       const newValue =
         _.isObject(option) && _.isString(option.value)
           ? option.value.trim()
@@ -68,13 +79,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         date,
         role,
         name: newValue,
-        serviceInfo: {
+        serviceInfo: _.defaults(serviceInfo, {
           category,
           date,
           footnote: '',
           skipService: false,
           skipReason: ''
-        }
+        })
       };
       if (id) {
         form.serviceInfo.id = id;
