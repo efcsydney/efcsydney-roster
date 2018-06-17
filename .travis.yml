@@ -35,7 +35,7 @@ script:
   else
     cd client && yarn build && cd ..;
   fi
-- docker-compose -f docker/docker-compose.yml build efc-prod
+# - docker-compose -f docker/docker-compose.yml build efc-prod
 before_deploy:
 - mkdir -p ~/.ssh/key
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
@@ -46,12 +46,12 @@ before_deploy:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: sh -x deploy.sh qa | docker push kleinchang/efcsydney-roster:qa
+  script: sh -x deploy.sh qa | docker-compose -f docker/docker-compose.yml build efc-qa && docker push kleinchang/efcsydney-roster:qa
   on:
     branch: qa
 - provider: script
   skip_cleanup: true
-  script: sh -x deploy.sh prod | docker push kleinchang/efcsydney-roster
+  script: sh -x deploy.sh prod | docker-compose -f docker/docker-compose.yml build efc-prod && docker push kleinchang/efcsydney-roster
   on:
     branch: master
 notifications:
