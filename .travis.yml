@@ -46,7 +46,7 @@ before_deploy:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: sh -x deploy.sh qa | docker-compose -f docker/docker-compose.yml build efc-prod && docker push kleinchang/efcsydney-roster:qa
+  script: sh -x deploy.sh qa | docker-compose -f docker/docker-compose.yml build efc-qa && docker push kleinchang/efcsydney-roster:qa
   on:
     branch: qa
 - provider: script
