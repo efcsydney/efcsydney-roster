@@ -43,8 +43,13 @@ export default class App extends Component {
       <div>
         {this.renderTagManager()}
         <Switch>
-          <Route exact path="/index" component={Index} />
-          <Route exact path="/index/:category" component={Index} />
+          <Route exact path="/" component={Index} />
+          <Route exact path="/chinese" component={Index} />
+          <Route exact path="/english" component={Index} />
+          <Route exact path="/preschool-junior" component={Index} />
+          <Route exact path="/preschool-middle" component={Index} />
+          <Route exact path="/preschool-senior" component={Index} />
+          <Route exact path="/prayer" component={Index} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/admin/services" component={AdminServices} />
           <Route exact path="/admin/services/new" component={AdminServices} />
@@ -54,7 +59,7 @@ export default class App extends Component {
             component={AdminServices}
           />
           <Redirect path="/admin" to="/admin/services" />
-          <Redirect to="/index" />
+          <Redirect to="/" />
         </Switch>
       </div>
     );
