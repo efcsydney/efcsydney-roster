@@ -30,7 +30,7 @@ services:
       - $PWD/../:/opt/efcsydney-roster/
 
   efc-prod:
-    image: efc-roster:latest
+    image: kleinchang/efcsydney-roster
     build:
       context: ../
       dockerfile: docker/Dockerfile-prod
