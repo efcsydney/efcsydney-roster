@@ -15,13 +15,14 @@ import { isHighlighted } from './utils';
 const mapStateToProps = state => {
   const { meta: { isEditingRole } } = state.index;
   const services = _.get(state, 'resource.data.services', {});
-  const selectedServiceName = _.get(state.core, 'meta.category', 'english');
+  const selectedServiceName = _.get(state, 'core.meta.category', 'english');
+  const selectedService = _.find(services, { name: selectedServiceName }) || {};
 
   return {
     events: _.get(state.index, 'data', []),
     isEditingRole,
     selectedData: _.get(state.index, 'meta.selectedData', null),
-    selectedService: _.find(services, { name: selectedServiceName })
+    selectedService
   };
 };
 export default connect(mapStateToProps)(
@@ -29,6 +30,7 @@ export default connect(mapStateToProps)(
     displayName = 'Mobile';
     static propTypes = {
       events: PropTypes.array,
+      frequency: PropTypes.string,
       members: PropTypes.array,
       onDayClick: PropTypes.func,
       onRoleClick: PropTypes.func,
@@ -99,24 +101,26 @@ export default connect(mapStateToProps)(
         { google: this.getTrans('addCalByGoogle') }
       ];
       const {
+        days,
         events,
         selectedService: { frequency },
         isEditingRole,
         onDayClick
       } = this.props;
-      const sortedEvents = _.sortBy(events, 'date');
-
       return (
         <Grid>
-          {sortedEvents.map(({ date, members, serviceInfo }) => {
+          {days.map(day => {
+            const matchedEvent = _.find(events, { date: day });
+            const members = _.get(matchedEvent, 'members', []);
+            const serviceInfo = _.get(matchedEvent, 'serviceInfo', {});
             const roles = members.map(member => member.role);
-            const icalEvent = getCalData(date, roles, members);
-            const formattedDate = date;
-            const highlighted = isHighlighted(date, frequency);
+            const icalEvent = getCalData(day, roles, members);
+            const formattedDate = day;
+            const highlighted = isHighlighted(day, frequency);
 
             return (
               <Day
-                key={date}
+                key={day}
                 highlighted={highlighted}
                 id={highlighted ? 'highlighted' : undefined}>
                 <Header>
@@ -124,7 +128,7 @@ export default connect(mapStateToProps)(
                     onClick={() => {
                       onDayClick(formattedDate, serviceInfo);
                     }}>
-                    {moment(date).format(this.getTrans('dateFormat'))}
+                    {moment(day).format(this.getTrans('dateFormat'))}
                   </Label>
                   <SettingLink
                     onClick={() => {
@@ -149,7 +153,7 @@ export default connect(mapStateToProps)(
                     />
                   </Action>
                 </Header>
-                {this.renderRolesList(date, roles, members, serviceInfo)}
+                {this.renderRolesList(day, roles, members, serviceInfo)}
               </Day>
             );
           })}

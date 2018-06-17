@@ -35,8 +35,7 @@ async function saveEvent(req, res, next) {
   try {
     log.info('saveEvent', req.body);
     const event = DtoMapper.convertDtoToEventModel(req.body);
-    await EventService.saveEvent(event);
-    const updateEvent = await EventService.getEventByDatePosition(event);
+    const updateEvent = await EventService.saveEvent(event);
     const data = DtoMapper.mapEventToDto(updateEvent);
 
     const response = {

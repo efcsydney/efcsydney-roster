@@ -1,8 +1,11 @@
 const chai = require('chai');
+const chaiExclude = require('chai-exclude');
 const expect = chai.expect;
 const request = require('supertest');
 const app = require('../../app').app;
 const createSeed = require('../helpers/test-helper').createSeed;
+
+chai.use(chaiExclude);
 
 describe('Server', function() {
   this.timeout(5000);
@@ -25,14 +28,16 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
-          expect(res.body.data).to.eql([
+          const expected = [
             {
               date: '2017-10-15',
               serviceInfo: {
                 id: 3,
                 footnote: 'english footnote 2',
                 skipService: false,
-                skipReason: ''
+                skipReason: '',
+                category: 'english',
+                date: '2017-10-15'
               },
               members: [
                 { role: 'Speaker', name: 'Rev. Kian Holik' },
@@ -51,7 +56,9 @@ describe('Server', function() {
                 id: 1,
                 footnote: 'english footnote 1',
                 skipService: false,
-                skipReason: ''
+                skipReason: '',
+                category: 'english',
+                date: '2017-10-08'
               },
               members: [
                 { role: 'Speaker', name: 'May Chien' },
@@ -64,7 +71,9 @@ describe('Server', function() {
                 { role: 'Refreshments', name: 'Christine Yang' }
               ]
             }
-          ]);
+          ];
+
+          chai.assert.deepEqualExcluding(res.body.data, expected, ['id']);
         });
     });
 
@@ -74,14 +83,16 @@ describe('Server', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(function(res) {
-          expect(res.body.data).to.eql([
+          const expected = [
             {
               date: '2017-10-15',
               serviceInfo: {
                 id: 4,
                 footnote: 'chinese footnote 2',
                 skipService: false,
-                skipReason: ''
+                skipReason: '',
+                category: 'chinese',
+                date: '2017-10-15'
               },
               members: [
                 { role: '證道', name: 'Christine Yang' },
@@ -104,7 +115,9 @@ describe('Server', function() {
                 id: 2,
                 footnote: 'chinese footnote 1',
                 skipService: false,
-                skipReason: ''
+                skipReason: '',
+                category: 'chinese',
+                date: '2017-10-08'
               },
               members: [
                 { role: '證道', name: 'May Chien' },
@@ -121,7 +134,9 @@ describe('Server', function() {
                 { role: '愛餐', name: 'Yvonne Lu' }
               ]
             }
-          ]);
+          ];
+
+          chai.assert.deepEqualExcluding(res.body.data, expected, ['id']);
         });
     });
 
@@ -140,7 +155,15 @@ describe('Server', function() {
       const event = {
         date: '2017-10-21T13:00:00.000Z',
         role: 'Usher/Offering',
-        name: 'Kai Chang'
+        name: 'Kai Chang',
+        serviceInfo: {
+          category: 'english',
+          date: '2017-10-21T13:00:00.000Z',
+          footnote: '',
+          skipService: false,
+          skipReason: '',
+          id: 5
+        }
       };
       return request(app)
         .put('/api/events')
@@ -156,7 +179,15 @@ describe('Server', function() {
       const event = {
         date: '2017-10-22',
         role: 'Usher/Offering',
-        name: 'Kai Chang'
+        name: 'Kai Chang',
+        serviceInfo: {
+          category: 'english',
+          date: '2017-10-22',
+          footnote: '',
+          skipService: false,
+          skipReason: '',
+          id: 5
+        }
       };
       return request(app)
         .put('/api/events')
@@ -170,7 +201,7 @@ describe('Server', function() {
         });
     });
   });
-  describe('update serviceInfo', function() {
+  describe('update/create serviceInfo', function() {
     it('updates a serviceInfo', function() {
       const footnote = {
         date: '2017-10-08',
@@ -179,15 +210,36 @@ describe('Server', function() {
         skipService: true,
         skipReason: 'Combined Service'
       };
-      const footnoteId = 1;
+      const serviceInfoId = 1;
       return request(app)
-        .put(`/api/serviceInfo/${footnoteId}`)
+        .put(`/api/serviceInfo/${serviceInfoId}`)
         .send(footnote)
         .expect('Content-Type', /json/)
         .expect(201)
         .then(function(res) {
           expect(res.body.result).to.equal('OK');
           expect(res.body.data.id).to.equal(1);
+          expect(res.body.data.skipService).to.equal(footnote.skipService);
+          expect(res.body.data.footnote).to.equal(footnote.footnote);
+        });
+    });
+    it('creates a serviceInfo', function() {
+      const footnote = {
+        date: '2016-01-01',
+        category: 'english',
+        footnote: 'Meeting (Election)',
+        skipService: true,
+        skipReason: 'Combined Service'
+      };
+
+      return request(app)
+        .post(`/api/serviceInfo`)
+        .send(footnote)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .then(function(res) {
+          expect(res.body.result).to.equal('OK');
+          expect(res.body.data.id).to.greaterThan(0);
           expect(res.body.data.skipService).to.equal(footnote.skipService);
           expect(res.body.data.footnote).to.equal(footnote.footnote);
         });

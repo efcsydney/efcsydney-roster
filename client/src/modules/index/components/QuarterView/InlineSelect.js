@@ -11,8 +11,10 @@ import { getOptions } from 'modules/index/utils';
 import 'react-select/dist/react-select.css';
 
 const mapStateToProps = state => {
+  const { meta: { category } } = state.core;
   const { meta: { isSaving } } = state.index;
   return {
+    category,
     isSaving
   };
 };
@@ -30,10 +32,12 @@ const mapDispatchToProps = dispatch =>
 export default connect(mapStateToProps, mapDispatchToProps)(
   class InlineSelect extends Component {
     static propTypes = {
+      id: PropTypes.number,
       date: PropTypes.string,
       isSaving: PropTypes.bool,
       names: PropTypes.array,
       role: PropTypes.string,
+      serviceInfo: PropTypes.object,
       value: PropTypes.string,
       onClose: PropTypes.func,
       onSave: PropTypes.func
@@ -43,6 +47,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       isSaving: false,
       names: [],
       role: null,
+      serviceInfo: {},
       value: null,
       onClose: () => {},
       onSave: () => {}
@@ -51,7 +56,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       direction: 'down'
     };
     handleChange = (option = {}) => {
-      const { date, role, value, onClose, onSave } = this.props;
+      const {
+        id,
+        date,
+        category,
+        role,
+        serviceInfo,
+        value,
+        onClose,
+        onSave
+      } = this.props;
       const newValue =
         _.isObject(option) && _.isString(option.value)
           ? option.value.trim()
@@ -60,11 +74,23 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         onClose();
         return;
       }
-      onSave({
+
+      const form = {
         date,
         role,
-        name: newValue
-      });
+        name: newValue,
+        serviceInfo: _.defaults(serviceInfo, {
+          category,
+          date,
+          footnote: '',
+          skipService: false,
+          skipReason: ''
+        })
+      };
+      if (id) {
+        form.serviceInfo.id = id;
+      }
+      onSave(form);
     };
     handleClose = () => {
       this.props.onClose();

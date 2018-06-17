@@ -51,14 +51,28 @@ export const requestModifyServiceInfo = createAction(
   `${PREFIX}/REQUEST_MODIFY_SERVICE_INFO`,
   payload => {
     let { id, ...body } = payload;
-    body = dotProp.set(body, 'footnote', body.footnote.trim());
-    body = dotProp.set(body, 'skipReason', body.skipReason.trim());
-    body = dotProp.set(body, 'skipService', !!body.skipReason);
-    ServiceInfoAPI.modify({ id, ...body }).then(() =>
-      store.dispatch(
-        receiveModifyServiceInfo({ id, serviceInfo: { id, ...body } })
-      )
+
+    body = dotProp.set(body, 'footnote', body.footnote && body.footnote.trim());
+    body = dotProp.set(
+      body,
+      'skipReason',
+      body.skipReason && body.skipReason.trim()
     );
+    body = dotProp.set(body, 'skipService', body.skipService);
+    if (id) {
+      ServiceInfoAPI.modify({ id, ...body }).then(() =>
+        store.dispatch(
+          receiveModifyServiceInfo({ id, serviceInfo: { id, ...body } })
+        )
+      );
+    } else {
+      ServiceInfoAPI.create(body).then(({ data }) => {
+        const id = data.id;
+        store.dispatch(
+          receiveModifyServiceInfo({ id, serviceInfo: { id, ...body } })
+        );
+      });
+    }
     return payload;
   }
 );
@@ -90,12 +104,30 @@ export const dataReducer = handleActions(
   {
     [receiveRetrieveEvents]: (state, { payload }) => payload,
     [receiveModifyIdEvents]: (state, { payload }) => {
-      const dayIndex = _.findIndex(state, {
-        date: moment(payload.date).format('YYYY-MM-DD')
+      const { date, role, name, serviceInfo } = payload;
+      let dayIndex = _.findIndex(state, {
+        date: moment(date).format('YYYY-MM-DD')
       });
+
+      if (dayIndex === -1) {
+        return dotProp.set(state, state.length, {
+          date,
+          serviceInfo,
+          members: [{ name, role }]
+        });
+      }
+
       const roleIndex = _.findIndex(state[dayIndex].members, {
         role: payload.role
       });
+
+      if (roleIndex === -1) {
+        const total = state[dayIndex].members.length;
+        return dotProp.set(state, `${dayIndex}.members.${total}`, {
+          name,
+          role
+        });
+      }
 
       return dotProp.set(
         state,
@@ -104,10 +136,21 @@ export const dataReducer = handleActions(
       );
     },
     [receiveModifyServiceInfo]: (state, { payload }) => {
+      const { serviceInfo, serviceInfo: { date } } = payload;
+
       const dayIndex = _.findIndex(state, day => {
         const id = _.get(day, 'serviceInfo.id', null);
         return id === payload.id;
       });
+
+      if (dayIndex === -1) {
+        return dotProp.set(state, state.length, {
+          date,
+          serviceInfo,
+          members: []
+        });
+      }
+
       return dotProp.set(state, `${dayIndex}.serviceInfo`, payload.serviceInfo);
     },
     [setEvent]: (state, { payload }) => {
