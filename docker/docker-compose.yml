@@ -29,6 +29,25 @@ services:
     volumes:
       - $PWD/../:/opt/efcsydney-roster/
 
+  efc-qa:
+    image: kleinchang/efcsydney-roster:qa
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile-prod
+    links:
+        - db:db
+    environment:
+        - NODE_ENV=qa
+    ports:
+      - "80:80"
+      - "3001:3001"
+      - "3002:3002"
+    entrypoint:
+      - /bin/bash
+      - -x
+      - /opt/efcsydney-roster/docker/Entrypoint.sh
+      - prod-local
+
   efc-prod:
     image: kleinchang/efcsydney-roster
     build:
