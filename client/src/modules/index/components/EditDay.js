@@ -19,6 +19,7 @@ const mapStateToProps = state => {
   const selectedService = _.find(services, { name: category });
 
   return {
+    category,
     day: _.get(selectedData, 'day', null),
     serviceInfo: _.get(selectedData, 'serviceInfo', {}),
     footnoteLabel: selectedService.footnoteLabel || '',
@@ -84,15 +85,19 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       e.preventDefault();
 
       let { serviceInfo } = this.state;
-      const { onSave } = this.props;
+      const { category, day, onSave } = this.props;
 
       serviceInfo = _.merge(serviceInfo, {
-        footnote: serviceInfo.footnote && serviceInfo.footnote.trim(),
-        skipReason: serviceInfo.skipReason && serviceInfo.skipReason.trim(),
+        footnote: _.get(serviceInfo, 'footnote', '').trim(),
+        skipReason: _.get(serviceInfo, 'skipReason', '').trim(),
         skipService: serviceInfo.skipService
       });
 
-      onSave(serviceInfo);
+      onSave({
+        category,
+        date: day,
+        ...serviceInfo
+      });
     };
     constructor(props) {
       super(props);
@@ -140,7 +145,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                   onChange={this.handleSkipReasonChange}
                 />
               ) : (
-                <Label>{skipReason}</Label>
+                <Label>
+                  {skipReason ? skipReason : this.getTrans('skipReason')}
+                </Label>
               )}
 
               <span>
