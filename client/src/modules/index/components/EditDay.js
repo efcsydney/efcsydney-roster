@@ -99,9 +99,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
       const serviceInfo = _.get(props, 'serviceInfo', {});
 
-      this.state = {
-        serviceInfo: serviceInfo
-      };
+      this.state = { serviceInfo };
     }
     render() {
       const {
