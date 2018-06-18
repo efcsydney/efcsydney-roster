@@ -8,7 +8,7 @@ import moment from 'moment';
 import pusher from 'utils/pusher';
 import EditDay from './EditDay';
 import { EventsAPI } from 'apis';
-import { getMemberNames } from 'utils';
+import { getMemberNames, getCategory, setCategory } from 'utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { switchCategory } from 'modules/core/redux';
@@ -23,8 +23,8 @@ import {
 } from 'modules/index/redux';
 import { createApiActions } from 'resource/actions';
 
-const mapStateToProps = state => {
-  const { meta: { category } } = state.core;
+const mapStateToProps = (state, ownProps) => {
+  const { history, match: { params: { category } } } = ownProps;
   const services = _.get(state, 'resource.data.services', {});
   const serviceNames = _.map(services, service => service.name);
   const selectedService = _.find(services, { name: category }) || {};
@@ -32,9 +32,15 @@ const mapStateToProps = state => {
     meta: { isEditingDay, isEditingRole, isLoading },
     data
   } = state.index;
+  const nextCategory = getCategory(category);
 
+  if (!category) {
+    history.replace(`/index/${nextCategory}`);
+  }
+
+  setCategory(nextCategory);
   return {
-    category,
+    category: nextCategory,
     data,
     frequency: selectedService.frequency || 'Sunday',
     isEditingDay,
@@ -65,8 +71,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   class Container extends Component {
     state = {
       date: new Date(),
-      selectedData: {},
-      params: {}
+      selectedData: {}
     };
     loadPrevData({ from, to, category }) {
       const query = {
@@ -130,10 +135,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       });
     };
     handleCategoryChange = category => {
-      const { history } = this.props;
+      const { history, switchCategory } = this.props;
       const { date } = this.state;
 
-      history.replace(category);
+      history.replace(`/index/${category}`);
+      switchCategory(category);
 
       this.loadData({
         from: moment(date)
@@ -163,23 +169,20 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       setSelectedData(data);
       toggleEditRole(true);
     };
-    handleHistoryChange = ({ pathname }) => {
-      const { serviceNames, switchCategory } = this.props;
+    handleHistoryChange = () => {
+      const { category, switchCategory } = this.props;
 
-      pathname = pathname.replace('/', '');
-      if (_.includes([serviceNames], pathname)) {
-        this.loadData({ category: pathname });
-        switchCategory(pathname);
-      }
+      this.loadData({ category });
+      switchCategory(category);
     };
     componentWillMount() {
-      const { category, switchCategory, match: { path } } = this.props;
+      const { category, switchCategory } = this.props;
 
       this.channel = pusher.subscribe('index');
       this.channel.bind('event-modified', this.handleEventModified);
       this.channel.bind('serviceInfo-modified', this.handleServiceInfoModified);
 
-      const nextCategory = path.replace(/\//g, '') || category;
+      const nextCategory = getCategory(category);
       switchCategory(nextCategory);
       this.loadData({ category: nextCategory });
     }

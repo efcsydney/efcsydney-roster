@@ -2,6 +2,7 @@ import queryString from 'query-string';
 import _ from 'lodash';
 import moment from 'moment';
 import i18n from 'i18n';
+import Cookie from 'js-cookie';
 
 export const sanitize = obj =>
   _.isObject(obj) && !_.isArray(obj)
@@ -51,14 +52,24 @@ export function getCalData(dateString, members) {
 }
 
 export function getQuarterDays(date, weekday = 7) {
+  let result = [];
   let currentDay = moment(date).startOf('quarter');
+  const thisQuarter = currentDay.quarter();
+
+  // Everyday
+  if (weekday === 0) {
+    while (thisQuarter === currentDay.quarter()) {
+      result.push(currentDay.clone().format('YYYY-MM-DD'));
+      currentDay.add(1, 'd');
+    }
+    return result;
+  }
+
+  // Weekly
   if (currentDay.isoWeekday() > weekday) {
     currentDay = currentDay.add(1, 'w');
   }
   currentDay = currentDay.isoWeekday(weekday);
-
-  let result = [];
-  const thisQuarter = currentDay.quarter();
   while (thisQuarter === currentDay.quarter()) {
     result.push(currentDay.clone().format('YYYY-MM-DD'));
     currentDay.add(7, 'd');
@@ -106,4 +117,17 @@ export function getMemberNames(events) {
     .filter(name => !_.isEmpty(name))
     .sort()
     .value();
+}
+
+export function getCategory(category) {
+  return category || Cookie.get('selectedService') || 'english';
+}
+
+export function setCategory(category) {
+  category = category || getCategory(category);
+  if (category) {
+    Cookie.set('selectedService', category);
+  } else {
+    Cookie.set('selectedService', 'english');
+  }
 }
