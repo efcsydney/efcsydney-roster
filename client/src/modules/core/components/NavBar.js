@@ -46,7 +46,7 @@ export default withResource('services')(
         const { hasSwitcher, services, title, value } = this.props;
 
         return (
-          <Wrapper>
+          <Wrapper id="navbar">
             <a href="/">
               <Logo />
             </a>
