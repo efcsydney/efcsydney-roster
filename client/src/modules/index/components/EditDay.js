@@ -72,14 +72,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       this.setState(state);
     };
     handleSkipServiceChange = e => {
-      const skipService = !!e.target.checked;
-      const state = dotProp.set(
-        this.state,
-        'serviceInfo.skipService',
-        skipService
-      );
+      const serviceInfo = _.clone(this.state.serviceInfo);
 
-      this.setState(state);
+      _.set(serviceInfo, 'skipService', !!e.target.checked);
+      if (!serviceInfo.skipReason) {
+        _.set(serviceInfo, 'skipReason', this.getTrans('skipReason'));
+      }
+
+      this.setState({ serviceInfo });
     };
     handleSave = e => {
       e.preventDefault();
@@ -102,13 +102,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     constructor(props) {
       super(props);
 
-      const serviceInfo = _.get(props, 'serviceInfo', {});
-
-      if (!serviceInfo.skipReason) {
-        _.set(serviceInfo, 'skipReason', this.getTrans('skipReason'));
-      }
-
-      this.state = { serviceInfo };
+      this.state = { serviceInfo: _.get(props, 'serviceInfo', {}) };
     }
     render() {
       const {
