@@ -95,7 +95,9 @@ export default withResource('services', mapResourceToProps)(
                   {_.map(data, ({ frequency, label, id, positions, name }) => (
                     <Row key={id}>
                       <Cell>
-                        <ExternalLink to={name}>{label}</ExternalLink>
+                        <ExternalLink to={`index/${name}`}>
+                          {label}
+                        </ExternalLink>
                       </Cell>
                       <Cell>{positions.length}</Cell>
                       <Cell>{_.capitalize(frequency)}</Cell>

@@ -152,8 +152,6 @@ class Popup extends Component {
     const { isSaving, hasCompleted } = this.props;
     const name = _.get(data, 'name', '');
     const locale = _.get(data, 'locale', '');
-    const localeOption = _.find(LANGUAGE_OPTIONS, { value: locale }) || {};
-    const localeLabel = localeOption.label || '';
     const frequency = _.get(data, 'frequency', '');
     const label = _.get(data, 'label', '');
     const footnoteLabel = _.get(data, 'footnoteLabel', '');
@@ -212,20 +210,17 @@ class Popup extends Component {
           {!isNew && frequency}
         </FormGroup>
         <FormGroup label="Language" isRequired={isNew}>
-          {isNew && (
-            <StyledSelect
-              value={locale}
-              clearable={false}
-              options={LANGUAGE_OPTIONS}
-              placeholder="e.g. English (Australia)"
-              onChange={e =>
-                this.handleChange({
-                  locale: e.value
-                })
-              }
-            />
-          )}
-          {!isNew && localeLabel}
+          <StyledSelect
+            value={locale}
+            clearable={false}
+            options={LANGUAGE_OPTIONS}
+            placeholder="e.g. English (Australia)"
+            onChange={e =>
+              this.handleChange({
+                locale: e.value
+              })
+            }
+          />
         </FormGroup>
         <FormGroup label="Descripiton Label" isRequired={true}>
           <StyledInput

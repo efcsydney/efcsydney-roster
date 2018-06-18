@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { createAction, handleAction } from 'redux-actions';
-import Cookies from 'js-cookie';
 
 const PREFIX = 'core';
 
@@ -11,42 +10,13 @@ export const retrieveServicesComplete = createAction(
 export const setMeta = createAction(`${PREFIX}/SET_META`);
 export const switchCategory = createAction(`${PREFIX}/SWITCH_CATEGORY`);
 
-function getCategory() {
-  let category = document.URL.match(
-    /(chinese|english|preschool-junior|preschool-middle|preschool-senior|prayer)/g
-  );
-  if (category) {
-    Cookies.set('selectedService', category[0]);
-    return category[0];
-  }
-
-  category = Cookies.get('selectedService');
-  return category ? category : 'english';
-}
-
-function getLang() {
-  let category = document.URL.match(
-    /(chinese|english|preschool-junior|preschool-midddle|preschool-senior|prayer)/g
-  );
-  category = category ? category[0] : Cookies.get('selectedService');
-
-  switch (category) {
-    case 'chinese':
-      return 'zh-TW';
-    case 'english':
-      return 'en-AU';
-    default:
-      return 'en-AU';
-  }
-}
-
 const defaultState = {
   data: {
     services: []
   },
   meta: {
-    lang: getLang(),
-    category: getCategory()
+    lang: 'en-AU',
+    category: 'english'
   }
 };
 
