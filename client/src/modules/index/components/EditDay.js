@@ -62,19 +62,36 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       this.setState(state);
     };
     handleSkipReasonChange = e => {
-      const skipService = !!e.target.checked;
-      const skipReason = skipService ? this.getTrans('skipReason') : '';
-      let state = _.clone(this.state);
-      state = dotProp.set(state, 'serviceInfo.skipReason', skipReason);
-      state = dotProp.set(state, 'serviceInfo.skipService', skipService);
+      const skipReason = e.target.value;
+      const state = dotProp.set(
+        this.state,
+        'serviceInfo.skipReason',
+        skipReason
+      );
 
       this.setState(state);
+    };
+    handleSkipServiceChange = e => {
+      const serviceInfo = _.clone(this.state.serviceInfo);
+
+      _.set(serviceInfo, 'skipService', !!e.target.checked);
+      if (!serviceInfo.skipReason) {
+        _.set(serviceInfo, 'skipReason', this.getTrans('skipReason'));
+      }
+
+      this.setState({ serviceInfo });
     };
     handleSave = e => {
       e.preventDefault();
 
-      const { serviceInfo } = this.state;
+      let { serviceInfo } = this.state;
       const { category, day, onSave } = this.props;
+
+      serviceInfo = _.merge(serviceInfo, {
+        footnote: serviceInfo.footnote && serviceInfo.footnote.trim(),
+        skipReason: serviceInfo.skipReason && serviceInfo.skipReason.trim(),
+        skipService: serviceInfo.skipService
+      });
 
       onSave({
         category,
@@ -85,9 +102,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     constructor(props) {
       super(props);
 
-      this.state = {
-        serviceInfo: _.get(props, 'serviceInfo', {})
-      };
+      this.state = { serviceInfo: _.get(props, 'serviceInfo', {}) };
     }
     render() {
       const {
@@ -97,7 +112,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         toggleEditDay,
         ...otherProps
       } = this.props;
-      const { serviceInfo: { footnote, skipReason } } = this.state;
+      const { serviceInfo: { footnote, skipService, skipReason } } = this.state;
       const formattedDate = moment(day).format(this.getTrans('dateFormat'));
 
       return (
@@ -121,18 +136,30 @@ export default connect(mapStateToProps, mapDispatchToProps)(
               </span>
             </Row>
             <Row>
-              <Label>{this.getTrans('skipReason')}</Label>
+              {skipService ? (
+                <StyledInput
+                  data-hj-whitelist
+                  type="text"
+                  value={skipReason}
+                  placeholder={this.getTrans('skipReason')}
+                  onChange={this.handleSkipReasonChange}
+                />
+              ) : (
+                <Label>{skipReason}</Label>
+              )}
+
               <span>
                 <SwitchButton
-                  checked={!_.isEmpty(skipReason)}
-                  onChange={this.handleSkipReasonChange}
+                  checked={skipService}
+                  onChange={this.handleSkipServiceChange}
                 />
               </span>
             </Row>
             <Row align="center">
               <StateButton
                 kind={isSaving ? 'loading' : 'default'}
-                type="submit">
+                type="submit"
+                disabled={skipService && _.isEmpty(skipReason)}>
                 {this.getTrans('saveLabel')}
               </StateButton>
               <CancelLink onClick={() => toggleEditDay(false)}>
@@ -176,6 +203,14 @@ const Label = styled.label`
   `};
 `;
 Label.displayName = 'Label';
+
+const StyledInput = styled(Input)`
+  margin-right: 15px;
+  width: 125px;
+  ${media.mobile`
+    width: 60px;
+  `};
+`;
 
 const CancelLink = styled.a`
   color: #369;

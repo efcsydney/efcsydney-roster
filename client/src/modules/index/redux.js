@@ -52,13 +52,6 @@ export const requestModifyServiceInfo = createAction(
   payload => {
     let { id, ...body } = payload;
 
-    body = dotProp.set(body, 'footnote', body.footnote && body.footnote.trim());
-    body = dotProp.set(
-      body,
-      'skipReason',
-      body.skipReason && body.skipReason.trim()
-    );
-    body = dotProp.set(body, 'skipService', body.skipService);
     if (id) {
       ServiceInfoAPI.modify({ id, ...body }).then(() =>
         store.dispatch(
