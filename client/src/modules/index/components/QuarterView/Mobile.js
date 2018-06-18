@@ -54,6 +54,14 @@ export default connect(mapStateToProps)(
         highlightedEl.scrollIntoView();
       }
     };
+    handleBackTopClick = e => {
+      e.preventDefault();
+
+      const navbarEl = document.getElementById('navbar');
+      if (navbarEl) {
+        navbarEl.scrollIntoView();
+      }
+    };
 
     componentWillReceiveProps(nextProps) {
       const isInitialLoad =
@@ -160,6 +168,7 @@ export default connect(mapStateToProps)(
           {isEditingRole && (
             <EditRole isOpen={true} members={this.props.members} />
           )}
+          <BackTopLink onClick={this.handleBackTopClick}>Top</BackTopLink>
           <BottomDateBarSpace />
         </Grid>
       );
@@ -302,4 +311,22 @@ const BottomDateBarSpace = styled.div`
   position: absolute;
   height: 50px;
   width: 100%;
+`;
+const BackTopLink = styled.a.attrs({ href: 'javascript:void(0)' })`
+  border-radius: 50%;
+  display: flex;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 1;
+  bottom: 50px;
+  right: 10px;
+  background: #4285f4;
+  &:link,
+  &:visited {
+    color: #fff;
+  }
+  width: 32px;
+  height: 32px;
 `;
