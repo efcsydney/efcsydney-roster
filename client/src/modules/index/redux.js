@@ -51,11 +51,7 @@ export const requestModifyServiceInfo = createAction(
   `${PREFIX}/REQUEST_MODIFY_SERVICE_INFO`,
   payload => {
     let { id, ...body } = payload;
-    body = dotProp.merge(body, {
-      footnote: body.footnote && body.footnote.trim(),
-      skipReason: body.skipReason && body.skipReason.trim(),
-      skipService: body.skipService
-    });
+
     ServiceInfoAPI.modify({ id, ...body }).then(() =>
       store.dispatch(
         receiveModifyServiceInfo({ id, serviceInfo: { id, ...body } })
