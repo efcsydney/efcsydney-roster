@@ -66,7 +66,6 @@ export const requestModifyServiceInfo = createAction(
         );
       });
     }
-
     return payload;
   }
 );
