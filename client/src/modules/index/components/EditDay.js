@@ -63,31 +63,35 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     };
     handleSkipReasonChange = e => {
       const skipReason = e.target.value;
-      let state = dotProp.set(this.state, 'serviceInfo.skipReason', skipReason);
-
-      this.setState(state);
-    };
-    handleSkipServiceChange = e => {
-      const skipService = !!e.target.checked;
-      let state = dotProp.set(
+      const state = dotProp.set(
         this.state,
-        'serviceInfo.skipService',
-        skipService
+        'serviceInfo.skipReason',
+        skipReason
       );
 
       this.setState(state);
     };
+    handleSkipServiceChange = e => {
+      const serviceInfo = _.clone(this.state.serviceInfo);
+
+      _.set(serviceInfo, 'skipService', !!e.target.checked);
+      if (!serviceInfo.skipReason) {
+        _.set(serviceInfo, 'skipReason', this.getTrans('skipReason'));
+      }
+
+      this.setState({ serviceInfo });
+    };
     handleSave = e => {
       e.preventDefault();
 
-      const { serviceInfo } = this.state;
+      let { serviceInfo } = this.state;
       const { category, day, onSave } = this.props;
 
-      if (serviceInfo.skipService) {
-        serviceInfo.skipReason = !_.isEmpty(serviceInfo.skipReason.trim())
-          ? serviceInfo.skipReason.trim()
-          : this.getTrans('skipReason');
-      }
+      serviceInfo = _.merge(serviceInfo, {
+        footnote: serviceInfo.footnote && serviceInfo.footnote.trim(),
+        skipReason: serviceInfo.skipReason && serviceInfo.skipReason.trim(),
+        skipService: serviceInfo.skipService
+      });
 
       onSave({
         category,
@@ -98,15 +102,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     constructor(props) {
       super(props);
 
-      let serviceInfo = _.get(props, 'serviceInfo', {});
-      const skipReason = !_.isEmpty(serviceInfo.skipReason)
-        ? serviceInfo.skipReason
-        : this.getTrans('skipReason');
-      serviceInfo.skipReason = skipReason;
-
-      this.state = {
-        serviceInfo: serviceInfo
-      };
+      this.state = { serviceInfo: _.get(props, 'serviceInfo', {}) };
     }
     render() {
       const {
@@ -141,7 +137,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
             </Row>
             <Row>
               {skipService ? (
-                <StyleInput
+                <StyledInput
                   data-hj-whitelist
                   type="text"
                   value={skipReason}
@@ -208,14 +204,13 @@ const Label = styled.label`
 `;
 Label.displayName = 'Label';
 
-const StyleInput = styled(Input)`
+const StyledInput = styled(Input)`
   margin-right: 15px;
   width: 125px;
   ${media.mobile`
     width: 60px;
   `};
 `;
-StyleInput.displayName = 'StyleInput';
 
 const CancelLink = styled.a`
   color: #369;
