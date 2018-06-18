@@ -27,7 +27,7 @@ export const defaultSingleResourceState = {
 };
 
 const defaultAsyncState = _.fromPairs(
-  Object.keys(apiMapping).map(key => [key], defaultSingleResourceState)
+  Object.keys(apiMapping).map(key => [key, defaultSingleResourceState])
 );
 
 export const asyncStatusReducer = (
