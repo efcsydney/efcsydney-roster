@@ -88,8 +88,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       const { category, day, onSave } = this.props;
 
       serviceInfo = _.merge(serviceInfo, {
-        footnote: serviceInfo.footnote && serviceInfo.footnote.trim(),
-        skipReason: serviceInfo.skipReason && serviceInfo.skipReason.trim(),
+        footnote: _.get(serviceInfo, 'footnote', '').trim(),
+        skipReason: _.get(serviceInfo, 'skipReason', '').trim(),
         skipService: serviceInfo.skipService
       });
 
@@ -151,7 +151,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                   onChange={this.handleSkipReasonChange}
                 />
               ) : (
-                <Label>{skipReason}</Label>
+                <Label>
+                  {skipReason ? skipReason : this.getTrans('skipReason')}
+                </Label>
               )}
 
               <span>
