@@ -4,7 +4,6 @@ const log = require('../utilities/logger');
 
 async function getServices(req, res, next) {
   try {
-    log.info('getServices');
     const services = await ServicesService.getServices();
     const dto = DtoMapper.mapServicesToDto(services);
 
