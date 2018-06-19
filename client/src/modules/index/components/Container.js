@@ -7,6 +7,7 @@ import { NavBar } from 'modules/core';
 import moment from 'moment';
 import pusher from 'utils/pusher';
 import EditDay from './EditDay';
+import queryString from 'query-string';
 import { EventsAPI } from 'apis';
 import { getMemberNames, getCategory, setCategory } from 'utils';
 import { connect } from 'react-redux';
@@ -24,7 +25,11 @@ import {
 import { createApiActions } from 'resource/actions';
 
 const mapStateToProps = (state, ownProps) => {
-  const { history, match: { params: { category } } } = ownProps;
+  const {
+    history,
+    match: { params: { category } },
+    location: { search }
+  } = ownProps;
   const services = _.get(state, 'resource.data.services', {});
   const serviceNames = _.map(services, service => service.name);
   const selectedService = _.find(services, { name: category }) || {};
@@ -43,6 +48,7 @@ const mapStateToProps = (state, ownProps) => {
     category: nextCategory,
     data,
     frequency: selectedService.frequency || 'Sunday',
+    query: queryString.parse(search),
     isEditingDay,
     isEditingRole,
     isLoading,
@@ -69,10 +75,16 @@ const mapDispatchToProps = dispatch => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   class Container extends Component {
-    state = {
-      date: new Date(),
-      selectedData: {}
-    };
+    constructor(props) {
+      super(props);
+
+      const fromDate = _.get(props, 'query.from');
+
+      this.state = {
+        date: fromDate ? new Date(fromDate) : new Date(),
+        selectedData: {}
+      };
+    }
     loadPrevData({ from, to, category }) {
       const query = {
         from: moment(from)
@@ -117,7 +129,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     }
     handleButtonClick = direction => {
       const { date } = this.state;
-      const { category } = this.props;
+      const { history, category } = this.props;
       let newDate = moment(date).startOf('quarter');
       if (direction === 'prev') {
         newDate.subtract(1, 'Q');
@@ -128,26 +140,34 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         date: newDate.toDate()
       });
 
-      this.loadData({
-        from: newDate.format('YYYY-MM-DD'),
-        to: newDate.endOf('quarter').format('YYYY-MM-DD'),
-        category
+      const fromDate = newDate.format('YYYY-MM-DD');
+      const toDate = newDate.endOf('quarter').format('YYYY-MM-DD');
+      history.replace({
+        pathname: `/index/${category}`,
+        search: `?from=${fromDate}&to=${toDate}`
       });
+      this.loadData({ from: fromDate, to: toDate, category });
     };
     handleCategoryChange = category => {
       const { history, switchCategory } = this.props;
       const { date } = this.state;
 
-      history.replace(`/index/${category}`);
+      const fromDate = moment(date)
+        .startOf('quarter')
+        .format('YYYY-MM-DD');
+      const toDate = moment(date)
+        .endOf('quarter')
+        .format('YYYY-MM-DD');
+
+      history.push({
+        pathname: `/index/${category}`,
+        search: `?from=${fromDate}&to=${toDate}`
+      });
       switchCategory(category);
 
       this.loadData({
-        from: moment(date)
-          .startOf('quarter')
-          .format('YYYY-MM-DD'),
-        to: moment(date)
-          .endOf('quarter')
-          .format('YYYY-MM-DD'),
+        from: fromDate,
+        to: toDate,
         category
       });
     };
@@ -176,7 +196,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       switchCategory(category);
     };
     componentWillMount() {
-      const { category, switchCategory } = this.props;
+      const { category, switchCategory, query } = this.props;
 
       this.channel = pusher.subscribe('index');
       this.channel.bind('event-modified', this.handleEventModified);
@@ -184,7 +204,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
       const nextCategory = getCategory(category);
       switchCategory(nextCategory);
-      this.loadData({ category: nextCategory });
+      this.loadData({ category: nextCategory, ...query });
     }
     componentDidMount() {
       const { history } = this.props;
