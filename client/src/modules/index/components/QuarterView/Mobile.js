@@ -312,7 +312,7 @@ const BottomDateBarSpace = styled.div`
   height: 50px;
   width: 100%;
 `;
-const BackTopLink = styled.a.attrs({ href: 'javascript:void(0)' })`
+const BackTopLink = styled.a.attrs({ href: '#top' })`
   border-radius: 50%;
   display: flex;
   font-size: 12px;
