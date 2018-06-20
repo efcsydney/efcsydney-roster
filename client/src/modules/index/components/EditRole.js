@@ -14,14 +14,24 @@ import i18n from 'i18n';
 import { media } from 'styled';
 
 const mapStateToProps = state => {
+  const { meta: { category } } = state.core;
   const { meta: { isSaving, selectedData } } = state.index;
   const day = _.get(selectedData, 'day');
+  const serviceInfo = _.get(selectedData, 'serviceInfo', {});
+  const date = moment(day).format('YYYY-MM-DD');
 
   return {
     date: moment(day).format('YYYY-MM-DD'),
     member: _.get(selectedData, 'member', null),
     names: _.get(selectedData, 'names', []),
     role: _.get(selectedData, 'role', null),
+    serviceInfo: _.defaults(serviceInfo, {
+      category,
+      date,
+      footnote: '',
+      skipService: false,
+      skipReason: ''
+    }),
     isSaving
   };
 };
@@ -38,12 +48,23 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   class EditRole extends Component {
     displayName = 'EditRole';
     static propTypes = {
-      date: PropTypes.string,
       id: PropTypes.number,
+      date: PropTypes.string,
+      isSaving: PropTypes.bool,
       member: PropTypes.string,
       names: PropTypes.array,
       onSave: PropTypes.func,
-      role: PropTypes.string
+      role: PropTypes.string,
+      serviceInfo: PropTypes.object
+    };
+    static defaultProps = {
+      date: null,
+      isSaving: false,
+      names: [],
+      role: null,
+      serviceInfo: {},
+      onClose: () => {},
+      onSave: () => {}
     };
     getTrans(key) {
       return i18n.t(`${this.displayName}.${key}`);
@@ -76,6 +97,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         isSaving,
         members,
         role,
+        serviceInfo,
         toggleEditRole,
         ...otherProps
       } = this.props; // eslint-disable-line
@@ -121,7 +143,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                   id,
                   date,
                   role,
-                  name: selectedName
+                  name: selectedName,
+                  serviceInfo
                 })}>
                 {this.getTrans('saveLabel')}
               </StateButton>

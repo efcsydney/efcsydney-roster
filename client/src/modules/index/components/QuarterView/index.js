@@ -36,8 +36,10 @@ export default class QuarterView extends Component {
   handleRoleClick = (day, role, member) => {
     const { data, onRoleClick } = this.props;
     const names = getMemberNames(data);
+    const selectedDay = _.find(data, { date: day });
+    const serviceInfo = _.get(selectedDay, 'serviceInfo', {});
 
-    onRoleClick({ day, role, member, names });
+    onRoleClick({ day, role, member, names, serviceInfo });
   };
   handleWindowResize = () => {
     const isMobile = document.body.offsetWidth <= MOBILE_BREAKPOINT;
