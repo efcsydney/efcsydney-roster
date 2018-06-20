@@ -4,7 +4,6 @@ const log = require('../utilities/logger');
 
 async function getServices(req, res, next) {
   try {
-    log.info('getServices');
     const services = await ServicesService.getServices();
     const dto = DtoMapper.mapServicesToDto(services);
 
@@ -34,7 +33,6 @@ async function getServiceById(req, res, next) {
     next(err);
   }
 }
-
 
 async function saveService(req, res, next) {
   try {

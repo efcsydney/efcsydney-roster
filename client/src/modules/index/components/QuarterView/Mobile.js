@@ -315,7 +315,8 @@ const BottomDateBarSpace = styled.div`
 const BackTopLink = styled.a.attrs({ href: '#top' })`
   border-radius: 50%;
   display: flex;
-  font-size: 12px;
+  font-size: 16px;
+  font-weight: bold;
   align-items: center;
   justify-content: center;
   position: fixed;
@@ -327,6 +328,6 @@ const BackTopLink = styled.a.attrs({ href: '#top' })`
   &:visited {
     color: #fff;
   }
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
 `;
