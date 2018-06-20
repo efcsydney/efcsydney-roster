@@ -116,7 +116,11 @@ const Title = styled.span`
   }
   .Select-menu-outer {
     min-width: 100%;
+    max-height: 261px !important;
     width: auto;
+  }
+  .Select-menu {
+    max-height: 259px !important;
   }
   ${media.mobile`
     font-size: 14px;
