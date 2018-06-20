@@ -222,7 +222,7 @@ class Popup extends Component {
             }
           />
         </FormGroup>
-        <FormGroup label="Descripiton Label" isRequired={true}>
+        <FormGroup label="Description Label" isRequired={true}>
           <StyledInput
             data-hj-whitelist
             type="text"

@@ -36,11 +36,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       date: PropTypes.string,
       isSaving: PropTypes.bool,
       names: PropTypes.array,
+      onClose: PropTypes.func,
+      onSave: PropTypes.func,
       role: PropTypes.string,
       serviceInfo: PropTypes.object,
-      value: PropTypes.string,
-      onClose: PropTypes.func,
-      onSave: PropTypes.func
+      value: PropTypes.string
     };
     static defaultProps = {
       date: null,
