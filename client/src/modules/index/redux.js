@@ -38,8 +38,8 @@ export const receiveModifyIdEvents = createAction(
 export const requestModifyIdEvents = createAction(
   `${PREFIX}/REQUEST_MODIFY_ID_EVENTS`,
   payload => {
-    EventsAPI.modify(payload).then(() => {
-      store.dispatch(receiveModifyIdEvents(payload));
+    EventsAPI.modify(payload).then(({ data }) => {
+      store.dispatch(receiveModifyIdEvents(data));
     });
     return payload;
   }
@@ -103,11 +103,13 @@ export const dataReducer = handleActions(
       });
 
       if (dayIndex === -1) {
-        return dotProp.set(state, state.length, {
+        state = dotProp.set(state, state.length, {
           date,
           serviceInfo,
           members: [{ name, role }]
         });
+
+        return state;
       }
 
       const roleIndex = _.findIndex(state[dayIndex].members, {

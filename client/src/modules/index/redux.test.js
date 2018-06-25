@@ -85,13 +85,27 @@ describe('index', () => {
       const state = [
         {
           date: '2018-02-25',
-          members: [{ role: 'Newsletter', name: 'Robin Zhang' }]
+          role: 'Newsletter',
+          members: [{ role: 'Newsletter', name: 'Robin Zhang' }],
+          serviceInfo: {
+            date: '2018-02-25',
+            skipReason: '',
+            skipService: false,
+            id: 1
+          }
         }
       ];
       const expected = [
         {
           date: '2018-02-25',
-          members: [{ role: 'Newsletter', name: 'Joseph Chiang' }]
+          role: 'Newsletter',
+          members: [{ role: 'Newsletter', name: 'Joseph Chiang' }],
+          serviceInfo: {
+            date: '2018-02-25',
+            skipReason: '',
+            skipService: false,
+            id: 1
+          }
         }
       ];
       const result = dataReducer(
@@ -99,7 +113,13 @@ describe('index', () => {
         receiveModifyIdEvents({
           date: '2018-02-25',
           role: 'Newsletter',
-          name: 'Joseph Chiang'
+          name: 'Joseph Chiang',
+          serviceInfo: {
+            date: '2018-02-25',
+            skipReason: '',
+            skipService: false,
+            id: 1
+          }
         })
       );
       expect(result).toEqual(expected);
