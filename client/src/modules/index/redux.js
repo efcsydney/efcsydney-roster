@@ -102,13 +102,13 @@ export const dataReducer = handleActions(
         date: moment(date).format('YYYY-MM-DD')
       });
 
-      state = dotProp.set(state, state.length, {
-        date,
-        serviceInfo,
-        members: [{ name, role }]
-      });
-
       if (dayIndex === -1) {
+        state = dotProp.set(state, state.length, {
+          date,
+          serviceInfo,
+          members: [{ name, role }]
+        });
+
         return state;
       }
 
