@@ -1,158 +1,149 @@
 {
-    "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "EFC sydney ELB",
-    "Parameters": {
-        "Environment": {
-            "Type": "String",
-            "Description": "The environment in which to create the stack"
-        },
-        "Certificates": {
-            "Type": "String",
-            "Description": "SSL certificate for HTTPS endpoint"
-        }
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "EFC sydney ELB",
+  "Parameters": {
+    "Environment": {
+      "Type": "String",
+      "Description": "The environment in which to create the stack"
     },
-    "Resources": {
-        "SecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "GroupDescription": "EC2 security group for Push service",
-                "VpcId": {
-                    "Fn::ImportValue": {
-                        "Fn::Sub": "VPC-VPCID"
-                    }
-                },
-                "SecurityGroupIngress": [
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": 443,
-                        "ToPort": 443,
-                        "CidrIp": "0.0.0.0/0"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": 80,
-                        "ToPort": 80,
-                        "CidrIp": "0.0.0.0/0"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": 8080,
-                        "ToPort": 8080,
-                        "CidrIp": "0.0.0.0/0",
-                        "Description": "For nginx log site"
-                    },
-                ],
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": "efcsydney-elb"
-                    },
-                    {
-                        "Key": "Environment",
-                        "Value": {
-                            "Ref": "Environment"
-                        }
-                    }
-                ]
-            }
-        },
-        "ElasticLoadBalancer": {
-            "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
-            "Properties": {
-                "LoadBalancerName": "efcsydney-elb",
-                "SecurityGroups": [
-                    {
-                        "Ref": "SecurityGroup"
-                    }
-                ],
-                "Subnets": [
-                    {
-                        "Fn::ImportValue": {
-                            "Fn::Sub": "VPC-PublicSubnet-A"
-                        }
-                    },
-                    {
-                        "Fn::ImportValue": {
-                            "Fn::Sub": "VPC-PublicSubnet-B"
-                        }
-                    },
-                    {
-                        "Fn::ImportValue": {
-                            "Fn::Sub": "VPC-PublicSubnet-C"
-                        }
-                    }
-                ],
-                "Scheme": "internet-facing",
-                "CrossZone": true,
-                "Listeners": [
-                    {
-                        "LoadBalancerPort": 80,
-                        "InstancePort": 80,
-                        "Protocol": "HTTP",
-                        "InstanceProtocol": "HTTP"
-                    },
-                    {
-                        "LoadBalancerPort": 443,
-                        "InstancePort": 3002,
-                        "Protocol": "HTTPS",
-                        "InstanceProtocol": "HTTP",
-                        "SSLCertificateId": {
-                            "Ref": "Certificates"
-                        }
-                    },
-                    {
-                        "LoadBalancerPort": 8080,
-                        "InstancePort": 8080,
-                        "Protocol": "HTTP",
-                        "InstanceProtocol": "HTTP"
-                    },
-                ],
-                "HealthCheck": {
-                    "Target": {
-                        "Fn::Join": [
-                            "",
-                            [
-                                "HTTP:",
-                                "3002/"
-                            ]
-                        ]
-                    },
-                    "HealthyThreshold": 3,
-                    "UnhealthyThreshold": 5,
-                    "Interval": 10,
-                    "Timeout": 5
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": "efcsydney-elb"
-                    },
-                    {
-                        "Key": "Environment",
-                        "Value": {
-                            "Ref": "Environment"
-                        }
-                    }
-                ]
-            }
-        }
-    },
-    "Outputs": {
-        "ElasticLoadBalancer": {
-            "Description": "The Amazon Resource Name (ARN) of the ELB",
-            "Value": {
-                "Ref": "ElasticLoadBalancer"
-            },
-            "Export": {
-                "Name": {
-                    "Fn::Join": [
-                        "-",
-                        [
-                            "efcsydney-elb"
-                        ]
-                    ]
-                }
-            }
-        }
+    "Certificates": {
+      "Type": "String",
+      "Description": "SSL certificate for HTTPS endpoint"
     }
+  },
+  "Resources": {
+    "SecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "EC2 security group for Push service",
+        "VpcId": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "VPC-VPCID"
+          }
+        },
+        "SecurityGroupIngress": [{
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 8080,
+            "ToPort": 8080,
+            "CidrIp": "0.0.0.0/0",
+            "Description": "For nginx log site"
+          },
+        ],
+        "Tags": [{
+            "Key": "Name",
+            "Value": "efcsydney-elb"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Environment"
+            }
+          }
+        ]
+      }
+    },
+    "ElasticLoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "LoadBalancerName": "efcsydney-elb",
+        "SecurityGroups": [{
+          "Ref": "SecurityGroup"
+        }],
+        "Subnets": [{
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-PublicSubnet-A"
+            }
+          },
+          {
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-PublicSubnet-B"
+            }
+          },
+          {
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-PublicSubnet-C"
+            }
+          }
+        ],
+        "Scheme": "internet-facing",
+        "CrossZone": true,
+        "Listeners": [{
+            "LoadBalancerPort": 80,
+            "InstancePort": 80,
+            "Protocol": "HTTP",
+            "InstanceProtocol": "HTTP"
+          },
+          {
+            "LoadBalancerPort": 443,
+            "InstancePort": 3002,
+            "Protocol": "HTTPS",
+            "InstanceProtocol": "HTTP",
+            "SSLCertificateId": {
+              "Ref": "Certificates"
+            }
+          },
+          {
+            "LoadBalancerPort": 8080,
+            "InstancePort": 8080,
+            "Protocol": "HTTP",
+            "InstanceProtocol": "HTTP"
+          },
+        ],
+        "HealthCheck": {
+          "Target": {
+            "Fn::Join": [
+              "", [
+                "HTTP:",
+                "3002/"
+              ]
+            ]
+          },
+          "HealthyThreshold": 3,
+          "UnhealthyThreshold": 5,
+          "Interval": 10,
+          "Timeout": 5
+        },
+        "Tags": [{
+            "Key": "Name",
+            "Value": "efcsydney-elb"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Environment"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "ElasticLoadBalancer": {
+      "Description": "The Amazon Resource Name (ARN) of the ELB",
+      "Value": {
+        "Ref": "ElasticLoadBalancer"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Join": [
+            "-", [
+              "efcsydney-elb"
+            ]
+          ]
+        }
+      }
+    }
+  }
 }

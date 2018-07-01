@@ -1,0 +1,199 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "EFC sydney ELB",
+  "Parameters": {
+    "Environment": {
+      "Type": "String",
+      "Description": "The environment in which to create the stack",
+      "Default": "QA"
+    },
+    "Certificates": {
+      "Type": "String",
+      "Description": "SSL certificate for HTTPS endpoint",
+      "Default": "arn:aws:acm:ap-southeast-2:651220962436:certificate/74011694-f934-4268-ae3a-437d99333daf"
+    }
+  },
+  "Resources": {
+    "SecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "EC2 security group for Push service",
+        "VpcId": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "VPC-VPCID"
+          }
+        },
+        "SecurityGroupIngress": [{
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags": [{
+            "Key": "Name",
+            "Value": "efcsydney-alb"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Environment"
+            }
+          }
+        ]
+      }
+    },
+    "AppLoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "Name": "UAT-Yarra-gateway",
+        "SecurityGroups": [{
+          "Ref": "SecurityGroup"
+        }],
+        "Scheme": "internet-facing",
+        "Subnets": [{
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-PublicSubnet-A"
+            }
+          },
+          {
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-PublicSubnet-B"
+            }
+          },
+          {
+            "Fn::ImportValue": {
+              "Fn::Sub": "VPC-PublicSubnet-C"
+            }
+          }
+        ],
+        "LoadBalancerAttributes": [{
+          "Key": "idle_timeout.timeout_seconds",
+          "Value": "60"
+        }],
+        "Tags": [{
+          "Key": "Environment",
+          "Value": {
+            "Ref": "Environment"
+          }
+        }]
+      }
+    },
+    "AlbListenerHTTP": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "LoadBalancerArn": {
+          "Ref": "AppLoadBalancer"
+        },
+        "Port": "80",
+        "Protocol": "HTTP",
+        "DefaultActions": [{
+          "Type": "forward",
+          "TargetGroupArn": {
+            "Ref": "AlbTargetGroupRedirect"
+          }
+        }]
+      },
+      "DependsOn": "AlbTargetGroupRedirect"
+    },
+    "AlbListenerHTTPS": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "LoadBalancerArn": {
+          "Ref": "AppLoadBalancer"
+        },
+        "Port": "443",
+        "Protocol": "HTTPS",
+        "Certificates": [{
+          "CertificateArn": {
+            "Ref": "Certificates"
+          }
+        }],
+        "DefaultActions": [{
+          "Type": "forward",
+          "TargetGroupArn": {
+            "Ref": "AlbTargetGroupHTTPS"
+          }
+        }]
+      },
+      "DependsOn": "AlbTargetGroupHTTPS"
+    },
+    "AlbTargetGroupHTTPS": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "Name": "EFC-Sydney-HTTPS",
+        "Protocol": "HTTP",
+        "Port": 3002,
+        "VpcId": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "VPC-VPCID"
+          }
+        },
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckPath": "/status",
+        "HealthyThresholdCount": 3,
+        "UnhealthyThresholdCount": 5,
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthCheckIntervalSeconds": 30,
+        "Matcher": {
+          "HttpCode": "200,301,302"
+        },
+        "TargetGroupAttributes": [{
+          "Key": "deregistration_delay.timeout_seconds",
+          "Value": "30"
+        }]
+      },
+      "DependsOn": "AppLoadBalancer"
+    },
+    "AlbTargetGroupRedirect": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "Name": "EFC-Sydney-Redirect",
+        "Protocol": "HTTP",
+        "Port": 80,
+        "VpcId": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "VPC-VPCID"
+          }
+        },
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckPath": "/status",
+        "HealthyThresholdCount": 3,
+        "UnhealthyThresholdCount": 5,
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthCheckIntervalSeconds": 30,
+        "Matcher": {
+          "HttpCode": "200,301,302"
+        },
+        "TargetGroupAttributes": [{
+          "Key": "deregistration_delay.timeout_seconds",
+          "Value": "30"
+        }]
+      },
+      "DependsOn": "AppLoadBalancer"
+    }
+  },
+  "Outputs": {
+    "ApplicationLoadBalancer": {
+      "Description": "The Amazon Resource Name (ARN) of the ALB",
+      "Value": {
+        "Ref": "AppLoadBalancer"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Join": [
+            "-", [
+              "ecs-alb"
+            ]
+          ]
+        }
+      }
+    }
+  }
+}
