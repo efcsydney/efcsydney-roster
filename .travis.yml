@@ -44,7 +44,7 @@ before_deploy:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: sh -x deploy.sh prod; BUILD_TAG=$TRAVIS_BUILD_NUMBER\_$TRAVIS_COMMIT docker-compose -f docker/docker-compose.yml build efc-prod && docker push kleinchang/efcsydney-roster:$BUILD_TAG
+  script: sh -x deploy.sh prod; BUILD_TAG=$TRAVIS_BUILD_NUMBER\_$TRAVIS_COMMIT docker-compose -f docker/docker-compose.yml build efc-prod && docker push kleinchang/efcsydney-roster:$TRAVIS_BUILD_NUMBER\_$TRAVIS_COMMIT
   on:
     branch: build_docker_image_via_travis#260
 - provider: script
