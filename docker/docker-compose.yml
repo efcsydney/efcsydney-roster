@@ -49,7 +49,7 @@ services:
       - prod-local
 
   efc-prod:
-    image: kleinchang/efcsydney-roster
+    image: kleinchang/efcsydney-roster:$BUILD_TAG
     build:
       context: ../
       dockerfile: docker/Dockerfile-prod
