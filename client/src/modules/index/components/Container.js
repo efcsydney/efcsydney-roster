@@ -182,7 +182,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     };
     handleServiceInfoModified = data => {
       const { setServiceInfo } = this.props;
-      setServiceInfo({ serviceInfo: data });
+      setServiceInfo(data);
     };
     handleRoleClick = data => {
       const { toggleEditRole, setSelectedData } = this.props;
