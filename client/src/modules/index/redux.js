@@ -179,8 +179,6 @@ export const dataReducer = handleActions(
       );
     },
     [setServiceInfo]: (state, { payload }) => {
-      const { serviceInfo, serviceInfo: { date } } = payload;
-
       const dayIndex = _.findIndex(state, day => {
         const id = _.get(day, 'serviceInfo.id', null);
         return id === payload.id;
@@ -188,13 +186,22 @@ export const dataReducer = handleActions(
 
       if (dayIndex === -1) {
         return dotProp.set(state, state.length, {
+<<<<<<< HEAD
           date,
           serviceInfo,
+=======
+          date: payload.date,
+          serviceInfo: payload,
+>>>>>>> #335
           members: []
         });
       }
 
+<<<<<<< HEAD
       return dotProp.set(state, `${dayIndex}.serviceInfo`, payload.serviceInfo);
+=======
+      return dotProp.set(state, `${dayIndex}.serviceInfo`, payload);
+>>>>>>> #335
     }
   },
   defaultState.data

@@ -167,6 +167,7 @@ describe('index', () => {
         {
           date: '2018-02-11',
           serviceInfo: {
+            date: '2018-02-11',
             footnote: '',
             id: 1,
             skipReason: '',
@@ -178,6 +179,7 @@ describe('index', () => {
         {
           date: '2018-02-11',
           serviceInfo: {
+            date: '2018-02-11',
             footnote: 'Chinese New Year',
             id: 1,
             skipReason: 'Combined Service',
@@ -188,6 +190,7 @@ describe('index', () => {
       const result = dataReducer(
         state,
         setServiceInfo({
+          date: '2018-02-11',
           footnote: 'Chinese New Year',
           id: 1,
           skipReason: 'Combined Service',
