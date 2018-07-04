@@ -149,33 +149,52 @@ export const dataReducer = handleActions(
       return dotProp.set(state, `${dayIndex}.serviceInfo`, payload.serviceInfo);
     },
     [setEvent]: (state, { payload }) => {
+      const { date, role, name, serviceInfo } = payload;
       const dayIndex = _.findIndex(state, { date: payload.date });
+
       if (dayIndex === -1) {
-        return state;
+        return dotProp.set(state, state.length, {
+          date,
+          serviceInfo,
+          members: [{ name, role }]
+        });
       }
 
-      const memberIndex = _.findIndex(state[dayIndex].members, {
+      const roleIndex = _.findIndex(state[dayIndex].members, {
         role: payload.role
       });
-      if (memberIndex === -1) {
-        return state;
+
+      if (roleIndex === -1) {
+        const total = state[dayIndex].members.length;
+        return dotProp.set(state, `${dayIndex}.members.${total}`, {
+          name,
+          role
+        });
       }
 
       return dotProp.set(
         state,
-        `${dayIndex}.members.${memberIndex}.name`,
+        `${dayIndex}.members.${roleIndex}.name`,
         payload.name
       );
     },
     [setServiceInfo]: (state, { payload }) => {
-      const dayIndex = _.findIndex(
-        state,
-        day => day.serviceInfo.id === payload.id
-      );
+      const { serviceInfo, serviceInfo: { date } } = payload;
+
+      const dayIndex = _.findIndex(state, day => {
+        const id = _.get(day, 'serviceInfo.id', null);
+        return id === payload.id;
+      });
+
       if (dayIndex === -1) {
-        return state;
+        return dotProp.set(state, state.length, {
+          date,
+          serviceInfo,
+          members: []
+        });
       }
-      return dotProp.set(state, `${dayIndex}.serviceInfo`, payload);
+
+      return dotProp.set(state, `${dayIndex}.serviceInfo`, payload.serviceInfo);
     }
   },
   defaultState.data
