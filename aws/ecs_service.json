@@ -4,7 +4,7 @@
     "DockerImgSrc": {
       "Type": "String",
       "Description": "Docker image source",
-      "Default": "651220962436.dkr.ecr.ap-southeast-2.amazonaws.com/efc-roster"
+      "Default": "docker.io/kleinchang/efcsydney-roster"
     },
     "NodeEnv": {
       "Type": "String",
@@ -14,7 +14,7 @@
     "S3ConfBucketName": {
       "Type": "String",
       "Description": "The S3 Bucket Name which store configure files. ",
-      "Default": "efc-roster-conf"
+      "Default": "efc-sydney-qa"
     },
     "ELBName": {
       "Type": "String",
@@ -193,9 +193,14 @@
             }
           },
           "PortMappings": [{
-            "ContainerPort": 3002,
-            "HostPort": 30022
-          }],
+              "ContainerPort": 3002,
+              "HostPort": 0
+            },
+            {
+              "ContainerPort": 3001,
+              "HostPort": 0
+            }
+          ],
           "MountPoints": [{
             "ContainerPath": "/opt/efcsydney-roster/log",
             "SourceVolume": "log",
@@ -207,9 +212,10 @@
         }
       }
     },
-    "ECSService": {
+    "ECSServiceHTTPS": {
       "Type": "AWS::ECS::Service",
       "Properties": {
+        "ServiceName": "Service-Roster",
         "Cluster": {
           "Fn::ImportValue": {
             "Fn::Sub": "ECSCluster"
@@ -219,8 +225,37 @@
         "LoadBalancers": [{
           "ContainerName": "efcRosterContainer",
           "ContainerPort": "3002",
-          "LoadBalancerName": {
-            "Ref": "ELBName"
+          "TargetGroupArn": {
+            "Fn::ImportValue": {
+              "Fn::Sub": "ALB-TargetGroup-HTTPS"
+            }
+          }
+        }],
+        "Role": {
+          "Ref": "ECSServiceRole"
+        },
+        "TaskDefinition": {
+          "Ref": "ECSTaskDef"
+        }
+      }
+    },
+    "ECSServiceRedirect": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "ServiceName": "Service-Redirect",
+        "Cluster": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "ECSCluster"
+          }
+        },
+        "DesiredCount": "1",
+        "LoadBalancers": [{
+          "ContainerName": "efcRosterContainer",
+          "ContainerPort": "3001",
+          "TargetGroupArn": {
+            "Fn::ImportValue": {
+              "Fn::Sub": "ALB-TargetGroup-Redirect"
+            }
           }
         }],
         "Role": {

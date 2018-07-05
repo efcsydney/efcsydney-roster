@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "EFC sydney ELB",
+  "Description": "EFC sydney ECS ALB",
   "Parameters": {
     "Environment": {
       "Type": "String",
@@ -52,7 +52,11 @@
     "AppLoadBalancer": {
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
       "Properties": {
-        "Name": "UAT-Yarra-gateway",
+        "Name": {
+          "Fn::Join": ["", [{
+            "Ref": "Environment"
+          }, "-", "EFC-Roster"]]
+        },
         "SecurityGroups": [{
           "Ref": "SecurityGroup"
         }],
@@ -136,7 +140,7 @@
           }
         },
         "HealthCheckProtocol": "HTTP",
-        "HealthCheckPath": "/status",
+        "HealthCheckPath": "/",
         "HealthyThresholdCount": 3,
         "UnhealthyThresholdCount": 5,
         "HealthCheckTimeoutSeconds": 10,
@@ -163,7 +167,7 @@
           }
         },
         "HealthCheckProtocol": "HTTP",
-        "HealthCheckPath": "/status",
+        "HealthCheckPath": "/",
         "HealthyThresholdCount": 3,
         "UnhealthyThresholdCount": 5,
         "HealthCheckTimeoutSeconds": 10,
@@ -190,6 +194,36 @@
           "Fn::Join": [
             "-", [
               "ecs-alb"
+            ]
+          ]
+        }
+      }
+    },
+    "TargetGroupHTTPS": {
+      "Description": "The Amazon Resource Name (ARN) of the TargetGroup",
+      "Value": {
+        "Ref": "AlbTargetGroupHTTPS"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Join": [
+            "-", [
+              "ALB-TargetGroup-HTTPS"
+            ]
+          ]
+        }
+      }
+    },
+    "TargetGroupRedirect": {
+      "Description": "The Amazon Resource Name (ARN) of the TargetGroup",
+      "Value": {
+        "Ref": "AlbTargetGroupRedirect"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Join": [
+            "-", [
+              "ALB-TargetGroup-Redirect"
             ]
           ]
         }
