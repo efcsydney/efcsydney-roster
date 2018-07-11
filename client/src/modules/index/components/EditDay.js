@@ -112,7 +112,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         toggleEditDay,
         ...otherProps
       } = this.props;
-      const { serviceInfo: { footnote, skipService, skipReason } } = this.state;
+      const { serviceInfo } = this.state;
+      const footnote = _.get(serviceInfo, 'footnote', '');
+      const skipService = _.get(serviceInfo, 'skipService', false);
+      const skipReason = _.get(serviceInfo, 'skipReason', '');
       const formattedDate = moment(day).format(this.getTrans('dateFormat'));
 
       return (
