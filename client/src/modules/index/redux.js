@@ -179,14 +179,15 @@ export const dataReducer = handleActions(
       );
     },
     [setServiceInfo]: (state, { payload }) => {
+      const id = _.get(payload, 'id');
       const dayIndex = _.findIndex(state, day => {
-        const id = _.get(day, 'serviceInfo.id', null);
-        return id === payload.id;
+        return id === _.get(day, 'serviceInfo.id');
       });
 
       if (dayIndex === -1) {
         return dotProp.set(state, state.length, {
           date: payload.date,
+          id: payload.id,
           serviceInfo: payload,
           members: []
         });
