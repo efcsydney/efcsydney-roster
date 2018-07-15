@@ -42,6 +42,7 @@ before_deploy:
   -in deploy_rsa.enc -out ~/.ssh/key/efcsydney.pem -d
 - eval "$(ssh-agent -s)"
 - chmod 400 ~/.ssh/key/efcsydney.pem
+- pip install --user awscli
 - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
 deploy:
 - provider: script
