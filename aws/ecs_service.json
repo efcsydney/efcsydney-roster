@@ -15,11 +15,6 @@
       "Type": "String",
       "Description": "The S3 Bucket Name which store configure files. ",
       "Default": "efc-sydney-qa"
-    },
-    "ELBName": {
-      "Type": "String",
-      "Description": "The name of classic load balancer",
-      "Default": "ecs-elb"
     }
   },
   "Resources": {

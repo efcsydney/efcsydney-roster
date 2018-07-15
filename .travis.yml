@@ -6,21 +6,23 @@ cache:
   - node_modules
   - client/node_modules
 hosts:
-  - db
+- db
 addons:
   ssh_known_hosts:
   - 54.206.106.116
   - 13.210.76.160
   apt:
     packages:
-      - docker-ce
+    - docker-ce
 services:
 - mysql
 - docker
 env:
   global:
-    - REGISTRY_USER=kleinchang
-    - secure: Mu010l75I6ucSpaSbpE2cYZLanDAZR5WxdI/2TPLuquFmF8kl/ojBYw8xZIvJmdWFhb6mHTgzl7PpY4zd0mbmhpwzAbLmn+ZCBm1d5JLfN9KMeMk9HKR7r+qYiauFBEtiuwwbD5aanH1l03ZgaPVYuFWP0O0fzfNoN+356G2cgHtrKBKFEMEvyvDjsVr03tAQotnxHsrnf1afrzKIS0kFWSlP2GleZoGyT5BLbn8Y1VHgNPK7NTv3oToyyt60Ykfj4z4vPyHVtClNuVrAMBdyOd+NEsUs0FSEKHN/W+9zdYJBDO3JFCgzszMuniFwDHBpBYq25i9r3OhizjdGsNCzVe9Z7VNBzQACBu3Ni5IMc4+hGpZ2l+S31l+6DNaNv8AMDIJnRuUKhGtd4pF0j+4MFVABft7EUJgZI0FV84DEZVDBAMssDnPpADcxxGGLXVJtes9gPU4dU+nRrLd49NcgRGvK3hRhCRkmxKHGJgOFpt2ObCkeD6UfXXejA0fHCByNWRT63XKFHLESnVMRDiWNL08aUIW99MkLl43L0OzHYkhF9p0XwS7GD2/EwAyFwJVa+ctiPUN6JdROGBHhABMz+kZXpF7Cn134ei/lXkNq09eo3s4Pj63zNXvfV70ux8opeITN8XIdD+7vqsgyia1k5HJW5VupApyNGkx4jxPTtY=
+  - REGISTRY_USER=kleinchang
+  - secure: Mu010l75I6ucSpaSbpE2cYZLanDAZR5WxdI/2TPLuquFmF8kl/ojBYw8xZIvJmdWFhb6mHTgzl7PpY4zd0mbmhpwzAbLmn+ZCBm1d5JLfN9KMeMk9HKR7r+qYiauFBEtiuwwbD5aanH1l03ZgaPVYuFWP0O0fzfNoN+356G2cgHtrKBKFEMEvyvDjsVr03tAQotnxHsrnf1afrzKIS0kFWSlP2GleZoGyT5BLbn8Y1VHgNPK7NTv3oToyyt60Ykfj4z4vPyHVtClNuVrAMBdyOd+NEsUs0FSEKHN/W+9zdYJBDO3JFCgzszMuniFwDHBpBYq25i9r3OhizjdGsNCzVe9Z7VNBzQACBu3Ni5IMc4+hGpZ2l+S31l+6DNaNv8AMDIJnRuUKhGtd4pF0j+4MFVABft7EUJgZI0FV84DEZVDBAMssDnPpADcxxGGLXVJtes9gPU4dU+nRrLd49NcgRGvK3hRhCRkmxKHGJgOFpt2ObCkeD6UfXXejA0fHCByNWRT63XKFHLESnVMRDiWNL08aUIW99MkLl43L0OzHYkhF9p0XwS7GD2/EwAyFwJVa+ctiPUN6JdROGBHhABMz+kZXpF7Cn134ei/lXkNq09eo3s4Pj63zNXvfV70ux8opeITN8XIdD+7vqsgyia1k5HJW5VupApyNGkx4jxPTtY=
+  - secure: ye/rMwpI9gQx9LGT+shGMBDmCWP8pVbDeX9R8N8+USwxo2Psn20DBg9FDWFIgImJEtysk8oR5ysumHiO6KhVeUB1dDR6N8O9vf+i0f872XC6rKFMH2jlyA9DnwumcI/qmfPn/hqoPvqmtFQTAAnPa3nrCKS/9kLrzBT0l5dxmZXLMFcviDFtV2JXY/0zIJZQxqpyYPtJNsDmFz9nYPg0xvVRww7SIQy13g4W7ixxiW35Cu/HvABIww0CbdjFIKPvobPbmgm6emsF8MtfXEukraT5auy/cpdOzqw92Gc4KwCjNXZ9My/LN9hn0WKJQmSQzh37U9XXihgtx1Qr31Jc7AMlkR+247rO7sRVtC3fNk4p9jfwPjaFmNhXOjNa+FcMLJ5cwP7GU5xqgyeDmQDRgSTqbwYVsCN5Wj1ewB+gYHzPr4CkNTLjUrU1qvWlTAEIs044Eziglt91uv+hGuuEqytcG8tvBRtdvm0EPuEq2TIg9gVuMIvJ/UhxPASW+HIkBylfL5dCb2Ss6RMlgIO7WtE1MywueWkEALdw9MMD3YjvVmgQiYUSWj2qXdHwT4hKSLxs3gVusdBfwiZSdI6SjLU42ec0qD+OcKqd3xY0jgn84q1/HUb/j3pZc7IajprXLUOrAct6dIBu1I2/najl5Ucj6CHT8NWRRlz2z5eKBrY=
+  - secure: GZEnrgjgpkiRVui+pYVEs46RLcJNyCW7xAf9Gf8WjM+Q+hOPGIo9cWvsORdDvyD87SOMjbinGkfhmyPbbUivFoWruCzoB1xFtbR7VRjBk4y7eQO4POlsZ/jDIo58xuqEBIqc3paPVIml3F7bST0vk4Pq7tnjSuMWsv7byXfESYJTY/lJqC5TVSrBbgutW/HGBRk00KUp+sicDqyKIcDUaOVkXMpQAKogLpccjc5LYU3z1zW+UCII+NL8VaLFHn5D1pl10IL6CDv/agLoNBiX6C8gc1E25enHXcfuY2dsxuvKbXv1hDiau2/4ZsITLzHe071ReCirzmGsEDdjyaNtrm73GKjkazPGoOYv6M0weO04ZdUCrtvAZzmmu4Pvq2PoKhfgIoVvOUKqbktIpPjbWZ2IprOAeJPvQ1MOgxfPcHPRZQVfaozY5pD1qQ+Yr5VL03JNmpA5tYNgtbPIc5QwFAwuvhroe0vvXuu4EvyNS3l5yy1ZocIN7mol5mb4pLZklzI0Mgg327ox6n3ggU5vWscmb6hFjyhaxdOf4+3S2kMR0oRZ11Fe9uxboA85CPEqbmCxgHr94uOFn+xkx17YmQZfnldbDp81XpVXolhGjwygOa8qRt7wc5et2D5by0LA/qU6Bp9aNH27ladOfu0p/17gJYsCbdfdm2uJyzJ27Dk=
 before_script:
 - yarn db-create
 - yarn db-migrate
@@ -42,6 +44,11 @@ before_deploy:
 - chmod 400 ~/.ssh/key/efcsydney.pem
 - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
 deploy:
+- provider: script
+  skip_cleanup: true
+  script: BUILD_TAG=$TRAVIS_BUILD_NUMBER\_${TRAVIS_COMMIT:0:7} sh -x aws/deploy.sh qa
+  on:
+    branch: aws_alb_docker
 - provider: script
   skip_cleanup: true
   script: sh -x deploy.sh qa; docker-compose -f docker/docker-compose.yml build efc-qa && docker push kleinchang/efcsydney-roster:qa
