@@ -49,11 +49,6 @@ deploy:
   skip_cleanup: true
   script: BUILD_TAG=$TRAVIS_BUILD_NUMBER\_${TRAVIS_COMMIT:0:7} sh -x docker_deploy.sh qa
   on:
-    branch: aws_alb_docker
-- provider: script
-  skip_cleanup: true
-  script: sh -x deploy.sh qa; docker-compose -f docker/docker-compose.yml build efc-qa && docker push kleinchang/efcsydney-roster:qa
-  on:
     branch: qa
 - provider: script
   skip_cleanup: true
