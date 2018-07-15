@@ -1,110 +1,96 @@
 {
-  "AWSTemplateFormatVersion":"2010-09-09",
-  "Parameters":{
-    "DockerImgSrc":{
-      "Type":"String",
-      "Description":"Docker image source",
-      "Default": "651220962436.dkr.ecr.ap-southeast-2.amazonaws.com/efc-roster"
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "DockerImgSrc": {
+      "Type": "String",
+      "Description": "Docker image source",
+      "Default": "docker.io/kleinchang/efcsydney-roster"
     },
-    "NodeEnv":{
-      "Type":"String",
-      "Description":"NODE_ENV=?",
+    "NodeEnv": {
+      "Type": "String",
+      "Description": "NODE_ENV=?",
       "Default": "qa"
     },
-    "S3ConfBucketName":{
-      "Type":"String",
-      "Description":"The S3 Bucket Name which store configure files. ",
-      "Default": "efc-roster-conf"
-    },
-    "ELBName":{
-      "Type":"String",
-      "Description":"The name of classic load balancer",
-      "Default": "ecs-elb"
+    "S3ConfBucketName": {
+      "Type": "String",
+      "Description": "The S3 Bucket Name which store configure files. ",
+      "Default": "efc-sydney-qa"
     }
   },
-  "Resources":{
-    "CloudwatchLogsGroup":{
-      "Type":"AWS::Logs::LogGroup",
-      "Properties":{
-        "LogGroupName":{
-          "Fn::Join":[
-            "-",
-            [
+  "Resources": {
+    "CloudwatchLogsGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "-", [
               "ECSLogGroup",
               {
-                "Ref":"AWS::StackName"
+                "Ref": "AWS::StackName"
               }
             ]
           ]
         },
-        "RetentionInDays":14
+        "RetentionInDays": 14
       }
     },
-    "ECSServiceRole":{
-      "Type":"AWS::IAM::Role",
-      "Properties":{
-        "AssumeRolePolicyDocument":{
-          "Statement":[
-            {
-              "Effect":"Allow",
-              "Principal":{
-                "Service":[
-                  "ecs.amazonaws.com",
-                  "ecs-tasks.amazonaws.com"
-                ]
-              },
-              "Action":[
-                "sts:AssumeRole"
+    "ECSServiceRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [
+                "ecs.amazonaws.com",
+                "ecs-tasks.amazonaws.com"
               ]
-            }
-          ]
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }]
         },
-        "Path":"/",
+        "Path": "/",
         "ManagedPolicyArns": [],
-        "Policies":[
-          {
-            "PolicyName":"ecs-service",
-            "PolicyDocument":{
-              "Statement":[
-                {
-                  "Effect":"Allow",
-                  "Action":[
-                    "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-                    "elasticloadbalancing:DeregisterTargets",
-                    "elasticloadbalancing:Describe*",
-                    "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-                    "elasticloadbalancing:RegisterTargets",
-                    "ec2:Describe*",
-                    "ec2:AuthorizeSecurityGroupIngress"
-                  ],
-                  "Resource":"*"
-                }
-              ]
-            }
+        "Policies": [{
+          "PolicyName": "ecs-service",
+          "PolicyDocument": {
+            "Statement": [{
+              "Effect": "Allow",
+              "Action": [
+                "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                "elasticloadbalancing:DeregisterTargets",
+                "elasticloadbalancing:Describe*",
+                "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                "elasticloadbalancing:RegisterTargets",
+                "ec2:Describe*",
+                "ec2:AuthorizeSecurityGroupIngress"
+              ],
+              "Resource": "*"
+            }]
           }
-        ]
+        }]
       }
     },
-    "ECSSTaskRole":{
-      "Type":"AWS::IAM::Role",
-      "Properties":{
-        "AssumeRolePolicyDocument":{
-          "Statement":[
-            {
-              "Effect":"Allow",
-              "Principal":{
-                "Service":[
-                  "ecs.amazonaws.com",
-                  "ecs-tasks.amazonaws.com"
-                ]
-              },
-              "Action":[
-                "sts:AssumeRole"
+    "ECSSTaskRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [
+                "ecs.amazonaws.com",
+                "ecs-tasks.amazonaws.com"
               ]
-            }
-          ]
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }]
         },
-        "Path":"/",
+        "Path": "/",
         "ManagedPolicyArns": [
           "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess",
           "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
@@ -113,144 +99,164 @@
           "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
           "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
         ],
-        "Policies":[
-          {
-            "PolicyName":"ecs-task",
-            "PolicyDocument":{
-              "Statement":[
-                {
-                  "Effect":"Allow",
-                  "Action":[
-                    "elasticloadbalancing:Describe*",
-                    "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-                    "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-                    "ec2:Describe*",
-                    "ec2:AuthorizeSecurityGroupIngress"
-                  ],
-                  "Resource":"*"
-                }
-              ]
+        "Policies": [{
+            "PolicyName": "ecs-task",
+            "PolicyDocument": {
+              "Statement": [{
+                "Effect": "Allow",
+                "Action": [
+                  "elasticloadbalancing:Describe*",
+                  "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                  "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                  "ec2:Describe*",
+                  "ec2:AuthorizeSecurityGroupIngress"
+                ],
+                "Resource": "*"
+              }]
             }
           },
           {
-            "PolicyName":"get-parameter",
-            "PolicyDocument":{
-              "Statement":[
-                {
-                  "Effect":"Allow",
-                  "Action":[
-                    "ssm:DescribeParameters",
-                    "ssm:GetParameterHistory",
-                    "ssm:DescribeDocumentParameters",
-                    "ssm:GetParametersByPath",
-                    "ssm:GetParameters",
-                    "ssm:GetParameter"
-                  ],
-                  "Resource":"*"
-                }
-              ]
+            "PolicyName": "get-parameter",
+            "PolicyDocument": {
+              "Statement": [{
+                "Effect": "Allow",
+                "Action": [
+                  "ssm:DescribeParameters",
+                  "ssm:GetParameterHistory",
+                  "ssm:DescribeDocumentParameters",
+                  "ssm:GetParametersByPath",
+                  "ssm:GetParameters",
+                  "ssm:GetParameter"
+                ],
+                "Resource": "*"
+              }]
             }
           }
         ]
       }
     },
-    "ECSTaskDef":{
-      "Type":"AWS::ECS::TaskDefinition",
-      "Properties":{
-        "NetworkMode": "host",
-        "Family":{
-          "Fn::Join":[
-            "",
-            [
-              {
-                "Ref":"AWS::StackName"
+    "ECSTaskDef": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "NetworkMode": "bridge",
+        "Family": {
+          "Fn::Join": [
+            "", [{
+                "Ref": "AWS::StackName"
               },
               "-task"
             ]
           ]
         },
-        "ContainerDefinitions":[
-          {
-            "Name":"efcRosterContainer",
-            "Cpu":"128",
-            "Essential":"true",
-            "Image":{
-              "Ref":"DockerImgSrc"
-            },
-            "Memory":"128",
-            "Environment": [
-              {
-                "Name" : "NODE_ENV",
-                "Value" : {
-                  "Ref":"NodeEnv"
-                }
-              },
-              {
-                "Name" : "S3_BUCKET",
-                "Value" : {
-                  "Ref": "S3ConfBucketName"
-                }
-              }
-            ],
-            "LogConfiguration":{
-              "LogDriver":"awslogs",
-              "Options":{
-                "awslogs-group":{
-                  "Ref":"CloudwatchLogsGroup"
-                },
-                "awslogs-region":{
-                  "Ref":"AWS::Region"
-                },
-                "awslogs-stream-prefix":"efcContainerLog"
-              }
-            },
-            "PortMappings":[
-              {
-                "ContainerPort":80,
-                "HostPort":80
-              },
-              {
-                "ContainerPort":3001,
-                "HostPort":3001
-              },
-              {
-                "ContainerPort":3002,
-                "HostPort":3002
-              },
-              {
-                "ContainerPort":8080,
-                "HostPort":8080
-              }
-            ]
+        "Volumes": [{
+          "Name": "log",
+          "Host": {
+            "SourcePath": "/var/log/roster"
           }
-        ],
+        }],
+        "ContainerDefinitions": [{
+          "Name": "efcRosterContainer",
+          "Cpu": "128",
+          "Essential": "true",
+          "Image": {
+            "Ref": "DockerImgSrc"
+          },
+          "Memory": "128",
+          "Environment": [{
+              "Name": "NODE_ENV",
+              "Value": {
+                "Ref": "NodeEnv"
+              }
+            },
+            {
+              "Name": "S3_BUCKET",
+              "Value": {
+                "Ref": "S3ConfBucketName"
+              }
+            }
+          ],
+          "LogConfiguration": {
+            "LogDriver": "awslogs",
+            "Options": {
+              "awslogs-group": {
+                "Ref": "CloudwatchLogsGroup"
+              },
+              "awslogs-region": {
+                "Ref": "AWS::Region"
+              },
+              "awslogs-stream-prefix": "efcContainerLog"
+            }
+          },
+          "PortMappings": [{
+              "ContainerPort": 3002,
+              "HostPort": 0
+            },
+            {
+              "ContainerPort": 3001,
+              "HostPort": 0
+            }
+          ],
+          "MountPoints": [{
+            "ContainerPath": "/opt/efcsydney-roster/log",
+            "SourceVolume": "log",
+            "ReadOnly": false
+          }]
+        }],
         "TaskRoleArn": {
-          "Ref":"ECSSTaskRole"
+          "Ref": "ECSSTaskRole"
         }
       }
     },
-    "ECSService":{
-      "Type":"AWS::ECS::Service",
-      "Properties":{
-        "Cluster":{
+    "ECSServiceHTTPS": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "ServiceName": "Service-Roster",
+        "Cluster": {
           "Fn::ImportValue": {
             "Fn::Sub": "ECSCluster"
           }
         },
-        "DesiredCount":"1",
-        "LoadBalancers":[
-          {
-            "ContainerName":"efcRosterContainer",
-            "ContainerPort":"3001",
-            "LoadBalancerName":{
-              "Ref": "ELBName"
+        "DesiredCount": "1",
+        "LoadBalancers": [{
+          "ContainerName": "efcRosterContainer",
+          "ContainerPort": "3002",
+          "TargetGroupArn": {
+            "Fn::ImportValue": {
+              "Fn::Sub": "ALB-TargetGroup-HTTPS"
             }
           }
-        ],
-        "Role":{
+        }],
+        "Role": {
           "Ref": "ECSServiceRole"
         },
-        "TaskDefinition":{
+        "TaskDefinition": {
+          "Ref": "ECSTaskDef"
+        }
+      }
+    },
+    "ECSServiceRedirect": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "ServiceName": "Service-Redirect",
+        "Cluster": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "ECSCluster"
+          }
+        },
+        "DesiredCount": "1",
+        "LoadBalancers": [{
+          "ContainerName": "efcRosterContainer",
+          "ContainerPort": "3001",
+          "TargetGroupArn": {
+            "Fn::ImportValue": {
+              "Fn::Sub": "ALB-TargetGroup-Redirect"
+            }
+          }
+        }],
+        "Role": {
+          "Ref": "ECSServiceRole"
+        },
+        "TaskDefinition": {
           "Ref": "ECSTaskDef"
         }
       }
