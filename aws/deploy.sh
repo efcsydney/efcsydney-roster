@@ -17,7 +17,7 @@ dockerImg="docker.io/kleinchang/efcsydney-roster:${BUILD_TAG:-latest}"
 file='./ecs_service.json'
 stack='ecs-service'
 
-aws cloudformation deploy \
+aws --region ap-southeast-2 cloudformation deploy \
     --capabilities CAPABILITY_IAM \
     --template-file $file \
     --stack-name $stack \
