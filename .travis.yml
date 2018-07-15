@@ -57,7 +57,7 @@ deploy:
     branch: qa
 - provider: script
   skip_cleanup: true
-  script: sh -x deploy.sh prod; docker-compose -f docker/docker-compose.yml build efc-prod && docker push kleinchang/efcsydney-roster
+  script: sh -x deploy.sh prod; BUILD_TAG=$TRAVIS_BUILD_NUMBER\_${TRAVIS_COMMIT:0:7} docker-compose -f docker/docker-compose.yml build efc-prod && docker push kleinchang/efcsydney-roster:$TRAVIS_BUILD_NUMBER\_${TRAVIS_COMMIT:0:7}
   on:
     branch: master
 notifications:
