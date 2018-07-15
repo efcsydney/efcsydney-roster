@@ -47,7 +47,7 @@ before_deploy:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: BUILD_TAG=$TRAVIS_BUILD_NUMBER\_${TRAVIS_COMMIT:0:7} sh -x aws/deploy.sh qa
+  script: BUILD_TAG=$TRAVIS_BUILD_NUMBER\_${TRAVIS_COMMIT:0:7} sh -x docker_deploy.sh qa
   on:
     branch: aws_alb_docker
 - provider: script
