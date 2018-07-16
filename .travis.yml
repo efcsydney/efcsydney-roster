@@ -52,12 +52,6 @@ deploy:
     AWS_SECRET_ACCESS_KEY=$QA_AWS_SECRET_ACCESS_KEY
     sh -x docker_deploy.sh qa
   on:
-    branch: aws_alb_docker
-- provider: script
-  skip_cleanup: true
-  script: BUILD_TAG=$TRAVIS_BUILD_NUMBER\_${TRAVIS_COMMIT:0:7} AWS_ACCESS_KEY_ID=$QA_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$QA_AWS_SECRET_ACCESS_KEY sh -x docker_deploy.sh
-    qa
-  on:
     branch: qa
 - provider: script
   skip_cleanup: true
