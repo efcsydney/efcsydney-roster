@@ -12,7 +12,7 @@ else
 fi
 
 docker-compose -f docker/docker-compose.yml build efc-prod
-docker push kleinchang/efcsydney-roster:$BUILD_TAG
+docker push kleinchang/efcsydney-roster:${BUILD_TAG:-latest}
 dockerImg="docker.io/kleinchang/efcsydney-roster:${BUILD_TAG:-latest}"
 file='aws/ecs_service.json'
 stack='ecs-service'
