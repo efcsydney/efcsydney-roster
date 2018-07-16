@@ -141,10 +141,10 @@
         },
         "HealthCheckProtocol": "HTTP",
         "HealthCheckPath": "/",
-        "HealthyThresholdCount": 3,
-        "UnhealthyThresholdCount": 5,
-        "HealthCheckTimeoutSeconds": 10,
-        "HealthCheckIntervalSeconds": 30,
+        "HealthyThresholdCount": 2,
+        "UnhealthyThresholdCount": 2,
+        "HealthCheckTimeoutSeconds": 5,
+        "HealthCheckIntervalSeconds": 10,
         "Matcher": {
           "HttpCode": "200,301,302"
         },
@@ -168,10 +168,10 @@
         },
         "HealthCheckProtocol": "HTTP",
         "HealthCheckPath": "/",
-        "HealthyThresholdCount": 3,
-        "UnhealthyThresholdCount": 5,
-        "HealthCheckTimeoutSeconds": 10,
-        "HealthCheckIntervalSeconds": 30,
+        "HealthyThresholdCount": 2,
+        "UnhealthyThresholdCount": 2,
+        "HealthCheckTimeoutSeconds": 5,
+        "HealthCheckIntervalSeconds": 10,
         "Matcher": {
           "HttpCode": "200,301,302"
         },
