@@ -8,7 +8,6 @@ else
     env='Production'
     NodeEnv='production'
     bucket='efc-sydney-prod'
-
 fi
 
 docker-compose -f docker/docker-compose.yml build efc-prod
