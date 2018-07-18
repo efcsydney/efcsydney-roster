@@ -22,7 +22,6 @@ aws --region ap-southeast-2 cloudformation deploy \
     --stack-name $stack \
     --parameter-overrides \
         Environment=$env \
-        Certificates=$cert \
         DockerImgSrc=$dockerImg \
         NodeEnv=$NodeEnv \
         S3ConfBucketName=$bucket
