@@ -156,12 +156,12 @@
         }],
         "ContainerDefinitions": [{
           "Name": "efcRosterContainer",
-          "Cpu": "128",
+          "Cpu": "512",
+          "Memory": "512",
           "Essential": "true",
           "Image": {
             "Ref": "DockerImgSrc"
           },
-          "Memory": "128",
           "Environment": [{
               "Name": "NODE_ENV",
               "Value": {
