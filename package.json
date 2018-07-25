@@ -59,6 +59,7 @@
     "lint": "eslint .",
     "test": "cross-env NODE_ENV=test mocha test",
     "test:frontend": "cd client && yarn test",
+    "test:functional": "testcafe 'chrome:headless' test/e2e-test/test.js",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
     "db-rollback-all": "sequelize db:migrate:undo:all",
@@ -75,6 +76,9 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "4.0.0",
-    "eslint-plugin-react": "6.9.0"
+    "eslint-plugin-react": "6.9.0",
+    "node-fetch": "^2.2.0",
+    "testcafe": "^0.20.5",
+    "testcafe-react-selectors": "^2.1.0"
   }
 }
