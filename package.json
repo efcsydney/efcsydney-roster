@@ -60,7 +60,7 @@
     "lint": "eslint .",
     "test": "cross-env NODE_ENV=test mocha test/unit-test test/integration-test",
     "test:frontend": "cd client && yarn test",
-    "test:functional": "testcafe 'chrome:headless' test/e2e-test/*.js",
+    "test:functional": "node ./test/e2e-test/server.js ",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
     "db-rollback-all": "sequelize db:migrate:undo:all",
@@ -79,6 +79,7 @@
     "eslint-plugin-jsx-a11y": "4.0.0",
     "eslint-plugin-react": "6.9.0",
     "node-fetch": "^2.2.0",
+    "puppeteer": "^1.6.1",
     "testcafe": "^0.20.5",
     "testcafe-react-selectors": "^2.1.0"
   }

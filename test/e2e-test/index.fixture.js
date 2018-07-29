@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Selector } from 'testcafe';
 import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
-import { createServiceInfo, getEvents, modifyServiceInfo } from './api';
+import { getEvents, modifyServiceInfo } from './api';
 
 const CATEGORY = 'english';
 const FROM_DATE = '2000-01-01';
@@ -12,33 +12,11 @@ const isDev = process.env.NODE_ENV === 'development';
 const webUrl = isDev
   ? 'http://localhost:3000'
   : 'https://demo-roster.efcsydney.org';
-let serviceInfoId;
 
 fixture('Quarter View') // eslint-ignore-line
   .page(`${webUrl}/#/index/${CATEGORY}?from=${FROM_DATE}&to=${TO_DATE}`)
-  .before(async () => {
-    serviceInfoId = await getEvents({
-      category: CATEGORY,
-      fromDate: FROM_DATE,
-      toDate: TO_DATE
-    }).then(({ data }) => {
-      const day = _.find(data, { date: FIRST_DATE });
-      if (day) {
-        return day.id;
-      }
-      return createServiceInfo({ category: CATEGORY, date: FIRST_DATE }).then(
-        ({ data }) => data.id
-      );
-    });
-  })
   .beforeEach(async () => {
     await waitForReact();
-  })
-  .afterEach(async () => {
-    await modifyServiceInfo(serviceInfoId, {
-      category: CATEGORY,
-      date: FIRST_DATE
-    });
   });
 
 test('Edit Day', async t => {
@@ -66,4 +44,37 @@ test('Edit Day', async t => {
     .click(SaveButton)
     .expect(CombinedCell.innerText)
     .contains('Church Camp', 'Modify the second cell to "Church Camp"');
-});
+})
+  .before(async () => {
+    const id = await getEventId();
+    if (id) {
+      await resetServiceInfo(id);
+    }
+  })
+  .after(async () => {
+    const id = await getEventId();
+    if (id) {
+      await resetServiceInfo(id);
+    }
+  });
+
+function getEventId() {
+  return getEvents({
+    category: CATEGORY,
+    fromDate: FROM_DATE,
+    toDate: TO_DATE
+  }).then(({ data }) => {
+    const day = _.find(data, { date: FIRST_DATE });
+    return day && day.id;
+  });
+}
+
+function resetServiceInfo(id) {
+  return modifyServiceInfo(id, {
+    category: CATEGORY,
+    date: FIRST_DATE,
+    footnote: '',
+    skipService: false,
+    skipReason: ''
+  });
+}
