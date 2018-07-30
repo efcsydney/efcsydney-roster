@@ -20,12 +20,13 @@ fixture('Quarter View') // eslint-ignore-line
   });
 
 test('Edit Day', async t => {
+  const options = { timeout: 500 };
   const FirstCell = Selector('table tbody tr:nth-child(1) td:nth-child(2)');
   const Popup = ReactSelector('Popup');
-  const NoteInput = Popup.findReact('Input');
-  const ReasonInput = Popup.findReact('StyledInput');
+  const NoteInput = Popup.findReact('Input').with(options);
+  const ReasonInput = Popup.findReact('StyledInput').with(options);
   const SaveButton = Popup.findReact('Button');
-  const SwitchButton = ReactSelector('Handle');
+  const SwitchButton = Popup.findReact('Handle').with(options);
   const CombinedCell = Selector('table tbody tr:nth-child(1) td:nth-child(3)');
 
   await t
