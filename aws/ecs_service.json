@@ -233,33 +233,6 @@
           "Ref": "ECSTaskDef"
         }
       }
-    },
-    "ECSServiceRedirect": {
-      "Type": "AWS::ECS::Service",
-      "Properties": {
-        "ServiceName": "Service-Redirect",
-        "Cluster": {
-          "Fn::ImportValue": {
-            "Fn::Sub": "ECSCluster"
-          }
-        },
-        "DesiredCount": "1",
-        "LoadBalancers": [{
-          "ContainerName": "efcRosterContainer",
-          "ContainerPort": "3001",
-          "TargetGroupArn": {
-            "Fn::ImportValue": {
-              "Fn::Sub": "ALB-TargetGroup-Redirect"
-            }
-          }
-        }],
-        "Role": {
-          "Ref": "ECSServiceRole"
-        },
-        "TaskDefinition": {
-          "Ref": "ECSTaskDef"
-        }
-      }
     }
   }
 }
