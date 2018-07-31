@@ -12,7 +12,7 @@ createTestCafe('localhost', 1337, 1338)
 
     return runner
       .src(files)
-      .browsers(['chrome:headless'])
+      .browsers(['chrome'])
       .run();
   })
   .then(failedCount => {
