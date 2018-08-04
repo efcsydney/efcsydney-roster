@@ -69,7 +69,16 @@ test('Footnote', async t => {
 });
 
 test('Footnote - Mobile', async t => {
-  // Choco to implement
+  const FootnoteCell = ReactSelector('Grid Day Footnote');
+
+  await t
+    .resizeWindow(350, 400)
+    .click(FootnoteCell)
+    .selectText(NoteInput)
+    .typeText(NoteInput, 'Mobile Footnote Test')
+    .click(SaveButton)
+    .expect(FootnoteCell.innerText)
+    .contains('Mobile Footnote Test');
 });
 
 test('Edit Day - Mobile', async t => {
