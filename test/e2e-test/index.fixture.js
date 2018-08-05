@@ -19,7 +19,7 @@ const FIRST_DATE = '2000-01-02';
 const options = { timeout: 500 };
 const FirstCell = Selector('table tbody tr:nth-child(1) td:nth-child(2)');
 const Popup = ReactSelector('Popup');
-const NoteInput = Popup.findReact('Input').with(options);
+const FootNoteInput = Popup.findReact('Input').with(options);
 const ReasonInput = Popup.findReact('StyledInput').with(options);
 const SaveButton = Popup.findReact('Button');
 const SwitchButton = Popup.findReact('Handle').with(options);
@@ -61,15 +61,32 @@ test('Footnote', async t => {
   // Choco to maintain
   await t
     .click(FirstCell)
-    .selectText(NoteInput)
-    .typeText(NoteInput, 'Footnote Test')
+    .selectText(FootNoteInput)
+    .typeText(FootNoteInput, 'Footnote Test')
     .click(SaveButton)
     .expect(FirstCell.innerText)
     .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
 });
 
 test('Footnote - Mobile', async t => {
-  // Choco to implement
+  const SettingLink = ReactSelector('Grid Day Cell SettingLink');
+  // can also select like ReactSelector('Grid Day Cell').nth(0).findReact('SettingLink');
+  const FootnoteText = ReactSelector('Grid Day Cell Footnote');
+
+  await t
+    .resizeWindow(300, 500)
+    .click(SettingLink)
+    .selectText(FootNoteInput)
+    .typeText(FootNoteInput, 'Footnote Test')
+    .click(SaveButton)
+    .expect(FootnoteText.innerText)
+    .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
+
+  // test again after reload
+  await t.eval(() => location.reload(true));
+  await t
+    .expect(FootnoteText.innerText)
+    .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
 });
 
 test('Edit Day - Mobile', async t => {
