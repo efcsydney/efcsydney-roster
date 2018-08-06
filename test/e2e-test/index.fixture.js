@@ -89,6 +89,27 @@ test('Footnote - Mobile', async t => {
     .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
 });
 
+test('Edit Day - Desktop', async t => {
+  const RoleCell = ReactSelector('Grid Row')
+    .nth(1)
+    .findReact('Cell')
+    .nth(2)
+    .findReact('Text');
+
+  await t
+    .resizeWindow(800, 500)
+    .click(RoleCell)
+    .pressKey('T')
+    .pressKey('E')
+    .pressKey('S')
+    .pressKey('T')
+    .pressKey('enter')
+    .expect(RoleCell.innerText)
+    .eql('TEST');
+  await t.eval(() => location.reload(true));
+  await t.expect(RoleCell.innerText).eql('TEST');
+});
+
 test('Edit Day - Mobile', async t => {
   // Choco to implement
 });
