@@ -4,14 +4,15 @@ if [ $1 = "qa" ]; then
     env='QA'
     NodeEnv='qa'
     bucket='efc-sydney-qa'
-    profile=efc-qa
+    dockerBuildTarget='efc-qa'
 else
     env='Production'
     NodeEnv='production'
-    #bucket='efc-sydney-prod'
+    # bucket='efc-sydney-prod'
+    dockerBuildTarget='efc-prod'
 fi
 
-docker-compose -f docker/docker-compose.yml build efc-prod
+docker-compose -f docker/docker-compose.yml build $dockerBuildTarget
 docker push kleinchang/efcsydney-roster:${BUILD_TAG:-latest}
 dockerImg="docker.io/kleinchang/efcsydney-roster:${BUILD_TAG:-latest}"
 file='aws/ecs_service.json'

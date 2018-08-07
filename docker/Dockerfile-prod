@@ -1,8 +1,12 @@
 FROM mhart/alpine-node:8.10.0
 
+
+ARG REACT_APP_ENV=qa
+ENV REACT_APP_ENV=${REACT_APP_ENV}
+
 RUN apk update && apk add --no-cache bash py-pip jq
 RUN npm install -g pm2@latest
-#RUN apk add --no-cache  make gcc g++
+
 RUN pip install awscli --upgrade --user && \
     echo "export PATH=$PATH:~/.local/bin/" >> ~/.bashrc
 

@@ -20,6 +20,7 @@ const options = { timeout: 500 };
 const FirstCell = Selector('table tbody tr:nth-child(1) td:nth-child(2)');
 const Popup = ReactSelector('Popup');
 const NoteInput = Popup.findReact('Input').with(options);
+
 const ReasonInput = Popup.findReact('StyledInput').with(options);
 const SaveButton = Popup.findReact('Button');
 const SwitchButton = Popup.findReact('Handle').with(options);
