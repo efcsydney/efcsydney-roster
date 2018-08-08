@@ -30,7 +30,7 @@ services:
       - $PWD/../:/opt/efcsydney-roster/
 
   efc-qa:
-    image: kleinchang/efcsydney-roster
+    image: kleinchang/efcsydney-roster:$BUILD_TAG
     build:
       context: ../
       dockerfile: docker/Dockerfile-prod
