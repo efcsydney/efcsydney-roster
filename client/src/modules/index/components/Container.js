@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import QuarterView from './QuarterView';
 import { LoadingIndicator, DateBar } from 'components';
@@ -7,74 +8,32 @@ import { NavBar } from 'modules/core';
 import moment from 'moment';
 import pusher from 'utils/pusher';
 import EditDay from './EditDay';
-import queryString from 'query-string';
 import { EventsAPI } from 'apis';
-import { getMemberNames, getCategory, setCategory } from 'utils';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { switchCategory } from 'modules/core/redux';
-import {
-  requestModifyServiceInfo,
-  requestRetrieveEvents,
-  setEvent,
-  setSelectedData,
-  setServiceInfo,
-  toggleEditRole,
-  toggleEditDay
-} from 'modules/index/redux';
-import { createApiActions } from 'resource/actions';
+import { getMemberNames, getCategory } from 'utils';
+import connectData from '../connect';
 
-const mapStateToProps = (state, ownProps) => {
-  const {
-    history,
-    match: { params: { category } },
-    location: { search }
-  } = ownProps;
-  const services = _.get(state, 'resource.data.services', {});
-  const serviceNames = _.map(services, service => service.name);
-  const selectedService = _.find(services, { name: category }) || {};
-  const {
-    meta: { isEditingDay, isEditingRole, isLoading },
-    data
-  } = state.index;
-  const nextCategory = getCategory(category);
-
-  if (!category) {
-    history.replace(`/index/${nextCategory}`);
-  }
-
-  setCategory(nextCategory);
-  return {
-    category: nextCategory,
-    data,
-    frequency: selectedService.frequency || 'Sunday',
-    query: queryString.parse(search),
-    isEditingDay,
-    isEditingRole,
-    isLoading,
-    serviceNames
-  };
-};
-const mapDispatchToProps = dispatch => {
-  const { retrieveEvents } = createApiActions('events');
-  return bindActionCreators(
-    {
-      requestModifyServiceInfo,
-      requestRetrieveEvents,
-      retrieveEvents,
-      setEvent,
-      setSelectedData,
-      setServiceInfo,
-      switchCategory,
-      toggleEditDay,
-      toggleEditRole
-    },
-    dispatch
-  );
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connectData(
   class Container extends Component {
+    static propTypes = {
+      category: PropTypes.string,
+      data: PropTypes.array,
+      frequency: PropTypes.string,
+      query: PropTypes.object,
+      isEditDay: PropTypes.bool,
+      isEditRole: PropTypes.bool,
+      isLoading: PropTypes.bool,
+      serviceNames: PropTypes.array
+    };
+    static defaultProps = {
+      category: 'english',
+      data: [],
+      frequency: 'Sunday',
+      query: {},
+      isEditDay: false,
+      isEditRole: false,
+      isLoading: false,
+      serviceNames: []
+    };
     constructor(props) {
       super(props);
 

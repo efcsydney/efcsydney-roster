@@ -43,7 +43,9 @@ export const withResource = (
 ) => WrappedComponent => {
   return connect((state, ownProps) => {
     const { resource } = state;
-    const query = _.isFunction(mapStateToQuery) ? mapStateToQuery(state) : {};
+    const query = _.isFunction(mapStateToQuery)
+      ? mapStateToQuery(state, ownProps)
+      : {};
 
     return {
       resource,
