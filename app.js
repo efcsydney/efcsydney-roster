@@ -9,6 +9,7 @@ const servicesController = require('./api/controllers/services-controller');
 const exception = require('./api/middleware/exception-handler');
 const httpRedirect = require('./api/middleware/http-redirect');
 const serviceInfoController = require('./api/controllers/service-info-controller');
+const userController = require('./api/controllers/user-controller');
 const Raven = require('raven');
 const env = _.get(process, 'env.NODE_ENV', 'development');
 const config = require('config');
@@ -61,7 +62,11 @@ app.get('/api/services/:id', servicesController.getServiceById);
 
 app.put('/api/services/:id', servicesController.saveService);
 
-app.post('/api/services/', servicesController.saveService);
+app.post('/api/users', userController.save);
+
+app.put('/api/users/:id', userController.save);
+
+app.get('/api/users', userController.get);
 
 if (isServerEnvironment()) {
   // The error handler must be before any other error middleware
