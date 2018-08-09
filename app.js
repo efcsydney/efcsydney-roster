@@ -62,6 +62,8 @@ app.get('/api/services/:id', servicesController.getServiceById);
 
 app.put('/api/services/:id', servicesController.saveService);
 
+app.post('/api/services/', servicesController.saveService);
+
 app.post('/api/users', userController.save);
 
 app.put('/api/users/:id', userController.save);
