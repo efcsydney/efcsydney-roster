@@ -11,7 +11,6 @@ class ValidatorResult {
   addError(error) {
     this.errors.push(error);
     this.success = false;
-    return this;
   }
 
   toString() {

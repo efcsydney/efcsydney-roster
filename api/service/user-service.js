@@ -3,17 +3,15 @@ const {
   updateUser,
   getUsers: getAllUsers
 } = require('../data/user-repository');
-const {
-  validate: validateUser
-} = require('../models-validator/user-validator');
+const { validate } = require('../models-validator/user-validator');
 const ValidationError = require('../models-validator/validation-error');
 const ValidationResult = require('../models-validator/validation-result');
 const Sequelize = require('sequelize');
 
 async function saveUser(user) {
-  const validationResult = validateUser(user);
-  if (!validationResult.success) {
-    throw new ValidationError(validationResult);
+  const result = validate(user);
+  if (!result.success) {
+    throw new ValidationError(result);
   }
 
   try {
