@@ -13,7 +13,6 @@ module.exports = {
         primaryName: {
           type: Sequelize.STRING,
           validate: {
-            notNull: true,
             notEmpty: true
           }
         },
@@ -22,8 +21,8 @@ module.exports = {
         },
         email: {
           type: Sequelize.STRING,
+          unique: true,
           validate: {
-            notNull: true,
             notEmpty: true
           }
         },

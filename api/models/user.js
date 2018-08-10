@@ -19,6 +19,7 @@ const User = sequelizeClient.define('users', {
   },
   email: {
     type: Sequelize.STRING,
+    unique: true,
     validate: {
       notEmpty: true
     }
