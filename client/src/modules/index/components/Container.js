@@ -151,11 +151,11 @@ export default connectData(
     handleHistoryChange = () => {
       const { category, switchCategory } = this.props;
 
-      this.loadData({ category });
+      //fthis.loadData({ category });
       switchCategory(category);
     };
     componentWillMount() {
-      const { category, switchCategory, query } = this.props;
+      const { category, switchCategory } = this.props;
 
       this.channel = pusher.subscribe('index');
       this.channel.bind('event-modified', this.handleEventModified);
@@ -163,7 +163,7 @@ export default connectData(
 
       const nextCategory = getCategory(category);
       switchCategory(nextCategory);
-      this.loadData({ category: nextCategory, ...query });
+      // this.loadData({ category: nextCategory, ...query });
     }
     componentDidMount() {
       const { history } = this.props;

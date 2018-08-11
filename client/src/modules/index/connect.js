@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -22,15 +23,11 @@ const mapStateToProps = (state, ownProps) => {
     location: { search }
   } = ownProps;
 
-  console.log(ownProps);
-
   const services = _.get(state, 'resource.data.services', {});
   const serviceNames = _.map(services, service => service.name);
   const selectedService = _.find(services, { name: category }) || {};
-  const {
-    meta: { isEditingDay, isEditingRole, isLoading },
-    data
-  } = state.index;
+  const events = _.get(state, 'resource.data.events', {});
+  const { meta: { isEditingDay, isEditingRole, isLoading } } = state.index;
 
   const nextCategory = getCategory(category);
   if (!category) {
@@ -40,7 +37,7 @@ const mapStateToProps = (state, ownProps) => {
   setCategory(nextCategory);
   return {
     category: nextCategory, // serviceName
-    data,
+    data: _.map(events),
     frequency: selectedService.frequency || 'Sunday',
     query: queryString.parse(search), // We probably don't need it?
     isEditingDay,
@@ -89,10 +86,21 @@ const connectEvents = withResource(
   (state, ownProps) => {
     const { location: { search }, match: { params: { category } } } = ownProps;
     const query = queryString.parse(search);
+    const from =
+      query.from ||
+      moment()
+        .startOf('quarter')
+        .format('YYYY-MM-DD');
+    const to =
+      query.to ||
+      moment()
+        .endOf('quarter')
+        .format('YYYY-MM-DD');
 
     return {
-      category: getCategory(category),
-      ...query
+      from,
+      to,
+      category: getCategory(category)
     };
   }
 );

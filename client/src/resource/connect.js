@@ -78,7 +78,7 @@ export const withResource = (
         const {
           resource: { data, status, cache },
           state,
-          ownProps
+          ...ownProps
         } = this.props;
 
         const filteredResource = {

@@ -1,12 +1,12 @@
 import _ from 'lodash';
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import { createAsyncAction } from './actions';
 import { mapping as apiMapping } from 'apis';
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 export default function* resourceSagas() {
-  yield takeLatest(
+  yield takeEvery(
     action => {
       return (
         action.resource &&
@@ -28,7 +28,7 @@ export default function* resourceSagas() {
     }
   );
 
-  yield takeLatest(
+  yield takeEvery(
     action => {
       return (
         action.resource &&
