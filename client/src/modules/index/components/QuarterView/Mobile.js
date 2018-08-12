@@ -19,7 +19,6 @@ const mapStateToProps = state => {
   const selectedService = _.find(services, { name: selectedServiceName }) || {};
 
   return {
-    events: _.get(state.index, 'data', []),
     isEditingRole,
     selectedData: _.get(state.index, 'meta.selectedData', null),
     selectedService

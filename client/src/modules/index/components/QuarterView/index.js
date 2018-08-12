@@ -99,6 +99,8 @@ export default class QuarterView extends Component {
       onRoleClick: this.handleRoleClick
     };
 
+    console.log('viewProps.events', viewProps.events);
+
     return (
       <Wrapper
         ref={input => {

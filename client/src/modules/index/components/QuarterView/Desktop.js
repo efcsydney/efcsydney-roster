@@ -25,7 +25,6 @@ const mapStateToProps = state => {
   const positions = selectedService.positions || [];
 
   return {
-    events: _.get(state.index, 'data', []),
     positions,
     selectedData: _.get(state.index, 'meta.selectedData', null),
     selectedService
@@ -148,6 +147,8 @@ export default connect(mapStateToProps)(
       const { days, events, selectedService } = this.props;
       const footnoteLabel = _.get(selectedService, 'footnoteLabel', '');
       const positions = _.get(selectedService, 'positions', []);
+
+      console.log('QuarterView events', this.props.events);
 
       return (
         <Grid role="grid">
