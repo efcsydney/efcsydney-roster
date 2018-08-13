@@ -2,6 +2,7 @@ FROM mhart/alpine-node:8.10.0
 
 RUN apk update && apk add --no-cache bash py-pip jq
 RUN npm install -g npm@5.6.0 && npm install -g pm2@latest
+RUN apk add mysql-client
 
 RUN pip install awscli --upgrade --user && \
     echo "export PATH=$PATH:~/.local/bin/" >> ~/.bashrc
