@@ -177,6 +177,8 @@ export default connectData(
       const { data } = this.props;
       const { preQuarterMembers } = this.state;
 
+      console.log('data', data);
+
       return _(data)
         .map(event => event.members.map(member => member.name))
         .flatten()

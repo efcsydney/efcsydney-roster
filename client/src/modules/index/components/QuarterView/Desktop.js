@@ -148,8 +148,6 @@ export default connect(mapStateToProps)(
       const footnoteLabel = _.get(selectedService, 'footnoteLabel', '');
       const positions = _.get(selectedService, 'positions', []);
 
-      console.log('QuarterView events', this.props.events);
-
       return (
         <Grid role="grid">
           <thead>

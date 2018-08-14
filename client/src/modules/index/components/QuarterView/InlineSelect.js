@@ -5,10 +5,13 @@ import React, { Component } from 'react';
 import { Creatable } from 'react-select';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { requestModifyIdEvents, toggleEditRole } from 'modules/index/redux';
+import { createApiActions } from 'resource';
+import { toggleEditRole } from 'modules/index/redux';
 import styled from 'styled-components';
 import { getOptions } from 'modules/index/utils';
 import 'react-select/dist/react-select.css';
+
+const { modifyEvents } = createApiActions('events');
 
 const mapStateToProps = state => {
   const { meta: { category } } = state.core;
@@ -23,7 +26,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       toggleEditRole,
-      onSave: form => requestModifyIdEvents(form),
+      onSave: form => modifyEvents(form),
       onClose: () => toggleEditRole(false)
     },
     dispatch
