@@ -2,7 +2,7 @@ const fs = require('fs');
 const _ = require('lodash');
 const { promisify } = require('util');
 const Heroku = require('heroku-client');
-const heroku = new Heroku({ token: process.env.HEROKU_API_TOKEN });
+const heroku = new Heroku({ token: '31ec6739-f215-49ca-92d2-3e777e9fd083' });
 
 async function exec() {
   console.log('Updating the config/database.json ...'); // eslint-disable-line
