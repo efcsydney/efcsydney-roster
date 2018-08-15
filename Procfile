@@ -1,4 +1,2 @@
+release: npm run db-heroku-update && npm run db-migrate
 web: npm run server
-release: node ./heroku/update-database-config.js
-release: npm run db-migrate
-

@@ -65,6 +65,7 @@
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
     "db-rollback-all": "sequelize db:migrate:undo:all",
+    "db-heroku-update": "node ./heroku/update-database-config.js",
     "prettier": "prettier --single-quote --write '{,!(node_modules|client)/**/}*.js'",
     "db-update-events": "node ./scripts/update-events-details.js",
     "db-backup": "node ./scripts/backup-database.js",
