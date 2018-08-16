@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import IconPencil from 'react-icons/lib/fa/pencil';
 import Popup from './Popup';
 import { createApiActions, withResource } from 'resource';
+import Nav from './Nav';
 
 const { modifyServices, createServices } = createApiActions('services');
 
@@ -82,37 +83,44 @@ export default withResource('services', mapResourceToProps)(
                   </Button>
                 </Link>
               </HeadRow>
-              <Grid>
-                <thead>
-                  <Row>
-                    <HeaderCell>Service Title</HeaderCell>
-                    <HeaderCell>Positions</HeaderCell>
-                    <HeaderCell>Frequency</HeaderCell>
-                    <HeaderCell>Actions</HeaderCell>
-                  </Row>
-                </thead>
-                <tbody>
-                  {_.map(data, ({ frequency, label, id, positions, name }) => (
-                    <Row key={id}>
-                      <Cell>
-                        <ExternalLink to={`index/${name}`}>
-                          {label}
-                        </ExternalLink>
-                      </Cell>
-                      <Cell>{positions.length}</Cell>
-                      <Cell>{_.capitalize(frequency)}</Cell>
-                      <Cell>
-                        <Link to={`${this.rootPath}/edit/${id}`}>
-                          <Button kind="blue">
-                            <IconEdit />
-                            Edit
-                          </Button>
-                        </Link>
-                      </Cell>
+              <div>
+                <Nav />
+
+                <StyledGrid>
+                  <thead>
+                    <Row>
+                      <HeaderCell>Service Title</HeaderCell>
+                      <HeaderCell>Positions</HeaderCell>
+                      <HeaderCell>Frequency</HeaderCell>
+                      <HeaderCell>Actions</HeaderCell>
                     </Row>
-                  ))}
-                </tbody>
-              </Grid>
+                  </thead>
+                  <tbody>
+                    {_.map(
+                      data,
+                      ({ frequency, label, id, positions, name }) => (
+                        <Row key={id}>
+                          <Cell>
+                            <ExternalLink to={`index/${name}`}>
+                              {label}
+                            </ExternalLink>
+                          </Cell>
+                          <Cell>{positions.length}</Cell>
+                          <Cell>{_.capitalize(frequency)}</Cell>
+                          <Cell>
+                            <Link to={`${this.rootPath}/edit/${id}`}>
+                              <Button kind="blue">
+                                <IconEdit />
+                                Edit
+                              </Button>
+                            </Link>
+                          </Cell>
+                        </Row>
+                      )
+                    )}
+                  </tbody>
+                </StyledGrid>
+              </div>
             </Auth>
           </Body>
           {hasPopup && (
@@ -141,4 +149,9 @@ const HeadRow = styled.div`
 `;
 const IconEdit = styled(IconPencil)`
   margin-right: 4px;
+`;
+const StyledGrid = styled(Grid)`
+  float: right;
+  min-width: auto;
+  width: 90%;
 `;
