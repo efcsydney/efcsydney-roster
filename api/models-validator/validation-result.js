@@ -2,7 +2,7 @@ class ValidatorResult {
   constructor(error) {
     this.errors = [];
     this.success = true;
-    if (!!error) {
+    if (error) {
       this.errors.push(error);
       this.success = false;
     }
