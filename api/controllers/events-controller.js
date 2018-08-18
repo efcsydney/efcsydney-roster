@@ -2,6 +2,7 @@ const EventService = require('../service/events-service').EventService;
 const DtoMapper = require('../mapper/dto-mapper');
 const log = require('../utilities/logger');
 const pusher = require('../utilities/pusher');
+const { ok, fail } = require('../utilities/response-helper');
 
 /**
  * Get Events
@@ -20,11 +21,7 @@ async function getEvents(req, res, next) {
     );
     const dto = DtoMapper.mapGroupEventsToDto(eventsByDateRange);
 
-    res.json({
-      result: 'OK',
-      error: { message: '' },
-      data: dto
-    });
+    res.json(ok(dto));
   } catch (err) {
     next(err);
   }
@@ -37,14 +34,8 @@ async function saveEvent(req, res, next) {
     const updateEvent = await EventService.saveEvent(event);
     const data = DtoMapper.mapEventToDto(updateEvent);
 
-    const response = {
-      result: 'OK',
-      error: { message: '' },
-      data
-    };
-
     pusher.trigger('index', 'event-modified', data);
-    res.status(201).json(response);
+    res.status(201).json(ok(data));
   } catch (err) {
     log.error(err);
     next(err);
