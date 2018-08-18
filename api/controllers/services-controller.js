@@ -1,7 +1,7 @@
 const ServicesService = require('../service/services-service');
 const DtoMapper = require('../mapper/dto-mapper');
 const log = require('../utilities/logger');
-const { ok, fail } = require('../utilities/response-helper');
+const { ok } = require('../utilities/response-helper');
 
 async function getServices(req, res, next) {
   try {

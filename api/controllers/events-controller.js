@@ -2,7 +2,7 @@ const EventService = require('../service/events-service').EventService;
 const DtoMapper = require('../mapper/dto-mapper');
 const log = require('../utilities/logger');
 const pusher = require('../utilities/pusher');
-const { ok, fail } = require('../utilities/response-helper');
+const { ok } = require('../utilities/response-helper');
 
 /**
  * Get Events

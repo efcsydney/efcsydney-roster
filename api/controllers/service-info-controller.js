@@ -3,7 +3,7 @@ const ServiceInfoService = require('../service/service-info-service')
   .ServiceInfoService;
 const log = require('../utilities/logger');
 const pusher = require('../utilities/pusher');
-const { ok, fail } = require('../utilities/response-helper');
+const { ok } = require('../utilities/response-helper');
 
 async function saveServiceInfo(req, res, next) {
   try {
