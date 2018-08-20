@@ -1,7 +1,6 @@
 const { saveUser, getUsers } = require('../service/user-service');
 const { validationResult } = require('express-validator/check');
-const toValidationErrorString = require('../utilities/express-validator-helper');
-const { ok, fail } = require('../utilities/response-helper');
+const { ok, validationFail } = require('../utilities/response-helper');
 
 const log = require('../utilities/logger');
 
@@ -10,7 +9,7 @@ async function save(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       // VALIDATION ERRORS
-      return res.status(422).json(fail(toValidationErrorString(errors)));
+      return res.status(422).json(validationFail(errors));
     }
 
     const user = { id: req.params.id, ...req.body };

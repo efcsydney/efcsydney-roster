@@ -13,7 +13,15 @@ function fail(message) {
   };
 }
 
+function validationFail(validationError) {
+  return {
+    result: 'FAIL',
+    error: validationError.array()
+  };
+}
+
 module.exports = {
   ok,
-  fail
+  fail,
+  validationFail
 };
