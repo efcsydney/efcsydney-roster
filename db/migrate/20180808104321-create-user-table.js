@@ -30,14 +30,10 @@ module.exports = {
           type: Sequelize.STRING
         },
         createdAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.fn('NOW')
+          type: Sequelize.DATE
         },
         updatedAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.fn('NOW')
+          type: Sequelize.DATE
         }
       },
       {

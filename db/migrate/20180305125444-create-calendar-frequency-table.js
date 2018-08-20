@@ -9,20 +9,16 @@ module.exports = {
       'calendar_dates_frequencies',
       {
         calendarDateId: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.INTEGER
         },
         frequencyId: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.INTEGER
         },
         createdAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.fn('NOW')
+          type: Sequelize.DATE
         },
         updatedAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.fn('NOW')
+          type: Sequelize.DATE
         }
       },
       {
@@ -66,22 +62,17 @@ module.exports = {
     await seedSaturdayFrequency(queryInterface);
     await seedMonthlyFrequency(queryInterface);
 
-    await queryInterface.removeColumn(
-      'calendar_dates',
-      'frequencyId'
-    );
+    await queryInterface.removeColumn('calendar_dates', 'frequencyId');
   },
 
-  down: (queryInterface) => {
+  down: queryInterface => {
     return queryInterface.dropTable('calendar_dates_frequencies');
   }
 };
 
 async function seedSundayFrequency() {
   //all records in calendar_dates table are Sudnay dates
-  await sequelizeClient.query(
-    'UPDATE calendar_dates SET frequencyId = 1'
-  );
+  await sequelizeClient.query('UPDATE calendar_dates SET frequencyId = 1');
 
   await sequelizeClient.query(
     'INSERT INTO calendar_dates_frequencies (calendarDateId, frequencyId) SELECT id, 1 FROM calendar_dates WHERE frequencyId = 1'

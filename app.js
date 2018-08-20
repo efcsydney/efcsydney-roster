@@ -2,6 +2,7 @@ const _ = require('lodash');
 const express = require('express');
 const app = express();
 module.exports.app = app;
+const UserValidators = require('./api/validators/user-validator');
 const bodyParser = require('body-parser');
 const emailController = require('./api/controllers/email-controller');
 const eventsController = require('./api/controllers/events-controller');
@@ -64,9 +65,9 @@ app.put('/api/services/:id', servicesController.saveService);
 
 app.post('/api/services/', servicesController.saveService);
 
-app.post('/api/users', userController.save);
+app.post('/api/users', UserValidators, userController.save);
 
-app.put('/api/users/:id', userController.save);
+app.put('/api/users/:id', UserValidators, userController.save);
 
 app.get('/api/users', userController.get);
 
