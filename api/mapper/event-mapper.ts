@@ -1,13 +1,35 @@
-const getDateString = require('../utilities/datetime-util').getDateString;
+import { getDateString } from '../utilities/datetime-util';
 
-class EventMapper {
-  static groupEventsByCalendarDate(events) {
+interface Event {
+  volunteerName: string;
+  calendarDate: CalendarDate;
+  position: Position;
+}
+
+interface CalendarDate {
+  date: string;
+}
+
+interface Position {
+  name: string;
+}
+
+interface EventDate {
+  date: string;
+  positions: EventDatePosition[];
+}
+
+interface EventDatePosition {
+}
+
+export class EventMapper {
+  static groupEventsByCalendarDate(events: Event[]) {
     // This is a collection of events for the specific date, which may look like:
     // {
     //   date: '2017-10-19',
     //   positions: [ { role: "A", name: "Brad" }, { role: "B", name: "Jack" } ]
     // }
-    const eventDates = [];
+    const eventDates: EventDate[] = [];
 
     // We have all the event objects in date order and position order already
     events.forEach(e => {
@@ -32,7 +54,7 @@ class EventMapper {
 
     return eventDates.map(eventDate => EventMapper.formatDate(eventDate));
   }
-  static formatDate(eventDate) {
+  static formatDate(eventDate: EventDate) {
     eventDate.date = getDateString(eventDate.date);
     return eventDate;
   }
@@ -63,5 +85,3 @@ class EventMapper {
     });
   }
 }
-
-module.exports = { EventMapper };
