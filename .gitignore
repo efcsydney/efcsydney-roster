@@ -11,3 +11,5 @@ backup/*
 sample.html
 efcsydney-roster.tar.gz
 log/*
+*.js.map
+test/unit-test/event-mapper-test.js

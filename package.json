@@ -7,6 +7,7 @@
     "node": "^8.9.0"
   },
   "dependencies": {
+    "@types/node": "^10.7.1",
     "babel-core": "6.14.0",
     "babel-eslint": "^8.0.2",
     "body-parser": "^1.18.2",
@@ -69,9 +70,12 @@
     "db-backup": "node ./scripts/backup-database.js",
     "db-restore": "node ./scripts/restore-database.js $DATE",
     "docker-up": "./docker/manage.sh build && ./docker/manage.sh up",
-    "docker-stop": "./docker/manage.sh stop"
+    "docker-stop": "./docker/manage.sh stop",
+    "compile": "tsc"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/mocha": "^5.2.5",
     "concurrently": "3.1.0",
     "eslint": "^4.10.0",
     "eslint-config-airbnb": "^16.1.0",
@@ -80,7 +84,9 @@
     "eslint-plugin-react": "6.9.0",
     "node-fetch": "^2.2.0",
     "puppeteer": "^1.6.1",
+    "source-map-support": "^0.5.9",
     "testcafe": "^0.20.5",
-    "testcafe-react-selectors": "^2.1.0"
+    "testcafe-react-selectors": "^2.1.0",
+    "typescript": "^3.0.1"
   }
 }

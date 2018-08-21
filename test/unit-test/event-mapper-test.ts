@@ -1,5 +1,5 @@
-const EventMapper = require('../../api/mapper/event-mapper').EventMapper;
-const chai = require('chai');
+import { EventMapper } from '../../api/mapper/event-mapper';
+import * as chai from 'chai';
 
 const expect = chai.expect;
 
