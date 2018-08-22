@@ -8,8 +8,8 @@ if [ $1 = "qa" ]; then
 else
     env='Production'
     NodeEnv='production'
-    # bucket='efc-sydney-prod'
     dockerBuildTarget='efc-prod'
+    bucket='efc-sydney-production'
 fi
 
 docker-compose -f docker/docker-compose.yml build $dockerBuildTarget
