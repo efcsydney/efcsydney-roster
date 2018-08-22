@@ -211,7 +211,7 @@
             "ReadOnly": false
             },
             {
-              "ContainerPath": "/opt/efcsydney-roster/backup",
+              "ContainerPath": "/opt/backup",
               "SourceVolume": "db-backup",
               "ReadOnly": false
             }
