@@ -18,6 +18,7 @@
     "database-cleaner": "^1.2.0",
     "dot-prop-immutable": "^1.4.0",
     "express": "4.13.3",
+    "express-validator": "^5.3.0",
     "firebase": "^4.10.1",
     "fs": "0.0.2",
     "glob": "^7.1.2",

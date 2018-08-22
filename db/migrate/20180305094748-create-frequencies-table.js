@@ -1,4 +1,3 @@
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable(
@@ -14,14 +13,10 @@ module.exports = {
           unique: true
         },
         createdAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.fn('NOW')
+          type: Sequelize.DATE
         },
         updatedAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.fn('NOW')
+          type: Sequelize.DATE
         }
       },
       {
@@ -31,13 +26,12 @@ module.exports = {
 
     await queryInterface.bulkInsert('frequencies', [
       { id: 1, name: 'Sunday' },
-      { id: 2, name: 'Saturday'},
-      { id: 3, name: 'Month' },]);
+      { id: 2, name: 'Saturday' },
+      { id: 3, name: 'Month' }
+    ]);
   },
 
-  down: (queryInterface) => {
+  down: queryInterface => {
     return queryInterface.dropTable('frequencies');
   }
 };
-
-

@@ -27,14 +27,10 @@ module.exports = {
           type: Sequelize.INTEGER
         },
         createdAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.fn('NOW')
+          type: Sequelize.DATE
         },
         updatedAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.fn('NOW')
+          type: Sequelize.DATE
         }
       },
       {
@@ -52,7 +48,7 @@ module.exports = {
     await seedServiceCalendarDate(queryInterface);
   },
 
-  down: (queryInterface) => {
+  down: queryInterface => {
     return queryInterface.dropTable('service_calendar_dates');
   }
 };

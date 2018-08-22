@@ -16,14 +16,10 @@ module.exports = {
           type: Sequelize.STRING
         },
         createdAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.fn('NOW')
+          type: Sequelize.DATE
         },
         updatedAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.fn('NOW')
+          type: Sequelize.DATE
         }
       },
       {
@@ -35,7 +31,7 @@ module.exports = {
       { id: 2, name: 'chinese', locale: 'zh-TW' }
     ]);
   },
-  down: (queryInterface) => {
+  down: queryInterface => {
     return queryInterface.dropTable('services');
   }
 };
