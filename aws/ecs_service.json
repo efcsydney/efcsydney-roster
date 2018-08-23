@@ -165,11 +165,11 @@
         "ContainerDefinitions": [{
           "Name": "efcRosterContainer",
           "Cpu": "256",
+          "Memory": "256",
           "Essential": "true",
           "Image": {
             "Ref": "DockerImgSrc"
           },
-          "Memory": "256",
           "Environment": [{
               "Name": "NODE_ENV",
               "Value": {
@@ -238,33 +238,6 @@
           "TargetGroupArn": {
             "Fn::ImportValue": {
               "Fn::Sub": "ALB-TargetGroup-HTTPS"
-            }
-          }
-        }],
-        "Role": {
-          "Ref": "ECSServiceRole"
-        },
-        "TaskDefinition": {
-          "Ref": "ECSTaskDef"
-        }
-      }
-    },
-    "ECSServiceRedirect": {
-      "Type": "AWS::ECS::Service",
-      "Properties": {
-        "ServiceName": "Service-Redirect",
-        "Cluster": {
-          "Fn::ImportValue": {
-            "Fn::Sub": "ECSCluster"
-          }
-        },
-        "DesiredCount": "1",
-        "LoadBalancers": [{
-          "ContainerName": "efcRosterContainer",
-          "ContainerPort": "3001",
-          "TargetGroupArn": {
-            "Fn::ImportValue": {
-              "Fn::Sub": "ALB-TargetGroup-Redirect"
             }
           }
         }],

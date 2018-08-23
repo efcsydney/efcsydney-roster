@@ -1,22 +1,33 @@
+'use strict';
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable(
-      'events',
+      'users',
       {
         id: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true
         },
-        volunteerName: {
+        primaryName: {
           type: Sequelize.STRING,
-          defaultValue: ''
+          validate: {
+            notEmpty: true
+          }
         },
-        calendarDateId: {
-          type: Sequelize.INTEGER
+        secondaryName: {
+          type: Sequelize.STRING
         },
-        positionId: {
-          type: Sequelize.INTEGER
+        email: {
+          type: Sequelize.STRING,
+          unique: true,
+          validate: {
+            notEmpty: true
+          }
+        },
+        phone: {
+          type: Sequelize.STRING
         },
         createdAt: {
           type: Sequelize.DATE
@@ -26,19 +37,12 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8',
-        uniqueKeys: [
-          {
-            name: 'unique on calendar date and position',
-            singleField: false,
-            fields: ['calendarDateId', 'positionId']
-          }
-        ]
+        charset: 'utf8'
       }
     );
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('events');
+    return queryInterface.dropTable('users');
   }
 };

@@ -44,6 +44,13 @@ const FREQUENCY_OPTIONS = [
   { value: 'Everyday', label: 'Everyday' }
 ];
 
+_.mixin({
+  move: (array, fromIndex, toIndex) => {
+    array.splice(toIndex, 0, array.splice(fromIndex, 1)[0]);
+    return array;
+  }
+});
+
 class Popup extends Component {
   static propTypes = {
     data: PropTypes.object,
@@ -107,14 +114,17 @@ class Popup extends Component {
 
     this.handleChange({ name: value });
   };
-  handleSwitch = (sourceNo, targetNo) => {
-    const { data: { positions } } = this.state;
-    const target = positions[targetNo];
-    const source = positions[sourceNo];
-
+  handleSwitch = (fromIndex, toIndex) => {
+    let positions = _.get(this.state, 'data.positions', []);
+    positions = _.move(positions, fromIndex, toIndex);
+    positions = positions.map((position, i) => {
+      return {
+        ...position,
+        order: i + 1
+      };
+    });
     this.handleChange({
-      [`positions.${sourceNo}.name`]: target.name,
-      [`positions.${targetNo}.name`]: source.name
+      positions
     });
   };
   handlePositionAdd = () => {
@@ -168,6 +178,7 @@ class Popup extends Component {
       hasLeastOnePosition;
     const buttonKind =
       (isSaving && 'loading') || (hasCompleted && 'success') || 'default';
+    const sortedPositions = _.orderBy(positions, 'order', 'asc');
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -235,7 +246,7 @@ class Popup extends Component {
         <FormGroup label="Positions" align="top" isRequired={true}>
           <DragDropZone>
             <PositionList>
-              {positions.map(({ id, name, order }, i) => (
+              {sortedPositions.map(({ id, name, order }, i) => (
                 <StyledDraggableItem
                   key={id || i}
                   value={order}

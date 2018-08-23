@@ -8,8 +8,9 @@ const errorHandler = function(err, req, res, next) {
   if (res.headersSent) {
     return next(err);
   }
+
   res.status(500);
-  res.send({ error: { message: err.message } });
+  res.send({ message: err.message });
 };
 
 module.exports = { errorHandler };
