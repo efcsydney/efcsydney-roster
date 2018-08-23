@@ -3,6 +3,7 @@ const ServiceInfoService = require('../service/service-info-service')
   .ServiceInfoService;
 const log = require('../utilities/logger');
 const pusher = require('../utilities/pusher');
+const { ok } = require('../utilities/response-helper');
 
 async function saveServiceInfo(req, res, next) {
   try {
@@ -16,16 +17,9 @@ async function saveServiceInfo(req, res, next) {
     );
 
     const data = DtoMapper.mapServiceInfoToDto(updatedServiceInfo);
-
-    const response = {
-      result: 'OK',
-      error: { message: '' },
-      data
-    };
-
     pusher.trigger('index', 'serviceInfo-modified', data);
 
-    return res.status(201).json(response);
+    return res.status(201).json(ok(data));
   } catch (err) {
     log.error(err);
     next(err);
@@ -44,16 +38,9 @@ async function createServiceInfo(req, res, next) {
     );
 
     const data = DtoMapper.mapServiceInfoToDto(newServiceInfo);
-
-    const response = {
-      result: 'OK',
-      error: { message: '' },
-      data
-    };
-
     pusher.trigger('index', 'serviceInfo-modified', data);
 
-    return res.status(201).json(response);
+    return res.status(201).json(ok(data));
   } catch (err) {
     next(err);
   }

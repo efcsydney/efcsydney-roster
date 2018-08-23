@@ -18,8 +18,10 @@
     "database-cleaner": "^1.2.0",
     "dot-prop-immutable": "^1.4.0",
     "express": "4.13.3",
+    "express-validator": "^5.3.0",
     "firebase": "^4.10.1",
     "fs": "0.0.2",
+    "glob": "^7.1.2",
     "global": "^4.3.2",
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",
@@ -57,8 +59,9 @@
     "client": "node start-client.js",
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
     "lint": "eslint .",
-    "test": "cross-env NODE_ENV=test mocha test",
+    "test": "cross-env NODE_ENV=test mocha test/unit-test test/integration-test",
     "test:frontend": "cd client && yarn test",
+    "test:functional": "node ./test/e2e-test/server.js ",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
     "db-rollback-all": "sequelize db:migrate:undo:all",
@@ -75,6 +78,10 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "4.0.0",
-    "eslint-plugin-react": "6.9.0"
+    "eslint-plugin-react": "6.9.0",
+    "node-fetch": "^2.2.0",
+    "puppeteer": "^1.6.1",
+    "testcafe": "^0.20.5",
+    "testcafe-react-selectors": "^2.1.0"
   }
 }

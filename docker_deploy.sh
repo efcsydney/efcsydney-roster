@@ -4,17 +4,18 @@ if [ $1 = "qa" ]; then
     env='QA'
     NodeEnv='qa'
     bucket='efc-sydney-qa'
+    stack='ecs-service'
 else
     env='Production'
     NodeEnv='production'
-    bucket='efc-sydney-prod'
+    bucket='efc-sydney-production'
+    stack='EFCSydney-ECS-Service'
 fi
 
 docker-compose -f docker/docker-compose.yml build efc-prod
 docker push kleinchang/efcsydney-roster:${BUILD_TAG:-latest}
 dockerImg="docker.io/kleinchang/efcsydney-roster:${BUILD_TAG:-latest}"
 file='aws/ecs_service.json'
-stack='ecs-service'
 
 aws --region ap-southeast-2 cloudformation deploy \
     --capabilities CAPABILITY_IAM \
