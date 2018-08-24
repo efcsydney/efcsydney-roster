@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { Selector } from 'testcafe';
 import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
-
 import { getEvents, modifyServiceInfo } from './api';
 
 // Environment
