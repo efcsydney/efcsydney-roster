@@ -36,5 +36,5 @@ export function modifyServiceInfo(id, { category, date }) {
       skipReason: ''
     }),
     headers: { 'Content-Type': 'application/json' }
-  });
+  }).then(res => res.json());
 }
