@@ -7,36 +7,42 @@ import IconUsers from 'react-icons/lib/fa/group';
 import IconChangelogs from 'react-icons/lib/fa/eye';
 import { media } from 'styled';
 
+const NavItem = ({ path, label, iconComponent }) => {
+  const isActive = window.location.hash.indexOf(path) > -1;
+  return (
+    <StyledNavItem isActive={isActive}>
+      <Link to={path}>
+        {iconComponent}
+        <Label>{label}</Label>
+      </Link>
+    </StyledNavItem>
+  );
+};
+
 export default class Nav extends Component {
   render() {
     return (
       <Wrapper {...this.props}>
         <NavItem
-          isActive={window.location.hash.indexOf('/admin/services') > -1}>
-          <Link to="/admin/services">
-            <IconServices />
-            <Label>Services</Label>
-          </Link>
-        </NavItem>
-        <NavItem isActive={window.location.hash.indexOf('/admin/users') > -1}>
-          <Link to="/admin/users">
-            <IconUsers />
-            <Label>Users</Label>
-          </Link>
-        </NavItem>
-        <NavItem isActive={window.location.hash.indexOf('/admin/email') > -1}>
-          <Link to="/admin/email">
-            <IconEmail />
-            <Label>Email</Label>
-          </Link>
-        </NavItem>
+          label="Services"
+          path="/admin/services"
+          iconComponent={<IconServices />}
+        />
         <NavItem
-          isActive={window.location.hash.indexOf('/admin/changelog') > -1}>
-          <Link to="/admin/changelogs">
-            <IconChangelogs />
-            <Label>Changelogs</Label>
-          </Link>
-        </NavItem>
+          label="Users"
+          path="/admin/users"
+          iconComponent={<IconUsers />}
+        />
+        <NavItem
+          label="Email"
+          path="/admin/email"
+          iconComponent={<IconEmail />}
+        />
+        <NavItem
+          label="Changelogs"
+          path="/admin/changelogs"
+          iconComponent={<IconChangelogs />}
+        />
       </Wrapper>
     );
   }
@@ -65,7 +71,7 @@ const Label = styled.div`
   text-align: center;
   font-size: 12px;
 `;
-const NavItem = styled.li`
+const StyledNavItem = styled.li`
   display: block;
   margin-bottom: 10px;
   a:link,
