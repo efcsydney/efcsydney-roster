@@ -105,6 +105,24 @@ test('Go to Prev/Next Quarter', async t => {
   // James to implement
 });
 
+test('Go to Prev/Next Quarter - Mobile', async t => {
+  // James to implement
+  const ArrowLeft = ReactSelector('Arrow');
+  const ArrowRight = ReactSelector('Arrow').nth(1);
+  const DateTextHeader = ReactSelector('Label');
+
+  await t
+    .resizeWindow(300, 500)
+    .click(ArrowLeft)
+    .expect(DateTextHeader.innerText)
+    .eql('Oct - Dec 1999');
+
+  await t
+    .click(ArrowRight)
+    .expect(DateTextHeader.innerText)
+    .eql('Jan - Mar 2000');
+});
+
 test('Switch to Differet Service', async t => {
   // Better to have - Liam to implement
 });
