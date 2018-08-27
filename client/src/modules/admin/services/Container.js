@@ -20,9 +20,14 @@ const mapResourceToProps = (resource, state, ownProps) => {
     'index';
   const paramId = _.get(ownProps, 'match.params.id', null);
   const selectedId = !_.isEmpty(paramId) ? parseInt(paramId, 10) : null;
+  const serviceNames = _.map(
+    _.get(state, 'resource.data.services', {}),
+    service => service.name
+  );
 
   return {
     data: resource.data,
+    serviceNames,
     mode,
     selectedId,
     ...ownProps
@@ -57,9 +62,18 @@ export default withResource('services', mapResourceToProps)(
       history.push(this.rootPath);
     };
     handlePopupSave = data => {
-      const { dispatch, mode } = this.props;
+      const { dispatch, mode, serviceNames } = this.props;
       const { id, ...body } = data;
+
       if (mode === 'new') {
+        if (_.includes(serviceNames, data.name)) {
+          alert(
+            `The service URL path "${
+              data.name
+            }" has been used. Please update it.`
+          );
+          return;
+        }
         dispatch(createServices({ ...body }));
       } else {
         dispatch(modifyServices({ id, ...body }));
