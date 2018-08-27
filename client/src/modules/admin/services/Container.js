@@ -35,9 +35,7 @@ export default withResource('services', mapResourceToProps)(
       selectedId: PropTypes.number
     };
     static defaultProps = {
-      data: {},
-      mode: 'index',
-      selectedId: null
+      data: {}
     };
     constructor(props) {
       super(props);
@@ -53,7 +51,7 @@ export default withResource('services', mapResourceToProps)(
       const { dispatch, serviceNames } = this.props;
       const { id, ...body } = data;
 
-      if (mode === 'new') {
+      if (!id) {
         if (_.includes(serviceNames, data.name)) {
           alert(
             `The service URL path "${
@@ -116,7 +114,7 @@ export default withResource('services', mapResourceToProps)(
                 mode={mode}
                 data={data[id]}
                 isLoading={isLoading && mode === 'edit'}
-                onSave={this.handlePopupSave(mode)}
+                onSave={this.handlePopupSave}
                 onClose={this.handlePopupClose}
               />
             )}
