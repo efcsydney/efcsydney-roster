@@ -60,6 +60,7 @@ const Wrapper = styled.ul`
   }
   ${media.mobile`
     border-bottom: 1px dotted #bbb;
+    display: flex;
     margin-bottom: 10px;
     svg {
       font-size: 20px;
@@ -70,8 +71,17 @@ const Label = styled.div`
   padding: 5px 0;
   text-align: center;
   font-size: 12px;
+  ${media.mobile`
+    display: block;
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  `};
 `;
 const StyledNavItem = styled.li`
+  box-sizing: border-box;
   display: block;
   margin-bottom: 10px;
   a:link,
@@ -90,7 +100,12 @@ const StyledNavItem = styled.li`
   }
   ${media.mobile`
     display: inline-block;
-    width: 80px;
+    flex: 1;
     padding: 5px;
+    width: 25%;
+    a:link,
+    a:visited {
+      padding: 10px 5px 5px;
+    }
   `};
 `;
