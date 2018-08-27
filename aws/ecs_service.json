@@ -148,12 +148,20 @@
             ]
           ]
         },
-        "Volumes": [{
+        "Volumes": [
+          {
           "Name": "log",
           "Host": {
             "SourcePath": "/var/log/roster"
           }
-        }],
+          },
+          {
+            "Name": "db-backup",
+            "Host": {
+              "SourcePath": "/var/log/backup"
+            }
+          }
+        ],
         "ContainerDefinitions": [{
           "Name": "efcRosterContainer",
           "Cpu": "256",
@@ -196,11 +204,18 @@
               "HostPort": 0
             }
           ],
-          "MountPoints": [{
-            "ContainerPath": "/opt/efcsydney-roster/log",
-            "SourceVolume": "log",
-            "ReadOnly": false
-          }]
+          "MountPoints": [
+            {
+              "ContainerPath": "/opt/efcsydney-roster/log",
+              "SourceVolume": "log",
+              "ReadOnly": false
+            },
+            {
+              "ContainerPath": "/opt/backup",
+              "SourceVolume": "db-backup",
+              "ReadOnly": false
+            }
+          ]
         }],
         "TaskRoleArn": {
           "Ref": "ECSSTaskRole"
