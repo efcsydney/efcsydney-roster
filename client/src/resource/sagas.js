@@ -16,15 +16,19 @@ export default function* resourceSagas() {
     },
     function*({ payload: params, meta = {}, resource }) {
       const API = _.get(apiMapping, [resource.name, resource.method]);
-      const ajaxResponse = yield call(API, params);
-      ajaxResponse.params = params;
 
       const completeAction = createAsyncAction(
         resource.name,
         resource.method,
         'complete'
       );
-      yield put(completeAction(ajaxResponse, meta));
+
+      try {
+        const ajaxResponse = yield call(API, params);
+        yield put(completeAction({ ...ajaxResponse, params }, meta));
+      } catch (e) {
+        yield put(completeAction(new Error(e)));
+      }
     }
   );
 
