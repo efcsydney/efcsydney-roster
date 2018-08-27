@@ -14,10 +14,15 @@ const { modifyServices, createServices } = createApiActions('services');
 
 const mapResourceToProps = (resource, state, ownProps) => {
   const isLoading = _.get(resource, 'status.retrieve.isLoading', false);
+  const serviceNames = _.map(
+    _.get(state, 'resource.data.services', {}),
+    service => service.name
+  );
 
   return {
     data: resource.data,
     isLoading,
+    serviceNames,
     ...ownProps
   };
 };
@@ -45,9 +50,18 @@ export default withResource('services', mapResourceToProps)(
       history.push(this.rootPath);
     };
     handlePopupSave = mode => data => {
-      const { dispatch } = this.props;
+      const { dispatch, serviceNames } = this.props;
       const { id, ...body } = data;
+
       if (mode === 'new') {
+        if (_.includes(serviceNames, data.name)) {
+          alert(
+            `The service URL path "${
+              data.name
+            }" has been used. Please update it.`
+          );
+          return;
+        }
         dispatch(createServices({ ...body }));
       } else {
         dispatch(modifyServices({ id, ...body }));

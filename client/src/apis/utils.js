@@ -19,7 +19,12 @@ export function createApi(path, overwrite) {
     }
   };
 
-  const onFulfilled = response => response.json();
+  const onFulfilled = response => {
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    return response.json();
+  };
 
   return {
     create: function(body) {

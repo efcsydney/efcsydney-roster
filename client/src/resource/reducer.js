@@ -30,10 +30,8 @@ const defaultAsyncState = _.fromPairs(
   Object.keys(apiMapping).map(key => [key, defaultSingleResourceState])
 );
 
-export const asyncStatusReducer = (
-  state = defaultAsyncState,
-  { resource, payload }
-) => {
+export const asyncStatusReducer = (state = defaultAsyncState, action) => {
+  const { resource, payload, error } = action;
   if (!resource) return state;
   if (!apiMapping[resource.name]) return state;
 
@@ -54,6 +52,14 @@ export const asyncStatusReducer = (
     }
     case 'complete': {
       state = set(state, [resource.name, resource.method, 'isLoading'], false);
+
+      if (error) {
+        alert(
+          'Oops! Something goes wrong. Please check your input values and try again.\n\n' +
+            payload.message
+        );
+        return state;
+      }
 
       if (resource.method === 'retrieve') {
         state = set(
@@ -103,13 +109,12 @@ const defaultAsyncData = _.fromPairs(
   _.map(Object.keys(apiMapping), resource => [resource, {}])
 );
 
-export const asyncDataReducer = (
-  state = defaultAsyncData,
-  { resource, payload }
-) => {
+export const asyncDataReducer = (state = defaultAsyncData, action) => {
+  const { resource, payload, error } = action;
   if (!resource) return state;
   if (!apiMapping[resource.name]) return state;
   if (resource.stage !== 'complete') return state;
+  if (error) return state;
 
   switch (resource.method) {
     case 'modify':
@@ -147,10 +152,11 @@ export const asyncDataReducer = (
 };
 
 const asyncCacheReducer = (state = {}, action) => {
-  const { resource, payload } = action;
+  const { resource, payload, error } = action;
   if (!resource) return state;
   if (!apiMapping[resource.name]) return state;
   if (resource.method !== 'retrieve') return state;
+  if (error) return state;
 
   const key = getHashKey(resource, payload.params);
 
