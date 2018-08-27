@@ -103,6 +103,25 @@ test('Edit Role - Mobile', async t => {
 
 test('Go to Prev/Next Quarter', async t => {
   // James to implement
+  const ArrowLeft = ReactSelector('Arrow');
+  const ArrowRight = ReactSelector('Arrow').nth(1);
+  const DateTextHeader = ReactSelector('Label');
+  const DateTextFooter = ReactSelector('Label').nth(1);
+
+  await t
+    .click(ArrowLeft)
+    .expect(DateTextHeader.innerText)
+    .eql('Oct - Dec 1999')
+    .expect(DateTextFooter.innerText)
+    .eql('Oct - Dec 1999')
+
+  await t
+    .click(ArrowRight)
+    .expect(DateTextHeader.innerText)
+    .eql('Jan - Mar 2000')
+    .expect(DateTextFooter.innerText)
+    .eql('Jan - Mar 2000')
+
 });
 
 test('Switch to Differet Service', async t => {
