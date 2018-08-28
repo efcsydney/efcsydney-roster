@@ -5,7 +5,7 @@ const upper = string => _.snakeCase(string).toUpperCase();
 const createAsyncAction = (name, method, stage = '') => {
   const TYPE = upper([method, name, stage].join('_'));
   const actionCreator = (params, meta) => {
-    return {
+    const action = {
       type: TYPE,
       payload: params,
       meta: meta,
@@ -15,6 +15,10 @@ const createAsyncAction = (name, method, stage = '') => {
         stage: stage || 'start'
       }
     };
+    if (params instanceof Error) {
+      action.error = true;
+    }
+    return action;
   };
   actionCreator.toString = function() {
     return TYPE;
