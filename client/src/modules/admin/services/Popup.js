@@ -75,7 +75,7 @@ class Popup extends Component {
     const { data } = props;
 
     if (props.mode === 'new') {
-      this.state = { data: { positions: [{ name: '' }] } };
+      this.state = { data: { positions: [{ name: '', order: 1 }] } };
     } else {
       this.state = { data };
     }
