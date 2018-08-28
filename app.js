@@ -43,9 +43,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello Guys! Welcome to roster!' });
 });
 
-if (['development', 'qa'].includes(env)) {
-  app.get('/email', emailController.getEmail);
-}
+app.get('/email', emailController.getEmail);
 
 app.get('/api/services', servicesController.getServices);
 

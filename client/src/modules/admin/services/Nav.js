@@ -49,7 +49,7 @@ export default class Nav extends Component {
 }
 
 const Wrapper = styled.ul`
-  margin: 0 10px 10px 10px;
+  margin: 20px 10px;
   a {
     padding: 10px 20px;
     text-align: right;
@@ -59,9 +59,8 @@ const Wrapper = styled.ul`
     font-size: 32px;
   }
   ${media.mobile`
-    border-bottom: 1px dotted #bbb;
+    margin: 10px;
     display: flex;
-    margin-bottom: 10px;
     svg {
       font-size: 20px;
     }
@@ -101,6 +100,7 @@ const StyledNavItem = styled.li`
   ${media.mobile`
     display: inline-block;
     flex: 1;
+    margin-bottom: 0;
     padding: 5px;
     width: 25%;
     a:link,
