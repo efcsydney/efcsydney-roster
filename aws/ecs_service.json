@@ -206,9 +206,9 @@
           ],
           "MountPoints": [
             {
-            "ContainerPath": "/opt/efcsydney-roster/log",
-            "SourceVolume": "log",
-            "ReadOnly": false
+              "ContainerPath": "/opt/efcsydney-roster/log",
+              "SourceVolume": "log",
+              "ReadOnly": false
             },
             {
               "ContainerPath": "/opt/backup",

@@ -21,8 +21,8 @@ const mapResourceToProps = (resource, state, ownProps) => {
 
   return {
     data: resource.data,
-    serviceNames,
     isLoading,
+    serviceNames,
     ...ownProps
   };
 };
@@ -47,11 +47,11 @@ export default withResource('services', mapResourceToProps)(
 
       history.push(this.rootPath);
     };
-    handlePopupSave = data => {
+    handlePopupSave = mode => data => {
       const { dispatch, serviceNames } = this.props;
       const { id, ...body } = data;
 
-      if (!id) {
+      if (mode === 'new') {
         if (_.includes(serviceNames, data.name)) {
           alert(
             `The service URL path "${
@@ -114,7 +114,7 @@ export default withResource('services', mapResourceToProps)(
                 mode={mode}
                 data={data[id]}
                 isLoading={isLoading && mode === 'edit'}
-                onSave={this.handlePopupSave}
+                onSave={this.handlePopupSave(mode)}
                 onClose={this.handlePopupClose}
               />
             )}

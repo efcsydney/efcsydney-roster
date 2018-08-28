@@ -12,10 +12,10 @@ prod() {
     | jq from_entries \
     > parameter.json
 
-  cat parameter.json | jq '{ "'$NODE_ENV'" : .}' > ./config/database.json
+  jq '{ "'$NODE_ENV'" : .}' parameter.json > ./config/database.json
 
-  user=`jq -r .username parameter.json`
-  password=`jq -r .password parameter.json`
+  user=$(jq -r .username parameter.json)
+  password=$(jq -r .password parameter.json)
 
   cat > ~/.my.cnf <<EOF
 [mysqldump]

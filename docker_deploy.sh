@@ -6,12 +6,14 @@ if [ $1 = "qa" ]; then
     bucket='efc-sydney-qa'
     dockerBuildTarget='efc-qa'
     stack='ecs-service'
+    dockerBuildTarget='efc-qa'
 else
     env='Production'
     NodeEnv='production'
     dockerBuildTarget='efc-prod'
     bucket='efc-sydney-production'
     stack='EFCSydney-ECS-Service'
+    dockerBuildTarget='efc-prod'
 fi
 
 docker-compose -f docker/docker-compose.yml build $dockerBuildTarget
