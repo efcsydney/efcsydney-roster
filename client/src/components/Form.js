@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import styled from 'styled-components';
+import { media } from 'styled';
 
 export const FormGroup = ({
   align,
@@ -74,6 +75,15 @@ export const FormRow = styled.div`
     padding: 20px 0;
   }
   justify-content: ${props => props.align || 'flex-start'};
+  ${media.mobile`
+    display: block;
+    text-align: left;
+    margin-bottom: 10px;
+    > span {
+      display: block;
+      font-size: 12px;
+    }
+  `};
 `;
 
 export const FormLabel = styled.label`
@@ -94,5 +104,10 @@ export const FormLabel = styled.label`
       position: absolute;
       right: 7px;
     }
+  `};
+  ${media.mobile`
+    font-size: 13px;
+    text-align: left;
+    width: auto;
   `};
 `;

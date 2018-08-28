@@ -1,13 +1,26 @@
 import styled from 'styled-components';
+import React from 'react';
 
-export const Grid = styled.table`
+export const Grid = props => (
+  <Wrapper>
+    <Table {...props} />
+  </Wrapper>
+);
+
+const Wrapper = styled.div`
+  min-width: 100%;
+  overflow-x: auto;
+  position: relative;
+`;
+
+export const Table = styled.table`
   background: #fff;
   border-collapse: collapse;
   border-radius: 8px;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
   margin: 0;
   padding: 0;
-  min-width: 100%;
+  width: 100%;
 `;
 export const Cell = styled.td`
   border: solid 1px #eee;
