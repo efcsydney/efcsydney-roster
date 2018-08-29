@@ -35,6 +35,7 @@
     "nodemailer": "^4.4.1",
     "nodemon": "^1.12.1",
     "papaparse": "^4.3.6",
+    "pm2": "^3.0.4",
     "prettier": "^1.9.2",
     "pusher": "^1.5.1",
     "query-string": "^5.0.1",
@@ -56,7 +57,7 @@
   "scripts": {
     "build": "cd client && npm run build",
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node server.js",
+    "server": "pm2-runtime process.json",
     "client": "node start-client.js",
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
     "lint": "eslint .",
