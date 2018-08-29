@@ -100,7 +100,7 @@ export default class Auth extends Component {
     const { isChecking } = this.state;
 
     if (isChecking) {
-      return <LoadingIndicator active={true} height="auto" />;
+      return <LoadingIndicator active={true} height="300px" />;
     }
 
     return <div>{children}</div>;

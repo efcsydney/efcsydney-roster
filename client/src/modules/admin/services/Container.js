@@ -9,6 +9,7 @@ import IconPencil from 'react-icons/lib/fa/pencil';
 import Popup from './Popup';
 import { createApiActions, withResource } from 'resource';
 import { media } from 'styled';
+import Title from '../Title';
 
 const { modifyServices, createServices } = createApiActions('services');
 
@@ -71,6 +72,7 @@ export default withResource('services', mapResourceToProps)(
       return (
         <Wrapper>
           <HeadRow>
+            <Title>Services Management</Title>
             <Link to={`${this.rootPath}/new`}>
               <Button kind="green" theme="solid">
                 Create New Service
@@ -134,7 +136,8 @@ const Wrapper = styled.div`
 const HeadRow = styled.div`
   display: flex;
   margin: 10px 0;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
   ${media.mobile`
     justify-content: center;
   `};

@@ -79,7 +79,6 @@ const Wrapper = styled.div`
   background: linear-gradient(to right, #666, #333);
   color: #fff;
   display: flex;
-  margin-bottom: 10px;
   padding: 0 20px;
   img {
     border-radius: 8px;
