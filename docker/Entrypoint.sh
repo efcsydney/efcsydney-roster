@@ -42,7 +42,7 @@ dev(){
   yarn db-migrate
   yarn db-update-events
 
-  pm2-runtime npm -- start --watch
+  npm start
 }
 
 $1

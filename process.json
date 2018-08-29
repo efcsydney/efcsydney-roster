@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "name": "efcsydney-roster",
+      "script": "./server.js",
+      "watch": true,
+      "instance_var": "INSTANCE_ID"
+    }
+  ]
+}
