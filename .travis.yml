@@ -30,8 +30,6 @@ before_script:
 - yarn db-migrate
 - cd client && yarn && cd ..;
 script:
-- yarn start
-- yarn testcafe:chrome-headless
 - yarn test
 - yarn test:frontend
 - |

@@ -4,7 +4,7 @@ import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
 import { getEvents, modifyServiceInfo } from './api';
 
 // Environment
-const isDev = _.includes(['test', 'development'], process.env.NODE_ENV);
+const isDev = process.env.NODE_ENV === 'development';
 const webUrl = isDev
   ? 'http://localhost:3000'
   : 'https://demo-roster.efcsydney.org';
