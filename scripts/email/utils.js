@@ -246,10 +246,10 @@ exports.getEmailHTML = (events, emailList, emptyEmailList) => {
   const dates = _.values(events.chinese)
     .map(event => event.date)
     .sort();
-  const thisWeek = moment(dates[0]).format('M/D');
+  const thisWeek = moment(dates[0]).format('DD/MM');
   const nextWeek = moment(dates[0])
     .add('w', 1)
-    .format('M/D');
+    .format('DD/MM');
   const title = `這週(${thisWeek})與下週(${nextWeek})的主日服事`;
   const mjml = `
     <mjml>
@@ -286,9 +286,14 @@ exports.getEmailHTML = (events, emailList, emptyEmailList) => {
           </mj-section>
           <mj-section padding="5px 0 5px">
             <mj-text font-size="14px">各位弟兄姊妹平安</mj-text>
+            <mj-text font-size="14px">Dear all,</mj-text>
           </mj-section>
           <mj-section padding="5px 0 5px">
             <mj-text font-size="14px">溫馨提醒下兩週的同工預備心服事</mj-text>
+            <mj-text font-size="14px">A friendly reminder for all who serve in this coming Sunday and the following Sunday.</mj-text>
+          </mj-section>
+          <mj-section>
+            <mj-text font-size="14px">THANK YOU :))</mj-text>
           </mj-section>
           <mj-section padding="5px 0 5px">
             ${_.values(events)
@@ -297,6 +302,7 @@ exports.getEmailHTML = (events, emailList, emptyEmailList) => {
           </mj-section>
           <mj-section padding="0">
             <mj-text font-size="12px" line-height="1.4">Regards<br/></mj-text>
+            <mj-text font-size="12px" line-height="1.4">PP</mj-text>
           </mj-section>
         </mj-container>
       </mj-body>

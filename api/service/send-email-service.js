@@ -1,3 +1,4 @@
+const moment = require('moment');
 const emailUtils = require('../../scripts/email/utils');
 const sendEmail = emailUtils.sendEmail;
 const getEmailHTML = emailUtils.getEmailHTML;
@@ -133,12 +134,14 @@ async function getCurrentEmailHTML() {
 // reminderEmail will send email for the next 2 weeks
 async function reminderEmail() {
   const currentEmailHTML = await getCurrentEmailHTML();
+  const fromDate = moment(getDateString(new Date())).format('DD/MM');
+  const toDate = moment(getDateByWeeks(fromDate, 2)).format('DD/MM');
 
   return sendEmail({
     from: config.get('reminderEmail.content.from'),
     to: config.get('reminderEmail.content.to'),
     cc: config.get('reminderEmail.content.cc'),
-    subject: `[自動提醒] 這週與下週的主日服事`,
+    subject: `[自動提醒] 這週(${fromDate})與下週(${toDate})的主日服事`,
     html: currentEmailHTML
   });
 }
