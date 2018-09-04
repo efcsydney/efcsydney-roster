@@ -12,6 +12,7 @@ import {
 } from 'components';
 import styled from 'styled-components';
 import { set } from 'dot-prop-immutable';
+import validator from 'validator';
 import { withResource } from 'resource';
 
 class Popup extends Component {
@@ -73,6 +74,16 @@ class Popup extends Component {
     const { data } = this.state;
 
     e.preventDefault();
+
+    const email = _.get(data, 'email', '');
+    const phone = _.get(data, 'phone', '');
+
+    if (!validator.isEmail(email)) {
+      return;
+    }
+    if (!validator.isMobilePhone(phone, 'en-AU')) {
+      return;
+    }
 
     onSave({
       ...data
