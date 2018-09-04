@@ -59,23 +59,14 @@ class Popup extends Component {
       setTimeout(onClose, 500);
     }
   }
-  handleChange = change => {
+  handleChange = changes => {
     let data = _.clone(this.state.data);
 
-    _.forOwn(change, (change, key) => {
+    _.forOwn(changes, (change, key) => {
       data = set(data, key, change);
     });
 
     this.setState({ data });
-  };
-  handlePrimaryNameChange = e => {
-    const value = _.get(e, 'target.value', '').trim();
-    const regExp = /^[a-z-]+$/gm;
-    if (!_.isEmpty(value) && _.isNull(value.match(regExp))) {
-      return;
-    }
-
-    this.handleChange({ primaryName: value });
   };
   handleSubmit = e => {
     const { onSave } = this.props;
@@ -110,7 +101,7 @@ class Popup extends Component {
             value={primaryName}
             maxLength={30}
             placeholder="e.g. Kyle"
-            onChange={this.handlePrimaryNameChange}
+            onChange={e => this.handleChange({ primaryName: e.target.value })}
           />
         </FormGroup>
         <FormGroup label="Secondary Name">
@@ -119,7 +110,7 @@ class Popup extends Component {
             type="text"
             value={secondaryName}
             maxLength={30}
-            placeholder="e.g. 凱爾"
+            placeholder="e.g. Kyle's nick name"
             onChange={e => this.handleChange({ secondaryName: e.target.value })}
           />
         </FormGroup>
@@ -138,7 +129,7 @@ class Popup extends Component {
             type="text"
             value={phone}
             maxLength={15}
-            placeholder="e.g. 0411111111"
+            placeholder="e.g. 0400123123"
             onChange={e => this.handleChange({ phone: e.target.value })}
           />
         </FormGroup>
