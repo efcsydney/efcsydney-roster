@@ -74,10 +74,10 @@ export default withResource('users', mapResourceToProps)(
           <NavBar hasSwitcher={false} title="Roster System" />
           <HeadRow>
             <Link to={`${this.rootPath}/new`}>
-              <Button kind="green" theme="solid">
+              <ButtonCreate kind="green" theme="solid">
                 <StyledIconPlus />
                 Create New User
-              </Button>
+              </ButtonCreate>
             </Link>
           </HeadRow>
           <Body>
@@ -143,6 +143,9 @@ const Body = styled.div`
 const ActionsCell = styled(Cell)`
   display: flex;
   justify-content: center;
+`;
+const ButtonCreate = styled(Button)`
+  margin-right: 10px;
 `;
 const StyledButton = styled(Button)`
   margin-left: 4px;
