@@ -70,6 +70,7 @@
     "testcafe-live:chrome-headless": "testcafe-live 'chrome:headless' test/e2e-test/*.js",
     "db-create": "node scripts/create-database.js",
     "db-migrate": "sequelize db:migrate",
+    "db-rollback": "sequelize db:migrate:undo",
     "db-rollback-all": "sequelize db:migrate:undo:all",
     "prettier": "prettier --single-quote --write '{,!(node_modules|client)/**/}*.js'",
     "db-update-events": "node ./scripts/update-events-details.js",

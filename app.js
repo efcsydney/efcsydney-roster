@@ -4,6 +4,7 @@ const app = express();
 module.exports.app = app;
 const UserValidators = require('./api/validators/user-validator');
 const bodyParser = require('body-parser');
+const changelogsController = require('./api/controllers/changelogs-controller');
 const emailController = require('./api/controllers/email-controller');
 const eventsController = require('./api/controllers/events-controller');
 const servicesController = require('./api/controllers/services-controller');
@@ -44,6 +45,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/email', emailController.getEmail);
+
+app.get('/api/changelogs', changelogsController.get);
 
 app.get('/api/services', servicesController.getServices);
 
