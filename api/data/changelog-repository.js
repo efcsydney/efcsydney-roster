@@ -5,7 +5,10 @@ async function createChangelog(changelog) {
 }
 
 async function getChangelogs() {
-  return await Changelog.findAll();
+  return await Changelog.findAll({
+    limit: 100,
+    order: [['id', 'DESC']]
+  });
 }
 module.exports = {
   createChangelog,
