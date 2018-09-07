@@ -1,4 +1,4 @@
-//import _ from 'lodash';
+import _ from 'lodash';
 import moment from 'moment';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -11,6 +11,20 @@ import useragent from 'useragent';
 import ReactJson from 'react-json-view';
 
 const DATE_FORMAT = 'D MMM, h:mma';
+
+function rephraseHttpMethod(method) {
+  if (method === 'GET') {
+    return 'Read';
+  } else if (method === 'POST') {
+    return 'Create';
+  } else if (method === 'PUT') {
+    return 'Update';
+  } else if (method === 'DELETE') {
+    return 'Remove';
+  } else if (method === 'OPTION') {
+    return 'Connect';
+  }
+}
 
 class AdminChangelogs extends Component {
   static propTypes = {
@@ -74,8 +88,8 @@ class AdminChangelogs extends Component {
                 return (
                   <Row key={id}>
                     <Cell>{formattedDate}</Cell>
-                    <Cell>{resourceType}</Cell>
-                    <Cell>{actionType}</Cell>
+                    <Cell>{_.capitalize(resourceType)}</Cell>
+                    <Cell>{rephraseHttpMethod(actionType)}</Cell>
                     <DataCell align="left">
                       <ReactJson
                         name={null}
