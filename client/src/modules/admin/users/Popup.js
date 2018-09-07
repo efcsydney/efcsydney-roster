@@ -75,16 +75,6 @@ class Popup extends Component {
 
     e.preventDefault();
 
-    const email = _.get(data, 'email', '');
-    const phone = _.get(data, 'phone', '');
-
-    if (!validator.isEmail(email)) {
-      return;
-    }
-    if (!validator.isMobilePhone(phone, 'en-AU')) {
-      return;
-    }
-
     onSave({
       ...data
     });
@@ -98,7 +88,19 @@ class Popup extends Component {
     const phone = _.get(data, 'phone', '');
     const { mode } = this.props;
     const isNew = mode === 'new';
-    const isButtonEnabled = !!(primaryName && secondaryName && email && phone);
+    const validEmail = validator.isEmail(email);
+    const validPhone = validator.isMobilePhone(phone, 'en-AU');
+
+    const isButtonEnabled = !!(
+      primaryName &&
+      secondaryName &&
+      email &&
+      phone &&
+      validEmail &&
+      validPhone
+    );
+    const emailKind = validEmail ? 'default' : 'warning';
+    const phoneKind = validPhone ? 'default' : 'warning';
 
     const buttonKind =
       (isSaving && 'loading') || (hasCompleted && 'success') || 'default';
@@ -129,6 +131,7 @@ class Popup extends Component {
           <StyledInput
             data-hj-whitelist
             type="text"
+            kind={emailKind}
             value={email}
             placeholder="e.g. Kyle@gmail.com"
             onChange={e => this.handleChange({ email: e.target.value })}
@@ -138,6 +141,7 @@ class Popup extends Component {
           <StyledInput
             data-hj-whitelist
             type="text"
+            kind={phoneKind}
             value={phone}
             maxLength={15}
             placeholder="e.g. 0400123123"
