@@ -14,12 +14,12 @@ const DATE_FORMAT = 'D MMM, h:mma';
 
 class AdminChangelogs extends Component {
   static propTypes = {
-    data: PropTypes.array,
+    data: PropTypes.object,
     isLoading: PropTypes.bool,
     error: PropTypes.object
   };
   static defaultProps = {
-    data: [],
+    data: {},
     isLoading: true,
     error: {}
   };
