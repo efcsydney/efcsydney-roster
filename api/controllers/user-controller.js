@@ -1,5 +1,7 @@
 const { saveUser, getUsers } = require('../service/user-service');
+const { addChangelog } = require('../service/changelogs-service');
 const { validationResult } = require('express-validator/check');
+const pusher = require('../utilities/pusher');
 const { ok, validationFail } = require('../utilities/response-helper');
 
 const log = require('../utilities/logger');
@@ -14,6 +16,9 @@ async function save(req, res, next) {
 
     const user = { id: req.params.id, ...req.body };
     const updatedUser = await saveUser(user);
+
+    await addChangelog('user', req, updatedUser);
+    pusher.trigger('index', 'user-modified', updatedUser);
 
     res.json(ok(updatedUser));
   } catch (err) {
