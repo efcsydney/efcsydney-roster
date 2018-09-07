@@ -17,6 +17,7 @@ const env = _.get(process, 'env.NODE_ENV', 'development');
 const config = require('config');
 const graphqlHttp = require('express-graphql');
 const schema = require('./api/schema');
+const cors = require('cors');
 
 if (isServerEnvironment()) {
   Raven.config(
@@ -29,7 +30,7 @@ if (isServerEnvironment()) {
 
 app.use(bodyParser.json());
 
-app.use('/graphql', graphqlHttp({ schema, graphiql: true }));
+app.use('/graphql', cors(), graphqlHttp({ schema, graphiql: true }));
 
 app.set('port', process.env.PORT || 3001);
 app.set('secure-port', config.get('port.secure'));

@@ -1,6 +1,8 @@
 const ServicesService = require('../service/services-service');
+const { addChangelog } = require('../service/changelogs-service');
 const DtoMapper = require('../mapper/dto-mapper');
 const log = require('../utilities/logger');
+const pusher = require('../utilities/pusher');
 const { ok } = require('../utilities/response-helper');
 
 async function getServices(req, res, next) {
@@ -32,9 +34,11 @@ async function saveService(req, res, next) {
     const incomingDto = { id: req.params.id, data: req.body };
     const service = await DtoMapper.mapServiceDtoToModel(incomingDto);
     const updatedService = await ServicesService.saveService(service);
-    const outgoingDto = DtoMapper.mapServiceToDto(updatedService);
+    const data = DtoMapper.mapServiceToDto(updatedService);
 
-    res.json(ok(outgoingDto));
+    await addChangelog('service', req, data);
+    pusher.trigger('index', 'service-modified', data);
+    res.json(ok(data));
   } catch (err) {
     next(err);
   }
