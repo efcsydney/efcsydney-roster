@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Index from './modules/index';
 import Login from './modules/login';
-import Admin from './modules/admin';
+import AdminUsers from './modules/admin/users';
+import AdminServices from './modules/admin/services';
 import { TagManager } from 'components';
 
 export default class App extends Component {
@@ -46,7 +47,17 @@ export default class App extends Component {
           <Route exact path="/index/:category" component={Index} />
           <Route exact path="/index" component={Index} />
           <Route exact path="/login" component={Login} />
-          <Route path="/admin" component={Admin} />
+          <Route exact path="/admin/services" component={AdminServices} />
+          <Route exact path="/admin/services/new" component={AdminServices} />
+          <Route
+            exact
+            path="/admin/services/edit/:id"
+            component={AdminServices}
+          />
+          <Route exact path="/admin/users" component={AdminUsers} />
+          <Route exact path="/admin/users/new" component={AdminUsers} />
+          <Route exact path="/admin/users/edit/:id" component={AdminUsers} />
+          <Redirect path="/admin" to="/admin/services" />
           <Redirect path="/chinese" to="/index/chinese" />
           <Redirect path="/english" to="/index/english" />
           <Redirect path="/preschool-junior" to="/index/preschool-junior" />
