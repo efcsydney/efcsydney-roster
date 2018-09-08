@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { Auth, NavBar } from 'modules/core';
+import { Route } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Cell, Grid, HeaderCell, Row } from 'components';
 import { Link } from 'react-router-dom';
@@ -10,22 +10,16 @@ import IconPlus from 'react-icons/lib/fa/plus';
 import Popup from './Popup';
 import { createApiActions, withResource } from 'resource';
 import { media } from 'styled';
+import Title from '../Title';
 
 const { modifyUsers, createUsers } = createApiActions('users');
 
 const mapResourceToProps = (resource, state, ownProps) => {
-  const path = _.get(ownProps, 'match.path');
-  const mode =
-    (path.indexOf('/new') !== -1 && 'new') ||
-    (path.indexOf('/edit') !== -1 && 'edit') ||
-    'index';
-  const paramId = _.get(ownProps, 'match.params.id', null);
-  const selectedId = !_.isEmpty(paramId) ? parseInt(paramId, 10) : null;
+  const isLoading = _.get(resource, 'status.retrieve.isLoading', false);
 
   return {
     data: resource.data,
-    mode,
-    selectedId,
+    isLoading,
     ...ownProps
   };
 };
@@ -46,16 +40,12 @@ export default withResource('users', mapResourceToProps)(
       super(props);
       this.rootPath = '/admin/users';
     }
-    handleAuthFail = () => {
-      const { history } = this.props;
-      history.replace('/login');
-    };
     handlePopupClose = () => {
       const { history } = this.props;
       history.push(this.rootPath);
     };
-    handlePopupSave = data => {
-      const { dispatch, mode } = this.props;
+    handlePopupSave = mode => data => {
+      const { dispatch } = this.props;
       const { id, ...body } = data;
       if (mode === 'new') {
         dispatch(createUsers({ ...body }));
@@ -64,62 +54,59 @@ export default withResource('users', mapResourceToProps)(
       }
     };
     render() {
-      const { data, mode, selectedId } = this.props;
-      const hasPopup = _.includes(['edit', 'new'], mode);
-      const selectedData = data[selectedId] || {};
-      const isLoading = mode === 'edit' && _.isEmpty(selectedData);
+      const { data, isLoading } = this.props;
 
       return (
         <Wrapper>
-          <NavBar hasSwitcher={false} title="Roster System" />
           <HeadRow>
+            <Title>Users Management</Title>
             <Link to={`${this.rootPath}/new`}>
-              <ButtonCreate kind="green" theme="solid">
+              <Button kind="green" theme="solid">
                 <StyledIconPlus />
                 Create New User
-              </ButtonCreate>
+              </Button>
             </Link>
           </HeadRow>
-          <Body>
-            <Auth onFail={this.handleAuthFail}>
-              <Grid>
-                <thead>
-                  <Row>
-                    <HeaderCell>Primary Name</HeaderCell>
-                    <HeaderCell>Secondary Name</HeaderCell>
-                    <HeaderCell>Email</HeaderCell>
-                    <HeaderCell>Actions</HeaderCell>
-                  </Row>
-                </thead>
-                <tbody>
-                  {_.map(data, ({ id, primaryName, secondaryName, email }) => (
-                    <Row key={id}>
-                      <Cell>{primaryName}</Cell>
-                      <Cell>{secondaryName}</Cell>
-                      <Cell>{email}</Cell>
-                      <ActionsCell>
-                        <Link to={`${this.rootPath}/edit/${id}`}>
-                          <StyledButton kind="blue">
-                            <IconEdit />
-                            Edit
-                          </StyledButton>
-                        </Link>
-                      </ActionsCell>
-                    </Row>
-                  ))}
-                </tbody>
-              </Grid>
-            </Auth>
-          </Body>
-          {hasPopup && (
-            <Popup
-              mode={mode}
-              data={selectedData}
-              isLoading={isLoading}
-              onSave={this.handlePopupSave}
-              onClose={this.handlePopupClose}
-            />
-          )}
+          <Grid>
+            <thead>
+              <Row>
+                <HeaderCell>Primary Name</HeaderCell>
+                <HeaderCell>Secondary Name</HeaderCell>
+                <HeaderCell>Email</HeaderCell>
+                <HeaderCell>Actions</HeaderCell>
+              </Row>
+            </thead>
+            <tbody>
+              {_.map(data, ({ id, primaryName, secondaryName, email }) => (
+                <Row key={id}>
+                  <Cell>{primaryName}</Cell>
+                  <Cell>{secondaryName}</Cell>
+                  <Cell>{email}</Cell>
+                  <ActionsCell>
+                    <Link to={`${this.rootPath}/edit/${id}`}>
+                      <StyledButton kind="blue">
+                        <IconEdit />
+                        Edit
+                      </StyledButton>
+                    </Link>
+                  </ActionsCell>
+                </Row>
+              ))}
+            </tbody>
+          </Grid>
+          <Route
+            exact
+            path="/admin/users/:mode(new|edit)/:id?"
+            render={({ match: { params: { mode, id } } }) => (
+              <Popup
+                mode={mode}
+                data={data[id]}
+                isLoading={isLoading && mode === 'edit'}
+                onSave={this.handlePopupSave(mode)}
+                onClose={this.handlePopupClose}
+              />
+            )}
+          />
         </Wrapper>
       );
     }
@@ -132,20 +119,14 @@ const Wrapper = styled.div`
 const HeadRow = styled.div`
   display: flex;
   margin: 10px 0;
-  justify-content: flex-end;
+  justify-content: space-between;
   ${media.mobile`
     justify-content: center;
   `};
 `;
-const Body = styled.div`
-  margin: 10px;
-`;
 const ActionsCell = styled(Cell)`
   display: flex;
   justify-content: center;
-`;
-const ButtonCreate = styled(Button)`
-  margin-right: 10px;
 `;
 const StyledButton = styled(Button)`
   margin-left: 4px;
