@@ -37,11 +37,6 @@ class AdminChangelogs extends Component {
     isLoading: true,
     error: {}
   };
-  constructor(props) {
-    super(props);
-
-    this.rootPath = '/admin/services';
-  }
   render() {
     const { data, isLoading } = this.props;
 
