@@ -37,11 +37,6 @@ class AdminChangelogs extends Component {
     isLoading: true,
     error: {}
   };
-  constructor(props) {
-    super(props);
-
-    this.rootPath = '/admin/services';
-  }
   render() {
     const { data, isLoading } = this.props;
 
@@ -121,6 +116,7 @@ class AdminChangelogs extends Component {
 
 export default () => (
   <Query
+    pollInterval={2000}
     query={gql`
       {
         changelogs {
