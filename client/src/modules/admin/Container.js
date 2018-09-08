@@ -6,7 +6,7 @@ import Nav from './services/Nav';
 import { Auth, NavBar } from 'modules/core';
 import AdminServices from './services';
 import AdminEmail from './email';
-import AdminChangelogs from './changelogs';
+import AdminChangelogs from './changelogs/index.js';
 import UnderConstruction from './UnderConstruction';
 import styled from 'styled-components';
 import { media } from 'styled';
