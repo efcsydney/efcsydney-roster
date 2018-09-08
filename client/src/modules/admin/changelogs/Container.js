@@ -116,6 +116,7 @@ class AdminChangelogs extends Component {
 
 export default () => (
   <Query
+    pollInterval={2000}
     query={gql`
       {
         changelogs {
