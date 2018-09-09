@@ -56,11 +56,11 @@ function color(kind = 'default', theme = 'normal') {
 export const Input = styled.input`
   background: #fff;
   border: solid 1px #c1c1c1;
-  border-color: ${props => borderColor(normalizeKind(props.kind), props.theme)};
+  border-color: ${props => (props.hasError ? 'red' : '#ccc')};
   border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  color: ${props => color(normalizeKind(props.kind), props.theme)};
+  color: ${props => (props.hasError ? 'red' : '#555')};
   padding: 9px;
   width: 100%;
   display: block;

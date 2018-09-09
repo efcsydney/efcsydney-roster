@@ -50,7 +50,8 @@
     "styled-components": "^2.2.3",
     "tinycolor2": "^1.4.1",
     "useragent": "^2.3.0",
-    "yamlparser": "^0.0.2"
+    "yamlparser": "^0.0.2",
+    "validator": "^10.7.1"
   },
   "scripts": {
     "start": "react-app-rewired start",

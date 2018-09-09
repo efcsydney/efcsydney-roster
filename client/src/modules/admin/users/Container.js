@@ -27,14 +27,10 @@ const mapResourceToProps = (resource, state, ownProps) => {
 export default withResource('users', mapResourceToProps)(
   class UserIndex extends Component {
     static propTypes = {
-      data: PropTypes.object,
-      mode: PropTypes.string,
-      selectedId: PropTypes.number
+      data: PropTypes.object
     };
     static defaultProps = {
-      data: {},
-      mode: 'index',
-      selectedId: null
+      data: {}
     };
     constructor(props) {
       super(props);
