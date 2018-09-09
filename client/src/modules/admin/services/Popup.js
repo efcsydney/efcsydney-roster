@@ -192,7 +192,11 @@ class Popup extends Component {
             onChange={e => this.handleChange({ label: e.target.value })}
           />
         </FormGroup>
-        <FormGroup label="URL Path" isRequired={isNew}>
+        <FormGroup
+          label="URL Path"
+          isRequired={isNew}
+          helpText={`English characters and dash (-) only. <br/>https://roster.efcsydney.org/#/index/${name ||
+            '(path)'}`}>
           {isNew && (
             <StyledInput
               data-hj-whitelist
@@ -220,7 +224,10 @@ class Popup extends Component {
           )}
           {!isNew && frequency}
         </FormGroup>
-        <FormGroup label="Language" isRequired={isNew}>
+        <FormGroup
+          label="Language"
+          isRequired={isNew}
+          helpText="Preferred language for this service">
           <StyledSelect
             value={locale}
             clearable={false}
@@ -233,7 +240,10 @@ class Popup extends Component {
             }
           />
         </FormGroup>
-        <FormGroup label="Description Label" isRequired={true}>
+        <FormGroup
+          label="Description Label"
+          isRequired={true}
+          helpText="Label for the first header column on the Quarter View">
           <StyledInput
             data-hj-whitelist
             type="text"
@@ -243,7 +253,11 @@ class Popup extends Component {
             onChange={e => this.handleChange({ footnoteLabel: e.target.value })}
           />
         </FormGroup>
-        <FormGroup label="Positions" align="top" isRequired={true}>
+        <FormGroup
+          label="Positions"
+          align="top"
+          isRequired={true}
+          helpText="Drag and drop to re-order positions">
           <DragDropZone>
             <PositionList>
               {sortedPositions.map(({ id, name, order }, i) => (
