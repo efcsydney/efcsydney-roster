@@ -23,40 +23,6 @@ export const FormGroup = ({
   </FormRow>
 );
 
-function normalizeKind(name = 'gray') {
-  const mappings = {
-    default: 'gray',
-    warning: 'red'
-  };
-
-  if (_.indexOf(_.values(mappings), name) !== -1) {
-    return name;
-  } else {
-    return mappings[name] || 'gray';
-  }
-}
-
-function borderColor(kind = 'default', theme = 'normal') {
-  if (theme === 'solid') {
-    return 'transparent';
-  } else {
-    return {
-      gray: '#c1c1c1',
-      red: '#e18f84'
-    }[kind];
-  }
-}
-function color(kind = 'default', theme = 'normal') {
-  if (theme === 'solid') {
-    return '#ffffff';
-  } else {
-    return {
-      gray: '#333',
-      red: '#cc3333'
-    }[kind];
-  }
-}
-
 export const Input = styled.input`
   background: #fff;
   border: solid 1px #c1c1c1;
