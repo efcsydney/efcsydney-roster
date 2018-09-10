@@ -86,8 +86,9 @@ class Popup extends Component {
     const secondaryName = _.get(data, 'secondaryName', '');
     const email = _.get(data, 'email', '');
     const phone = _.get(data, 'phone', '');
-    const isValidEmail = validator.isEmail(email);
-    const isValidPhone = validator.isMobilePhone(phone, 'en-AU');
+    const isValidEmail = _.isEmpty(email) || validator.isEmail(email);
+    const isValidPhone =
+      _.isEmpty(phone) || validator.isMobilePhone(phone, 'en-AU');
 
     const isButtonEnabled = !!(
       primaryName &&
