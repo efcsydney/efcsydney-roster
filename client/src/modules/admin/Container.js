@@ -7,7 +7,6 @@ import { Auth, NavBar } from 'modules/core';
 import AdminServices from './services';
 import AdminEmail from './email';
 import UnderConstruction from './UnderConstruction';
-import AdminUsers from './users';
 import styled from 'styled-components';
 import { media } from 'styled';
 
@@ -79,7 +78,10 @@ export default class Admin extends PureComponent {
                     <UnderConstruction title="Changelogs Management" />
                   )}
                 />
-                <Route path="/admin/users" component={AdminUsers} />
+                <Route
+                  path="/admin/users"
+                  render={() => <UnderConstruction title="Users Management" />}
+                />
                 <Redirect to="/admin/services" />
               </Switch>
             </Content>

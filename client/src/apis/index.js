@@ -14,7 +14,6 @@ export const EventsAPI = createApi('/api/events', {
 });
 export const ServicesAPI = createApi('/api/services');
 export const ServiceInfoAPI = createApi('/api/serviceInfo');
-export const UsersAPI = createApi('/api/users');
 
 const mapper = (API, other = {}) => {
   return _.assign(
@@ -32,6 +31,5 @@ const mapper = (API, other = {}) => {
 export const mapping = {
   events: mapper(EventsAPI, { idAttribute: 'serviceInfo.id' }),
   services: mapper(ServicesAPI, { idAttribute: 'id' }),
-  serviceInfo: mapper(ServiceInfoAPI, { idAttribute: 'id' }),
-  users: mapper(UsersAPI, { idAttribute: 'id' })
+  serviceInfo: mapper(ServiceInfoAPI, { idAttribute: 'id' })
 };

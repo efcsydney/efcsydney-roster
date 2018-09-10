@@ -19,48 +19,13 @@ export const FormGroup = ({
   </FormRow>
 );
 
-function normalizeKind(name = 'gray') {
-  const mappings = {
-    default: 'gray',
-    warning: 'red'
-  };
-
-  if (_.indexOf(_.values(mappings), name) !== -1) {
-    return name;
-  } else {
-    return mappings[name] || 'gray';
-  }
-}
-
-function borderColor(kind = 'default', theme = 'normal') {
-  if (theme === 'solid') {
-    return 'transparent';
-  } else {
-    return {
-      gray: '#c1c1c1',
-      red: '#e18f84'
-    }[kind];
-  }
-}
-function color(kind = 'default', theme = 'normal') {
-  if (theme === 'solid') {
-    return '#ffffff';
-  } else {
-    return {
-      gray: '#333',
-      red: '#cc3333'
-    }[kind];
-  }
-}
-
 export const Input = styled.input`
   background: #fff;
   border: solid 1px #c1c1c1;
-  border-color: ${props => borderColor(normalizeKind(props.kind), props.theme)};
   border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  color: ${props => color(normalizeKind(props.kind), props.theme)};
+  color: #333;
   padding: 9px;
   width: 100%;
   display: block;
