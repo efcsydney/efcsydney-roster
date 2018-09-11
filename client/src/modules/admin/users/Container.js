@@ -41,8 +41,20 @@ export default withResource('users', mapResourceToProps)(
       history.push(this.rootPath);
     };
     handlePopupSave = mode => data => {
-      const { dispatch } = this.props;
+      const { dispatch, data: originUsers } = this.props;
       const { id, ...body } = data;
+
+      const otherUsers = _.filter(originUsers, user => user.id !== id);
+      const otherUsersEmail = _.map(otherUsers, otherUser => otherUser.email);
+
+      if (_.includes(otherUsersEmail, data.email)) {
+        alert(
+          `The user email "${
+            data.email
+          }" has been used. Please use other email.`
+        );
+        return;
+      }
       if (mode === 'new') {
         dispatch(createUsers({ ...body }));
       } else {
