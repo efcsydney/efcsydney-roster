@@ -80,14 +80,20 @@ class Popup extends Component {
     });
   };
   validateEmail = email => {
-    if (_.isEmpty(email) || _.isNil(email)) {
+    if (_.isEmpty(email)) {
+      return true;
+    }
+    if (_.isNil(email)) {
       return false;
     } else {
       return validator.isEmail(email);
     }
   };
   validatePhone = phone => {
-    if (_.isEmpty(phone) || _.isNil(phone)) {
+    if (_.isEmpty(phone)) {
+      return true;
+    }
+    if ( _.isNil(phone)) {
       return false;
     } else {
       return validator.isMobilePhone(phone, 'en-AU');
