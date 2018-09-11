@@ -79,8 +79,6 @@ class Popup extends Component {
       ...data
     });
   };
-<<<<<<< HEAD
-=======
   validateEmail = email => {
     if (_.isEmpty(email) || _.isNil(email)) {
       return false;
@@ -95,7 +93,6 @@ class Popup extends Component {
       return validator.isMobilePhone(phone, 'en-AU');
     }
   };
->>>>>>> hotfixValidate
   renderForm() {
     const { data } = this.state;
     const { isSaving, hasCompleted } = this.props;
@@ -103,25 +100,12 @@ class Popup extends Component {
     const secondaryName = _.get(data, 'secondaryName', '');
     const email = _.get(data, 'email', '');
     const phone = _.get(data, 'phone', '');
-<<<<<<< HEAD
-    const { mode } = this.props;
-    const isNew = mode === 'new';
-    const isValidEmail = validator.isEmail(email);
-    const isValidPhone = validator.isMobilePhone(phone, 'en-AU');
-
-    const isButtonEnabled = !!(
-      primaryName &&
-      secondaryName &&
-      email &&
-      phone &&
-=======
     const isValidEmail = this.validateEmail(email);
     const isValidPhone = this.validatePhone(phone);
 
     const isButtonEnabled = !!(
       primaryName &&
       email &&
->>>>>>> hotfixValidate
       isValidEmail &&
       isValidPhone
     );
@@ -131,11 +115,7 @@ class Popup extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-<<<<<<< HEAD
-        <FormGroup label="Primary Name" isRequired={isNew}>
-=======
         <FormGroup label="Primary Name" isRequired={true}>
->>>>>>> hotfixValidate
           <StyledInput
             data-hj-whitelist
             type="text"
@@ -155,11 +135,7 @@ class Popup extends Component {
             onChange={e => this.handleChange({ secondaryName: e.target.value })}
           />
         </FormGroup>
-<<<<<<< HEAD
-        <FormGroup label="Email" isRequired={isNew}>
-=======
         <FormGroup label="Email" isRequired={true}>
->>>>>>> hotfixValidate
           <StyledInput
             data-hj-whitelist
             type="text"
