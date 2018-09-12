@@ -28,7 +28,7 @@ EOF
   aws s3 cp s3://$S3_BUCKET/local.yaml $EFC_FOLDER/config/local.yaml
   aws s3 cp s3://$S3_BUCKET/email-list.csv $EFC_FOLDER/db/data/email-list.csv
 
-  pm2-runtime server.js
+  npm start
 }
 
 dev(){
