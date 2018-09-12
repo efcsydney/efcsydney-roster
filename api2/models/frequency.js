@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelizeClient = require('../infrastructure/sequelize-client')
+const sequelizeClient = require('../../api/infrastructure/sequelize-client')
   .sequelizeClient;
 const { Service } = require('./service');
 
@@ -14,7 +14,7 @@ const Frequency = sequelizeClient.define('frequencies_v2', {
   }
 });
 
-Frequency.hasMany(Service, { foreignKey: 'frequencyId' });
+Frequency.hasMany(Service);
 
 module.exports = {
   Frequency

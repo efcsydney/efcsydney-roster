@@ -11,6 +11,7 @@ const exception = require('./api/middleware/exception-handler');
 const httpRedirect = require('./api/middleware/http-redirect');
 const serviceInfoController = require('./api/controllers/service-info-controller');
 const userController = require('./api/controllers/user-controller');
+const eventsController2 = require('./api2/controller/event-controller');
 const Raven = require('raven');
 const env = _.get(process, 'env.NODE_ENV', 'development');
 const config = require('config');
@@ -48,6 +49,8 @@ if (['development', 'qa'].includes(env)) {
 }
 
 app.get('/api/services', servicesController.getServices);
+
+app.get('/api/v2/events', eventsController2.getEvents);
 
 app.get('/api/events', eventsController.getEvents);
 

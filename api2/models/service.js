@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
-const sequelizeClient = require('../infrastructure/sequelize-client')
+const sequelizeClient = require('../../api/infrastructure/sequelize-client')
   .sequelizeClient;
-const { Position } = require('./position');
 const { Event } = require('./event');
+const { Position } = require('./position');
 
 const Service = sequelizeClient.define('services_v2', {
   id: {
@@ -24,10 +24,6 @@ const Service = sequelizeClient.define('services_v2', {
   }
 });
 
-// Event.Position = Event.belongsTo(Position, {
-//   as: 'position',
-//   foreignKey: 'positionId'
-// });
 Service.hasMany(Position, { foreignKey: 'serviceId' });
 Service.hasMany(Event, { foreignKey: 'serviceId' });
 

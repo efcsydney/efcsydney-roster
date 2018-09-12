@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelizeClient = require('../infrastructure/sequelize-client')
+const sequelizeClient = require('../../api/infrastructure/sequelize-client')
   .sequelizeClient;
 const { Position } = require('./position');
 const { Event } = require('./event');
@@ -15,8 +15,9 @@ const EventPosition = sequelizeClient.define('event_positions_v2', {
   }
 });
 
-Position.belongsToMany(Event, { through: EventPosition });
-Event.belongsToMany(Position, { through: EventPosition });
+Position.belongsToMany(Event, {
+  through: EventPosition
+});
 
 module.exports = {
   EventPosition

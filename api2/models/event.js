@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
-const sequelizeClient = require('../infrastructure/sequelize-client')
+const sequelizeClient = require('../../api/infrastructure/sequelize-client')
   .sequelizeClient;
+const { Service } = require('./service');
 
 const Event = sequelizeClient.define('events_v2', {
   id: {
@@ -19,6 +20,9 @@ const Event = sequelizeClient.define('events_v2', {
   },
   skipService: {
     type: Sequelize.BOOLEAN
+  },
+  serviceId: {
+    type: Sequelize.INTEGER
   }
 });
 
