@@ -46,10 +46,16 @@ export default withResource('users', mapResourceToProps)(
       const { dispatch, data: originUsers } = this.props;
       const { id, ...body } = data;
 
-      const otherUsers = _.filter(originUsers, user => user.id !== id);
-      const otherUsersEmail = _.map(otherUsers, otherUser => otherUser.email);
+      const otherEmails = _.reduce(
+        originUsers,
+        (result, user) => {
+          if (user.id !== id) result.push(user.email);
+          return result;
+        },
+        []
+      );
 
-      if (_.includes(otherUsersEmail, data.email)) {
+      if (_.includes(otherEmails, data.email)) {
         alert(
           `The user email "${
             data.email

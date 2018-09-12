@@ -79,35 +79,16 @@ class Popup extends Component {
       ...data
     });
   };
-  validateEmail = email => {
-    if (_.isEmpty(email)) {
-      return true;
-    }
-    if (_.isNil(email)) {
-      return false;
-    } else {
-      return validator.isEmail(email);
-    }
-  };
-  validatePhone = phone => {
-    if (_.isEmpty(phone)) {
-      return true;
-    }
-    if ( _.isNil(phone)) {
-      return false;
-    } else {
-      return validator.isMobilePhone(phone, 'en-AU');
-    }
-  };
   renderForm() {
     const { data } = this.state;
     const { isSaving, hasCompleted } = this.props;
-    const primaryName = _.get(data, 'primaryName', '');
-    const secondaryName = _.get(data, 'secondaryName', '');
-    const email = _.get(data, 'email', '');
-    const phone = _.get(data, 'phone', '');
-    const isValidEmail = this.validateEmail(email);
-    const isValidPhone = this.validatePhone(phone);
+    const primaryName = _.get(data, 'primaryName', '') || '';
+    const secondaryName = _.get(data, 'secondaryName', '') || '';
+    const email = _.get(data, 'email', '') || '';
+    const phone = _.get(data, 'phone', '') || '';
+    const isValidEmail = validator.isEmail(email);
+    const isValidPhone =
+      _.isEmpty(phone) || validator.isMobilePhone(phone, 'en-AU');
 
     const isButtonEnabled = !!(
       primaryName &&
