@@ -4,6 +4,7 @@
       "name": "efcsydney-roster",
       "script": "./server.js",
       "watch": true,
+      "ignore_watch" : [".git", "node_modules", "log", "client"],
       "instance_var": "INSTANCE_ID"
     }
   ]
