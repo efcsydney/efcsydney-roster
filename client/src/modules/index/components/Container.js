@@ -37,13 +37,20 @@ const mapStateToProps = (state, ownProps) => {
     meta: { isEditingDay, isEditingRole, isLoading },
     data
   } = state.index;
-  const nextCategory = getCategory(category);
 
+  // Prevent user from inputing a non-existed service
+  // Workaround - redirect to english service
+  if (!_.isEmpty(services) && _.isEmpty(selectedService)) {
+    setCategory('english');
+    history.replace(`/index/english`);
+  }
+
+  const nextCategory = getCategory(category);
   if (!category) {
     history.replace(`/index/${nextCategory}`);
   }
-
   setCategory(nextCategory);
+
   return {
     category: nextCategory,
     data,
