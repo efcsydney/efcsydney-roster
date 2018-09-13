@@ -74,7 +74,7 @@ export const FormRow = styled.div`
   align-items: ${props =>
     _.includes(['top', 'flex-start'], props.align) ? 'flex-start' : 'center'};
   display: flex;
-  margin-bottom: 5px;
+  margin-bottom: 1em;
   min-height: 50px;
   &:last-child {
     text-align: center;
@@ -119,8 +119,8 @@ export const FormLabel = styled.label`
 `;
 
 export const HelpText = styled.div`
-  color: #999;
-  font-size: 10px;
+  color: #777;
+  font-size: 11px;
   line-height: 1.2;
   padding: 2px 0;
   white-space: break-word;
