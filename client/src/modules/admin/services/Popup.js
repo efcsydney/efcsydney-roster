@@ -195,7 +195,7 @@ class Popup extends Component {
         <FormGroup
           label="URL Path"
           isRequired={isNew}
-          helpText={`English characters and dash (-) only. <br/>https://roster.efcsydney.org/#/index/${name ||
+          helpText={`English and dash (-) only. Maximum 10 characters. <br/>https://roster.efcsydney.org/#/index/${name ||
             '(path)'}`}>
           {isNew && (
             <StyledInput
