@@ -105,23 +105,28 @@ class Popup extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <FormGroup label="Primary Name" isRequired={isNew}>
+        <FormGroup
+          label="Primary Name"
+          isRequired={true}
+          helpText="Usually user's English name">
           <StyledInput
             data-hj-whitelist
             type="text"
             value={primaryName}
             maxLength={30}
-            placeholder="e.g. Kyle"
+            placeholder="e.g. Gary Tan"
             onChange={e => this.handleChange({ primaryName: e.target.value })}
           />
         </FormGroup>
-        <FormGroup label="Secondary Name">
+        <FormGroup
+          label="Secondary Name"
+          helpText="Usually user's Chinese name">
           <StyledInput
             data-hj-whitelist
             type="text"
             value={secondaryName}
             maxLength={30}
-            placeholder="e.g. Kyle's nick name"
+            placeholder="e.g. 譚克丞"
             onChange={e => this.handleChange({ secondaryName: e.target.value })}
           />
         </FormGroup>
@@ -131,7 +136,7 @@ class Popup extends Component {
             type="text"
             hasError={!isValidEmail}
             value={email}
-            placeholder="e.g. Kyle@gmail.com"
+            placeholder="e.g. gary.tan@gmail.com"
             onChange={e => this.handleChange({ email: e.target.value })}
           />
         </FormGroup>
