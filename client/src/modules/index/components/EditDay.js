@@ -7,7 +7,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Input } from 'components';
 import styled from 'styled-components';
-import { Modal, StateButton, SwitchButton } from 'components';
+import {
+  FormGroup,
+  HelpText,
+  Modal,
+  StateButton,
+  SwitchButton
+} from 'components';
 import { requestModifyServiceInfo, toggleEditDay } from 'modules/index/redux';
 import { media } from 'styled';
 import i18n from 'i18n';
@@ -116,28 +122,27 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       const footnote = _.get(serviceInfo, 'footnote', '');
       const skipService = _.get(serviceInfo, 'skipService', false);
       const skipReason = _.get(serviceInfo, 'skipReason', '');
+      const fallbackSkipReason = this.getTrans('skipReason');
       const formattedDate = moment(day).format(this.getTrans('dateFormat'));
 
       return (
         <Modal {...otherProps} title={this.getTrans('title')}>
           <Form onSubmit={this.handleSave}>
-            <Row>
-              <Label>{this.getTrans('dateTitle')}</Label>
-              <span>{formattedDate}</span>
-            </Row>
-            <Row>
-              <Label>{footnoteLabel}</Label>
-              <span>
-                <Input
-                  data-hj-whitelist
-                  autoFocus
-                  type="text"
-                  value={footnote}
-                  placeholder={this.getTrans('footnotePlaceholder')}
-                  onChange={this.handleFootnoteChange}
-                />
-              </span>
-            </Row>
+            <FormGroup label={this.getTrans('dateTitle')}>
+              {formattedDate}
+            </FormGroup>
+            <FormGroup
+              label={footnoteLabel}
+              helpText={this.getTrans('footnoteLabel')}>
+              <Input
+                data-hj-whitelist
+                autoFocus
+                type="text"
+                value={footnote}
+                placeholder={this.getTrans('footnotePlaceholder')}
+                onChange={this.handleFootnoteChange}
+              />
+            </FormGroup>
             <Row>
               {skipService ? (
                 <StyledInput
@@ -148,16 +153,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                   onChange={this.handleSkipReasonChange}
                 />
               ) : (
-                <Label>
-                  {skipReason ? skipReason : this.getTrans('skipReason')}
-                </Label>
+                <Label>{skipReason || fallbackSkipReason}</Label>
               )}
-
               <span>
                 <SwitchButton
                   checked={skipService}
                   onChange={this.handleSkipServiceChange}
                 />
+                <HelpText>{this.getTrans('skipService')}</HelpText>
               </span>
             </Row>
             <Row align="center">

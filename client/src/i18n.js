@@ -26,9 +26,11 @@ i18next.init({
           dateFormat: 'DD MMM, YYYY',
           dateTitle: 'Date',
           footnotePlaceholder: 'e.g. Holy Communion',
+          footnoteLabel: 'Details for this event',
           footnoteTitle: 'Occassion',
           saveLabel: 'Save',
           skipReason: 'Combined Service',
+          skipService: 'Enable means cancellation or no one has to serve',
           title: 'Edit Day'
         },
         EditRole: {
@@ -75,8 +77,10 @@ i18next.init({
           dateFormat: 'YYYY年MMMDo',
           dateTitle: '日期',
           footnotePlaceholder: '範例：聯合崇拜',
+          footnoteLabel: '本日的細節或說明',
           footnoteTitle: '型式',
           saveLabel: '儲存',
+          skipService: '若啟用：本日不需服事人員或因故取消',
           skipReason: '聯合崇拜',
           title: '日期特別設定'
         },

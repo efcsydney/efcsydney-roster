@@ -134,8 +134,10 @@ async function getCurrentEmailHTML() {
 // reminderEmail will send email for the next 2 weeks
 async function reminderEmail() {
   const currentEmailHTML = await getCurrentEmailHTML();
-  const fromDate = moment(getDateString(new Date())).format('DD/MM');
-  const toDate = moment(getDateByWeeks(fromDate, 2)).format('DD/MM');
+  const fromMoment = moment(getDateString(new Date()));
+  const fromDate = fromMoment.endOf('isoWeek').format('DD/MM');
+  const toMoment = fromMoment.add('weeks', 1);
+  const toDate = toMoment.format('DD/MM');
 
   return sendEmail({
     from: config.get('reminderEmail.content.from'),
