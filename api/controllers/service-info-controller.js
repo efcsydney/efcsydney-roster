@@ -1,4 +1,5 @@
 const DtoMapper = require('../mapper/dto-mapper');
+const { addChangelog } = require('../service/changelogs-service');
 const ServiceInfoService = require('../service/service-info-service')
   .ServiceInfoService;
 const log = require('../utilities/logger');
@@ -17,6 +18,8 @@ async function saveServiceInfo(req, res, next) {
     );
 
     const data = DtoMapper.mapServiceInfoToDto(updatedServiceInfo);
+
+    await addChangelog('serviceInfo', req, data);
     pusher.trigger('index', 'serviceInfo-modified', data);
 
     return res.status(201).json(ok(data));
@@ -38,6 +41,8 @@ async function createServiceInfo(req, res, next) {
     );
 
     const data = DtoMapper.mapServiceInfoToDto(newServiceInfo);
+
+    await addChangelog('serviceInfo', req, data);
     pusher.trigger('index', 'serviceInfo-modified', data);
 
     return res.status(201).json(ok(data));
