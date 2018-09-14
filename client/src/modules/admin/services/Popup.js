@@ -28,6 +28,7 @@ import IconMinusCircle from 'react-icons/lib/fa/minus-circle';
 import Select from 'react-select';
 import IconBar from 'react-icons/lib/fa/bars';
 import { withResource } from 'resource';
+import 'react-select/dist/react-select.css';
 
 const LANGUAGE_OPTIONS = [
   { value: 'en-AU', label: 'English' },
