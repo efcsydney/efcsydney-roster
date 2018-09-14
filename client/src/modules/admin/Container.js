@@ -7,7 +7,6 @@ import { Auth, NavBar } from 'modules/core';
 import AdminServices from './services';
 import AdminEmail from './email';
 import AdminChangelogs from './changelogs/index.js';
-import UnderConstruction from './UnderConstruction';
 import AdminUsers from './users';
 import styled from 'styled-components';
 import { media } from 'styled';
@@ -74,7 +73,7 @@ export default class Admin extends PureComponent {
               <Switch>
                 <Route path="/admin/services" component={AdminServices} />
                 <Route path="/admin/email" component={AdminEmail} />
-                <Route path="/admin/changelogs" component={AdminChangelogs} />              
+                <Route path="/admin/changelogs" component={AdminChangelogs} />
                 <Route path="/admin/users" component={AdminUsers} />
                 <Redirect to="/admin/services" />
               </Switch>
