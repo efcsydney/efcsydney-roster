@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
-import Index from './modules/index';
-import Login from './modules/login';
-import Admin from './modules/admin';
 import { TagManager } from 'components';
+import Loadable from 'loadable-components';
+import { hot } from 'react-hot-loader';
 
-export default class App extends Component {
+const Index = Loadable(() =>
+  import(/* webpackChunkName: "index" */ './modules/index')
+);
+const Login = Loadable(() =>
+  import(/* webpackChunkName: "login" */ './modules/login')
+);
+const Admin = Loadable(() =>
+  import(/* webpackChunkName: "admin" */ './modules/admin')
+);
+
+class App extends Component {
   constructor(props) {
     super(props);
 
@@ -59,3 +68,5 @@ export default class App extends Component {
     );
   }
 }
+
+export default hot(module)(App);

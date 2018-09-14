@@ -1,12 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900');
-
 html, body {
   background-color: #eee !important;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 a, a:link, a:visited, a:hover {
@@ -18,52 +16,6 @@ a, a:link, a:visited, a:hover {
   border: none !important;
   background: none !important;
   padding: 10px 3px;
-}
-
-/* Title Service Dropdown */
-.ServiceSelect .Select-control {
-  width: auto;
-}
-.ServiceSelect.Select:focus {
-  outline: none;
-}
-.ServiceSelect.Select .Select-control,
-.ServiceSelect.Select.is-focused .Select-control {
-  border: none;
-  background: transparent;
-  box-shadow: none;
-}
-.ServiceSelect .Select-control .Select-input:focus {
-  background: none;
-}
-.ServiceSelect.Select .Select-arrow,
-.ServiceSelect.Select.is-focused .Select-arrow {
-  border-color: #fff transparent transparent;
-}
-.ServiceSelect.Select.is-focused.is-open .Select-arrow {
-  border-color: transparent transparent #999;
-}
-.ServiceSelect.Select.Select--single.is-focused > .Select-control .Select-value .Select-value-label,
-.ServiceSelect.Select.Select--single > .Select-control .Select-value .Select-value-label {
-  color: #fff;
-}
-.ServiceSelect.Select.is-open .Select-control {
-  background: #fff;
-  border-color: #b3b3b3 #ccc #d9d9d9;
-}
-.ServiceSelect.Select.is-open.Select--single > .Select-control .Select-value .Select-value-label {
-  color: #333;
-}
-.ServiceSelect .Select-arrow-zone:hover > .Select-arrow {
-  border-top-color: #fff;
-}
-.ServiceSelect.Select.Select--single > .Select-control .Select-value {
-  position: static;
-}
-.ServiceSelect .Select-input {
-  position: absolute;
-  left: -1000em;
-  top: -1000em;
 }
 
 @media print {
