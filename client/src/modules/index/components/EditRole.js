@@ -51,8 +51,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       id: PropTypes.number,
       date: PropTypes.string,
       isSaving: PropTypes.bool,
-      member: PropTypes.string,
-      names: PropTypes.array,
+      members: PropTypes.array,
+      name: PropTypes.string,
       onSave: PropTypes.func,
       role: PropTypes.string,
       serviceInfo: PropTypes.object
@@ -60,7 +60,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     static defaultProps = {
       date: null,
       isSaving: false,
-      names: [],
+      members: [],
       role: null,
       serviceInfo: {},
       onClose: () => {},
@@ -74,19 +74,18 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       onSave(form);
     };
     handleNameChange = option => {
-      const value = _.get(option, 'value', null);
-      let state = { selectedName: value };
-      let { names } = this.props;
-      if (!_.find(names, value)) {
-        state.names = _.union(names, [value]).sort();
-      }
-      this.setState(state);
+      const selectedName = _.get(option, 'value', null);
+      const { names } = this.state;
+      this.setState({
+        names: _.union(names, [selectedName]).sort(),
+        selectedName
+      });
     };
     constructor(props) {
       super(props);
 
       this.state = {
-        names: props.names,
+        names: props.members || [],
         selectedName: props.member
       };
     }
@@ -95,13 +94,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         id,
         date,
         isSaving,
-        members,
         role,
         serviceInfo,
         toggleEditRole,
         ...otherProps
       } = this.props; // eslint-disable-line
-      const { selectedName } = this.state;
+      const { names, selectedName } = this.state;
       const formattedDate = moment(date).format(this.getTrans('dateFormat'));
 
       return (
@@ -124,7 +122,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
                   multi={false}
                   value={selectedName}
                   onChange={this.handleNameChange}
-                  options={getOptions(members)}
+                  options={getOptions(names)}
                   clearable={true}
                 />
               </span>
