@@ -23,10 +23,10 @@ user=$user
 password=$password
 EOF
 
-  yarn db-migrate
-
   aws s3 cp s3://$S3_BUCKET/local.yaml $EFC_FOLDER/config/local.yaml
   aws s3 cp s3://$S3_BUCKET/email-list.csv $EFC_FOLDER/db/data/email-list.csv
+
+  yarn db-migrate
 
   pm2-runtime server.js
 }
@@ -42,7 +42,7 @@ dev(){
   yarn db-migrate
   yarn db-update-events
 
-  pm2-runtime npm -- start --watch
+  npm start
 }
 
 $1

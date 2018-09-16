@@ -1,4 +1,5 @@
 const EventService = require('../service/events-service').EventService;
+const { addChangelog } = require('../service/changelogs-service');
 const DtoMapper = require('../mapper/dto-mapper');
 const log = require('../utilities/logger');
 const pusher = require('../utilities/pusher');
@@ -34,6 +35,7 @@ async function saveEvent(req, res, next) {
     const updateEvent = await EventService.saveEvent(event);
     const data = DtoMapper.mapEventToDto(updateEvent);
 
+    await addChangelog('event', req, data);
     pusher.trigger('index', 'event-modified', data);
     res.status(201).json(ok(data));
   } catch (err) {

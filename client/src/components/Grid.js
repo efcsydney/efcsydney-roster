@@ -28,7 +28,7 @@ export const Cell = styled.td`
   border-width: 0 1px 0 0;
   overflow: hidden;
   padding: 10px;
-  text-align: center;
+  text-align: ${props => props.align || 'center'};
   white-space: nowrap;
   width: ${props => props.width};
   &:empty:before {
