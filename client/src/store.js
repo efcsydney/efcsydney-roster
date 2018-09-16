@@ -13,7 +13,9 @@ let initialState = {};
 let enhancers = [];
 let middleware = [sagaMiddleware, routerMiddleware(history)];
 
-if (process.env.NODE_ENV === 'development') {
+const env = process.env.REACT_APP_ENV || process.env.NODE_ENV;
+console.log('[DEBUG] env =', env); // eslint-disable-line
+if (env === 'development') {
   middleware.push(logger);
 }
 
