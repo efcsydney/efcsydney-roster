@@ -14,8 +14,7 @@ let enhancers = [];
 let middleware = [sagaMiddleware, routerMiddleware(history)];
 
 const env = process.env.REACT_APP_ENV || process.env.NODE_ENV;
-console.log('[DEBUG] process.env.NODE_ENV: ', process.env.NODE_ENV); // eslint-disable-line
-console.log('[DEBUG] process.env.REACT_APP_ENV: ', process.env.REACT_APP_ENV); // eslint-disable-line
+console.log('[DEBUG] env =', env); // eslint-disable-line
 if (env === 'development') {
   middleware.push(logger);
 }

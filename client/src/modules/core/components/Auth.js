@@ -8,7 +8,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { LoadingIndicator } from 'components';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 import config from 'config/firebase.json';
 
 firebase.initializeApp(config);
