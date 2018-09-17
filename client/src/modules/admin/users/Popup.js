@@ -82,20 +82,17 @@ class Popup extends Component {
   renderForm() {
     const { data } = this.state;
     const { isSaving, hasCompleted } = this.props;
-    const primaryName = _.get(data, 'primaryName', '');
-    const secondaryName = _.get(data, 'secondaryName', '');
-    const email = _.get(data, 'email', '');
-    const phone = _.get(data, 'phone', '');
-    const { mode } = this.props;
-    const isNew = mode === 'new';
+    const primaryName = _.get(data, 'primaryName', '') || '';
+    const secondaryName = _.get(data, 'secondaryName', '') || '';
+    const email = _.get(data, 'email', '') || '';
+    const phone = _.get(data, 'phone', '') || '';
     const isValidEmail = validator.isEmail(email);
-    const isValidPhone = validator.isMobilePhone(phone, 'en-AU');
+    const isValidPhone =
+      _.isEmpty(phone) || validator.isMobilePhone(phone, 'en-AU');
 
     const isButtonEnabled = !!(
       primaryName &&
-      secondaryName &&
       email &&
-      phone &&
       isValidEmail &&
       isValidPhone
     );
@@ -130,7 +127,7 @@ class Popup extends Component {
             onChange={e => this.handleChange({ secondaryName: e.target.value })}
           />
         </FormGroup>
-        <FormGroup label="Email" isRequired={isNew}>
+        <FormGroup label="Email" isRequired={true}>
           <StyledInput
             data-hj-whitelist
             type="text"
