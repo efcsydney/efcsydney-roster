@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import styled from 'styled-components';
+import styled, { injectGlobal } from 'styled-components';
 import { switchCategory } from '../redux';
 import { media } from 'styled';
 import i18n from 'i18n';
 import { withResource } from 'resource';
+import '../../../index.css';
 
 const mapStateToProps = state => ({
   value: state.core.meta.category
@@ -134,4 +135,51 @@ const Org = styled.span`
   ${media.mobile`
     display: none;
   `};
+`;
+
+injectGlobal`
+  .ServiceSelect .Select-control {
+    width: auto;
+  }
+  .ServiceSelect.Select:focus {
+    outline: none;
+  }
+  .ServiceSelect.Select .Select-control,
+  .ServiceSelect.Select.is-focused .Select-control {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+  .ServiceSelect .Select-control .Select-input:focus {
+    background: none;
+  }
+  .ServiceSelect.Select .Select-arrow,
+  .ServiceSelect.Select.is-focused .Select-arrow {
+    border-color: #fff transparent transparent;
+  }
+  .ServiceSelect.Select.is-focused.is-open .Select-arrow {
+    border-color: transparent transparent #999;
+  }
+  .ServiceSelect.Select.Select--single.is-focused > .Select-control .Select-value .Select-value-label,
+  .ServiceSelect.Select.Select--single > .Select-control .Select-value .Select-value-label {
+    color: #fff;
+  }
+  .ServiceSelect.Select.is-open .Select-control {
+    background: #fff;
+    border-color: #b3b3b3 #ccc #d9d9d9;
+  }
+  .ServiceSelect.Select.is-open.Select--single > .Select-control .Select-value .Select-value-label {
+    color: #333;
+  }
+  .ServiceSelect .Select-arrow-zone:hover > .Select-arrow {
+    border-top-color: #fff;
+  }
+  .ServiceSelect.Select.Select--single > .Select-control .Select-value {
+    position: static;
+  }
+  .ServiceSelect .Select-input {
+    position: absolute;
+    left: -1000em;
+    top: -1000em;
+  }
 `;
