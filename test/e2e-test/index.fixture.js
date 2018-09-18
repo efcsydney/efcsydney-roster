@@ -44,6 +44,7 @@ fixture('Quarter View')
 test('Combined Service', async t => {
   // Waguei to implement
   await t
+    .maximizeWindow()
     .click(FirstCell)
     .click(SwitchButton)
     .selectText(ReasonInput)
@@ -60,6 +61,7 @@ test('Combined Service - Mobile', async t => {
 test('Footnote', async t => {
   // Choco to maintain
   await t
+    .maximizeWindow()
     .click(FirstCell)
     .selectText(FootNoteInput)
     .typeText(FootNoteInput, 'Footnote Test')
@@ -97,7 +99,7 @@ test('Edit Day - Desktop', async t => {
     .findReact('Text');
 
   await t
-    .resizeWindow(800, 500)
+    .maximizeWindow()
     .click(RoleCell)
     .pressKey('T')
     .pressKey('E')
@@ -111,16 +113,27 @@ test('Edit Day - Desktop', async t => {
 });
 
 test('Edit Day - Mobile', async t => {
-  // Choco to implement
+  const RoleCell = ReactSelector('Grid Day Row')
+    .nth(0)
+    .findReact('Cell')
+    .nth(1);
+
+  await t
+    .resizeWindow(300, 500)
+    .click(RoleCell)
+    .pressKey('T')
+    .pressKey('E')
+    .pressKey('S')
+    .pressKey('T')
+    .pressKey('2')
+    .pressKey('enter')
+    .click(SaveButton)
+    .expect(RoleCell.innerText)
+    .eql('TEST2');
+  await t.eval(() => location.reload(true));
+  await t.expect(RoleCell.innerText).eql('TEST2');
 });
 
-test('Edit Role', async t => {
-  // Choco to implement
-});
-
-test('Edit Role - Mobile', async t => {
-  // Choco to implement
-});
 
 test('Go to Prev/Next Quarter', async t => {
   // James to implement
