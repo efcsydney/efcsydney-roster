@@ -99,6 +99,43 @@ test('Edit Day - Desktop', async t => {
     .findReact('Text');
 
   await t
+    .resizeWindow(800, 500)
+    .click(RoleCell)
+    .pressKey('T')
+    .pressKey('E')
+    .pressKey('S')
+    .pressKey('T')
+    .pressKey('enter')
+    .expect(RoleCell.innerText)
+    .eql('TEST');
+  await t.eval(() => location.reload(true));
+  await t.expect(RoleCell.innerText).eql('TEST');
+});
+
+await t
+  .resizeWindow(300, 500)
+  .click(SettingLink)
+  .selectText(FootNoteInput)
+  .typeText(FootNoteInput, 'Footnote Test')
+  .click(SaveButton)
+  .expect(FootnoteText.innerText)
+  .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
+
+// test again after reload
+await t.eval(() => location.reload(true));
+await t
+  .expect(FootnoteText.innerText)
+  .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
+});
+
+test('Edit Day - Desktop', async t => {
+  const RoleCell = ReactSelector('Grid Row')
+    .nth(1)
+    .findReact('Cell')
+    .nth(2)
+    .findReact('Text');
+
+  await t
     .maximizeWindow()
     .click(RoleCell)
     .pressKey('T')
