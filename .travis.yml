@@ -32,6 +32,7 @@ before_script:
 script:
 - yarn test
 - yarn test:frontend
+- if [ $TRAVIS_EVENT_TYPE = 'cron' ]; then yarn testcafe; fi;
 - |
   if [ $TRAVIS_BRANCH == 'qa' ]; then
     cd client && REACT_APP_ENV=qa yarn build && cd ..;
@@ -39,7 +40,6 @@ script:
     cd client && yarn build && cd ..;
   fi
 # - docker-compose -f docker/docker-compose.yml build efc-prod
-- if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then yarn testcafe; fi;
 before_deploy:
 - mkdir -p ~/.ssh/key
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
