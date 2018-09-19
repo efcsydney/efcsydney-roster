@@ -24,3 +24,20 @@ export function modifyServiceInfo(id, { category, date }) {
     headers: { 'Content-Type': 'application/json' }
   }).then(res => res.json());
 }
+
+export function modifyEvent(id, { category, date }) {
+  return fetch(`${apiUrl}/api/events`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      date,
+      role: 'Speaker',
+      name: '',
+      serviceInfo: {
+        id,
+        category
+      }
+    }),
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json());
+}
+

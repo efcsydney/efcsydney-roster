@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Selector } from 'testcafe';
 import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
-import { getEvents, modifyServiceInfo } from './api';
+import { getEvents, modifyServiceInfo, modifyEvent } from './api';
 
 // Environment
 const isDev = process.env.NODE_ENV === 'development';
@@ -26,12 +26,16 @@ const SaveButton = Popup.findReact('Button');
 const SwitchButton = Popup.findReact('Handle').with(options);
 const CombinedCell = Selector('table tbody tr:nth-child(1) td:nth-child(3)');
 
+const mobileSizeX = 300;
+const mobileSizeY = 500;
+
 fixture('Quarter View')
   .page(`${webUrl}/#/index/${CATEGORY}?from=${FROM_DATE}&to=${TO_DATE}`)
   .beforeEach(async () => {
     const id = await getEventId();
     if (id) {
       await resetServiceInfo(id);
+      await resetEvent(id);
     }
     await waitForReact();
   })
@@ -39,12 +43,14 @@ fixture('Quarter View')
     const id = await getEventId();
     if (id) {
       await resetServiceInfo(id);
+      await resetEvent(id);
     }
   });
 
 test('Combined Service', async t => {
   // Waguei to implement
   await t
+    .maximizeWindow()
     .click(FirstCell)
     .click(SwitchButton)
     .selectText(ReasonInput)
@@ -61,6 +67,7 @@ test('Combined Service - Mobile', async t => {
 test('Footnote', async t => {
   // Choco to maintain
   await t
+    .maximizeWindow()
     .click(FirstCell)
     .selectText(NoteInput)
     .typeText(NoteInput, 'Footnote Test')
@@ -70,20 +77,70 @@ test('Footnote', async t => {
 });
 
 test('Footnote - Mobile', async t => {
-  // Choco to implement
+  const SettingLink = ReactSelector('Grid Day Cell SettingLink');
+  // can also select like ReactSelector('Grid Day Cell').nth(0).findReact('SettingLink');
+  const FootnoteText = ReactSelector('Grid Day Cell Footnote');
+
+  await t
+    .resizeWindow(mobileSizeX, mobileSizeY)
+    .click(SettingLink)
+    .selectText(FootNoteInput)
+    .typeText(FootNoteInput, 'Footnote Test')
+    .click(SaveButton)
+    .expect(FootnoteText.innerText)
+    .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
+
+  // test again after reload
+  await t.eval(() => location.reload(true));
+  await t
+    .expect(FootnoteText.innerText)
+    .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
+});
+
+
+test('Edit Day', async t => {
+  const RoleCell = ReactSelector('Grid Row')
+    .nth(1)
+    .findReact('Cell')
+    .nth(2)
+    .findReact('Text');
+
+  await t
+    .maximizeWindow()
+    .click(RoleCell)
+    .pressKey('T')
+    .pressKey('E')
+    .pressKey('S')
+    .pressKey('T')
+    .pressKey('enter')
+    .expect(RoleCell.innerText)
+    .eql('TEST');
+  await t.eval(() => location.reload(true));
+  await t.expect(RoleCell.innerText).eql('TEST');
 });
 
 test('Edit Day - Mobile', async t => {
-  // Choco to implement
+  const RoleCell = ReactSelector('Grid Day Row')
+    .nth(0)
+    .findReact('Cell')
+    .nth(1);
+
+  await t
+    .resizeWindow(mobileSizeX, mobileSizeY)
+    .click(RoleCell)
+    .pressKey('T')
+    .pressKey('E')
+    .pressKey('S')
+    .pressKey('T')
+    .pressKey('2')
+    .pressKey('enter')
+    .click(SaveButton)
+    .expect(RoleCell.innerText)
+    .eql('TEST2');
+  await t.eval(() => location.reload(true));
+  await t.expect(RoleCell.innerText).eql('TEST2');
 });
 
-test('Edit Role', async t => {
-  // Choco to implement
-});
-
-test('Edit Role - Mobile', async t => {
-  // Choco to implement
-});
 
 test('Go to Prev/Next Quarter', async t => {
   // James to implement
@@ -93,6 +150,7 @@ test('Go to Prev/Next Quarter', async t => {
   const DateTextFooter = ReactSelector('Label').nth(1);
 
   await t
+    .maximizeWindow()
     .click(ArrowLeft)
     .expect(DateTextHeader.innerText)
     .eql('Oct - Dec 1999')
@@ -100,6 +158,7 @@ test('Go to Prev/Next Quarter', async t => {
     .eql('Oct - Dec 1999')
 
   await t
+    .maximizeWindow()
     .click(ArrowRight)
     .expect(DateTextHeader.innerText)
     .eql('Jan - Mar 2000')
@@ -136,5 +195,12 @@ function resetServiceInfo(id) {
     footnote: '',
     skipService: false,
     skipReason: ''
+  });
+}
+
+function resetEvent(id) {
+  return modifyEvent(id, {
+    category: CATEGORY,
+    date: FIRST_DATE,
   });
 }
