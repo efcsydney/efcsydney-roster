@@ -39,6 +39,7 @@ script:
     cd client && yarn build && cd ..;
   fi
 # - docker-compose -f docker/docker-compose.yml build efc-prod
+- if [ $TRAVIS_EVENT_TYPE = 'cron' ]; yarn testcafe; fi
 before_deploy:
 - mkdir -p ~/.ssh/key
 - openssl aes-256-cbc -K $encrypted_42e0c1fefb4c_key -iv $encrypted_42e0c1fefb4c_iv
@@ -56,6 +57,7 @@ deploy:
     sh -x docker_deploy.sh qa
   on:
     branch: qa
+    condition: $TRAVIS_EVENT_TYPE != cron
 - provider: script
   skip_cleanup: true
   script: BUILD_TAG=$TRAVIS_BUILD_NUMBER\_${TRAVIS_COMMIT:0:7}
