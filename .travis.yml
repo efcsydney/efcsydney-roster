@@ -63,6 +63,7 @@ deploy:
     sh -x docker_deploy.sh prod
   on:
     branch: master
+    condition: $TRAVIS_EVENT_TYPE != cron
 notifications:
   slack:
     rooms:
