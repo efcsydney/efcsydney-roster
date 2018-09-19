@@ -84,8 +84,8 @@ test('Footnote - Mobile', async t => {
   await t
     .resizeWindow(mobileSizeX, mobileSizeY)
     .click(SettingLink)
-    .selectText(FootNoteInput)
-    .typeText(FootNoteInput, 'Footnote Test')
+    .selectText(NoteInput)
+    .typeText(NoteInput, 'Footnote Test')
     .click(SaveButton)
     .expect(FootnoteText.innerText)
     .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
@@ -96,7 +96,6 @@ test('Footnote - Mobile', async t => {
     .expect(FootnoteText.innerText)
     .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
 });
-
 
 test('Edit Day', async t => {
   const RoleCell = ReactSelector('Grid Row')
@@ -141,7 +140,6 @@ test('Edit Day - Mobile', async t => {
   await t.expect(RoleCell.innerText).eql('TEST2');
 });
 
-
 test('Go to Prev/Next Quarter', async t => {
   // James to implement
   const ArrowLeft = ReactSelector('Arrow');
@@ -155,7 +153,7 @@ test('Go to Prev/Next Quarter', async t => {
     .expect(DateTextHeader.innerText)
     .eql('Oct - Dec 1999')
     .expect(DateTextFooter.innerText)
-    .eql('Oct - Dec 1999')
+    .eql('Oct - Dec 1999');
 
   await t
     .maximizeWindow()
@@ -163,8 +161,7 @@ test('Go to Prev/Next Quarter', async t => {
     .expect(DateTextHeader.innerText)
     .eql('Jan - Mar 2000')
     .expect(DateTextFooter.innerText)
-    .eql('Jan - Mar 2000')
-
+    .eql('Jan - Mar 2000');
 });
 
 test('Switch to Differet Service', async t => {
@@ -201,6 +198,6 @@ function resetServiceInfo(id) {
 function resetEvent(id) {
   return modifyEvent(id, {
     category: CATEGORY,
-    date: FIRST_DATE,
+    date: FIRST_DATE
   });
 }
