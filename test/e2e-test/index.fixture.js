@@ -25,6 +25,9 @@ const SaveButton = Popup.findReact('Button');
 const SwitchButton = Popup.findReact('Handle').with(options);
 const CombinedCell = Selector('table tbody tr:nth-child(1) td:nth-child(3)');
 
+const mobileSizeX = 300;
+const mobileSizeY = 500;
+
 fixture('Quarter View')
   .page(`${webUrl}/#/index/${CATEGORY}?from=${FROM_DATE}&to=${TO_DATE}`)
   .beforeEach(async () => {
@@ -78,7 +81,7 @@ test('Footnote - Mobile', async t => {
   const FootnoteText = ReactSelector('Grid Day Cell Footnote');
 
   await t
-    .resizeWindow(300, 500)
+    .resizeWindow(mobileSizeX, mobileSizeY)
     .click(SettingLink)
     .selectText(FootNoteInput)
     .typeText(FootNoteInput, 'Footnote Test')
@@ -122,7 +125,7 @@ test('Edit Day - Mobile', async t => {
     .nth(1);
 
   await t
-    .resizeWindow(300, 500)
+    .resizeWindow(mobileSizeX, mobileSizeY)
     .click(RoleCell)
     .pressKey('T')
     .pressKey('E')
@@ -146,6 +149,7 @@ test('Go to Prev/Next Quarter', async t => {
   const DateTextFooter = ReactSelector('Label').nth(1);
 
   await t
+    .maximizeWindow()
     .click(ArrowLeft)
     .expect(DateTextHeader.innerText)
     .eql('Oct - Dec 1999')
@@ -153,6 +157,7 @@ test('Go to Prev/Next Quarter', async t => {
     .eql('Oct - Dec 1999')
 
   await t
+    .maximizeWindow()
     .click(ArrowRight)
     .expect(DateTextHeader.innerText)
     .eql('Jan - Mar 2000')
