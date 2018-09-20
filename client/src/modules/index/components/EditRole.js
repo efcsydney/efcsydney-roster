@@ -51,8 +51,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       id: PropTypes.number,
       date: PropTypes.string,
       isSaving: PropTypes.bool,
+      member: PropTypes.string,
       members: PropTypes.array,
       name: PropTypes.string,
+      names: PropTypes.array,
       onSave: PropTypes.func,
       role: PropTypes.string,
       serviceInfo: PropTypes.object
@@ -61,6 +63,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       date: null,
       isSaving: false,
       members: [],
+      names: [],
       role: null,
       serviceInfo: {},
       onClose: () => {},

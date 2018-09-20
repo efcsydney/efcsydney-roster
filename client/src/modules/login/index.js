@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Auth, NavBar } from 'modules/core';
 import Button from 'components/Button';
 import styled from 'styled-components';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { injectGlobal } from 'styled-components';
 import IconInfo from 'react-icons/lib/md/info-outline';
 
