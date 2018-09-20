@@ -32,6 +32,7 @@ before_script:
 script:
 - yarn test
 - yarn test:frontend
+- if [ $TRAVIS_EVENT_TYPE = 'cron' ]; then yarn testcafe; fi;
 - |
   if [ $TRAVIS_BRANCH == 'qa' ]; then
     cd client && REACT_APP_ENV=qa yarn build && cd ..;
@@ -55,6 +56,7 @@ deploy:
     sh -x docker_deploy.sh qa
   on:
     branch: qa
+    condition: $TRAVIS_EVENT_TYPE != cron
 - provider: script
   skip_cleanup: true
   script: BUILD_TAG=$TRAVIS_BUILD_NUMBER\_${TRAVIS_COMMIT:0:7}
