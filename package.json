@@ -91,7 +91,6 @@
     "eslint-plugin-jsx-a11y": "4.0.0",
     "eslint-plugin-react": "6.9.0",
     "node-fetch": "^2.2.0",
-    "puppeteer": "^1.6.1",
     "testcafe": "^0.20.5",
     "testcafe-react-selectors": "^2.1.0"
   }
