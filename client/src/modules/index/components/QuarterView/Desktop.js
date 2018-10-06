@@ -219,7 +219,7 @@ const Cell = styled.td`
     white-space: normal;
   `};
 `;
-const Header = Cell.extend`
+const Header = styled(Cell)`
   background-color: #eee;
   border-bottom: solid 1px #dadada;
   border-top: solid 1px #dadada;
@@ -230,7 +230,7 @@ const Header = Cell.extend`
     font-size: 11px;
   `};
 `;
-const DayCell = Cell.extend`
+const DayCell = styled(Cell)`
   border-right: solid 1px #eee;
   color: #666;
   cursor: pointer;
@@ -242,7 +242,7 @@ const DayCell = Cell.extend`
     white-space: nowrap;
   `};
 `;
-const NameCell = Cell.extend`
+const NameCell = styled(Cell)`
   cursor: pointer;
   position: relative;
   &[colspan] {
@@ -251,7 +251,7 @@ const NameCell = Cell.extend`
   }
   ${props => props.isSelected && `z-index: 1`};
 `;
-const NoteCell = NameCell.extend`
+const NoteCell = styled(NameCell)`
   line-height: 1.2;
   min-width: 75px;
   max-width: 120px;
@@ -261,6 +261,7 @@ const NoteCell = NameCell.extend`
   white-space: normal;
   font-size: 12px;
 `;
+const HeaderRow = styled.tr``;
 const Row = styled.tr`
   width: 100%;
   &:nth-child(odd) {
@@ -273,7 +274,8 @@ const Row = styled.tr`
     background-color: #f8f8f8;
   }
   ${NameCell}, ${NoteCell} {
-    background-color: ${props => (props.highlighted ? '#ffc' : 'transparent')};
+    background-color: ${props =>
+      props.highlighted ? '#ffc !important' : 'transparent !important'};
     color: ${props => (props.highlighted ? '#333' : '#666')};
   }
   &:last-child {

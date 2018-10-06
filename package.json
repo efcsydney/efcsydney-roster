@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "babel-core": "6.14.0",
-    "babel-eslint": "^8.0.2",
+    "babel-eslint": "9.0.0",
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
     "chai-exclude": "^1.0.8",
@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "concurrently": "3.1.0",
-    "eslint": "^4.10.0",
+    "eslint": "5.6.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "4.0.0",

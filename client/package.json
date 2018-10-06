@@ -7,7 +7,7 @@
     "codeclimate-test-reporter": "^0.5.0",
     "enzyme": "^3.3.0",
     "react-addons-test-utils": "15.4.0",
-    "react-scripts": "^1.1.5"
+    "react-scripts": "2.0.3"
   },
   "dependencies": {
     "apollo-boost": "^0.1.15",
@@ -27,6 +27,7 @@
     "query-string": "5.1.1",
     "react": "^16.0.0",
     "react-apollo": "^2.1.11",
+    "react-app-polyfill": "^0.1.3",
     "react-app-rewire-hot-loader": "^1.0.1",
     "react-app-rewire-styled-components": "^3.0.2",
     "react-app-rewired": "^1.5.2",
@@ -62,5 +63,11 @@
     "test": "react-scripts test --env=jsdom --forceExit",
     "test:ci": "CI=true npm test -- --coverage; ./scripts/codebeat-upload-coverage.sh",
     "eject": "react-scripts eject"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie < 11",
+    "not op_mini all"
+  ]
 }
