@@ -6040,9 +6040,9 @@ mkdirp@0.5.1, mkdirp@0.5.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@
   dependencies:
     minimist "0.0.8"
 
-moment@^2.18.1, moment@^2.19.1:
-  version "2.22.2"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+moment@^2.19.1:
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
 
 moo@^0.4.3:
   version "0.4.3"
@@ -7571,12 +7571,6 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-add-to-calendar@^0.1.4:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/react-add-to-calendar/-/react-add-to-calendar-0.1.5.tgz#ab077fe98ca0f178a5a3b70a3590d4b630c0f275"
-  optionalDependencies:
-    moment "^2.18.1"
-
 react-addons-test-utils@15.4.0:
   version "15.4.0"
   resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.4.0.tgz#bd326904916b80de6a466248ef52cdfc1799e963"
@@ -7700,6 +7694,10 @@ react-hot-loader@^4.3.7:
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
     shallowequal "^1.0.2"
+
+react-icalendar-link@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-icalendar-link/-/react-icalendar-link-1.0.2.tgz#7635be773a8abc02ee52521e63ea52ab6a9a7aa5"
 
 react-icon-base@2.1.0:
   version "2.1.0"

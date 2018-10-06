@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import AddToCalendar from 'react-add-to-calendar';
-import './icalstyle.css';
+import ICalLink from 'react-icalendar-link';
 import moment from 'moment';
 import { getCalData } from 'utils';
 import IconEdit from 'react-icons/lib/fa/pencil';
@@ -13,7 +12,9 @@ import EditRole from '../EditRole';
 import { isHighlighted } from './utils';
 
 const mapStateToProps = state => {
-  const { meta: { isEditingRole } } = state.index;
+  const {
+    meta: { isEditingRole }
+  } = state.index;
   const services = _.get(state, 'resource.data.services', {});
   const selectedServiceName = _.get(state, 'core.meta.category', 'english');
   const selectedService = _.find(services, { name: selectedServiceName }) || {};
@@ -103,11 +104,6 @@ export default connect(mapStateToProps)(
     }
 
     render() {
-      const icalicon = { 'calendar-plus-o': 'left' };
-      const icalitems = [
-        { apple: this.getTrans('addCalByDownloadCsv') },
-        { google: this.getTrans('addCalByGoogle') }
-      ];
       const {
         days,
         events,
@@ -122,7 +118,7 @@ export default connect(mapStateToProps)(
             const members = _.get(matchedEvent, 'members', []);
             const serviceInfo = _.get(matchedEvent, 'serviceInfo', {});
             const roles = members.map(member => member.role);
-            const icalEvent = getCalData(day, roles, members);
+            const calData = getCalData(day, roles, members);
             const formattedDate = day;
             const highlighted = isHighlighted(day, frequency);
 
@@ -153,12 +149,7 @@ export default connect(mapStateToProps)(
                     </Footnote>
                   )}
                   <Action>
-                    <AddToCalendar
-                      event={icalEvent}
-                      listItems={icalitems}
-                      buttonTemplate={icalicon}
-                      buttonLabel={this.getTrans('addCalLabel')}
-                    />
+                    <ICalLink event={calData} />
                   </Action>
                 </Header>
                 {this.renderRolesList(day, roles, members, serviceInfo)}
