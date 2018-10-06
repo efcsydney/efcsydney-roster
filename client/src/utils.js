@@ -30,17 +30,17 @@ export function getCalData(dateString, members) {
     members,
     (message, { name, role }) => {
       if (name) {
-        message.push(`${role} - ${name}`);
+        message.push(`* ${role} - ${name}`);
       }
       return message;
     },
     []
-  ).join(',');
+  ).join('\\n');
 
   return {
     title: i18n.t('common.title'),
     description,
-    location: '10 Carlotta St, Artarmon NSW 2064, Australia',
+    location: '10 Carlotta St Artarmon NSW 2064 Australia',
     startTime: moment(dateString)
       .hour(10)
       .minute(30)
