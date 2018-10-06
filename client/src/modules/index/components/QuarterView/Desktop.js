@@ -261,7 +261,6 @@ const NoteCell = styled(NameCell)`
   white-space: normal;
   font-size: 12px;
 `;
-const HeaderRow = styled.tr``;
 const Row = styled.tr`
   width: 100%;
   &:nth-child(odd) {
