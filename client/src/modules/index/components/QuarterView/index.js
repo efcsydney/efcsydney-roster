@@ -7,7 +7,6 @@ import Desktop from './Desktop';
 import Mobile from './Mobile';
 import { MOBILE_BREAKPOINT } from 'styled';
 import { getMemberNames, getQuarterDays, getRoles } from 'utils';
-import './icalstyle.css';
 import ReactDOM from 'react-dom';
 import { media } from 'styled';
 

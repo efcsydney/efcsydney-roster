@@ -1,22 +1,16 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import ICalLink from 'react-icalendar-link';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { media } from 'styled';
-import AddToCalendar from 'react-add-to-calendar';
-import './icalstyle.css';
 import moment from 'moment';
 import { getCalData } from 'utils';
 import { isHighlighted } from './utils';
 import i18n from 'i18n';
 import InlineSelect from './InlineSelect';
-
-const CAL_ICON = { 'calendar-plus-o': 'left' };
-const CAL_ENABLED_TYPES = [
-  { apple: i18n.t('Desktop.addCalByDownloadCsv') },
-  { google: i18n.t('Desktop.addCalByGoogle') }
-];
+import IconCalendar from 'react-icons/lib/fa/calendar-plus-o';
 
 const mapStateToProps = state => {
   const services = _.get(state, 'resource.data.services', {});
@@ -47,9 +41,11 @@ export default connect(mapStateToProps)(
       selectedData: {},
       selectedService: {}
     };
+    handleCalClick = e => {
+      e.stopPropagation();
+    };
     handleDayClick = (e, dateString, serviceInfo) => {
-      const isAddCalendar =
-        e.target.className.indexOf('react-add-to-calendar') !== -1;
+      const isAddCalendar = e.target.tagName === 'svg';
       if (isAddCalendar) {
         e.stopPropagation();
         return;
@@ -109,16 +105,15 @@ export default connect(mapStateToProps)(
       const event = getCalData(day, members);
 
       return (
-        <AddToCalendar
-          event={event}
-          listItems={CAL_ENABLED_TYPES}
-          buttonTemplate={CAL_ICON}
-          buttonLabel=""
-        />
+        <CalLink event={event}>
+          <IconCalendar />
+        </CalLink>
       );
     }
     renderDayRow(date, positions, matchedEvent) {
-      const { selectedService: { frequency } } = this.props;
+      const {
+        selectedService: { frequency }
+      } = this.props;
       const serviceInfo = _.get(matchedEvent, 'serviceInfo', {});
       const members = _.get(matchedEvent, 'members', []);
 
@@ -135,6 +130,7 @@ export default connect(mapStateToProps)(
         <Row key={date} highlighted={isHighlighted(date, frequency)}>
           <DayCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
             {moment(date).format(this.getTrans('dateFormat'))}
+
             {this.renderCalendar(date, members)}
           </DayCell>
           <NoteCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
@@ -297,4 +293,11 @@ const Row = styled.tr`
       color: #666;
     }
   `};
+`;
+const CalLink = styled(ICalLink)`
+  margin-left: 5px;
+  &:link,
+  &:visited {
+    color: #666;
+  }
 `;
