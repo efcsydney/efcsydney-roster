@@ -45,11 +45,6 @@ export default connect(mapStateToProps)(
       e.stopPropagation();
     };
     handleDayClick = (e, dateString, serviceInfo) => {
-      const isAddCalendar = e.target.tagName === 'svg';
-      if (isAddCalendar) {
-        e.stopPropagation();
-        return;
-      }
       this.props.onDayClick(dateString, serviceInfo);
     };
     getTrans(key) {
@@ -130,7 +125,6 @@ export default connect(mapStateToProps)(
         <Row key={date} highlighted={isHighlighted(date, frequency)}>
           <DayCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
             {moment(date).format(this.getTrans('dateFormat'))}
-
             {this.renderCalendar(date, members)}
           </DayCell>
           <NoteCell onClick={e => this.handleDayClick(e, date, serviceInfo)}>
