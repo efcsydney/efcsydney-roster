@@ -12,21 +12,21 @@ export const FormGroup = ({
   isRequired,
   ...otherProps
 }) => (
-    <FormRow align={align} {...otherProps}>
-      <FormLabel align={align} style={labelStyle} required={isRequired}>
-        {label}
-      </FormLabel>
-      <span>
-        {children}
-        {helpText && <HelpText dangerouslySetInnerHTML={{ __html: helpText }} />}
-      </span>
-    </FormRow>
-  );
+  <FormRow align={align} {...otherProps}>
+    <FormLabel align={align} style={labelStyle} required={isRequired}>
+      {label}
+    </FormLabel>
+    <span>
+      {children}
+      {helpText && <HelpText dangerouslySetInnerHTML={{ __html: helpText }} />}
+    </span>
+  </FormRow>
+);
 
 export const Input = styled.input`
   background: #fff;
   border: solid 1px #c1c1c1;
-  border-color: border-color: #ccc;
+  border-color: #ccc;
   border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
