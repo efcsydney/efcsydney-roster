@@ -6540,9 +6540,9 @@ react-hot-loader@^4.3.7:
     react-lifecycles-compat "^3.0.4"
     shallowequal "^1.0.2"
 
-react-icalendar-link@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-icalendar-link/-/react-icalendar-link-1.0.2.tgz#7635be773a8abc02ee52521e63ea52ab6a9a7aa5"
+react-icalendar-link@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-icalendar-link/-/react-icalendar-link-1.0.3.tgz#46d1aa0426a6258dcfc24fd15ae871a549e63ca1"
 
 react-icon-base@2.1.0:
   version "2.1.0"
