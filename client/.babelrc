@@ -1,6 +1,10 @@
 {
   "presets": [
-    ["es2015", {"modules": false}],
+    "@babel/preset-typescript",
+    [
+      "es2015",
+      {"modules": false}
+    ],
     "react"
   ],
   "plugins": [
