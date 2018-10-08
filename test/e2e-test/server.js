@@ -1,3 +1,4 @@
+process.env.CHROME_BIN = require('puppeteer').executablePath();
 const createTestCafe = require('testcafe');
 const util = require('util');
 const glob = util.promisify(require('glob'));
