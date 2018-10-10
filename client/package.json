@@ -5,6 +5,7 @@
   "proxy": "http://localhost:3001/",
   "devDependencies": {
     "@types/jest": "^23.3.4",
+    "babel-core": "7.0.0-bridge.0",
     "codeclimate-test-reporter": "^0.5.0",
     "enzyme": "^3.3.0",
     "react-addons-test-utils": "15.4.0",
