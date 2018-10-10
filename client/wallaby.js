@@ -28,6 +28,9 @@ module.exports = function(wallaby) {
       '**/*.js': wallaby.compilers.babel({
         babel: require('babel-core'),
         presets: ['react-app']
+      }),
+      '**/*.ts?(x)': wallaby.compilers.typeScript({
+        module: 'commonjs'
       })
     },
     setup: wallaby => {
