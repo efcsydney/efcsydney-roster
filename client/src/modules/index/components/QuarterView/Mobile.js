@@ -10,6 +10,7 @@ import IconEdit from 'react-icons/lib/fa/pencil';
 import i18n from 'i18n';
 import EditRole from '../EditRole';
 import { isHighlighted } from './utils';
+import IconCalendar from 'react-icons/lib/fa/calendar-plus-o';
 
 const mapStateToProps = state => {
   const {
@@ -148,9 +149,13 @@ export default connect(mapStateToProps)(
                       {serviceInfo.footnote}
                     </Footnote>
                   )}
-                  <Action>
-                    <ICalLink event={calData} />
-                  </Action>
+                  {ICalLink.isSupported && (
+                    <Action>
+                      <CalLink event={calData}>
+                        <IconCalendar /> Add to Calendar
+                      </CalLink>
+                    </Action>
+                  )}
                 </Header>
                 {this.renderRolesList(day, roles, members, serviceInfo)}
               </Day>
@@ -185,12 +190,12 @@ const Cell = styled.span`
   white-space: nowrap;
   width: auto;
 `;
-const ExcludeReason = Cell.extend`
+const ExcludeReason = styled(Cell)`
   cursor: pointer;
   color: #ef4b3c;
   padding: 10px;
 `;
-const Header = Cell.extend`
+const Header = styled(Cell)`
   cursor: pointer;
   align-items: center;
   background-color: #eee;
@@ -208,7 +213,7 @@ const Header = Cell.extend`
     display: inline-block;
   }
 `;
-const Role = Cell.extend`
+const Role = styled(Cell)`
   background: #eee;
   border-right: solid 1px #dadada;
   font-weight: bold;
@@ -218,7 +223,7 @@ const Role = Cell.extend`
   text-overflow: ellipsis;
   width: 30%;
 `;
-const Name = Cell.extend`
+const Name = styled(Cell)`
   cursor: pointer;
   padding: 10px;
   text-align: left;
@@ -320,4 +325,14 @@ const BackTopLink = styled.a.attrs({ href: '#top' })`
   }
   width: 48px;
   height: 48px;
+`;
+const CalLink = styled(ICalLink)`
+  margin-left: 5px;
+  &:link,
+  &:visited {
+    color: #666;
+  }
+  * {
+    vertical-align: middle;
+  }
 `;

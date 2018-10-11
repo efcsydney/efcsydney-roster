@@ -26,7 +26,7 @@ export const FormGroup = ({
 export const Input = styled.input`
   background: #fff;
   border: solid 1px #c1c1c1;
-  border-color: ${props => (props.hasError ? 'red' : '#ccc')};
+  border-color: #ccc;
   border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;

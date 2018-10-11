@@ -11,8 +11,12 @@ import { getOptions } from 'modules/index/utils';
 import 'react-select/dist/react-select.css';
 
 const mapStateToProps = state => {
-  const { meta: { category } } = state.core;
-  const { meta: { isSaving } } = state.index;
+  const {
+    meta: { category }
+  } = state.core;
+  const {
+    meta: { isSaving }
+  } = state.index;
   return {
     category,
     isSaving
@@ -29,7 +33,10 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   class InlineSelect extends Component {
     static propTypes = {
       id: PropTypes.number,
