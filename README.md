@@ -11,12 +11,12 @@ Status](https://travis-ci.org/efcsydney/efcsydney-roster.svg?branch=master)](htt
 
 ## Installation
 
-### Install Node.js > 8.9.0
+### Install Node.js > 8.12.0
 
-Please make sure your Node.js version is newer than `8.9.0`.
+Please make sure your Node.js version is newer than `8.12.0`.
 You can have multiple Node.js versions by using [nvm](https://github.com/creationix/nvm)
 ```
-nvm install 8
+nvm install 8.12
 ```
 
 ### Install AVN
