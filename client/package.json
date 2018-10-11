@@ -6,6 +6,7 @@
   "devDependencies": {
     "codeclimate-test-reporter": "^0.5.0",
     "enzyme": "^3.3.0",
+    "icss-replace-symbols": "^1.1.0",
     "react-addons-test-utils": "15.4.0",
     "react-scripts": "2.0.3"
   },
