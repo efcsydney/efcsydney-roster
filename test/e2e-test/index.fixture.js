@@ -1,3 +1,4 @@
+/* global fixture */
 import _ from 'lodash';
 import { Selector } from 'testcafe';
 import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
@@ -14,20 +15,18 @@ const CATEGORY = 'english';
 const FROM_DATE = '2000-01-01';
 const TO_DATE = '2000-03-01';
 const FIRST_DATE = '2000-01-02';
+const MOBILE_WIDTH = 300;
+const MOBILE_HEIGHT = 500;
+const OPTIONS = { timeout: 500 };
 
 // Selectors
-const options = { timeout: 500 };
 const FirstCell = Selector('table tbody tr:nth-child(1) td:nth-child(2)');
 const Popup = ReactSelector('Popup');
-const NoteInput = Popup.findReact('Input').with(options);
-
-const ReasonInput = Popup.findReact('StyledInput').with(options);
+const NoteInput = Popup.findReact('Input').with(OPTIONS);
+const ReasonInput = Popup.findReact('StyledInput').with(OPTIONS);
 const SaveButton = Popup.findReact('Button');
-const SwitchButton = Popup.findReact('Handle').with(options);
+const SwitchButton = Popup.findReact('Handle').with(OPTIONS);
 const CombinedCell = Selector('table tbody tr:nth-child(1) td:nth-child(3)');
-
-const mobileSizeX = 300;
-const mobileSizeY = 500;
 
 fixture('Quarter View')
   .page(`${webUrl}/#/index/${CATEGORY}?from=${FROM_DATE}&to=${TO_DATE}`)
@@ -48,7 +47,6 @@ fixture('Quarter View')
   });
 
 test('Combined Service', async t => {
-  // Waguei to implement
   await t
     .maximizeWindow()
     .click(FirstCell)
@@ -61,11 +59,15 @@ test('Combined Service', async t => {
 });
 
 test('Combined Service - Mobile', async t => {
-  // Waguei to implement
+  // const RoleCell = ReactSelector('Grid Row')
+  //   .nth(1)
+  //   .findReact('Cell')
+  //   .nth(2)
+  //   .findReact('Text');
+  // await t.resizeWindow(MOBILE_WIDTH, MOBILE_HEIGHT).click(RoleCell);
 });
 
 test('Footnote', async t => {
-  // Choco to maintain
   await t
     .maximizeWindow()
     .click(FirstCell)
@@ -82,7 +84,7 @@ test('Footnote - Mobile', async t => {
   const FootnoteText = ReactSelector('Grid Day Cell Footnote');
 
   await t
-    .resizeWindow(mobileSizeX, mobileSizeY)
+    .resizeWindow(MOBILE_WIDTH, MOBILE_HEIGHT)
     .click(SettingLink)
     .selectText(NoteInput)
     .typeText(NoteInput, 'Footnote Test')
@@ -125,7 +127,7 @@ test('Edit Day - Mobile', async t => {
     .nth(1);
 
   await t
-    .resizeWindow(mobileSizeX, mobileSizeY)
+    .resizeWindow(MOBILE_WIDTH, MOBILE_HEIGHT)
     .click(RoleCell)
     .pressKey('T')
     .pressKey('E')

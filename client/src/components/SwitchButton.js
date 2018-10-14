@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 export default class SwitchButton extends Component {
+  static displayName = 'SwitchButton';
   render() {
     const { checked, onChange, ...otherProps } = this.props;
 
