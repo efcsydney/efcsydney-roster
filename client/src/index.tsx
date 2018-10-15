@@ -1,13 +1,14 @@
 import 'react-app-polyfill/ie11';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { ApolloProvider } from 'react-apollo';
-import ApolloClient from 'apollo-boost';
-import store, { history } from './store';
+import ApolloBoost from 'apollo-boost';
+import store, {history} from './store';
 import App from './App';
 import './index.css';
+
 
 const env = process.env.REACT_APP_ENV || process.env.NODE_ENV;
 let baseUrl = 'http://localhost:3001';
@@ -21,9 +22,9 @@ switch (env) {
   case 'development':
     baseUrl = 'http://localhost:3001';
     break;
-  default:
 }
-const client = new ApolloClient({ uri: `${baseUrl}/graphql` });
+
+const client = new ApolloBoost({ uri: `${baseUrl}/graphql` });
 
 ReactDOM.render(
   <Provider store={store}>
@@ -33,5 +34,5 @@ ReactDOM.render(
       </ApolloProvider>
     </ConnectedRouter>
   </Provider>,
-  document.getElementById('root') // eslint-disable-line no-undef
+  document.getElementById('root')
 );
