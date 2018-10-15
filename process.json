@@ -3,8 +3,7 @@
     {
       "name": "efcsydney-roster",
       "script": "./server.js",
-      "watch": true,
-      "ignore_watch" : [".git", "node_modules", "log", "client"],
+      "watch": ["api", "config", "server.js", "app.js"],
       "instance_var": "INSTANCE_ID"
     }
   ]
