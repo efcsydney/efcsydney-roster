@@ -14,8 +14,12 @@ import i18n from 'i18n';
 import { media } from 'styled';
 
 const mapStateToProps = state => {
-  const { meta: { category } } = state.core;
-  const { meta: { isSaving, selectedData } } = state.index;
+  const {
+    meta: { category }
+  } = state.core;
+  const {
+    meta: { isSaving, selectedData }
+  } = state.index;
   const day = _.get(selectedData, 'day');
   const serviceInfo = _.get(selectedData, 'serviceInfo', {});
   const date = moment(day).format('YYYY-MM-DD');
@@ -44,7 +48,10 @@ const mapDispatchToProps = dispatch =>
     },
     dispatch
   );
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   class EditRole extends Component {
     displayName = 'EditRole';
     static propTypes = {

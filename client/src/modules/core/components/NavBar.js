@@ -18,7 +18,10 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({ switchCategory }, dispatch);
 };
 export default withResource('services')(
-  connect(mapStateToProps, mapDispatchToProps)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(
     class NavBar extends Component {
       displayName = 'NavBar';
       static propTypes = {

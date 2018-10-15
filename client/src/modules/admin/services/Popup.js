@@ -129,7 +129,10 @@ class Popup extends Component {
     });
   };
   handlePositionAdd = () => {
-    let { data, data: { positions } } = this.state;
+    let {
+      data,
+      data: { positions }
+    } = this.state;
 
     data = set(data, `positions.${positions.length}`, {
       name: '',
@@ -146,7 +149,10 @@ class Popup extends Component {
   };
   handleSubmit = e => {
     const { onSave } = this.props;
-    const { data, data: { positions } } = this.state;
+    const {
+      data,
+      data: { positions }
+    } = this.state;
 
     e.preventDefault();
 
