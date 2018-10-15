@@ -66,7 +66,7 @@
     "client": "node start-client.js",
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
     "lint": "eslint .",
-    "test": "cross-env NODE_ENV=test mocha test/unit-test test/integration-test",
+    "test": "cross-env NODE_ENV=test mocha test/unit-test test/integration-test --timeout 10000",
     "test:frontend": "cd client && yarn test",
     "testcafe": "npm run testcafe:chrome-headless",
     "testcafe:chrome": "testcafe 'chrome' test/e2e-test/*.js",
