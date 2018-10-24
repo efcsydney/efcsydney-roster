@@ -21,7 +21,7 @@
     "@types/react-redux": "^6.0.9",
     "@types/react-router-redux": "^5.0.16",
     "apollo-boost": "^0.1.15",
-    "babel-plugin-transform-class-properties": "6.22.0",
+    "babel-plugin-transform-class-properties": "6.24.1",
     "dot-prop-immutable": "^1.4.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "firebase": "^5.5.0",
