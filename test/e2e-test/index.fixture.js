@@ -48,7 +48,8 @@ fixture('Quarter View')
 
 test('Combined Service', async t => {
   await t
-    .maximizeWindow()
+    //.maximizeWindow()
+    .resizeWindow(1920, 1080)
     .click(FirstCell)
     .click(SwitchButton) // FIXME
     .selectText(ReasonInput)
