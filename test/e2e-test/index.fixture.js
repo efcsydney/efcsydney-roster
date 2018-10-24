@@ -17,7 +17,7 @@ const TO_DATE = '2000-03-01';
 const FIRST_DATE = '2000-01-02';
 const MOBILE_WIDTH = 300;
 const MOBILE_HEIGHT = 500;
-const OPTIONS = { timeout: 500 };
+const OPTIONS = { timeout: 1000 };
 
 // Selectors
 const FirstCell = Selector('table tbody tr:nth-child(1) td:nth-child(2)');
@@ -36,7 +36,7 @@ fixture('Quarter View')
       await resetServiceInfo(id);
       await resetEvent(id);
     }
-    await waitForReact();
+    await waitForReact(2000);
   })
   .afterEach(async () => {
     const id = await getEventId();
@@ -50,7 +50,7 @@ test('Combined Service', async t => {
   await t
     .maximizeWindow()
     .click(FirstCell)
-    .click(SwitchButton)
+    .click(SwitchButton) // FIXME
     .selectText(ReasonInput)
     .typeText(ReasonInput, 'Church Camp')
     .click(SaveButton)
