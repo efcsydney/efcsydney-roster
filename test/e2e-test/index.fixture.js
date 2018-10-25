@@ -1,3 +1,4 @@
+/* global fixture */
 import _ from 'lodash';
 import { Selector } from 'testcafe';
 import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
@@ -27,6 +28,8 @@ const CombinedCell = Selector('table tbody tr:nth-child(1) td:nth-child(3)');
 
 const mobileSizeX = 300;
 const mobileSizeY = 500;
+const desktopSizeX = 1920;
+const desktopSizeY = 1080;
 
 fixture('Quarter View')
   .page(`${webUrl}/#/index/${CATEGORY}?from=${FROM_DATE}&to=${TO_DATE}`)
@@ -47,9 +50,8 @@ fixture('Quarter View')
   });
 
 test('Combined Service', async t => {
-  // Waguei to implement
   await t
-    .maximizeWindow()
+    .resizeWindow(desktopSizeX, desktopSizeY)
     .click(FirstCell)
     .click(SwitchButton)
     .selectText(ReasonInput)
@@ -59,14 +61,11 @@ test('Combined Service', async t => {
     .contains('Church Camp', 'Modify the second cell to "Church Camp"');
 });
 
-test('Combined Service - Mobile', async t => {
-  // Waguei to implement
-});
+test('Combined Service - Mobile', async t => {});
 
 test('Footnote', async t => {
-  // Choco to maintain
   await t
-    .maximizeWindow()
+    .resizeWindow(desktopSizeX, desktopSizeY)
     .click(FirstCell)
     .selectText(FootNoteInput)
     .typeText(FootNoteInput, 'Footnote Test')
@@ -104,7 +103,7 @@ test('Edit Day', async t => {
     .findReact('Text');
 
   await t
-    .maximizeWindow()
+    .resizeWindow(desktopSizeX, desktopSizeY)
     .click(RoleCell)
     .pressKey('T')
     .pressKey('E')
@@ -140,14 +139,13 @@ test('Edit Day - Mobile', async t => {
 });
 
 test('Go to Prev/Next Quarter', async t => {
-  // James to implement
   const ArrowLeft = ReactSelector('Arrow');
   const ArrowRight = ReactSelector('Arrow').nth(1);
   const DateTextHeader = ReactSelector('Label');
   const DateTextFooter = ReactSelector('Label').nth(1);
 
   await t
-    .maximizeWindow()
+    .resizeWindow(desktopSizeX, desktopSizeY)
     .click(ArrowLeft)
     .expect(DateTextHeader.innerText)
     .eql('Oct - Dec 1999')
@@ -155,7 +153,7 @@ test('Go to Prev/Next Quarter', async t => {
     .eql('Oct - Dec 1999');
 
   await t
-    .maximizeWindow()
+    .resizeWindow(desktopSizeX, desktopSizeY)
     .click(ArrowRight)
     .expect(DateTextHeader.innerText)
     .eql('Jan - Mar 2000')
@@ -163,13 +161,9 @@ test('Go to Prev/Next Quarter', async t => {
     .eql('Jan - Mar 2000');
 });
 
-test('Switch to Differet Service', async t => {
-  // Better to have - Liam to implement
-});
+test('Switch to Differet Service', async t => {});
 
-test('Highlight', async t => {
-  // Better to have - Liam to implement
-});
+test('Highlight', async t => {});
 //================
 // API Utilities
 //================
