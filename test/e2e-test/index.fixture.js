@@ -19,7 +19,7 @@ const MOBILE_WIDTH = 300;
 const MOBILE_HEIGHT = 500;
 const DESKTOP_WIDTH = 1920;
 const DESKTOP_HEIGHT = 1080;
-const OPTIONS = { timeout: 500 };
+const OPTIONS = { timeout: 1000 };
 
 // Selectors
 const FirstCell = Selector('table tbody tr:nth-child(1) td:nth-child(2)');
@@ -39,7 +39,7 @@ fixture('Quarter View')
       await resetServiceInfo(id);
       await resetEvent(id);
     }
-    await waitForReact();
+    await waitForReact(2000);
   })
   .afterEach(async () => {
     const id = await getEventId();
