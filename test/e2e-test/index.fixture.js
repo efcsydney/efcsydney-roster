@@ -15,21 +15,21 @@ const CATEGORY = 'english';
 const FROM_DATE = '2000-01-01';
 const TO_DATE = '2000-03-01';
 const FIRST_DATE = '2000-01-02';
+const MOBILE_WIDTH = 300;
+const MOBILE_HEIGHT = 500;
+const DESKTOP_WIDTH = 1920;
+const DESKTOP_HEIGHT = 1080;
+const OPTIONS = { timeout: 500 };
 
 // Selectors
-const options = { timeout: 500 };
 const FirstCell = Selector('table tbody tr:nth-child(1) td:nth-child(2)');
 const Popup = ReactSelector('Popup');
-const FootNoteInput = Popup.findReact('Input').with(options);
-const ReasonInput = Popup.findReact('StyledInput').with(options);
+const FootNoteInput = Popup.findReact('Input').with(OPTIONS);
+const NoteInput = Popup.findReact('Input').with(OPTIONS);
+const ReasonInput = Popup.findReact('StyledInput').with(OPTIONS);
 const SaveButton = Popup.findReact('Button');
-const SwitchButton = Popup.findReact('Handle').with(options);
+const SwitchButton = Popup.findReact('Handle').with(OPTIONS);
 const CombinedCell = Selector('table tbody tr:nth-child(1) td:nth-child(3)');
-
-const mobileSizeX = 300;
-const mobileSizeY = 500;
-const desktopSizeX = 1920;
-const desktopSizeY = 1080;
 
 fixture('Quarter View')
   .page(`${webUrl}/#/index/${CATEGORY}?from=${FROM_DATE}&to=${TO_DATE}`)
@@ -51,7 +51,7 @@ fixture('Quarter View')
 
 test('Combined Service', async t => {
   await t
-    .resizeWindow(desktopSizeX, desktopSizeY)
+    .resizeWindow(DESKTOP_WIDTH, DESKTOP_HEIGHT)
     .click(FirstCell)
     .click(SwitchButton)
     .selectText(ReasonInput)
@@ -65,7 +65,7 @@ test('Combined Service - Mobile', async t => {});
 
 test('Footnote', async t => {
   await t
-    .resizeWindow(desktopSizeX, desktopSizeY)
+    .resizeWindow(DESKTOP_WIDTH, DESKTOP_HEIGHT)
     .click(FirstCell)
     .selectText(FootNoteInput)
     .typeText(FootNoteInput, 'Footnote Test')
@@ -80,10 +80,10 @@ test('Footnote - Mobile', async t => {
   const FootnoteText = ReactSelector('Grid Day Cell Footnote');
 
   await t
-    .resizeWindow(mobileSizeX, mobileSizeY)
+    .resizeWindow(MOBILE_WIDTH, MOBILE_HEIGHT)
     .click(SettingLink)
-    .selectText(FootNoteInput)
-    .typeText(FootNoteInput, 'Footnote Test')
+    .selectText(NoteInput)
+    .typeText(NoteInput, 'Footnote Test')
     .click(SaveButton)
     .expect(FootnoteText.innerText)
     .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
@@ -103,7 +103,7 @@ test('Edit Day', async t => {
     .findReact('Text');
 
   await t
-    .resizeWindow(desktopSizeX, desktopSizeY)
+    .resizeWindow(DESKTOP_WIDTH, DESKTOP_HEIGHT)
     .click(RoleCell)
     .pressKey('T')
     .pressKey('E')
@@ -123,7 +123,7 @@ test('Edit Day - Mobile', async t => {
     .nth(1);
 
   await t
-    .resizeWindow(mobileSizeX, mobileSizeY)
+    .resizeWindow(MOBILE_WIDTH, MOBILE_HEIGHT)
     .click(RoleCell)
     .pressKey('T')
     .pressKey('E')
@@ -145,7 +145,7 @@ test('Go to Prev/Next Quarter', async t => {
   const DateTextFooter = ReactSelector('Label').nth(1);
 
   await t
-    .resizeWindow(desktopSizeX, desktopSizeY)
+    .resizeWindow(DESKTOP_WIDTH, DESKTOP_HEIGHT)
     .click(ArrowLeft)
     .expect(DateTextHeader.innerText)
     .eql('Oct - Dec 1999')
@@ -153,7 +153,7 @@ test('Go to Prev/Next Quarter', async t => {
     .eql('Oct - Dec 1999');
 
   await t
-    .resizeWindow(desktopSizeX, desktopSizeY)
+    .resizeWindow(DESKTOP_WIDTH, DESKTOP_HEIGHT)
     .click(ArrowRight)
     .expect(DateTextHeader.innerText)
     .eql('Jan - Mar 2000')
