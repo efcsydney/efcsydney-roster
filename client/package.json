@@ -18,7 +18,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "23.6.0",
     "codeclimate-test-reporter": "0.5.1",
-    "enzyme": "3.6.0",
+    "enzyme": "3.7.0",
     "icss-replace-symbols": "1.1.0",
     "jest": "23.6.0",
     "react-addons-test-utils": "15.4.0",
