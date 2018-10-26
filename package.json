@@ -7,8 +7,7 @@
     "node": "^8.12.0"
   },
   "dependencies": {
-
-    "babel-core": "6.14.0",
+    "babel-core": "6.26.3",
     "babel-eslint": "9.0.0",
     "body-parser": "1.18.3",
     "chai": "4.2.0",
@@ -18,7 +17,7 @@
     "cron": "1.4.1",
     "cross-env": "5.2.0",
     "database-cleaner": "1.2.0",
-    "dot-prop-immutable": "1.4.0",
+    "dot-prop-immutable": "1.5.0",
     "express": "4.13.3",
     "express-graphql": "0.6.12",
     "express-validator": "5.3.0",
@@ -42,7 +41,7 @@
     "pm2": "3.2.1",
     "prettier": "1.14.3",
     "pusher": "1.5.1",
-    "query-string": "5.1.1",
+    "query-string": "6.2.0",
     "raven": "2.6.4",
     "react-add-to-calendar": "0.1.5",
     "react-app-rewired": "2.0.0",
@@ -87,7 +86,7 @@
     "docker-stop": "./docker/manage.sh stop"
   },
   "devDependencies": {
-    "concurrently": "3.1.0",
+    "concurrently": "4.0.1",
     "eslint": "5.6.0",
     "eslint-config-airbnb": "16.1.0",
     "eslint-plugin-import": "2.2.0",
