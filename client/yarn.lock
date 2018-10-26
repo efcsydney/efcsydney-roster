@@ -1103,10 +1103,10 @@
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.0.tgz#2fac51050c68f7d6f96c5aafc631132522f4aa3f"
   integrity sha512-1A/RUAX4VtmGzNTGLSfmiPxQ3XwUSe/1YN4lW9GRa+j307oFK6MPjhlvw6jEHDodUBIvSvrA7/iHDchr5LS+0Q==
 
-"@types/jest@23.3.4":
-  version "23.3.4"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.4.tgz#cc43ae176a91dcb1504839b0b9d6659386cf0af5"
-  integrity sha512-46jSw0QMerCRkhJZbOwPA0Eb9T1p74HtECsfa0GXdgjkenSGhgvK96w+e2PEPu4GF0/brUK5WQKq/rUQQFyAxA==
+"@types/jest@23.3.7":
+  version "23.3.7"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.7.tgz#77f9a4332ccf8db680a31818ade3ee454c831a79"
+  integrity sha512-N0p6mHrS0RHC3A9hHN4QH1RM2fGSb2E8rt6ONEK5xKSnyKtn/JAhr1VritkCn6cdyDBephVB80THqJGWzK8FAw==
 
 "@types/node@*":
   version "10.11.4"
