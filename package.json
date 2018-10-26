@@ -42,7 +42,7 @@
     "pm2": "3.2.1",
     "prettier": "1.14.3",
     "pusher": "1.5.1",
-    "query-string": "5.1.1",
+    "query-string": "6.2.0",
     "raven": "2.6.4",
     "react-add-to-calendar": "0.1.5",
     "react-app-rewired": "2.0.0",
