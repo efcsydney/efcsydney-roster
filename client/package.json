@@ -10,7 +10,7 @@
     "@babel/preset-env": "7.1.0",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
-    "@types/jest": "23.3.7",
+    "@types/jest": "23.3.8",
     "@types/react": "16.4.18",
     "@types/react-dom": "16.0.9",
     "@types/react-redux": "6.0.9",
@@ -34,7 +34,7 @@
   "dependencies": {
     "apollo-boost": "0.1.18",
     "dot-prop-immutable": "1.5.0",
-    "enzyme-adapter-react-16": "1.6.0",
+    "enzyme-adapter-react-16": "1.5.0",
     "firebase": "5.5.2",
     "graphql": "14.0.2",
     "history": "4.7.2",
