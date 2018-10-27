@@ -45,7 +45,7 @@
     "raven": "2.6.4",
     "react-add-to-calendar": "0.1.5",
     "react-app-rewired": "2.0.0",
-    "react-dom": "16.5.2",
+    "react-dom": "16.6.0",
     "react-google-tag-manager": "2.2.1",
     "reduce-reducers": "0.4.3",
     "sequelize": "4.39.0",
