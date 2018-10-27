@@ -94,7 +94,7 @@
     "eslint-plugin-react": "6.9.0",
     "node-fetch": "2.2.0",
     "puppeteer": "1.9.0",
-    "testcafe": "0.20.5",
+    "testcafe": "0.23.0",
     "testcafe-react-selectors": "2.1.0"
   }
 }
