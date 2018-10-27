@@ -47,7 +47,7 @@
     "react-app-rewired": "2.0.0",
     "react-dom": "16.5.2",
     "react-google-tag-manager": "2.2.1",
-    "reduce-reducers": "0.1.5",
+    "reduce-reducers": "0.4.3",
     "sequelize": "4.39.0",
     "sequelize-cli": "3.2.0",
     "sinon": "4.5.0",
