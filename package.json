@@ -54,7 +54,7 @@
     "testcafe-live": "0.1.3",
     "tinycolor2": "1.4.1",
     "winston": "2.4.4",
-    "winston-daily-rotate-file": "1.7.2"
+    "winston-daily-rotate-file": "3.4.0"
   },
   "scripts": {
     "build": "cd client && npm run build",
