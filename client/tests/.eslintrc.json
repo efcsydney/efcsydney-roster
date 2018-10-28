@@ -3,5 +3,8 @@
 {
   "rules": {
     "no-undef": 0
+  },
+  "jsRules": {
+    "no-empty": true
   }
 }
