@@ -86,7 +86,7 @@
     "concurrently": "4.0.1",
     "eslint": "5.8.0",
     "eslint-config-airbnb": "17.1.0",
-    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jsx-a11y": "6.1.2",
     "eslint-plugin-react": "6.9.0",
     "node-fetch": "2.2.0",
