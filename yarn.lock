@@ -6994,11 +6994,6 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-sql.js@0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/sql.js/-/sql.js-0.3.2.tgz#1676321f0716bdbbdef8d6bf70603424405d3889"
-  integrity sha1-FnYyHwcWvbve+Na/cGA0JEBdOIk=
-
 sqlstring@2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/sqlstring/-/sqlstring-2.3.1.tgz#475393ff9e91479aea62dcaf0ca3d14983a7fb40"
