@@ -21,7 +21,7 @@
     "enzyme": "3.7.0",
     "icss-replace-symbols": "1.1.0",
     "jest": "23.6.0",
-    "react-addons-test-utils": "15.4.0",
+    "react-addons-test-utils": "15.6.2",
     "react-app-rewire-hot-loader": "1.0.3",
     "react-app-rewire-styled-components": "3.0.2",
     "react-app-rewire-typescript-babel-preset": "3.0.0",
