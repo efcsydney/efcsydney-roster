@@ -12,7 +12,7 @@
     "babel-eslint": "9.0.0",
     "body-parser": "1.18.3",
     "chai": "4.2.0",
-    "chai-exclude": "1.0.9",
+    "chai-exclude": "1.0.10",
     "config": "2.0.1",
     "cors": "2.8.4",
     "cron": "1.4.1",

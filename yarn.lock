@@ -1681,10 +1681,12 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-chai-exclude@1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/chai-exclude/-/chai-exclude-1.0.9.tgz#ca145a7797f0e75f9284321d6422491bce05ab50"
-  integrity sha512-lnlzkl7OKelBYWvY6ewFJsE3pIExIrPl5Hu8dUGPk+CWBiD7H3B/RBaeC8XXC1xypdYNNB5Zi6qi5MpacO8Lyw==
+chai-exclude@1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/chai-exclude/-/chai-exclude-1.0.10.tgz#7a91a92ce305a4ed39eba7376fdb4069525e4c89"
+  integrity sha512-0ydcWiIgpqhXUVRXlJrkl11EDX8BNSBjLXwom+DcNArsXzi89lOHQjKjfBG5WZTH/vKVGK867Bn3boq5A3y5+g==
+  dependencies:
+    fclone "^1.0.11"
 
 chai@4.2.0, chai@^4.1.2:
   version "4.2.0"
