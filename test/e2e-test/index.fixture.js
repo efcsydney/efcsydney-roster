@@ -1,3 +1,4 @@
+/* global fixture */
 import _ from 'lodash';
 import { Selector } from 'testcafe';
 import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
@@ -14,19 +15,21 @@ const CATEGORY = 'english';
 const FROM_DATE = '2000-01-01';
 const TO_DATE = '2000-03-01';
 const FIRST_DATE = '2000-01-02';
+const MOBILE_WIDTH = 300;
+const MOBILE_HEIGHT = 500;
+const DESKTOP_WIDTH = 1920;
+const DESKTOP_HEIGHT = 1080;
+const OPTIONS = { timeout: 1000 };
 
 // Selectors
-const options = { timeout: 500 };
 const FirstCell = Selector('table tbody tr:nth-child(1) td:nth-child(2)');
 const Popup = ReactSelector('Popup');
-const FootNoteInput = Popup.findReact('Input').with(options);
-const ReasonInput = Popup.findReact('StyledInput').with(options);
+const FootNoteInput = Popup.findReact('Input').with(OPTIONS);
+const NoteInput = Popup.findReact('Input').with(OPTIONS);
+const ReasonInput = Popup.findReact('StyledInput').with(OPTIONS);
 const SaveButton = Popup.findReact('Button');
-const SwitchButton = Popup.findReact('Handle').with(options);
+const SwitchButton = Popup.findReact('Handle').with(OPTIONS);
 const CombinedCell = Selector('table tbody tr:nth-child(1) td:nth-child(3)');
-
-const mobileSizeX = 300;
-const mobileSizeY = 500;
 
 fixture('Quarter View')
   .page(`${webUrl}/#/index/${CATEGORY}?from=${FROM_DATE}&to=${TO_DATE}`)
@@ -36,7 +39,7 @@ fixture('Quarter View')
       await resetServiceInfo(id);
       await resetEvent(id);
     }
-    await waitForReact();
+    await waitForReact(2000);
   })
   .afterEach(async () => {
     const id = await getEventId();
@@ -47,9 +50,8 @@ fixture('Quarter View')
   });
 
 test('Combined Service', async t => {
-  // Waguei to implement
   await t
-    .maximizeWindow()
+    .resizeWindow(DESKTOP_WIDTH, DESKTOP_HEIGHT)
     .click(FirstCell)
     .click(SwitchButton)
     .selectText(ReasonInput)
@@ -59,14 +61,11 @@ test('Combined Service', async t => {
     .contains('Church Camp', 'Modify the second cell to "Church Camp"');
 });
 
-test('Combined Service - Mobile', async t => {
-  // Waguei to implement
-});
+test('Combined Service - Mobile', async t => {});
 
 test('Footnote', async t => {
-  // Choco to maintain
   await t
-    .maximizeWindow()
+    .resizeWindow(DESKTOP_WIDTH, DESKTOP_HEIGHT)
     .click(FirstCell)
     .selectText(FootNoteInput)
     .typeText(FootNoteInput, 'Footnote Test')
@@ -81,10 +80,10 @@ test('Footnote - Mobile', async t => {
   const FootnoteText = ReactSelector('Grid Day Cell Footnote');
 
   await t
-    .resizeWindow(mobileSizeX, mobileSizeY)
+    .resizeWindow(MOBILE_WIDTH, MOBILE_HEIGHT)
     .click(SettingLink)
-    .selectText(FootNoteInput)
-    .typeText(FootNoteInput, 'Footnote Test')
+    .selectText(NoteInput)
+    .typeText(NoteInput, 'Footnote Test')
     .click(SaveButton)
     .expect(FootnoteText.innerText)
     .contains('Footnote Test', 'Modify the first cell to "Footnote Test"');
@@ -104,7 +103,7 @@ test('Edit Day', async t => {
     .findReact('Text');
 
   await t
-    .maximizeWindow()
+    .resizeWindow(DESKTOP_WIDTH, DESKTOP_HEIGHT)
     .click(RoleCell)
     .pressKey('T')
     .pressKey('E')
@@ -124,7 +123,7 @@ test('Edit Day - Mobile', async t => {
     .nth(1);
 
   await t
-    .resizeWindow(mobileSizeX, mobileSizeY)
+    .resizeWindow(MOBILE_WIDTH, MOBILE_HEIGHT)
     .click(RoleCell)
     .pressKey('T')
     .pressKey('E')
@@ -140,14 +139,13 @@ test('Edit Day - Mobile', async t => {
 });
 
 test('Go to Prev/Next Quarter', async t => {
-  // James to implement
   const ArrowLeft = ReactSelector('Arrow');
   const ArrowRight = ReactSelector('Arrow').nth(1);
   const DateTextHeader = ReactSelector('Label');
   const DateTextFooter = ReactSelector('Label').nth(1);
 
   await t
-    .maximizeWindow()
+    .resizeWindow(DESKTOP_WIDTH, DESKTOP_HEIGHT)
     .click(ArrowLeft)
     .expect(DateTextHeader.innerText)
     .eql('Oct - Dec 1999')
@@ -155,7 +153,7 @@ test('Go to Prev/Next Quarter', async t => {
     .eql('Oct - Dec 1999');
 
   await t
-    .maximizeWindow()
+    .resizeWindow(DESKTOP_WIDTH, DESKTOP_HEIGHT)
     .click(ArrowRight)
     .expect(DateTextHeader.innerText)
     .eql('Jan - Mar 2000')
@@ -163,13 +161,9 @@ test('Go to Prev/Next Quarter', async t => {
     .eql('Jan - Mar 2000');
 });
 
-test('Switch to Differet Service', async t => {
-  // Better to have - Liam to implement
-});
+test('Switch to Differet Service', async t => {});
 
-test('Highlight', async t => {
-  // Better to have - Liam to implement
-});
+test('Highlight', async t => {});
 //================
 // API Utilities
 //================
