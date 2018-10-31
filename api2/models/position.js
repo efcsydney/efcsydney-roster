@@ -1,25 +1,27 @@
-const Sequelize = require('sequelize');
-const sequelizeClient = require('../../api/infrastructure/sequelize-client')
-  .sequelizeClient;
-const { Service } = require('./service');
+module.exports = (Sequelize, sequelizeClient) => {
+  const Position = sequelizeClient.define(
+    'position',
+    {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      name: {
+        type: Sequelize.STRING
+      },
+      order: {
+        type: Sequelize.INTEGER
+      },
+      serviceId: {
+        type: Sequelize.INTEGER
+      }
+    },
+    {
+      freezeTableName: true,
+      tableName: 'positions_v2'
+    }
+  );
 
-const Position = sequelizeClient.define('positions_v2', {
-  id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  name: {
-    type: Sequelize.STRING
-  },
-  order: {
-    type: Sequelize.INTEGER
-  },
-  serviceId: {
-    type: Sequelize.INTEGER
-  }
-});
-
-module.exports = {
-  Position
+  return Position;
 };

@@ -1,17 +1,19 @@
-const { Event } = require('../models/event');
-const { Service } = require('../models/service');
-const { EventPosition } = require('../models/event-position');
-const { Position } = require('../models/position');
+const {
+  events,
+  services,
+  eventPositions,
+  positions
+} = require('../models/data');
 
 async function getEvents() {
-  await Event.findAll({
+  await events.findAll({
     include: [
       {
-        model: Service
+        model: services
       },
       {
-        model: Position,
-        through: EventPosition
+        model: positions,
+        through: eventPositions
       }
     ]
   });
