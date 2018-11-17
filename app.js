@@ -15,6 +15,8 @@ const eventsController2 = require('./api2/controller/event-controller');
 const Raven = require('raven');
 const env = _.get(process, 'env.NODE_ENV', 'development');
 const config = require('config');
+const express_graphql = require('express-graphql');
+const { schema, root } = require('./api2/graphql-schema');
 
 if (isServerEnvironment()) {
   Raven.config(
@@ -47,6 +49,15 @@ app.get('/', (req, res) => {
 if (['development', 'qa'].includes(env)) {
   app.get('/email', emailController.getEmail);
 }
+
+app.use(
+  '/graphql',
+  express_graphql({
+    schema: schema,
+    rootValue: root,
+    graphiql: true
+  })
+);
 
 app.get('/api/services', servicesController.getServices);
 

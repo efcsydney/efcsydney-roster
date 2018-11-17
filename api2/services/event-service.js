@@ -6,14 +6,17 @@ const {
 } = require('../models/data');
 
 async function getEvents() {
-  await events.findAll({
+  return await events.findAll({
     include: [
       {
         model: services
       },
       {
         model: positions,
-        through: eventPositions
+        through: {
+          as: 'eventPosition',
+          eventPositions
+        }
       }
     ]
   });
