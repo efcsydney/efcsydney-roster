@@ -16,7 +16,7 @@ const Raven = require('raven');
 const env = _.get(process, 'env.NODE_ENV', 'development');
 const config = require('config');
 const express_graphql = require('express-graphql');
-const { schema, root } = require('./api2/graphql-schema');
+const schema = require('./api2/graphql/schema');
 
 if (isServerEnvironment()) {
   Raven.config(
@@ -54,7 +54,6 @@ app.use(
   '/graphql',
   express_graphql({
     schema: schema,
-    rootValue: root,
     graphiql: true
   })
 );

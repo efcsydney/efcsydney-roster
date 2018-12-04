@@ -9,13 +9,36 @@ async function getEvents() {
   return await events.findAll({
     include: [
       {
-        model: services
+        model: services,
+        required: false
       },
       {
         model: positions,
+        required: false,
         through: {
           as: 'eventPosition',
-          eventPositions
+          eventPositions,
+          required: false
+        }
+      }
+    ]
+  });
+}
+
+async function getServices(serviceId, eventStartDate, eventEndDate) {
+  return await services.findAll({
+    include: [
+      {
+        model: events,
+        required: false
+      },
+      {
+        model: positions,
+        required: false,
+        through: {
+          as: 'eventPosition',
+          eventPositions,
+          required: false
         }
       }
     ]
@@ -23,5 +46,6 @@ async function getEvents() {
 }
 
 module.exports = {
-  getEvents
+  getEvents,
+  getServices
 };
