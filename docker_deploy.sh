@@ -10,8 +10,7 @@ if [ $1 = "qa" ]; then
 else
     env='Production'
     NodeEnv='production'
-    dockerBuildTarget='efc-prod'
-    bucket='efc-sydney-production'
+    bucket='efc-sydney-production-2018-dec'
     stack='EFCSydney-ECS-Service'
     dockerBuildTarget='efc-prod'
 fi
