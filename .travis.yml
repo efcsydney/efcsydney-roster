@@ -64,7 +64,7 @@ deploy:
     AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY
     sh -x docker_deploy.sh prod
   on:
-    branch: master
+    branch: master_2019
 notifications:
   slack:
     rooms:
