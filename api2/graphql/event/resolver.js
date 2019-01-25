@@ -2,8 +2,8 @@ const { getEvents } = require('../../services/event-service');
 
 module.exports = {
   Query: {
-    events: () => {
-      return getEvents().then(events => events);
+    events: (obj, { serviceCateory, from, to }) => {
+      return getEvents(serviceCateory, from, to).then(events => events);
     }
   }
 };

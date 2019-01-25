@@ -9,6 +9,9 @@ module.exports.sequelizeClient = new Sequelize(
   {
     dialect: config.dialect,
     host: config.host,
-    logging: config.logging
+    logging: config.logging,
+    dialectOptions: {
+      multipleStatements: true
+    }
   }
 );
