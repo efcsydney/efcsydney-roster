@@ -62,7 +62,7 @@ deploy:
   script: BUILD_TAG=$TRAVIS_BUILD_NUMBER\_${TRAVIS_COMMIT:0:7} AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY sh -x docker_deploy.sh prod
   on:
-    branch: master_2019
+    branch: master
 notifications:
   slack:
     rooms:
