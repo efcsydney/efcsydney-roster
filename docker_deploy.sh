@@ -3,9 +3,9 @@
 if [ $1 = "qa" ]; then
     env='QA'
     NodeEnv='qa'
-    bucket='efc-sydney-qa'
+    bucket='efc-sydney-dev-2019-may'
     dockerBuildTarget='efc-qa'
-    stack='ecs-service'
+    stack='EFC-Dev-ECS-Service'
     dockerBuildTarget='efc-qa'
 else
     env='Production'
