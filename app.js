@@ -12,11 +12,12 @@ const exception = require('./api/middleware/exception-handler');
 const httpRedirect = require('./api/middleware/http-redirect');
 const serviceInfoController = require('./api/controllers/service-info-controller');
 const userController = require('./api/controllers/user-controller');
+const eventsController2 = require('./api2/controller/event-controller');
 const Raven = require('raven');
 const env = _.get(process, 'env.NODE_ENV', 'development');
 const config = require('config');
-const graphqlHttp = require('express-graphql');
-const schema = require('./api/schema');
+const express_graphql = require('express-graphql');
+const schema = require('./api2/graphql/schema');
 const cors = require('cors');
 
 if (isServerEnvironment()) {
@@ -30,7 +31,7 @@ if (isServerEnvironment()) {
 
 app.use(bodyParser.json());
 
-app.use('/graphql', cors(), graphqlHttp({ schema, graphiql: true }));
+app.use('/graphql', cors(), express_graphql({ schema, graphiql: true }));
 
 app.set('port', process.env.PORT || 3001);
 app.set('secure-port', config.get('port.secure'));
@@ -49,11 +50,22 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello Guys! Welcome to roster!' });
 });
 
-app.get('/email', emailController.getEmail);
-
+if (['development', 'qa'].includes(env)) {
+  app.get('/email', emailController.getEmail);
+}
 app.get('/api/changelogs', changelogsController.get);
 
+app.use(
+  '/graphql',
+  express_graphql({
+    schema: schema,
+    graphiql: true
+  })
+);
+
 app.get('/api/services', servicesController.getServices);
+
+app.get('/api/v2/events', eventsController2.getEvents);
 
 app.get('/api/events', eventsController.getEvents);
 
