@@ -1,6 +1,5 @@
 FROM mhart/alpine-node:8.12.0
 
-
 ARG REACT_APP_ENV=qa
 ENV REACT_APP_ENV=${REACT_APP_ENV}
 
@@ -11,7 +10,6 @@ RUN apk add mysql-client
 RUN pip install awscli --upgrade --user && \
     echo "export PATH=$PATH:~/.local/bin/" >> ~/.bashrc
 
-
 COPY ./ /opt/efcsydney-roster/
 RUN ls /opt/efcsydney-roster/
 WORKDIR /opt/efcsydney-roster
@@ -21,6 +19,9 @@ WORKDIR /opt/efcsydney-roster/client
 RUN yarn ; yarn build ; rm -rf ./node_modules
 
 WORKDIR /opt/efcsydney-roster
+RUN addgroup -S efcuser && adduser -S efcuser -G efcuser
+RUN chown efcuser:efcuser -R /opt/efcsydney-roster
 
+USER efcuser
 EXPOSE 3000 3001 3002
 ENTRYPOINT ["/bin/bash", "-ex", "/opt/efcsydney-roster/docker/Entrypoint.sh", "prod"]
