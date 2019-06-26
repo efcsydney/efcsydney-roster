@@ -17,9 +17,8 @@ WORKDIR /opt/efcsydney-roster/client
 RUN yarn ; yarn build ; rm -rf ./node_modules
 
 WORKDIR /opt/efcsydney-roster
-RUN addgroup -S efcuser && adduser -S efcuser -G efcuser
-RUN chown efcuser:efcuser -R /opt/efcsydney-roster
-
+RUN addgroup -g 1001 -S efcuser && adduser -u 1001 -S -G efcuser efcuser
+RUN chown -R efcuser:efcuser /opt/efcsydney-roster/* && ls -al /opt/efcsydney-roster/*
 USER efcuser
 RUN pip install awscli --upgrade --user && \
     echo "export PATH=$PATH:~/.local/bin/" >> ~/.bashrc

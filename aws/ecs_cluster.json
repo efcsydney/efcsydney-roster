@@ -147,7 +147,9 @@
                 {
                   "Ref":"ECSCluster"
                 },
-                " >> /etc/ecs/ecs.config\n"
+                " >> /etc/ecs/ecs.config\n",
+                "chown -R 1001:1001 /var/log/roster\n",
+                "chown -R 1001:1001 /var/log/backup\n"
               ]
             ]
           }
