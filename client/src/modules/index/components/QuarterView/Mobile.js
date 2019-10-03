@@ -91,7 +91,7 @@ export default connect(mapStateToProps)(
         );
       }
 
-      return positions.map((position, i) => {
+      return _.orderBy(positions, 'order', 'asc').map((position, i) => {
         const role = position.name;
         const member = _.find(members, { role }) || {};
         const name = member.name || '';
