@@ -179,3 +179,13 @@ e.g.
 ```
 yarn db-restore 20180101
 ```
+
+# Build (Docker container image)
+
+The command to build the docker container image for production release. (please note, the '.' at the end of the command is required)
+
+```
+docker build -t efcsydney/roster:prod -f ./docker/Dockerfile-prod --build-arg "REACT_APP_ENV=production" .
+```
+
+PLEASE NOTE: Please execute this command from the root direcotry of the project. The Dockerfile is specified in relative direcotry fashion.
