@@ -5,6 +5,7 @@ ARG REACT_APP_ENV=qa
 ENV REACT_APP_ENV=${REACT_APP_ENV}
 
 RUN apk update && apk add --no-cache bash py-pip jq
+RUN npm config set unsafe-perm true
 RUN npm install -g npm@5.6.0 && npm install -g pm2@latest
 RUN apk add mysql-client
 
