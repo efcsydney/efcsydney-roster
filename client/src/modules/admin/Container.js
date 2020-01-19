@@ -19,6 +19,7 @@ export default class Admin extends PureComponent {
     super(props);
 
     this.rootPath = '/admin/services';
+    this.loginPath = '/login';
     this.bodyEl = null;
     this.contentEl = null;
   }
@@ -33,6 +34,11 @@ export default class Admin extends PureComponent {
     const endPos = $(window).innerHeight();
 
     return `${endPos - startPos}px`;
+  };
+  handleAuthFail = () => {
+    const { history } = this.props;
+
+    history.push(this.loginPath);
   };
   handlePopupClose = () => {
     const { history } = this.props;

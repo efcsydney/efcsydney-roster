@@ -85,6 +85,8 @@ async function buildEventsForMultipleServices(from, to) {
   const services = await Service.findAll();
   await Promise.all(
     services.map(async service => {
+      let positions = await service.getPositions();
+      positions = positions.map(p => ({ position: p.name }));
       const eventsForService = await EventRepository.getEventsByDateRange(
         { from, to },
         service.name
@@ -99,6 +101,15 @@ async function buildEventsForMultipleServices(from, to) {
       events[service.name].forEach((event, index) => {
         event.lang = service.locale;
         event.serviceInfo = serviceInfo[index];
+        event.serviceInfo.positions = positions.map(p => {
+          const matched =
+            event.positions.find(ep => ep.position === p.position) || {};
+
+          return {
+            position: p.position,
+            volunteerName: matched.volunteerName || ''
+          };
+        });
       });
       return events;
     })

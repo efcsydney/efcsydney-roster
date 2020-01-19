@@ -44,8 +44,10 @@ export default class Login extends Component {
         <SadFaceIcon />
         <Title>Almost there!</Title>
         <P>
-          You have logged in successfully.<br />
-          <br />However the System Administartor needs to review and grant your
+          You have logged in successfully.
+          <br />
+          <br />
+          However the System Administartor needs to review and grant your
           account permission before you can access Admin Portal. Please contact
           the system administartor for further assistance.
         </P>
@@ -62,7 +64,9 @@ export default class Login extends Component {
   renderLoginButton = () => {
     return (
       <Auth onSuccess={this.handleAuthSuccess} onFail={this.handleAuthFail}>
-        <LoginButton onClick={this.handleLogin} />
+        <Wrapper style={{ maxWidth: '50%', padding: '50px' }}>
+          <LoginButton onClick={this.handleLogin} />
+        </Wrapper>
       </Auth>
     );
   };
