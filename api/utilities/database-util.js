@@ -33,7 +33,7 @@ function ensurePathExists(path) {
 // The command has to be in single line only. Multi-line interpolated string is seperated by
 // carriage return and will cause the command fails to execute on the shell.
 function getBackupQuery(filename) {
-  return `mysqldump -u ${dbConfig.username} -h ${dbConfig.host} ${dbConfig.database} > ${BACKUP_DIR}/${filename}`;
+  return `mysqldump -u ${dbConfig.username} -p${dbConfig.password} -h ${dbConfig.host} ${dbConfig.database} > ${BACKUP_DIR}/${filename}`;
 }
 
 function getRestoreQuery(filename) {

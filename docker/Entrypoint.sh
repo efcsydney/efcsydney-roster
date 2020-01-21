@@ -4,7 +4,7 @@ EFC_FOLDER="/opt/efcsydney-roster"
 cd $EFC_FOLDER
 
 prod() {
-  export PATH=$PATH:~/.local/bin/
+
 
   cp "/opt/efcsydney-config/database.json" $EFC_FOLDER/config/
   cp "/opt/efcsydney-config/local.yaml" $EFC_FOLDER/config/
