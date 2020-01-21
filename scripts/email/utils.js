@@ -58,11 +58,18 @@ const emptyCellStyle = `
 `;
 
 function decorateDay(day, blacklist) {
-  let positions = day.positions || [];
+  let positions = day.serviceInfo.positions || [];
   positions = _.filter(
     positions,
     ({ position }) => blacklist.indexOf(position) === -1
-  );
+  ).map(position => {
+    const matched =
+      day.positions.find(p => p.position === position.position) || {};
+    return {
+      position,
+      volunteerName: matched.volunteerName || 'x'
+    };
+  });
 
   day.positions = positions;
 
@@ -113,7 +120,7 @@ const renderMemberRow = ({ date, serviceInfo, positions, lang }) => {
   const footnote =
     serviceInfo.footnote || `<span style="${emptyCellStyle}">-</span>`;
   const contentCells = !serviceInfo.skipService
-    ? positions
+    ? serviceInfo.positions
         .map(
           ({ volunteerName }) => `
       <td style="${cellStyle}">${
@@ -144,7 +151,7 @@ const renderTable = days => {
   days = days.map(day => decorateDay(day, blacklist));
 
   const lang = _.get(days, '0.lang', 'zh-TW');
-  const roles = _.get(days, '0.positions', []);
+  const roles = _.get(days, '0.serviceInfo.positions', []);
   const title = _.get(days, '0.serviceInfo.service.label', '');
 
   if (!days.length) {
@@ -297,7 +304,7 @@ exports.getEmailHTML = (events, emailList, emptyEmailList) => {
           </mj-section>
           <mj-section padding="5px 0 5px">
             ${_.values(events)
-              .map(days => renderTable(days))
+              .map(event => renderTable(event))
               .join('\n')}
           </mj-section>
           <mj-section padding="0">
