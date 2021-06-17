@@ -79,6 +79,8 @@
     "db-update-events": "node ./scripts/update-events-details.js",
     "db-backup": "node ./scripts/backup-database.js",
     "db-restore": "node ./scripts/restore-database.js $DATE",
+    "docker-build": "docker build -t efcsydney/roster:prod -f ./docker/Dockerfile-prod --build-arg \"REACT_APP_ENV=production\" .",
+    "docker-push": "docker push efcsydney/roster:prod",
     "docker-up": "./docker/manage.sh build && ./docker/manage.sh up",
     "docker-stop": "./docker/manage.sh stop"
   },

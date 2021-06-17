@@ -12,7 +12,7 @@ services:
         MYSQL_DATABASE: "efcRoster"
 
   efc-dev:
-    image: efc-roster:develop
+    image: efcsydney/roster:dev
     build:
       context: ../
       dockerfile: docker/Dockerfile-dev
@@ -30,7 +30,7 @@ services:
       - $PWD/../:/opt/efcsydney-roster/
 
   efc-qa:
-    image: kleinchang/efcsydney-roster:$BUILD_TAG
+    image: efcsydney/roster:$BUILD_TAG
     build:
       context: ../
       dockerfile: docker/Dockerfile-prod
@@ -44,14 +44,17 @@ services:
       - "80:80"
       - "3001:3001"
       - "3002:3002"
+    volumes:
+      - /opt/efcsydney-config:/opt/efcsydney-config
+      - /var/log/db-backup:/opt/backup
     entrypoint:
       - /bin/bash
       - -x
       - /opt/efcsydney-roster/docker/Entrypoint.sh
-      - prod-local
+      - prod
 
   efc-prod:
-    image: kleinchang/efcsydney-roster:$BUILD_TAG
+    image: efcsydney/roster:$BUILD_TAG
     build:
       context: ../
       dockerfile: docker/Dockerfile-prod
@@ -60,13 +63,16 @@ services:
     links:
         - db:db
     environment:
-        - NODE_ENV=qa
+        - NODE_ENV=production
     ports:
       - "80:80"
       - "3001:3001"
       - "3002:3002"
+    volumes:
+      - /opt/efcsydney-config:/opt/efcsydney-config
+      - /var/log/db-backup:/opt/backup
     entrypoint:
       - /bin/bash
       - -x
       - /opt/efcsydney-roster/docker/Entrypoint.sh
-      - prod-local
+      - prod
