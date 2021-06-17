@@ -9,8 +9,8 @@ hosts:
 - db
 addons:
   ssh_known_hosts:
-  - 54.206.106.116
-  - 13.210.76.160
+  - 107.175.94.108
+  - 45.76.12.191
   apt:
     packages:
     - docker-ce
@@ -19,7 +19,7 @@ services:
 - docker
 env:
   global:
-  - REGISTRY_USER=kleinchang
+  - REGISTRY_USER=efcsydney
   - secure: Mu010l75I6ucSpaSbpE2cYZLanDAZR5WxdI/2TPLuquFmF8kl/ojBYw8xZIvJmdWFhb6mHTgzl7PpY4zd0mbmhpwzAbLmn+ZCBm1d5JLfN9KMeMk9HKR7r+qYiauFBEtiuwwbD5aanH1l03ZgaPVYuFWP0O0fzfNoN+356G2cgHtrKBKFEMEvyvDjsVr03tAQotnxHsrnf1afrzKIS0kFWSlP2GleZoGyT5BLbn8Y1VHgNPK7NTv3oToyyt60Ykfj4z4vPyHVtClNuVrAMBdyOd+NEsUs0FSEKHN/W+9zdYJBDO3JFCgzszMuniFwDHBpBYq25i9r3OhizjdGsNCzVe9Z7VNBzQACBu3Ni5IMc4+hGpZ2l+S31l+6DNaNv8AMDIJnRuUKhGtd4pF0j+4MFVABft7EUJgZI0FV84DEZVDBAMssDnPpADcxxGGLXVJtes9gPU4dU+nRrLd49NcgRGvK3hRhCRkmxKHGJgOFpt2ObCkeD6UfXXejA0fHCByNWRT63XKFHLESnVMRDiWNL08aUIW99MkLl43L0OzHYkhF9p0XwS7GD2/EwAyFwJVa+ctiPUN6JdROGBHhABMz+kZXpF7Cn134ei/lXkNq09eo3s4Pj63zNXvfV70ux8opeITN8XIdD+7vqsgyia1k5HJW5VupApyNGkx4jxPTtY=
   - secure: EKb7U5/vxFnlswlLHqT+L2KB2lr99aWJQydwqLabkLjzUUCYBZDH19SZZs0torUE+UJTvyDGO7wsjvRleYsS/mmKnUa0TE4i9oGo1qwt7sNfRHU42mYuNTNmTPQLOLzay2HWIqCMoTuRbDceFBHx9HGKBddfdb0O+YwGHF5qw38h6hAm5JhXCPARs4lVyQUUrik+73y5NWVegYldT7PSNrcwGZX6irFfw2kmKQrFHkCtiWjvaM1NUe82lBa62Iw3WTdNhAMh4tjTGxZbuQKrx2IcW/fPSeJQUe0FY9+kQlctlimlCbCMvG9gY5EBhEM91fFT+4TW2yHjj+x7HCgiEC6MR+kX8FLBiBoQpKHaMJU/AQBJipvV1/7lI38AJeLkScP40jzuDSNwhX4BM+X/j9aCX4Y0EKzIB9+uGw1/d9vOrdd1ht/fktHxQXCN+BIekRlF99OKFYrybCcU629ChfWbQ0Osgl9etTAqUI8H8wCGetTLSE09Ho51+uGeCbYdp7NV/n+ov1xYMdMNStqQyx9rjzJ8e8HfGdMwP/wVCPhojhlMEYKekG6lA2442cVtH/xfYz8whLjwIyEpIfI+EAN2ku5h6DWkx1RYZBKsRtdpyzmYz2RlNMCMHsXjWhFd2H6xPbXdA5PXg6g3M+91jVWUMokxDsx1QqfWbt3YCAQ=
   - secure: zHkD4Jjt4i1iNio0xW4PBicBXw6i5OC7u8zWdYTyfsbC+B1mnwSv+Dk/irkojxdtWHMYkA/B5TCM522qXeHMhO6Sl7KIrgn+0YJxJjLpMbxIw5fYbw3CZNjw0ExV5UoLDUP832S3AgY2Voqcgoq6RvtHvREWd4D8ok/GKW/B+sjgDyt9PfQBwlvScronYvrkgUYEw7ddeltlA2ZzhMqfLRvQX7tcepW7F5V8WXzvabk7n0D6yjaIIZ7lJAMd7qticaUmNMSoIN0BgYfxdvm/sbT/5MG0rSTpyYC/OX3dGpb16E+ayTnyf5pR0mBk2aUCw6OrgY7aR+z8cqo6t4fkjFVnjZvyffUxyX6fYj4LJuhep2iSwq1PwQwrE/3SsQugojtOrF06Y4cB/WoYsyz7BcWnhr6asBlfAZE2v0gQzbfT5ISvUNUAYbJRkn/fVDAThWGtmdxhEvyzctf9tD2knwiyumbaxLr1lII7V6bigZHLZfywZ92wor7ZFlcwixojG4M6f9kLG8WTsBermD00rjoFJTYINU0eWFqEFCBPCCy4i4IUvQzlFgnUsmzGfFTp6uLLgTGCQsb2ag8zekzr7uAXEGPdD9HWMxm/dj7b6GLIza/AWk0xvwhQdGAia2Y3nzLGtUIC6ZlK9ZyxvoE698yifpvBk/ysitCHEKY6ulk=
@@ -47,7 +47,6 @@ before_deploy:
   -in deploy_rsa.enc -out ~/.ssh/key/efcsydney.pem -d
 - eval "$(ssh-agent -s)"
 - chmod 400 ~/.ssh/key/efcsydney.pem
-- pip install --user awscli
 - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
 deploy:
 - provider: script

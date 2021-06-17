@@ -4,27 +4,9 @@ EFC_FOLDER="/opt/efcsydney-roster"
 cd $EFC_FOLDER
 
 prod() {
-  export PATH=$PATH:~/.local/bin/
-  aws ssm get-parameters --region ap-southeast-2 \
-    --names username password database host dialect \
-    --with-decryption \
-    --query 'Parameters[*].{key:Name,value:Value}' \
-    | jq from_entries \
-    > parameter.json
-
-  jq '{ "'$NODE_ENV'" : .}' parameter.json > ./config/database.json
-
-  user=$(jq -r .username parameter.json)
-  password=$(jq -r .password parameter.json)
-
-  cat > ~/.my.cnf <<EOF
-[mysqldump]
-user=$user
-password=$password
-EOF
-
-  aws s3 cp s3://$S3_BUCKET/local.yaml $EFC_FOLDER/config/local.yaml
-  aws s3 cp s3://$S3_BUCKET/email-list.csv $EFC_FOLDER/db/data/email-list.csv
+  cp "/opt/efcsydney-config/database.json" $EFC_FOLDER/config/
+  cp "/opt/efcsydney-config/local.yaml" $EFC_FOLDER/config/
+  cp "/opt/efcsydney-config/email-list.csv" $EFC_FOLDER/db/data/
 
   yarn db-migrate
 
