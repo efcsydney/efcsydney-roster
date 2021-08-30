@@ -24,7 +24,6 @@ import {
 } from 'modules/index/redux';
 import { createApiActions } from 'resource/actions';
 import { media } from 'styled';
-import MediaQuery from 'react-responsive';
 
 const mapStateToProps = (state, ownProps) => {
   const {
@@ -289,6 +288,5 @@ const PrintHeader = styled.div`
   ${media.print`
     display: block;
     height: 100px;
-
   `};
 `;
