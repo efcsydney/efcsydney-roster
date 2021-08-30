@@ -192,6 +192,8 @@ const Grid = styled.table`
     font-size: 11px;
     min-width: 0;
     width: 100%;
+    border: solid 2px black;
+    zoom: 94%;
   `};
 `;
 const Cell = styled.td`
@@ -211,6 +213,8 @@ const Cell = styled.td`
     line-height: 1.3;
     padding: 8px 4px;
     white-space: normal;
+    border: dashed 1px black;
+    word-break: break-word;
   `};
 `;
 const Header = styled(Cell)`
@@ -222,6 +226,10 @@ const Header = styled(Cell)`
   text-align: center;
   ${media.print`
     font-size: 11px;
+    background-color: #242a34;
+    border-bottom: solid 2px black;
+    border-top: solid 2px black;
+    color: white;
   `};
 `;
 const DayCell = styled(Cell)`
@@ -234,6 +242,8 @@ const DayCell = styled(Cell)`
   ${media.print`
     text-align: center;
     white-space: nowrap;
+    border-right: dashed 1px black;
+    color: black;
   `};
 `;
 const NameCell = styled(Cell)`
@@ -244,6 +254,11 @@ const NameCell = styled(Cell)`
     border-width: 1px 1px 1px 0;
   }
   ${props => props.isSelected && `z-index: 1`};
+  ${media.print`
+    &[colspan] {
+        border-color: black;
+    }
+  `};
 `;
 const NoteCell = styled(NameCell)`
   line-height: 1.2;
@@ -285,7 +300,7 @@ const Row = styled.tr`
   ${media.print`
     ${NameCell}, ${NoteCell} {
       background-color: transparent;
-      color: #666;
+      color: black;
     }
   `};
 `;
@@ -295,4 +310,7 @@ const CalLink = styled(ICalLink)`
   &:visited {
     color: #666;
   }
+  ${media.print`
+    display: none;
+  `};
 `;
