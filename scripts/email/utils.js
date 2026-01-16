@@ -107,6 +107,16 @@ const renderDateRow = (days, lang) => {
   `;
 };
 
+const renderTitleRow = days => {
+  const colSpan = days.length + 1;
+
+  return `
+    <tr>
+      <th style="${firstHeaderCellStyle}" colspan=${colSpan}>主日聖工服事表</th>
+    </tr>
+  `;
+};
+
 const renderOccasionRow = (days, lang) => {
   const footnoteLabel = lang === 'zh-TW' ? '型式' : 'Occasion';
   const cells = days
@@ -180,6 +190,7 @@ const renderTable = days => {
         ${title}
       </mj-text>
       <mj-table padding="0">
+        ${renderTitleRow(days)}
         ${renderDateRow(days, lang)}
         ${renderOccasionRow(days, lang)}
         ${renderRoleRows(days)}
