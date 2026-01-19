@@ -23,11 +23,14 @@ import {
   toggleEditDay
 } from 'modules/index/redux';
 import { createApiActions } from 'resource/actions';
+import { media } from 'styled';
 
 const mapStateToProps = (state, ownProps) => {
   const {
     history,
-    match: { params: { category } },
+    match: {
+      params: { category }
+    },
     location: { search }
   } = ownProps;
   const services = _.get(state, 'resource.data.services', {});
@@ -80,7 +83,10 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   class Container extends Component {
     constructor(props) {
       super(props);
@@ -276,4 +282,11 @@ const Wrapper = styled.div`
 const Content = styled.div`
   position: relative;
   margin: 10px;
+`;
+const PrintHeader = styled.div`
+  display: none;
+  ${media.print`
+    display: block;
+    height: 100px;
+  `};
 `;

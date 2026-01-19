@@ -17,6 +17,7 @@ body {
   height: 100%;
   overflow-x:hidden;
   -webkit-overflow-scrolling: touch;
+  -webkit-print-color-adjust: exact;
   background: #f5f5f5;
   color: #555;
   font-size: 14px;
