@@ -107,12 +107,13 @@ const renderDateRow = (days, lang) => {
   `;
 };
 
-const renderTitleRow = days => {
+const renderTitleRow = (days, lang) => {
   const colSpan = days.length + 1;
+  const label = lang === 'zh-TW' ? '主日聖工服事表' : 'Sunday Service Roster';
 
   return `
     <tr>
-      <th style="${firstHeaderCellStyle}" colspan=${colSpan}>主日聖工服事表</th>
+      <th style="${firstHeaderCellStyle}" colspan=${colSpan}>${label}</th>
     </tr>
   `;
 };
@@ -190,7 +191,7 @@ const renderTable = days => {
         ${title}
       </mj-text>
       <mj-table padding="0">
-        ${renderTitleRow(days)}
+        ${renderTitleRow(days, lang)}
         ${renderDateRow(days, lang)}
         ${renderOccasionRow(days, lang)}
         ${renderRoleRows(days)}
