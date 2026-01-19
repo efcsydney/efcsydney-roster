@@ -82,66 +82,94 @@ function removePositionNumber(position) {
   return matches ? matches[1] : position;
 }
 
-const renderHeaderRow = (lang, roles) => {
+const renderDateRow = (days, lang) => {
   const dateLabel = lang === 'zh-TW' ? '日期' : 'Date';
-  const footnoteLabel = lang === 'zh-TW' ? '型式' : 'Occasion';
-  const positions = roles.map(({ position }) => removePositionNumber(position));
+  const dateCells = days
+    .map(day => {
+      let date = day.date;
+      moment.locale(lang);
+      if (lang === 'zh-TW') {
+        date = moment(date).format('MMMDo');
+      } else if (lang === 'en-AU') {
+        date = moment(date).format('D MMM');
+      } else {
+        date = moment(date).format('ll');
+      }
+      return `<th style="${cellHeaderStyle}">${date}</th>`;
+    })
+    .join('\n');
 
   return `
     <tr>
       <th style="${firstHeaderCellStyle}">${dateLabel}</th>
-      <th style="${cellHeaderStyle}">${footnoteLabel}</th>
-      ${_.uniq(positions)
-        .map(cell => {
-          const colSpan = _.filter(positions, val => cell === val).length;
-          return `
-          <th
-            colspan=${colSpan}
-            style="${cellHeaderStyle}">
-            ${cell}
-          </th>
-        `;
-        })
-        .join('\n')}
+      ${dateCells}
     </tr>
   `;
 };
 
-const renderMemberRow = ({ date, serviceInfo, positions, lang }) => {
-  moment.locale(lang);
-  if (lang === 'zh-TW') {
-    date = moment(date).format('MMMDo');
-  } else if (lang === 'en-AU') {
-    date = moment(date).format('D MMM');
-  } else {
-    date = moment(date).format('ll');
-  }
-
-  const footnote =
-    serviceInfo.footnote || `<span style="${emptyCellStyle}">-</span>`;
-  const contentCells = !serviceInfo.skipService
-    ? serviceInfo.positions
-        .map(
-          ({ volunteerName }) => `
-      <td style="${cellStyle}">${
-            volunteerName
-              ? volunteerName
-              : `<span style="${emptyCellStyle}">-</span>`
-          }</td>
-      `
-        )
-        .join('\n')
-    : `<td style="${cellStyle}" colspan=${positions.length}>${
-        serviceInfo.skipReason
-      }</td>`;
+const renderTitleRow = (days, lang) => {
+  const colSpan = days.length + 1;
+  const label = lang === 'zh-TW' ? '主日聖工服事表' : 'Sunday Service Roster';
 
   return `
     <tr>
-      <td style="${firstCellStyle}">${date}</td>
-      <td style="${cellStyle}">${footnote}</td>
-      ${contentCells}
+      <th style="${firstHeaderCellStyle}" colspan=${colSpan}>${label}</th>
     </tr>
   `;
+};
+
+const renderOccasionRow = (days, lang) => {
+  const footnoteLabel = lang === 'zh-TW' ? '型式' : 'Occasion';
+  const cells = days
+    .map(day => {
+      const footnote =
+        day.serviceInfo.footnote || `<span style="${emptyCellStyle}">-</span>`;
+      return `<td style="${cellStyle}">${footnote}</td>`;
+    })
+    .join('\n');
+
+  return `
+    <tr>
+      <th style="${firstHeaderCellStyle}">${footnoteLabel}</th>
+      ${cells}
+    </tr>
+  `;
+};
+
+const renderRoleRows = days => {
+  if (!days.length) {
+    return '';
+  }
+
+  const referencePositions = days[0].positions;
+
+  return referencePositions
+    .map((p, index) => {
+      const label = removePositionNumber(p.position.position);
+      const cells = days
+        .map(day => {
+          if (day.serviceInfo.skipService) {
+            return `<td style="${cellStyle}">${day.serviceInfo.skipReason}</td>`;
+          }
+
+          const pos = day.positions[index];
+          const volunteerName =
+            pos && pos.volunteerName
+              ? pos.volunteerName
+              : `<span style="${emptyCellStyle}">-</span>`;
+
+          return `<td style="${cellStyle}">${volunteerName}</td>`;
+        })
+        .join('\n');
+
+      return `
+      <tr>
+        <th style="${firstHeaderCellStyle}">${label}</th>
+        ${cells}
+      </tr>
+      `;
+    })
+    .join('\n');
 };
 
 const renderTable = days => {
@@ -151,7 +179,6 @@ const renderTable = days => {
   days = days.map(day => decorateDay(day, blacklist));
 
   const lang = _.get(days, '0.lang', 'zh-TW');
-  const roles = _.get(days, '0.serviceInfo.positions', []);
   const title = _.get(days, '0.serviceInfo.service.label', '');
 
   if (!days.length) {
@@ -164,8 +191,10 @@ const renderTable = days => {
         ${title}
       </mj-text>
       <mj-table padding="0">
-        ${renderHeaderRow(lang, roles)}
-        ${days.map(day => renderMemberRow(day)).join('')}
+        ${renderTitleRow(days, lang)}
+        ${renderDateRow(days, lang)}
+        ${renderOccasionRow(days, lang)}
+        ${renderRoleRows(days)}
       </mj-table>
     </mj-section>
   `;
