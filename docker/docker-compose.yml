@@ -30,7 +30,7 @@ services:
       - $PWD/../:/opt/efcsydney-roster/
 
   efc-qa:
-    image: kleinchang/efcsydney-roster:$BUILD_TAG
+    image: efcsydney/efcsydney-roster:$BUILD_TAG
     build:
       context: ../
       dockerfile: docker/Dockerfile-prod
@@ -51,7 +51,7 @@ services:
       - prod-local
 
   efc-prod:
-    image: kleinchang/efcsydney-roster:$BUILD_TAG
+    image: efcsydney/efcsydney-roster:$BUILD_TAG
     build:
       context: ../
       dockerfile: docker/Dockerfile-prod
@@ -60,13 +60,12 @@ services:
     links:
         - db:db
     environment:
-        - NODE_ENV=qa
+        - NODE_ENV=production
     ports:
-      - "80:80"
       - "3001:3001"
       - "3002:3002"
     entrypoint:
-      - /bin/bash
+      - /bin/sh
       - -x
       - /opt/efcsydney-roster/docker/Entrypoint.sh
-      - prod-local
+      - prod
