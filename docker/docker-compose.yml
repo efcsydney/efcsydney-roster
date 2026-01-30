@@ -62,7 +62,7 @@ services:
     environment:
         - NODE_ENV=production
     ports:
-      - "3001:80"
+      - "3001:3001"
       - "3002:3002"
     entrypoint:
       - /bin/sh
