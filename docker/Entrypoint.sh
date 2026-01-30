@@ -4,27 +4,37 @@ EFC_FOLDER="/opt/efcsydney-roster"
 cd $EFC_FOLDER
 
 prod() {
-  export PATH=$PATH:~/.local/bin/
-  aws ssm get-parameters --region ap-southeast-2 \
-    --names username password database host dialect \
-    --with-decryption \
-    --query 'Parameters[*].{key:Name,value:Value}' \
-    | jq from_entries \
-    > parameter.json
+  # Copy database config from external mount point
+  if [ -f /opt/efcsydney-config/database.json ]; then
+    cp /opt/efcsydney-config/database.json ./config/database.json
+    echo "Database config loaded from /opt/efcsydney-config/database.json"
+  else
+    echo "ERROR: Database config not found at /opt/efcsydney-config/database.json"
+    exit 1
+  fi
 
-  jq '{ "'$NODE_ENV'" : .}' parameter.json > ./config/database.json
+  # Extract credentials for mysqldump
+  user=$(jq -r '.production.username // .qa.username // empty' ./config/database.json)
+  password=$(jq -r '.production.password // .qa.password // empty' ./config/database.json)
 
-  user=$(jq -r .username parameter.json)
-  password=$(jq -r .password parameter.json)
-
-  cat > ~/.my.cnf <<EOF
+  if [ -n "$user" ] && [ -n "$password" ]; then
+    cat > ~/.my.cnf <<EOF
 [mysqldump]
 user=$user
 password=$password
 EOF
+  fi
 
-  aws s3 cp s3://$S3_BUCKET/local.yaml $EFC_FOLDER/config/local.yaml
-  aws s3 cp s3://$S3_BUCKET/email-list.csv $EFC_FOLDER/db/data/email-list.csv
+  # Copy additional config files if they exist
+  if [ -f /opt/efcsydney-config/local.yaml ]; then
+    cp /opt/efcsydney-config/local.yaml ./config/production.yaml
+    echo "Local config loaded from /opt/efcsydney-config/production.yaml"
+  fi
+
+  if [ -f /opt/efcsydney-config/email-list.csv ]; then
+    cp /opt/efcsydney-config/email-list.csv ./db/data/email-list.csv
+    echo "Email list loaded from /opt/efcsydney-config/email-list.csv"
+  fi
 
   yarn db-migrate
 
